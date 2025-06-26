@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My First Web Page</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    #search-box {
+      margin: 20px 0;
+    }
+    input[type="text"] {
+      padding: 8px;
+      width: 200px;
+    }
+    button {
+      padding: 8px 12px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Snap Shot Insight</h1>
+  </header>
+
+  <nav>
+    <ul>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="explore.html">Explore</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- 🔍 Search Box -->
+<div id="search-box">
+  <input type="text" id="searchInput" placeholder="Search...">
+  <button onclick="searchAndRedirect()">Go</button>
+</div>
+
+<!-- 🔁 JavaScript for Search-Based Navigation -->
+<script>
+  function searchAndRedirect() {
+    const input = document.getElementById("searchInput").value.toLowerCase().trim();
+
+    // Define keyword-to-page mapping
+    const pageMap = {
+      "memory": "memory_computation.html",
+      "memory computation": "memory_computation.html",
+      "memory usage": "memory_computation.html",
+      "framebuffer": "memory_computation.html",
+      "display memory": "memory_computation.html"
+      // Add more keywords and corresponding pages if needed
+    };
+
+    // Find a match
+    for (const keyword in pageMap) {
+      if (input.includes(keyword)) {
+        window.location.href = pageMap[keyword];
+        return;
+      }
+    }
+
+    // If no match is found
+    alert("No match found. Try 'memory', 'memory computation', or similar keywords.");
+  }
+</script>
+
+
+</body>
+</html>

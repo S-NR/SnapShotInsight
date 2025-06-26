@@ -1,53 +1,94 @@
-<!-- Declares the document type as HTML5 -->
-<!-- Tells the browser: "This is an HTML document using modern standards." -->
-<!DOCTYPE html>                                                                   <!-- Starts the HTML document. indicates the language is english -->
-<html lang="en">                                                                  <!-- The <head> section contains metadata and configuration for the page (not visible to users). -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">                                                          <!-- Sets the character encoding to UTF-8 (supports almost all characters, including symbols and emojis). -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">          <!-- Makes the site responsive on mobile devices. with match the screen’s width &  sets initial zoom level -->
-  <title>My First Web Page</title>                                                <!-- Sets the title shown in the browser tab or window title bar. -->
-  <link rel="stylesheet" href="styles.css">                                       <!-- Link to external CSS -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My First Web Page</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    #search-box {
+      margin: 20px 0;
+    }
+    input[type="text"] {
+      padding: 8px;
+      width: 200px;
+    }
+    button {
+      padding: 8px 12px;
+    }
+  </style>
 </head>
-<!-- Ends the head section -->
-
-<!-- This is the visible part of the web page where all content appears. -->
 <body>
 
-  <!-- The <header> is a semantic tag that usually contains titles, logos, or top navigation. 
-       <h1> is the main heading (only one per page recommended). -->
   <header>
-    <h1>Welcome to My Website</h1>                                              
+    <h1>Snap Shot Insight</h1>
   </header>
 
-  <!--  <nav> contains navigation links.
-        <ul> = unordered list.
-        <li> = list item.
-        <a href="#"> = hyperlink placeholder (you can replace # with actual URLs like about.html). -->
   <nav>
     <ul>
-      <li><a href="#">Home</a></li>
-      <li><a href="#">About</a></li>
-      <li><a href="#">Contact</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="explore.html">Explore</a></li>
+      <li><a href="contact.html">Contact</a></li>
     </ul>
   </nav>
 
-  <!--  <main>: the main content area of the page (only one per page).
-        <section>: a logical grouping of related content.
-        <h2>: a subheading (you can have multiple h2s).
-        <p>: paragraph text.-->
-  <main>
-    <section>
-      <h2>About Me</h2>
-      <p>This is a simple web page created using HTML and CSS.</p>
-    </section>
-  </main>
+  <!-- 🔍 Search Box with Dropdown -->
+<div id="search-box">
+  <input type="text" id="searchInput" placeholder="Search..." oninput="showSuggestions()">
+  <div id="suggestions" style="border: 1px solid #ccc; display: none; max-width: 200px;"></div>
+</div>
 
-  <!-- <footer>: shows copyright or contact info.
-       &copy; is an HTML entity that displays the © symbol.-->
-  <footer>
-    <p>&copy; 2025 My Website</p>
-  </footer>
+<script>
+  const pages = [
+    { name: "Memory Computation", file: "memory_computation.html" },
+    { name: "Memory Details", file: "memory_details.html" },
+    { name: "Memory Layout", file: "memory_layout.html" },
+    { name: "Explore", file: "explore.html" },
+    { name: "Contact", file: "contact.html" }
+  ];
 
-<!-- Closes the body and entire HTML document. -->
+  function showSuggestions() {
+    const input = document.getElementById("searchInput").value.toLowerCase();
+    const suggestionBox = document.getElementById("suggestions");
+    suggestionBox.innerHTML = '';
+
+    if (input === '') {
+      suggestionBox.style.display = 'none';
+      return;
+    }
+
+    const matches = pages.filter(page => page.name.toLowerCase().includes(input));
+
+    if (matches.length === 0) {
+      suggestionBox.style.display = 'none';
+      return;
+    }
+
+    matches.forEach(match => {
+      const div = document.createElement('div');
+      div.textContent = match.name;
+      div.style.padding = '6px';
+      div.style.cursor = 'pointer';
+      div.style.background = '#fff';
+
+      div.addEventListener('mouseover', () => {
+        div.style.background = '#f0f0f0';
+      });
+
+      div.addEventListener('mouseout', () => {
+        div.style.background = '#fff';
+      });
+
+      div.addEventListener('click', () => {
+        window.location.href = match.file;
+      });
+
+      suggestionBox.appendChild(div);
+    });
+
+    suggestionBox.style.display = 'block';
+  }
+</script>
+
 </body>
 </html>

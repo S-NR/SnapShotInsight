@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Memory Computation Overview</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid #aaa;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+    h2 {
+      color: #333;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+    }
+    code {
+      background: #f4f4f4;
+      padding: 2px 5px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📊 Computation of Memory</h2>
+
+  <h3>🔲 Display Framebuffers</h3>
+  <p><strong>Formula:</strong> <code>Memory (in bytes) = Width × Height × bpp / 8</code></p>
+  <p><strong>Common bpp values:</strong> 1, 2, 8, 16, 24, 32</p>
+
+  <table>
+    <tr>
+      <th>Resolution</th>
+      <th>bpp</th>
+      <th>Bytes per Pixel</th>
+      <th>Single Buffer (Approx)</th>
+      <th>Double Buffer (Approx)</th>
+    </tr>
+    <tr>
+      <td>128×160</td>
+      <td>16</td>
+      <td>2</td>
+      <td>40 KB</td>
+      <td>80 KB</td>
+    </tr>
+    <tr>
+      <td>320×240</td>
+      <td>16</td>
+      <td>2</td>
+      <td>150 KB</td>
+      <td>300 KB</td>
+    </tr>
+    <tr>
+      <td>480×272</td>
+      <td>16</td>
+      <td>2</td>
+      <td>255 KB</td>
+      <td>510 KB</td>
+    </tr>
+    <tr>
+      <td>800×480</td>
+      <td>16</td>
+      <td>2</td>
+      <td>750 KB</td>
+      <td>1.5 MB</td>
+    </tr>
+  </table>
+
+  <h3>📌 Example Calculation</h3>
+  <p><strong>Display:</strong> <code>320 × 240</code> at <code>16 bpp</code></p>
+  <ul>
+    <li>Width = 320</li>
+    <li>Height = 240</li>
+    <li>bpp = 16 → Bytes per pixel = 16 / 8 = 2</li>
+  </ul>
+  <p><strong>Single Buffer:</strong> <code>320 × 240 × 2 = 153,600 bytes ≈ 150 KB</code></p>
+  <p><strong>Double Buffer:</strong> <code>153,600 × 2 = 307,200 bytes ≈ 300 KB</code></p>
+  <p><strong>Quick Formula (KB):</strong> <code>(Width × Height × (bpp / 8)) / 1024</code></p>
+
+  <h3>📦 Variables & Arrays in C/C++</h3>
+  <p><strong>General Formula:</strong> <code>Memory = Number of elements × Size of each element</code></p>
+
+  <table>
+    <tr>
+      <th>Declaration</th>
+      <th>Description</th>
+      <th>Total Memory</th>
+    </tr>
+    <tr>
+      <td><code>int arr[100];</code></td>
+      <td>100 integers (int = 4 bytes)</td>
+      <td>100 × 4 = 400 bytes</td>
+    </tr>
+    <tr>
+      <td><code>char name[50];</code></td>
+      <td>50 characters</td>
+      <td>50 × 1 = 50 bytes</td>
+    </tr>
+    <tr>
+      <td><code>float matrix[10][10];</code></td>
+      <td>2D float array (float = 4 bytes)</td>
+      <td>10 × 10 × 4 = 400 bytes</td>
+    </tr>
+  </table>
+
+</body>
+</html>
