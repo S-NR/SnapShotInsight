@@ -1,0 +1,53 @@
+<!-- Declares the document type as HTML5 -->
+<!-- Tells the browser: "This is an HTML document using modern standards." -->
+<!DOCTYPE html>                                                                   <!-- Starts the HTML document. indicates the language is english -->
+<html lang="en">                                                                  <!-- The <head> section contains metadata and configuration for the page (not visible to users). -->
+<head>
+  <meta charset="UTF-8">                                                          <!-- Sets the character encoding to UTF-8 (supports almost all characters, including symbols and emojis). -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">          <!-- Makes the site responsive on mobile devices. with match the screen’s width &  sets initial zoom level -->
+  <title>My First Web Page</title>                                                <!-- Sets the title shown in the browser tab or window title bar. -->
+  <link rel="stylesheet" href="styles.css">                                       <!-- Link to external CSS -->
+</head>
+<!-- Ends the head section -->
+
+<!-- This is the visible part of the web page where all content appears. -->
+<body>
+
+  <!-- The <header> is a semantic tag that usually contains titles, logos, or top navigation. 
+       <h1> is the main heading (only one per page recommended). -->
+  <header>
+    <h1>Welcome to My Website</h1>                                              
+  </header>
+
+  <!--  <nav> contains navigation links.
+        <ul> = unordered list.
+        <li> = list item.
+        <a href="#"> = hyperlink placeholder (you can replace # with actual URLs like about.html). -->
+  <nav>
+    <ul>
+      <li><a href="#">Home</a></li>
+      <li><a href="#">About</a></li>
+      <li><a href="#">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!--  <main>: the main content area of the page (only one per page).
+        <section>: a logical grouping of related content.
+        <h2>: a subheading (you can have multiple h2s).
+        <p>: paragraph text.-->
+  <main>
+    <section>
+      <h2>About Me</h2>
+      <p>This is a simple web page created using HTML and CSS.</p>
+    </section>
+  </main>
+
+  <!-- <footer>: shows copyright or contact info.
+       &copy; is an HTML entity that displays the © symbol.-->
+  <footer>
+    <p>&copy; 2025 My Website</p>
+  </footer>
+
+<!-- Closes the body and entire HTML document. -->
+</body>
+</html>
