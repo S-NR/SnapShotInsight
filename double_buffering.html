@@ -1,96 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Double Buffering</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 30px;
-      line-height: 1.6;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png'); /* Replace with your image path */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #ffffff;
+      line-height: 1.8;
     }
 
-    h1, h2 {
-      color: #2c3e50;
-      border-bottom: 2px solid #ccc;
-      padding-bottom: 5px;
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.75);
+      min-height: 100vh;
+      padding: 50px 10vw;
+      box-sizing: border-box;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .header h1 {
+      font-size: 2.8em;
+      color: #00eaff;
+      border-bottom: 2px solid #00eaff;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: #00eaff;
+      font-size: 1.8em;
+      margin-top: 50px;
+    }
+
+    p, ul, li {
+      font-size: 18px;
+      margin-bottom: 18px;
     }
 
     ul {
-      margin-left: 20px;
+      padding-left: 20px;
     }
 
     .section {
-      margin-bottom: 30px;
+      margin-bottom: 40px;
     }
 
     .quote {
       font-style: italic;
-      color: #555;
-      margin: 10px 0;
-      padding-left: 15px;
-      border-left: 4px solid #ccc;
+      color: #e0e0e0;
+      margin: 15px 0;
+      padding-left: 20px;
+      border-left: 4px solid #ffc107;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+    }
+
+    @media screen and (max-width: 768px) {
+      .overlay {
+        padding: 30px 6vw;
+      }
+
+      .header h1 {
+        font-size: 2em;
+      }
+
+      h2 {
+        font-size: 1.5em;
+      }
+
+      p, li {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="overlay">
+    <div class="header">
+      <h1>Double Buffering</h1>
+    </div>
 
-  <h1>Double Buffering</h1>
+    <div class="section">
+      <h2>Why?</h2>
+      <p>
+        Double buffering is a common technique used in graphics programming and embedded display systems to prevent flickering, tearing, and visual artifacts during screen updates.
+      </p>
+    </div>
 
-  <div class="section">
-    <h2>Why?</h2>
-    <p>
-      Double buffering is a common technique used in graphics programming and embedded display systems to prevent flickering, tearing, and visual artifacts during screen updates.
-    </p>
+    <div class="section">
+      <h2>What is Double Buffering?</h2>
+      <p>
+        Double buffering involves using two memory buffers for rendering display content:
+      </p>
+      <ul>
+        <li><strong>Front Buffer:</strong> The buffer currently being displayed on the screen.</li>
+        <li><strong>Back Buffer:</strong> The buffer where the next frame is drawn off-screen.</li>
+      </ul>
+      <p>
+        Once the back buffer is fully updated, the two buffers are swapped — the back buffer becomes the new front buffer, and vice versa.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>Why is it Used?</h2>
+      <ul>
+        <li><strong>Avoids Flickering:</strong> Drawing directly to the screen causes flickering as partial images become visible. Double buffering prevents this by showing only complete frames.</li>
+        <li><strong>Prevents Tearing:</strong> Tearing happens when the display refreshes during an update. Buffer swapping with VSync avoids this.</li>
+        <li><strong>Improves Rendering Smoothness:</strong> Because rendering happens off-screen, the user only sees finished frames, ensuring smoother animations.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Visual Analogy</h2>
+      <p class="quote">
+        Think of it like painting a picture. Instead of painting directly on a wall (visible to others), you paint it on a canvas (back buffer). Once it’s ready, you swap it with the one on the wall (front buffer). No one sees your half-finished work.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>In Embedded Systems (e.g., STM32 with TouchGFX)</h2>
+      <ul>
+        <li>TouchGFX uses double (or triple) buffering based on configuration.</li>
+        <li>Buffer swapping is handled by DMA2D and LTDC hardware.</li>
+        <li>Updates are synchronized with display refresh using VSync.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>Trade-Offs</h2>
+      <ul>
+        <li><strong>Increased RAM usage:</strong> Requires memory for two full framebuffers.</li>
+        <li>Example: A 320x240 display at 16 bpp needs ~150 KB per buffer → 300 KB for double buffering.</li>
+        <li>On low-memory MCUs, alternative techniques like partial buffering may be used.</li>
+      </ul>
+    </div>
   </div>
-
-  <div class="section">
-    <h2>What is Double Buffering?</h2>
-    <p>
-      Double buffering involves using two memory buffers for rendering display content:
-    </p>
-    <ul>
-      <li><strong>Front Buffer:</strong> The buffer currently being displayed on the screen.</li>
-      <li><strong>Back Buffer:</strong> The buffer where the next frame is drawn off-screen.</li>
-    </ul>
-    <p>
-      Once the back buffer is fully updated, the two buffers are swapped — the back buffer becomes the new front buffer, and vice versa.
-    </p>
-  </div>
-
-  <div class="section">
-    <h2>Why is it Used?</h2>
-    <ul>
-      <li><strong>Avoids Flickering:</strong> Drawing directly to the screen causes flickering as partial images become visible. Double buffering prevents this by showing only complete frames.</li>
-      <li><strong>Prevents Tearing:</strong> Tearing happens when the display refreshes during an update. Buffer swapping with VSync avoids this.</li>
-      <li><strong>Improves Rendering Smoothness:</strong> Because rendering happens off-screen, the user only sees finished frames, ensuring smoother animations.</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>Visual Analogy</h2>
-    <p class="quote">
-      Think of it like painting a picture. Instead of painting directly on a wall (visible to others), you paint it on a canvas (back buffer). Once it’s ready, you swap it with the one on the wall (front buffer). No one sees your half-finished work.
-    </p>
-  </div>
-
-  <div class="section">
-    <h2>In Embedded Systems (e.g., STM32 with TouchGFX)</h2>
-    <ul>
-      <li>TouchGFX uses double (or triple) buffering based on configuration.</li>
-      <li>Buffer swapping is handled by DMA2D and LTDC hardware.</li>
-      <li>Updates are synchronized with display refresh using VSync.</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>Trade-Offs</h2>
-    <ul>
-      <li><strong>Increased RAM usage:</strong> Requires memory for two full framebuffers.</li>
-      <li>Example: A 320x240 display at 16 bpp needs ~150 KB per buffer → 300 KB for double buffering.</li>
-      <li>On low-memory MCUs, alternative techniques like partial buffering may be used.</li>
-    </ul>
-  </div>
-
 </body>
 </html>

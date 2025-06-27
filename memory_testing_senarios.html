@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Memory in Embedded Systems</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png'); /* Replace if needed */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #ffffff;
+      line-height: 1.8;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.78);
+      min-height: 100vh;
+      padding: 50px 10vw;
+      box-sizing: border-box;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 2.8em;
+      color: #00eaff;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: #00eaff;
+      margin-top: 45px;
+      font-size: 1.8em;
+    }
+
+    h3 {
+      color: #ffd700;
+      margin-top: 30px;
+      font-size: 1.4em;
+    }
+
+    p, ul, li {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0 40px 0;
+      background-color: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(6px);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      color: #fff;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      text-align: center;
+    }
+
+    th {
+      background-color: rgba(0,0,0,0.5);
+      font-weight: bold;
+    }
+
+    .note {
+      background: rgba(255, 255, 255, 0.1);
+      border-left: 6px solid #ffc107;
+      color: #fffbe6;
+      padding: 18px 25px;
+      font-size: 17px;
+      margin-bottom: 35px;
+      border-radius: 10px;
+    }
+
+    ul {
+      padding-left: 25px;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 4px 8px;
+      border-radius: 4px;
+      color: #00ffcc;
+      font-family: Consolas, monospace;
+    }
+
+    @media screen and (max-width: 768px) {
+      .overlay {
+        padding: 30px 6vw;
+      }
+
+      .header h1 {
+        font-size: 2em;
+      }
+
+      h2 {
+        font-size: 1.5em;
+      }
+
+      th, td {
+        font-size: 14px;
+      }
+
+      p, li, .note {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="header">
+      <h1>🧪 EEPROM / Flash Test Scenarios</h1>
+    </div>
+
+    <h2>🔁 1. Power Cycle Retention</h2>
+    <ul>
+      <li>Save settings</li>
+      <li>Power off & restart</li>
+      <li>✅ Expect data to persist</li>
+    </ul>
+
+    <h2>🔌 2. Power Loss During Write</h2>
+    <ul>
+      <li>Start saving data</li>
+      <li>Immediately power off</li>
+      <li>✅ Expect graceful recovery</li>
+    </ul>
+
+    <h2>⏱️ 3. Long-Term Retention</h2>
+    <ul>
+      <li>Save known values</li>
+      <li>Wait hours/days</li>
+      <li>✅ Expect no corruption</li>
+    </ul>
+
+    <h2>📝 4. Frequent Writes</h2>
+    <ul>
+      <li>Repeatedly write to same location</li>
+      <li>Log count</li>
+      <li>✅ Check for errors as endurance nears limit</li>
+    </ul>
+
+    <h2>🧮 5. Boundary Conditions</h2>
+    <ul>
+      <li>Save min/max/invalid data</li>
+      <li>✅ Device should reject invalid, save valid</li>
+    </ul>
+
+    <h2>🧯 6. Factory Reset</h2>
+    <ul>
+      <li>Modify data</li>
+      <li>Trigger reset</li>
+      <li>✅ All values reset to default</li>
+    </ul>
+
+    <h2>🧩 7. Corruption Injection</h2>
+    <ul>
+      <li>Corrupt EEPROM manually (dev tool)</li>
+      <li>✅ Expect safe fallback or reset</li>
+    </ul>
+
+    <h2>🧾 8. Multi-Param Save</h2>
+    <ul>
+      <li>Save multiple values</li>
+      <li>✅ All should persist — not partially saved</li>
+    </ul>
+
+    <h3>🧰 Optional Checks</h3>
+    <ul>
+      <li>Check CRC or checksum (if implemented)</li>
+      <li>EEPROM wear-leveling map (if available)</li>
+      <li>Log write counts per variable</li>
+    </ul>
+
+    <h3>📝 Reporting</h3>
+    <ul>
+      <li>Note data written, action taken, result</li>
+      <li>Record if data persisted, corrupted, or failed</li>
+      <li>Attach logs or debug screenshots if possible</li>
+    </ul>
+  </div>
+</body>
+</html>

@@ -1,95 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My First Web Page</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome | Snap Shot Insight</title>
   <style>
+    body {
+      margin: 0;
+      font-family: 'Times New Roman', Times, serif;
+      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #ffffff;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.7);
+      min-height: 100vh;
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      color: #00eaff;
+    }
+
+    p {
+      font-size: 1.2em;
+      line-height: 1.7;
+      max-width: 800px;
+      margin: 0 auto 30px auto;
+    }
+
+    /* .btn {
+      background-color: #00eaff;
+      color: #000;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1em;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      text-decoration: none;
+      margin-bottom: 30px;
+    }
+
+    .btn:hover {
+      background-color: #00c2cc;
+    } */
+
+  .explore-button {
+    background-color: #00eaff;
+    color: #000;
+    border: none;
+    padding: 10px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+  }
+
+  .explore-button:hover {
+    background-color: #00c0cc;
+  }
+
     #search-box {
-      margin: 20px 0;
+      margin-top: 10px;
     }
-    input[type="text"] {
+
+    #searchInput {
+      padding: 10px;
+      width: 240px;
+      border-radius: 4px;
+      border: none;
+      font-size: 1em;
+    }
+
+    #suggestions {
+      margin: 0 auto;
+      max-width: 240px;
+      background-color: white;
+      color: black;
+      text-align: left;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      display: none;
+      position: relative;
+      z-index: 10;
+    }
+
+    #suggestions div {
       padding: 8px;
-      width: 200px;
+      cursor: pointer;
     }
-    button {
-      padding: 8px 12px;
+
+    #suggestions div:hover {
+      background-color: #f0f0f0;
+    }
+
+    @media screen and (max-width: 600px) {
+      h1 {
+        font-size: 2em;
+      }
+
+      p {
+        font-size: 1em;
+      }
+
+      .btn, #searchInput {
+        font-size: 0.9em;
+      }
     }
   </style>
 </head>
+
 <body>
+  <div class="overlay">
+    <h1>Welcome to Snap Shot Insight</h1>
+    <p>
+      Discover the art and science behind modern embedded systems, display technology, and intelligent interfaces.<br><br>
+      This space brings you simplified insights into memory computation, double buffering, system commands, and more — crafted for learners and developers alike.
+    </p>
+    <p>
+      Dive into a world where bytes meet beauty, pixels perform flawlessly, and logic drives innovation.
+    </p>
+    <a class="btn" href="index.html">Explore Now</a>
 
-  <header>
-    <h1>Snap Shot Insight</h1>
-  </header>
+    <!-- Search Box with Dropdown -->
+    <div id="search-box">
+      <input type="text" id="searchInput" placeholder="Search..." oninput="showSuggestions()" />
+      <div id="suggestions"></div>
+    </div>
+  </div>
 
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="explore.html">Explore</a></li>
-      <li><a href="contact.html">Contact</a></li>
-    </ul>
-  </nav>
+  <script>
+    const pages = [
+      { name: "Memory Computation", file: "memory_computation.html" },
+      { name: "Memory Details", file: "memory_details.html" },
+      { name: "Memory Layout", file: "memory_layout.html" },
+      { name: "Explore", file: "explore.html" },
+      { name: "Double Buffering", file: "double_buffering.html" },
+      { name: "Linux Commands", file: "linux_commands.html" },
+      { name: "Basics of memories : For Testers", file: "memory_testing_team.html" },      
+      { name: "Memory : Testing Senarios", file: "memory_testing_senarios.html" },         
+      { name: "PID Controller", file: "pid_ccontroller.html" },     
+      { name: "Contact", file: "contact.html" }
+    ];
 
-  <!-- 🔍 Search Box with Dropdown -->
-<div id="search-box">
-  <input type="text" id="searchInput" placeholder="Search..." oninput="showSuggestions()">
-  <div id="suggestions" style="border: 1px solid #ccc; display: none; max-width: 200px;"></div>
-</div>
+    function showSuggestions() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const suggestionBox = document.getElementById("suggestions");
+      suggestionBox.innerHTML = '';
 
-<script>
-  const pages = [
-    { name: "Memory Computation", file: "memory_computation.html" },
-    { name: "Memory Details", file: "memory_details.html" },
-    { name: "Memory Layout", file: "memory_layout.html" },
-    { name: "Explore", file: "explore.html" },
-    { name: "Double Buffering", file: "double_buffering.html" },
-    { name: "Contact", file: "contact.html" }
-  ];
+      if (input === '') {
+        suggestionBox.style.display = 'none';
+        return;
+      }
 
-  function showSuggestions() {
-    const input = document.getElementById("searchInput").value.toLowerCase();
-    const suggestionBox = document.getElementById("suggestions");
-    suggestionBox.innerHTML = '';
+      const matches = pages.filter(page => page.name.toLowerCase().includes(input));
 
-    if (input === '') {
-      suggestionBox.style.display = 'none';
-      return;
+      if (matches.length === 0) {
+        suggestionBox.style.display = 'none';
+        return;
+      }
+
+      matches.forEach(match => {
+        const div = document.createElement('div');
+        div.textContent = match.name;
+        div.onclick = () => {
+          window.location.href = match.file;
+        };
+        suggestionBox.appendChild(div);
+      });
+
+      suggestionBox.style.display = 'block';
     }
-
-    const matches = pages.filter(page => page.name.toLowerCase().includes(input));
-
-    if (matches.length === 0) {
-      suggestionBox.style.display = 'none';
-      return;
-    }
-
-    matches.forEach(match => {
-      const div = document.createElement('div');
-      div.textContent = match.name;
-      div.style.padding = '6px';
-      div.style.cursor = 'pointer';
-      div.style.background = '#fff';
-
-      div.addEventListener('mouseover', () => {
-        div.style.background = '#f0f0f0';
-      });
-
-      div.addEventListener('mouseout', () => {
-        div.style.background = '#fff';
-      });
-
-      div.addEventListener('click', () => {
-        window.location.href = match.file;
-      });
-
-      suggestionBox.appendChild(div);
-    });
-
-    suggestionBox.style.display = 'block';
-  }
-</script>
-
+  </script>
 </body>
 </html>

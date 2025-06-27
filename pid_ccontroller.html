@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PID Controller Overview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 30px;
+      background: #f4f4f9;
+      color: #222;
+      line-height: 1.8;
+    }
+
+    h1, h2, h3 {
+      color: #1a73e8;
+    }
+
+    h1 {
+      border-bottom: 3px solid #1a73e8;
+      padding-bottom: 5px;
+    }
+
+    h2 {
+      margin-top: 40px;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 4px;
+    }
+
+    h3 {
+      margin-top: 30px;
+      font-weight: 600;
+    }
+
+    ul {
+      margin: 10px 0 20px 20px;
+    }
+
+    .formula, code {
+      background: #eaeaea;
+      display: inline-block;
+      padding: 4px 8px;
+      margin: 8px 0;
+      border-radius: 5px;
+      font-family: Consolas, monospace;
+    }
+
+    .note {
+      background: #fff7d6;
+      border-left: 5px solid #fbbc04;
+      padding: 15px 20px;
+      margin: 20px 0;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>3.3 Proportional–Integral–Derivative Controller (PID Controller)</h1>
+
+  <div class="section">
+    <p>The <strong>PID controller</strong> is a feedback-based control loop mechanism commonly used to manage machines and processes that require continuous control and automatic adjustment.</p>
+    <p>The controller compares the desired value (<strong>Setpoint, SP</strong>) with the actual system value (<strong>Process Variable, PV</strong>), and the difference <code>e(t) = SP - PV</code> drives the correction.</p>
+
+    <h2>Corrective Actions</h2>
+    <ul>
+      <li><strong>Proportional (P)</strong></li>
+      <li><strong>Integral (I)</strong></li>
+      <li><strong>Derivative (D)</strong></li>
+    </ul>
+
+    <p>The key strength of a PID controller lies in combining the influence of all three components — P, I, and D — to optimize control performance.</p>
+
+    <div class="note">
+      <strong>Formula:</strong><br>
+      <span class="formula">Output = Kp * e(t) + Ki * ∫e(t)dt + Kd * de(t)/dt</span><br>
+      where:<br>
+      <span class="formula">Ki = Kp / Ti</span><br>
+      <span class="formula">Kd = Kp * Td</span>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>3.3.1 Proportional Term</h2>
+    <p>The proportional term outputs a value directly proportional to the current error.</p>
+    <p>
+      If the error is large, the response is large (based on gain <code>Kp</code>). However, proportional control alone always leaves a steady-state error.
+    </p>
+
+    <h3>Steady-State Error (SSE)</h3>
+    <p>The SSE is the remaining difference between SP and PV. It occurs because the proportional controller requires a non-zero error to maintain output. SSE is:</p>
+    <ul>
+      <li>Proportional to <strong>process gain</strong></li>
+      <li>Inversely proportional to <strong>Kp</strong></li>
+    </ul>
+    <p>It can be reduced by adding a bias or using an integral term.</p>
+  </div>
+
+  <div class="section">
+    <h2>3.3.2 Integral Term</h2>
+    <p>The integral term accumulates past error values over time and compensates for residual steady-state errors.</p>
+    <p>The contribution is calculated as:</p>
+    <span class="formula">Ki * ∫e(t) dt</span>
+
+    <p>
+      It boosts control when the error persists. However, excessive use may lead to <strong>overshooting</strong> due to accumulated effects from previous errors.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>3.3.3 Derivative Term</h2>
+    <p>This term predicts future error trends by looking at how quickly the error is changing:</p>
+    <span class="formula">Kd * de(t)/dt</span>
+
+    <p>
+      It acts like a damping component, improving system stability and response time. However, it's sensitive to noise and may require filtering.
+    </p>
+    <p>
+      Because of its complexity and real-world sensitivity, derivative control is less frequently used (estimated in about 25% of cases).
+    </p>
+  </div>
+
+</body>
+</html>

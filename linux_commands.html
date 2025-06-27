@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Linux Commands Cheat Sheet</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #ffffff;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.75);
+      min-height: 100vh;
+      padding: 40px 10vw;
+      box-sizing: border-box;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      color: #00eaff;
+      margin-bottom: 10px;
+    }
+
+    .header p {
+      font-size: 1.2em;
+      color: #ccc;
+    }
+
+    h2 {
+      color: #00eaff;
+      margin-top: 40px;
+      font-size: 1.6em;
+      border-bottom: 1px solid #00eaff;
+      padding-bottom: 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.2);
+      text-align: left;
+      color: #fff;
+    }
+
+    th {
+      background-color: rgba(0,0,0,0.4);
+      font-weight: bold;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+      color: #00ffcc;
+    }
+
+    @media screen and (max-width: 768px) {
+      .overlay {
+        padding: 20px 5vw;
+      }
+      .header h1 {
+        font-size: 2em;
+      }
+      .header p {
+        font-size: 1em;
+      }
+      h2 {
+        font-size: 1.3em;
+      }
+      th, td {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="header">
+      <h1>Linux Commands Cheat Sheet</h1>
+      <p>Fast access to common and essential terminal commands</p>
+    </div>
+
+    <h2>Basic Commands</h2>
+    <table>
+      <tr><th>Command</th><th>Description</th></tr>
+      <tr><td><code>pwd</code></td><td>Print current working directory</td></tr>
+      <tr><td><code>ls</code></td><td>List files in current directory</td></tr>
+      <tr><td><code>ls -l</code></td><td>Long list with details</td></tr>
+      <tr><td><code>ls -a</code></td><td>Include hidden files</td></tr>
+      <tr><td><code>cd &lt;dir&gt;</code></td><td>Change directory</td></tr>
+      <tr><td><code>cd ..</code></td><td>Go up one level</td></tr>
+      <tr><td><code>cd ~</code></td><td>Go to home directory</td></tr>
+      <tr><td><code>mkdir &lt;dir&gt;</code></td><td>Create a directory</td></tr>
+      <tr><td><code>rm &lt;file&gt;</code></td><td>Delete a file</td></tr>
+      <tr><td><code>rm -r &lt;dir&gt;</code></td><td>Delete a directory recursively</td></tr>
+      <tr><td><code>cp &lt;src&gt; &lt;dst&gt;</code></td><td>Copy file or directory</td></tr>
+      <tr><td><code>mv &lt;src&gt; &lt;dst&gt;</code></td><td>Move or rename file or directory</td></tr>
+      <tr><td><code>touch &lt;file&gt;</code></td><td>Create an empty file</td></tr>
+      <tr><td><code>cat &lt;file&gt;</code></td><td>Display file contents</td></tr>
+      <tr><td><code>less &lt;file&gt;</code></td><td>View file with scroll</td></tr>
+      <tr><td><code>file &lt;file&gt;</code></td><td>Show file type</td></tr>
+    </table>
+
+
+  <h2>System Information</h2>
+  <table>
+    <tr><th>Command</th><th>Description</th></tr>
+    <tr><td><code>uname -a</code></td><td>Show system info</td></tr>
+    <tr><td><code>top</code> or <code>htop</code></td><td>Show running processes</td></tr>
+    <tr><td><code>df -h</code></td><td>Disk usage (human readable)</td></tr>
+    <tr><td><code>free -h</code></td><td>Memory usage</td></tr>
+    <tr><td><code>uptime</code></td><td>How long the system has been running</td></tr>
+    <tr><td><code>whoami</code></td><td>Show current user</td></tr>
+    <tr><td><code>id</code></td><td>Show current user's UID and groups</td></tr>
+    <tr><td><code>hostname</code></td><td>Show or set system hostname</td></tr>
+  </table>
+
+  <h2>Package Management (Ubuntu/Debian)</h2>
+  <table>
+    <tr><th>Command</th><th>Description</th></tr>
+    <tr><td><code>sudo apt update</code></td><td>Update package lists</td></tr>
+    <tr><td><code>sudo apt upgrade</code></td><td>Upgrade installed packages</td></tr>
+    <tr><td><code>sudo apt install &lt;pkg&gt;</code></td><td>Install a package</td></tr>
+    <tr><td><code>sudo apt remove &lt;pkg&gt;</code></td><td>Remove a package</td></tr>
+  </table>
+
+  <h2>Permissions & Ownership</h2>
+  <table>
+    <tr><th>Command</th><th>Description</th></tr>
+    <tr><td><code>chmod &lt;perm&gt; &lt;file&gt;</code></td><td>Change file permissions</td></tr>
+    <tr><td><code>chown &lt;user&gt;:&lt;group&gt; &lt;file&gt;</code></td><td>Change ownership</td></tr>
+    <tr><td><code>ls -l</code></td><td>View permissions and ownership</td></tr>
+  </table>
+
+  <h2>Searching</h2>
+  <table>
+    <tr><th>Command</th><th>Description</th></tr>
+    <tr><td><code>find &lt;dir&gt; -name "&lt;pattern&gt;"</code></td><td>Find files</td></tr>
+    <tr><td><code>grep "&lt;text&gt;" &lt;file&gt;</code></td><td>Search for text in a file</td></tr>
+    <tr><td><code>grep -r "&lt;text&gt;" &lt;dir&gt;</code></td><td>Recursive search in directory</td></tr>
+  </table>
+
+  <h2>Networking</h2>
+  <table>
+    <tr><th>Command</th><th>Description</th></tr>
+    <tr><td><code>ping &lt;host&gt;</code></td><td>Test connectivity</td></tr>
+    <tr><td><code>ip a</code> or <code>ifconfig</code></td><td>Show IP addresses</td></tr>
+    <tr><td><code>netstat -tuln</code></td><td>List open ports</td></tr>
+    <tr><td><code>curl &lt;url&gt;</code></td><td>Fetch URL content</td></tr>
+    <tr><td><code>wget &lt;url&gt;</code></td><td>Download file</td></tr>
+  </table>
+
+  <h2>User Management</h2>
+  <table>
+    <tr><th>Command</th><th>Description</th></tr>
+    <tr><td><code>adduser &lt;name&gt;</code></td><td>Add a user</td></tr>
+    <tr><td><code>passwd &lt;name&gt;</code></td><td>Set password for user</td></tr>
+    <tr><td><code>sudo</code></td><td>Run command as root</td></tr>
+    <tr><td><code>su</code></td><td>Switch user</td></tr>
+  </table>
+
+  <h2>Miscellaneous</h2>
+  <table>
+    <tr><th>Command</th><th>Description</th></tr>
+    <tr><td><code>echo "Hello"</code></td><td>Print message</td></tr>
+    <tr><td><code>history</code></td><td>Show previous commands</td></tr>
+    <tr><td><code>clear</code></td><td>Clear terminal</td></tr>
+    <tr><td><code>man &lt;command&gt;</code></td><td>Show manual for command</td></tr>
+    <tr><td><code>exit</code></td><td>Exit terminal or SSH session</td></tr>
+  </table>
+
+  <h2>Version Check Commands</h2>
+  <table>
+    <tr><th>Command</th><th>Tool / Language</th></tr>
+    <tr><td><code>gcc --version</code> / <code>g++ --version</code></td><td>gcc / g++</td></tr>
+    <tr><td><code>python --version</code> or <code>python3 --version</code></td><td>Python</td></tr>
+    <tr><td><code>pip --version</code> or <code>pip3 --version</code></td><td>pip</td></tr>
+    <tr><td><code>java -version</code></td><td>Java</td></tr>
+    <tr><td><code>javac -version</code></td><td>javac</td></tr>
+    <tr><td><code>node -v</code></td><td>Node.js</td></tr>
+    <tr><td><code>npm -v</code></td><td>NPM</td></tr>
+    <tr><td><code>git --version</code></td><td>Git</td></tr>
+    <tr><td><code>docker --version</code></td><td>Docker</td></tr>
+    <tr><td><code>cmake --version</code></td><td>CMake</td></tr>
+    <tr><td><code>make --version</code></td><td>Make</td></tr>
+    <tr><td><code>perl -v</code></td><td>Perl</td></tr>
+    <tr><td><code>ruby --version</code></td><td>Ruby</td></tr>
+    <tr><td><code>go version</code></td><td>Go</td></tr>
+    <tr><td><code>rustc --version</code></td><td>Rust</td></tr>
+    <tr><td><code>cargo --version</code></td><td>Cargo</td></tr>
+    <tr><td><code>mvn -v</code>, <code>gradle -v</code></td><td>Java packages</td></tr>
+    <tr><td><code>touchgfx -v</code> or GUI</td><td>TouchGFX</td></tr>
+  </table>
+
+  <h2>Package Version via apt</h2>
+  <table>
+    <tr><td><code>apt list --installed | grep &lt;package&gt;</code></td><td>List installed version</td></tr>
+    <tr><td><code>apt show &lt;package&gt;</code></td><td>Show detailed package info</td></tr>
+    <tr><td><code>dpkg -s &lt;package&gt;</code></td><td>Get version and status</td></tr>
+  </table>
+
+  <h2>Check if a Command/Package is Installed</h2>
+  <table>
+    <tr><td><code>which &lt;command&gt;</code></td><td>e.g. <code>which python3</code></td></tr>
+    <tr><td><code>command -v &lt;command&gt;</code></td><td>Find if available</td></tr>
+    <tr><td><code>whereis &lt;command&gt;</code></td><td>e.g. <code>whereis gcc</code></td></tr>
+    <tr><td><code>type &lt;command&gt;</code></td><td>Show command type</td></tr>
+    <tr><td><code>readlink -f $(which &lt;command&gt;)</code></td><td>Full path</td></tr>
+  </table>
+
+  <h2>Clock Skew Fix</h2>
+  <table>
+    <tr><td><code>sudo date --set "$(date)"</code></td><td>Sync system date</td></tr>
+    <tr><td><code>sudo hwclock --systohc</code></td><td>Sync hardware clock</td></tr>
+    <tr><td><code>find . -type f -exec touch {} +</code></td><td>Update file timestamps</td></tr>
+  </table>
+
+</body>
+</html>

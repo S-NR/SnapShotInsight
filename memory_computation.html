@@ -1,120 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Memory Computation Overview</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Memory Computation</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      margin: 30px;
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #ffffff;
+      line-height: 1.8;
     }
-    table {
-      border-collapse: collapse;
-      width: 100%;
-      margin-bottom: 30px;
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.75);
+      min-height: 100vh;
+      padding: 50px 10vw;
+      box-sizing: border-box;
     }
-    th, td {
-      border: 1px solid #aaa;
-      padding: 8px;
+
+    .header {
       text-align: center;
+      margin-bottom: 50px;
     }
-    th {
-      background-color: #f2f2f2;
+
+    .header h1 {
+      font-size: 2.8em;
+      color: #00eaff;
+      margin-bottom: 10px;
     }
+
     h2 {
-      color: #333;
-      border-bottom: 2px solid #ccc;
+      color: #00eaff;
+      margin-top: 50px;
+      font-size: 1.8em;
       padding-bottom: 5px;
     }
+
+    .section-title {
+      border-bottom: 1px solid #00eaff;
+    }
+
+    p, ul, li {
+      font-size: 18px;
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0 40px 0;
+      background-color: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(6px);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    }
+
+    th, td {
+      padding: 14px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      text-align: center;
+      color: #fff;
+    }
+
+    th {
+      background-color: rgba(0,0,0,0.5);
+      font-weight: bold;
+    }
+
     code {
-      background: #f4f4f4;
-      padding: 2px 5px;
-      font-family: monospace;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+      color: #00ffcc;
+    }
+
+    .note {
+      background: rgba(255, 255, 255, 0.1);
+      border-left: 6px solid #ffc107;
+      color: #fffbe6;
+      padding: 18px 25px;
+      font-size: 17px;
+      margin-bottom: 35px;
+      backdrop-filter: blur(5px);
+      border-radius: 10px;
+    }
+
+    .section {
+      margin-top: 50px;
+    }
+
+    @media screen and (max-width: 768px) {
+      .overlay {
+        padding: 30px 6vw;
+      }
+
+      .header h1 {
+        font-size: 2em;
+      }
+
+      h2 {
+        font-size: 1.4em;
+      }
+
+      th, td {
+        font-size: 14px;
+      }
+
+      p, li, .note {
+        font-size: 16px;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="overlay">
+    <div class="header">
+      <h1>Memory Computation</h1>
+    </div>
+ 
+    <div class="header">
+      <h2 class="section-title">Computation for Displays</h2>
+    </div>
 
-  <h2>📊 Computation of Memory</h2>
+    <div class="note">
+      <strong>Formula:</strong><br>
+      <code>Memory (Bytes) = Width × Height × BitsPerPixel / 8</code><br>
+      <code>Memory (KB) = (Width × Height × (bpp / 8)) / 1024</code><br>
+      If using <strong>double buffering</strong>, multiply the result by 2.
+    </div>
 
-  <h3>🔲 Display Framebuffers</h3>
-  <p><strong>Formula:</strong> <code>Memory (in bytes) = Width × Height × bpp / 8</code></p>
-  <p><strong>Common bpp values:</strong> 1, 2, 8, 16, 24, 32</p>
+    <h2>Examples</h2>
+    <table>
+      <tr>
+        <th>Resolution (WxH)</th>
+        <th>Bits per Pixel (bpp)</th>
+        <th>Bytes per Pixel</th>
+        <th>Single Buffer (KB)</th>
+        <th>Double Buffer (KB)</th>
+      </tr>
+      <tr>
+        <td>129 × 160</td>
+        <td>16</td>
+        <td>2</td>
+        <td>40.31</td>
+        <td>80.62</td>
+      </tr>
+      <tr>
+        <td>320 × 240</td>
+        <td>16</td>
+        <td>2</td>
+        <td>150</td>
+        <td>300</td>
+      </tr>
+      <tr>
+        <td>160 × 100</td>
+        <td>1</td>
+        <td>0.125</td>
+        <td>1.95</td>
+        <td>3.91</td>
+      </tr>
+    </table>
 
-  <table>
-    <tr>
-      <th>Resolution</th>
-      <th>bpp</th>
-      <th>Bytes per Pixel</th>
-      <th>Single Buffer (Approx)</th>
-      <th>Double Buffer (Approx)</th>
-    </tr>
-    <tr>
-      <td>128×160</td>
-      <td>16</td>
-      <td>2</td>
-      <td>40 KB</td>
-      <td>80 KB</td>
-    </tr>
-    <tr>
-      <td>320×240</td>
-      <td>16</td>
-      <td>2</td>
-      <td>150 KB</td>
-      <td>300 KB</td>
-    </tr>
-    <tr>
-      <td>480×272</td>
-      <td>16</td>
-      <td>2</td>
-      <td>255 KB</td>
-      <td>510 KB</td>
-    </tr>
-    <tr>
-      <td>800×480</td>
-      <td>16</td>
-      <td>2</td>
-      <td>750 KB</td>
-      <td>1.5 MB</td>
-    </tr>
-  </table>
+    <div class="section">
+      <h2>Step-by-step Calculation Example</h2>
+      <p><strong>Display:</strong> 320 × 240 at 16 bpp</p>
+      <ul>
+        <li>Width = 320</li>
+        <li>Height = 240</li>
+        <li>Bits per pixel = 16</li>
+        <li>Bytes per pixel = 16 / 8 = 2</li>
+      </ul>
+      <p><strong>Single Buffer:</strong> 320 × 240 × 2 = 153,600 bytes ≈ <strong>150 KB</strong></p>
+      <p><strong>Double Buffer:</strong> 153,600 × 2 = 307,200 bytes ≈ <strong>300 KB</strong></p>
+    </div>
 
-  <h3>📌 Example Calculation</h3>
-  <p><strong>Display:</strong> <code>320 × 240</code> at <code>16 bpp</code></p>
-  <ul>
-    <li>Width = 320</li>
-    <li>Height = 240</li>
-    <li>bpp = 16 → Bytes per pixel = 16 / 8 = 2</li>
-  </ul>
-  <p><strong>Single Buffer:</strong> <code>320 × 240 × 2 = 153,600 bytes ≈ 150 KB</code></p>
-  <p><strong>Double Buffer:</strong> <code>153,600 × 2 = 307,200 bytes ≈ 300 KB</code></p>
-  <p><strong>Quick Formula (KB):</strong> <code>(Width × Height × (bpp / 8)) / 1024</code></p>
+        
+    <div class="header">
+      <h2 class="section-title">Computation for Variables or Arrays in C/C++</h2>
+    </div>
+    <div class="section">
+      <h2>Variables and Arrays in C / C++</h2>
+      <div class="note">
+        <strong>Formula:</strong><br>
+        <code>Memory (bytes) = Number of elements × Size of each element (in bytes)</code>
+      </div>
 
-  <h3>📦 Variables & Arrays in C/C++</h3>
-  <p><strong>General Formula:</strong> <code>Memory = Number of elements × Size of each element</code></p>
-
-  <table>
-    <tr>
-      <th>Declaration</th>
-      <th>Description</th>
-      <th>Total Memory</th>
-    </tr>
-    <tr>
-      <td><code>int arr[100];</code></td>
-      <td>100 integers (int = 4 bytes)</td>
-      <td>100 × 4 = 400 bytes</td>
-    </tr>
-    <tr>
-      <td><code>char name[50];</code></td>
-      <td>50 characters</td>
-      <td>50 × 1 = 50 bytes</td>
-    </tr>
-    <tr>
-      <td><code>float matrix[10][10];</code></td>
-      <td>2D float array (float = 4 bytes)</td>
-      <td>10 × 10 × 4 = 400 bytes</td>
-    </tr>
-  </table>
-
+      <h2>Examples</h2>
+      <ul>
+        <li><code>int arr[100];</code> → 100 integers</li>
+        <li>If <code>int</code> is 4 bytes → 100 × 4 = <strong>400 bytes</strong></li>
+        <li><code>char name[50];</code> → 50 bytes (1 byte per character)</li>
+        <li><code>float matrix[10][10];</code> → 10 × 10 × 4 = <strong>400 bytes</strong> (if float = 4 bytes)</li>
+      </ul>
+    </div>
+  </div>
 </body>
 </html>

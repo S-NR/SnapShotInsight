@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Memory in Embedded Systems</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png'); /* Replace if needed */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #ffffff;
+      line-height: 1.8;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.78);
+      min-height: 100vh;
+      padding: 50px 10vw;
+      box-sizing: border-box;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 2.8em;
+      color: #00eaff;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      color: #00eaff;
+      margin-top: 45px;
+      font-size: 1.8em;
+    }
+
+    h3 {
+      color: #ffd700;
+      margin-top: 30px;
+      font-size: 1.4em;
+    }
+
+    p, ul, li {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0 40px 0;
+      background-color: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(6px);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      color: #fff;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      text-align: center;
+    }
+
+    th {
+      background-color: rgba(0,0,0,0.5);
+      font-weight: bold;
+    }
+
+    .note {
+      background: rgba(255, 255, 255, 0.1);
+      border-left: 6px solid #ffc107;
+      color: #fffbe6;
+      padding: 18px 25px;
+      font-size: 17px;
+      margin-bottom: 35px;
+      border-radius: 10px;
+    }
+
+    ul {
+      padding-left: 25px;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 4px 8px;
+      border-radius: 4px;
+      color: #00ffcc;
+      font-family: Consolas, monospace;
+    }
+
+    @media screen and (max-width: 768px) {
+      .overlay {
+        padding: 30px 6vw;
+      }
+
+      .header h1 {
+        font-size: 2em;
+      }
+
+      h2 {
+        font-size: 1.5em;
+      }
+
+      th, td {
+        font-size: 14px;
+      }
+
+      p, li, .note {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <div class="header">
+      <h1>🧠 Memory in Embedded Systems</h1>
+    </div>
+
+    <div class="note">
+      Embedded systems are often resource-constrained. Understanding memory layout helps testers catch crashes, data loss, and stability issues during runtime.
+    </div>
+
+    <h2>📁 1. Types of Memory</h2>
+    <table>
+      <tr>
+        <th>Memory Type</th>
+        <th>Purpose</th>
+        <th>Common Issues</th>
+      </tr>
+      <tr>
+        <td>Flash (ROM)</td>
+        <td>Stores firmware/program</td>
+        <td>Corruption, improper flashing</td>
+      </tr>
+      <tr>
+        <td>RAM</td>
+        <td>Temporary memory for execution</td>
+        <td>Overflow, memory leaks</td>
+      </tr>
+      <tr>
+        <td>EEPROM / Flash (data)</td>
+        <td>Stores non-volatile user settings</td>
+        <td>Wear-out, retention failure</td>
+      </tr>
+    </table>
+
+    <h2>📦 2. Memory Segments in RAM</h2>
+    <table>
+      <tr>
+        <th>Segment</th>
+        <th>Purpose</th>
+        <th>Example Issues</th>
+      </tr>
+      <tr>
+        <td>Stack</td>
+        <td>Local variables, function calls</td>
+        <td>Overflow, deep recursion</td>
+      </tr>
+      <tr>
+        <td>Heap</td>
+        <td>Dynamic memory allocation</td>
+        <td>Leaks, fragmentation</td>
+      </tr>
+      <tr>
+        <td>Global/Static</td>
+        <td>Globals and statics</td>
+        <td>Corrupt values due to overwrite</td>
+      </tr>
+      <tr>
+        <td>BSS</td>
+        <td>Uninitialized globals/statics</td>
+        <td>Unexpected default behavior</td>
+      </tr>
+    </table>
+
+    <h2>🔍 3. Why This Matters in Testing</h2>
+    <ul>
+      <li>Crashes → Stack overflow, invalid memory access</li>
+      <li>Data loss → EEPROM/Flash write failures</li>
+      <li>Unstable after hours → Memory leaks or heap fragmentation</li>
+      <li>Watchdog resets → RAM exhaustion or lock-ups</li>
+    </ul>
+
+    <h2>🧪 4. How Testers Can Be Aware</h2>
+    <table>
+      <tr>
+        <th>Symptom</th>
+        <th>Memory Area Affected</th>
+      </tr>
+      <tr>
+        <td>Device won't boot</td>
+        <td>Flash</td>
+      </tr>
+      <tr>
+        <td>Freezing/restarts</td>
+        <td>Stack or RAM</td>
+      </tr>
+      <tr>
+        <td>Incorrect saved values</td>
+        <td>EEPROM</td>
+      </tr>
+      <tr>
+        <td>Junk UI or corrupted display</td>
+        <td>RAM</td>
+      </tr>
+      <tr>
+        <td>Slowdown over time</td>
+        <td>Heap fragmentation</td>
+      </tr>
+    </table>
+
+    <h2>✅ 5. Useful Test Scenarios</h2>
+    <ul>
+      <li>Run device for hours (stress test) — check for memory leaks.</li>
+      <li>Reset device — validate default values (BSS section).</li>
+      <li>Power cycle 100+ times — catch EEPROM wear or instability.</li>
+      <li>Force edge inputs — test stack depth or heap usage.</li>
+    </ul>
+
+    <h2>🛠️ 6. Helpful Tools</h2>
+    <ul>
+      <li>Watchdog logs</li>
+      <li>Heap/stack size monitoring</li>
+      <li>Debugger memory view</li>
+      <li>Static analysis (Valgrind, simulation tools)</li>
+    </ul>
+
+    <h2>🎯 7. Final Note</h2>
+    <p>You don’t have to debug code — but recognizing memory-related symptoms, patterns, and logs makes bug reporting more valuable to developers.</p>
+
+  </div>
+</body>
+</html>
