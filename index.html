@@ -39,39 +39,22 @@
       margin: 0 auto 30px auto;
     }
 
-    /* .btn {
+    .explore-button {
       background-color: #00eaff;
       color: #000;
       border: none;
-      padding: 12px 24px;
-      font-size: 1em;
+      padding: 10px 25px;
+      font-size: 16px;
+      font-weight: bold;
       border-radius: 6px;
       cursor: pointer;
-      transition: background-color 0.3s;
-      text-decoration: none;
-      margin-bottom: 30px;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
     }
 
-    .btn:hover {
-      background-color: #00c2cc;
-    } */
-
-  .explore-button {
-    background-color: #00eaff;
-    color: #000;
-    border: none;
-    padding: 10px 25px;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s ease;
-  }
-
-  .explore-button:hover {
-    background-color: #00c0cc;
-  }
+    .explore-button:hover {
+      background-color: #00c0cc;
+    }
 
     #search-box {
       margin-top: 10px;
@@ -137,7 +120,12 @@
 
     <!-- Search Box with Dropdown -->
     <div id="search-box">
-      <input type="text" id="searchInput" placeholder="Search..." oninput="showSuggestions()" />
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search..."
+        oninput="showSuggestions()"
+        onfocus="showSuggestions()" /> <!-- ✅ Added onfocus here -->
       <div id="suggestions"></div>
     </div>
   </div>
@@ -150,56 +138,59 @@
       { name: "Explore", file: "explore.html" },
       { name: "Double Buffering", file: "double_buffering.html" },
       { name: "Linux Commands", file: "linux_commands.html" },
-      { name: "Basics of memories : For Testers", file: "memory_testing_team.html" },      
-      { name: "Memory : Testing Senarios", file: "memory_testing_senarios.html" },         
-      { name: "PID Controller", file: "pid_ccontroller.html" },           
-      { name: "PID Controller", file: "pid_ccontroller.html" },  
-      { name: "Mutex and Semaphore", file: "mutex_semaphore.html" },     
+      { name: "Basics of memories : For Testers", file: "memory_testing_team.html" },
+      { name: "Memory : Testing Senarios", file: "memory_testing_senarios.html" },
+      { name: "PID Controller", file: "pid_ccontroller.html" },
+      { name: "Mutex and Semaphore", file: "mutex_semaphore.html" },
       { name: "Contact", file: "contact.html" }
     ];
-    
+
     function showSuggestions() {
-  const input = document.getElementById("searchInput").value.toLowerCase();
-  const suggestionBox = document.getElementById("suggestions");
-  suggestionBox.innerHTML = '';
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const suggestionBox = document.getElementById("suggestions");
+      suggestionBox.innerHTML = '';
 
-  let matches;
+      let matches;
 
-  if (input === '') {
-    // Show Popular label
-    const label = document.createElement('div');
-    label.textContent = 'Popular Topics';
-    label.style.fontWeight = 'bold';
-    label.style.backgroundColor = '#eee';
-    label.style.color = '#333';
-    label.style.padding = '8px';
-    suggestionBox.appendChild(label);
+      if (input === '') {
+        const label = document.createElement('div');
+        label.textContent = 'Popular Topics';
+        label.style.fontWeight = 'bold';
+        label.style.backgroundColor = '#eee';
+        label.style.color = '#333';
+        label.style.padding = '8px';
+        suggestionBox.appendChild(label);
 
-    // Assign popular topics
-    matches = pages.slice(0, 5);
-  } else {
-    // Filter by user input
-    matches = pages.filter(page => page.name.toLowerCase().includes(input));
-  }
+        matches = pages.slice(0, 5); // Show first 5 items
+      } else {
+        matches = pages.filter(page => page.name.toLowerCase().includes(input));
+      }
 
-  if (matches.length === 0) {
-    suggestionBox.style.display = 'none';
-    return;
-  }
+      if (matches.length === 0) {
+        suggestionBox.style.display = 'none';
+        return;
+      }
 
-  // Append suggestions
-  matches.forEach(match => {
-    const div = document.createElement('div');
-    div.textContent = match.name;
-    div.onclick = () => {
-      window.location.href = match.file;
-    };
-    suggestionBox.appendChild(div);
-  });
+      matches.forEach(match => {
+        const div = document.createElement('div');
+        div.textContent = match.name;
+        div.onclick = () => {
+          window.location.href = match.file;
+        };
+        suggestionBox.appendChild(div);
+      });
 
-  suggestionBox.style.display = 'block';
+      suggestionBox.style.display = 'block';
     }
-    
+
+    // ✅ Optional: Hide suggestions when clicking outside
+    document.addEventListener('click', (event) => {
+      const searchBox = document.getElementById("search-box");
+      const suggestions = document.getElementById("suggestions");
+      if (!searchBox.contains(event.target)) {
+        suggestions.style.display = "none";
+      }
+    });
   </script>
 </body>
 </html>
