@@ -166,17 +166,19 @@
   let matches;
 
   if (input === '') {
-  const label = document.createElement('div');
-  label.textContent = 'Popular Topics';
-  label.style.fontWeight = 'bold';
-  label.style.backgroundColor = '#eee';
-  label.style.color = '#333';
-  label.style.padding = '8px';
-  suggestionBox.appendChild(label);
+    // Show Popular label
+    const label = document.createElement('div');
+    label.textContent = 'Popular Topics';
+    label.style.fontWeight = 'bold';
+    label.style.backgroundColor = '#eee';
+    label.style.color = '#333';
+    label.style.padding = '8px';
+    suggestionBox.appendChild(label);
 
-  matches = pages.slice(0, 5);
-  }
-  else {
+    // Assign popular topics
+    matches = pages.slice(0, 5);
+  } else {
+    // Filter by user input
     matches = pages.filter(page => page.name.toLowerCase().includes(input));
   }
 
@@ -185,6 +187,7 @@
     return;
   }
 
+  // Append suggestions
   matches.forEach(match => {
     const div = document.createElement('div');
     div.textContent = match.name;
