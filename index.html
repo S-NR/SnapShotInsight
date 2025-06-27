@@ -166,9 +166,17 @@
   let matches;
 
   if (input === '') {
-    // Show top 5 popular or default suggestions
-    matches = pages.slice(0, 5);
-  } else {
+  const label = document.createElement('div');
+  label.textContent = 'Popular Topics';
+  label.style.fontWeight = 'bold';
+  label.style.backgroundColor = '#eee';
+  label.style.color = '#333';
+  label.style.padding = '8px';
+  suggestionBox.appendChild(label);
+
+  matches = pages.slice(0, 5);
+  }
+  else {
     matches = pages.filter(page => page.name.toLowerCase().includes(input));
   }
 
