@@ -157,35 +157,38 @@
       { name: "Mutex and Semaphore", file: "mutex_semaphore.html" },     
       { name: "Contact", file: "contact.html" }
     ];
-
+    
     function showSuggestions() {
-      const input = document.getElementById("searchInput").value.toLowerCase();
-      const suggestionBox = document.getElementById("suggestions");
-      suggestionBox.innerHTML = '';
+  const input = document.getElementById("searchInput").value.toLowerCase();
+  const suggestionBox = document.getElementById("suggestions");
+  suggestionBox.innerHTML = '';
 
-      if (input === '') {
-        suggestionBox.style.display = 'none';
-        return;
-      }
+  let matches;
 
-      const matches = pages.filter(page => page.name.toLowerCase().includes(input));
+  if (input === '') {
+    // Show top 5 popular or default suggestions
+    matches = pages.slice(0, 5);
+  } else {
+    matches = pages.filter(page => page.name.toLowerCase().includes(input));
+  }
 
-      if (matches.length === 0) {
-        suggestionBox.style.display = 'none';
-        return;
-      }
+  if (matches.length === 0) {
+    suggestionBox.style.display = 'none';
+    return;
+  }
 
-      matches.forEach(match => {
-        const div = document.createElement('div');
-        div.textContent = match.name;
-        div.onclick = () => {
-          window.location.href = match.file;
-        };
-        suggestionBox.appendChild(div);
-      });
+  matches.forEach(match => {
+    const div = document.createElement('div');
+    div.textContent = match.name;
+    div.onclick = () => {
+      window.location.href = match.file;
+    };
+    suggestionBox.appendChild(div);
+  });
 
-      suggestionBox.style.display = 'block';
+  suggestionBox.style.display = 'block';
     }
+    
   </script>
 </body>
 </html>
