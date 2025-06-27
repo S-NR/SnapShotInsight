@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Understanding Mutex & Semaphore Usage</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png'); /* Replace with actual image path */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #ffffff;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.75);
+      min-height: 100vh;
+      padding: 50px 10vw;
+      box-sizing: border-box;
+    }
+
+    h1, h2, h3 {
+      color: #00eaff;
+    }
+
+    h1 {
+      font-size: 2.4em;
+      border-bottom: 3px solid #00eaff;
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.8em;
+      margin-top: 40px;
+      border-bottom: 2px solid #00eaff;
+      padding-bottom: 5px;
+    }
+
+    h3 {
+      font-size: 1.4em;
+      margin-top: 30px;
+    }
+
+    p, li {
+      font-size: 18px;
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin-bottom: 25px;
+    }
+
+    code {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-family: Consolas, monospace;
+      color: #00ffcc;
+      display: inline-block;
+      margin: 6px 0;
+    }
+
+    .note {
+      background: rgba(255, 255, 255, 0.1);
+      border-left: 6px solid #ffc107;
+      padding: 18px 25px;
+      font-size: 17px;
+      color: #fffbe6;
+      margin-bottom: 35px;
+      backdrop-filter: blur(5px);
+      border-radius: 10px;
+    }
+
+    pre {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      color: #00ffcc;
+    }
+
+    @media screen and (max-width: 768px) {
+      .overlay {
+        padding: 30px 6vw;
+      }
+
+      h1 {
+        font-size: 2em;
+      }
+
+      h2 {
+        font-size: 1.5em;
+      }
+
+      h3 {
+        font-size: 1.2em;
+      }
+
+      p, li, .note {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h1>🔐 Understanding the Use of Mutex & Semaphore</h1>
+
+    <p>
+      In a multi-threaded or multi-process application, especially where shared resources like <strong>sockets or files</strong> are accessed, it's crucial to manage concurrency carefully to avoid data corruption, message interleaving, or race conditions.
+    </p>
+
+    <h2>🔹 Part 1: std::mutex – For Thread-Level Synchronization</h2>
+
+    <p>
+      During the initial setup, we want to ensure that the semaphore is initialized only once, even if multiple threads are running in parallel. That’s where <code>std::mutex</code> is used:
+    </p>
+
+    <pre><code>static std::mutex sem_init_mutex;
+
+{
+    std::lock_guard&lt;std::mutex&gt; lock(sem_init_mutex);
+    if (!sem_initialized) {
+        ...
+        sem_initialized = true;
+    }
+}</code></pre>
+
+    <div class="note">
+      ✅ Ensures that initialization code (like <code>sem_open</code> or <code>sem_unlink</code>) is thread-safe and executed only once — even under heavy parallelism.
+    </div>
+
+    <h2>🔹 Part 2: POSIX Semaphore – For Inter-Process Locking</h2>
+
+    <p>
+      Unlike <code>std::mutex</code> which only works within a process, a named <strong>POSIX semaphore</strong> allows synchronization across different processes:
+    </p>
+
+    <pre><code>static sem_t* global_sem = nullptr;
+global_sem = sem_open("/fl232_global_mutex", O_CREAT | O_EXCL, 0666, 1);
+
+sem_wait(global_sem); // enter critical section
+// socket send/receive
+sem_post(global_sem); // exit critical section</code></pre>
+
+    <div class="note">
+      ✅ This guarantees only one process or thread at a time can perform socket communication (like <code>sendto</code> / <code>recvfrom</code>) — preventing simultaneous access.
+    </div>
+
+    <h2>🔄 Summary: Why Both Are Needed</h2>
+
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; color: #fff;">
+      <tr style="background: rgba(255,255,255,0.1);">
+        <th style="padding: 10px; border: 1px solid #888;">Purpose</th>
+        <th style="padding: 10px; border: 1px solid #888;">Tool</th>
+        <th style="padding: 10px; border: 1px solid #888;">Scope</th>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #555;">Protect semaphore initialization</td>
+        <td style="padding: 10px; border: 1px solid #555;">std::mutex</td>
+        <td style="padding: 10px; border: 1px solid #555;">Within the same process (thread safety)</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px; border: 1px solid #555;">Protect socket access across all processes</td>
+        <td style="padding: 10px; border: 1px solid #555;">POSIX Semaphore</td>
+        <td style="padding: 10px; border: 1px solid #555;">System-wide (inter-process)</td>
+      </tr>
+    </table>
+
+    <h2>🧼 Cleaning Up the Semaphore</h2>
+    <p>To remove the named semaphore from the system (typically during shutdown):</p>
+    <pre><code>sem_unlink("/fl232_global_mutex");</code></pre>
+
+    <p>This removes the named handle but doesn’t affect already opened semaphores. Useful to avoid stale locks.</p>
+
+    <h2>🧠 Pro Tip for Debugging</h2>
+    <ul>
+      <li>Check if <code>sem_wait()</code> is stuck — it may be blocked due to a crash before <code>sem_post()</code>.</li>
+      <li>Use <code>ls /dev/shm/sem.*</code> or <code>ipcs -s</code> to inspect active semaphores.</li>
+    </ul>
+
+    <div class="note">
+      ✅ With this dual-level protection in place, you ensure robust and reliable communication even in complex multi-threaded, multi-process systems.
+    </div>
+  </div>
+</body>
+</html>
