@@ -7,8 +7,8 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-image: url('background_usb.jpg');
+      font-family: 'Times New Roman', Times, serif;
+      background-image: url('background.png');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -17,105 +17,120 @@
     }
 
     .overlay {
-      background-color: rgba(0, 0, 0, 0.75);
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 40px;
       min-height: 100vh;
-      padding: 60px 20px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      text-align: center;
+      justify-content: flex-start;
     }
 
-    h1, h2 {
+    h1 {
       color: #00eaff;
-      margin-bottom: 20px;
+      text-align: left;
     }
 
-    p, li {
-      font-size: 1.1em;
-      line-height: 1.6;
-      max-width: 800px;
-      margin: 0 auto 20px auto;
-    }
-
-    ul {
-      list-style-type: none;
-      padding-left: 0;
-    }
-
-    ul li::before {
-      content: "\2726";
-      color: #00eaff;
-      margin-right: 8px;
-    }
-
-    .section {
+    h2 {
+      color: #ffd700;
       margin-top: 30px;
     }
 
-    @media screen and (max-width: 600px) {
-      h1 {
-        font-size: 2em;
-      }
-      p, li {
-        font-size: 1em;
-      }
+    p, li {
+      text-align: left;
+      line-height: 1.6;
+      font-size: 1.1em;
+      max-width: 800px;
+    }
+
+    img.connector-img {
+      width: 200px;
+      height: auto;
+      margin: 10px 0;
+      border: 2px solid #ccc;
+      border-radius: 8px;
+      background-color: #fff;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    ul {
+      padding-left: 20px;
     }
   </style>
 </head>
-
 <body>
   <div class="overlay">
-    <h1>Understanding USB Connector Types</h1>
+    <h1>🔌 USB Connector Types</h1>
 
     <div class="section">
-      <h2>Standard USB Connectors</h2>
+      <h2>1. USB Type-A</h2>
+      <img src="usb_type_a.jpg" alt="USB Type-A" class="connector-img">
       <ul>
-        <li><strong>USB Type-A:</strong> Classic rectangular plug. Found on PCs, TVs, and USB drives. One-way insertion.</li>
-        <li><strong>USB Type-B:</strong> Square-ish with a slanted top. Common for printers and scanners.</li>
-        <li><strong>Mini-USB:</strong> Small, older connector used in early cameras and MP3 players.</li>
-        <li><strong>Micro-USB:</strong> Flat, compact, used in older Android devices. Not reversible.</li>
-        <li><strong>USB Type-C:</strong> Modern standard. Reversible, fast, and powerful. Used in laptops, phones, and more.</li>
+        <li>Most common rectangular port.</li>
+        <li>Found on computers, TVs, game consoles.</li>
+        <li>Only inserts one way (non-reversible).</li>
       </ul>
     </div>
 
     <div class="section">
-      <h2>Specialized and Proprietary Types</h2>
+      <h2>2. USB Type-B</h2>
+      <img src="usb_type_b.jpg" alt="USB Type-B" class="connector-img">
       <ul>
-        <li><strong>Apple Lightning:</strong> Used in older iPhones/iPads. Reversible but proprietary.</li>
-        <li><strong>USB 3.0 Micro-B:</strong> Dual plug for USB 3.0 hard drives. Faster data but awkward shape.</li>
-        <li><strong>Barrel Jack:</strong> Round power plug used in desktop drives and routers. Not USB.</li>
-        <li><strong>Magnetic Connectors:</strong> Found in Surface tablets, smart keyboards, etc.</li>
+        <li>Square-ish with a slanted top.</li>
+        <li>Common on printers and some external hard drives.</li>
       </ul>
     </div>
 
     <div class="section">
-      <h2>USB Versions & Capabilities</h2>
+      <h2>3. Mini-USB (Type-B)</h2>
+      <img src="mini_usb.jpg" alt="Mini USB" class="connector-img">
       <ul>
-        <li><strong>USB 1.1:</strong> 12 Mbps, 2.5W – Obsolete.</li>
-        <li><strong>USB 2.0:</strong> 480 Mbps, 2.5W – Still common in peripherals.</li>
-        <li><strong>USB 3.0:</strong> 5 Gbps, 4.5W – Recognized by blue ports.</li>
-        <li><strong>USB 3.1 Gen 2:</strong> 10 Gbps, 15W – Faster than USB 3.0.</li>
-        <li><strong>USB 3.2:</strong> Up to 20 Gbps, 15W – Uses USB-C.</li>
-        <li><strong>USB4:</strong> Up to 40 Gbps, 100W – Supports Thunderbolt 3, high-speed video/data/power.</li>
-        <li><strong>USB PD (Power Delivery):</strong> Up to 240W – Charges laptops, monitors, and more.</li>
+        <li>Smaller version of USB-B.</li>
+        <li>Used in older cameras and MP3 players.</li>
       </ul>
     </div>
 
     <div class="section">
-      <h2>Why USB Types Evolved</h2>
+      <h2>4. Micro-USB (Type-B)</h2>
+      <img src="micro_usb.jpg" alt="Micro USB" class="connector-img">
       <ul>
-        <li><strong>Reversibility:</strong> Type-C and Lightning solved the frustration of plug orientation.</li>
-        <li><strong>Power Needs:</strong> Type-C enables high-wattage charging for bigger devices.</li>
-        <li><strong>Speed & Versatility:</strong> USB4 and Type-C offer faster data, video output, and backward compatibility.</li>
-        <li><strong>Durability:</strong> Type-C rated for 10,000+ insertions. Stronger than Micro-USB.</li>
-        <li><strong>Universal Standard:</strong> USB-C aims to replace all older ports, encouraging one cable for everything.</li>
+        <li>Smaller and flatter than Mini-USB.</li>
+        <li>Common on older Android phones and accessories.</li>
+        <li>Not reversible.</li>
       </ul>
     </div>
 
-    <p style="margin-top: 40px; font-style: italic;">
-      Need help identifying a specific port on your device? Share a model or photo — we’ll help you find the right connector.
-    </p>
+    <div class="section">
+      <h2>5. USB Type-C</h2>
+      <img src="usb_type_c.jpg" alt="USB Type-C" class="connector-img">
+      <ul>
+        <li>Modern standard, reversible.</li>
+        <li>Used in new phones, laptops, tablets.</li>
+        <li>Supports power, data, video.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>⚡ USB Versions (Speed & Power)</h2>
+      <ul>
+        <li><strong>USB 2.0</strong>: 480 Mbps, 2.5W – still common.</li>
+        <li><strong>USB 3.0</strong>: 5 Gbps, 4.5W – blue-colored ports.</li>
+        <li><strong>USB 3.2</strong>: up to 20 Gbps, uses USB-C.</li>
+        <li><strong>USB4</strong>: up to 40 Gbps, up to 100W, supports Thunderbolt 3.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🧩 Special USB Types</h2>
+      <ul>
+        <li><strong>Lightning</strong>: Apple’s proprietary reversible connector.</li>
+        <li><strong>Thunderbolt</strong>: High-speed data/video using USB-C-style connectors.</li>
+        <li><strong>USB 3.0 Micro-B</strong>: Dual segment plug used in some external drives.</li>
+        <li><strong>Barrel Jack</strong>: Round power connector used in some powered drives.</li>
+      </ul>
+    </div>
   </div>
 </body>
 </html>
