@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Timestamp Print – C++</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Courier New', Courier, monospace;
+      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png'); /* Replace with your background */
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #fff;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.85);
+      min-height: 100vh;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    h1 {
+      color: #00eaff;
+      font-size: 2em;
+    }
+
+    h2 {
+      color: #ffd700;
+      margin-top: 30px;
+    }
+
+    p {
+      max-width: 800px;
+      font-size: 1.1em;
+      line-height: 1.6;
+    }
+
+    pre {
+      background-color: rgba(255, 255, 255, 0.08);
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      max-width: 1000px;
+      font-size: 0.95em;
+      line-height: 1.4;
+      border-left: 4px solid #00eaff;
+    }
+
+    code {
+      color: #00ffcc;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h1>🕒 Printing Timestamps in C++</h1>
+
+    <p>
+      This utility function prints the current timestamp with milliseconds using <code>&lt;chrono&gt;</code>, <code>&lt;iomanip&gt;</code>, and <code>&lt;ctime&gt;</code>. Useful for debugging or logging in time-sensitive systems like embedded or multithreaded applications.
+    </p>
+
+    <h2>✅ Code</h2>
+    <pre><code>#include &lt;chrono&gt;
+#include &lt;iomanip&gt;
+#include &lt;ctime&gt;
+#include &lt;cstring&gt;  // for strlen
+
+// Helper: Print current timestamp
+void print_timestamp(const std::string&amp; label) {
+    using namespace std::chrono;
+    auto now = system_clock::now();
+    auto now_time_t = system_clock::to_time_t(now);
+    auto now_ms = duration_cast&lt;milliseconds&gt;(now.time_since_epoch()) % 1000;
+
+    std::tm now_tm = *std::localtime(&amp;now_time_t);
+    std::cout &lt;&lt; "[" &lt;&lt; label &lt;&lt; "] "
+              &lt;&lt; std::put_time(&amp;now_tm, "%Y-%m-%d %H:%M:%S")
+              &lt;&lt; "." &lt;&lt; std::setfill('0') &lt;&lt; std::setw(3) &lt;&lt; now_ms.count()
+              &lt;&lt; std::endl;
+}
+
+// Calling function
+print_timestamp("triggered write callback");
+</code></pre>
+
+    <h2>💡 Output Example</h2>
+    <pre><code>[triggered write callback] 2025-06-27 09:35:42.127</code></pre>
+
+    <p>
+      This timestamp format is very readable and accurate up to milliseconds. You can replace the <code>label</code> with context-specific messages like "start transmission", "read event", etc.
+    </p>
+  </div>
+</body>
+</html>
