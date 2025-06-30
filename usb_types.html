@@ -29,9 +29,11 @@
 
     .section {
       display: flex;
+      flex-direction: row;
       align-items: flex-start;
-      margin-bottom: 40px;
       gap: 20px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
     }
 
     .section img {
@@ -40,9 +42,12 @@
       border-radius: 8px;
       background-color: #fff;
       padding: 5px;
+      flex-shrink: 0;
     }
 
     .text {
+      flex: 1;
+      min-width: 250px;
       max-width: 900px;
     }
 
@@ -73,19 +78,37 @@
       background-color: rgba(255, 255, 255, 0.05);
       color: #fff;
     }
-    
-    .usb-summary th, .usb-summary td {
+
+    .usb-summary th,
+    .usb-summary td {
       border: 1px solid #555;
       padding: 12px;
       text-align: left;
     }
-    
+
     .usb-summary thead {
       background-color: rgba(0, 234, 255, 0.2);
     }
-    
+
     .usb-summary tr:nth-child(even) {
       background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    /* Mobile responsive layout */
+    @media (max-width: 768px) {
+      .section {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .section img {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .text {
+        max-width: 100%;
+      }
     }
     
   </style>
