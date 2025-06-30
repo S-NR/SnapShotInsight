@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>USB Connector Types | Snap Shot Insight</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-image: url('background.png'); /* Replace with your image */
+      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png'); /* Replace with your background */
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -17,55 +17,57 @@
     }
 
     .overlay {
-      background-color: rgba(0, 0, 0, 0.75);
-      min-height: 100vh;
+      background-color: rgba(0, 0, 0, 0.8);
       padding: 50px 10vw;
-      box-sizing: border-box;
+      min-height: 100vh;
     }
 
-    h1, h2 {
+    h1 {
       color: #00eaff;
-      text-align: left;
-      margin-top: 40px;
+      text-align: center;
+      margin-bottom: 50px;
     }
 
     h2 {
       color: #ffd700;
-      margin-top: 30px;
-    }
-
-    p, li {
-      font-size: 18px;
-      line-height: 1.6;
-      margin-bottom: 10px;
-    }
-
-    ul {
-      padding-left: 20px;
+      margin-bottom: 15px;
+      font-size: 1.5em;
     }
 
     .section {
-      margin-bottom: 40px;
+      display: flex;
+      gap: 40px;
+      align-items: center;
+      margin-bottom: 60px;
+      flex-wrap: wrap;
     }
 
-    img.connector-img {
-      width: 200px;
-      height: auto;
-      margin: 10px 0;
+    .text {
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .text ul {
+      padding-left: 20px;
+      line-height: 1.8;
+      font-size: 1.1em;
+    }
+
+    .connector-img {
+      flex: 0 0 200px;
+      max-width: 100%;
       border: 2px solid #ccc;
       border-radius: 8px;
       background-color: #fff;
-      display: block;
     }
 
     @media screen and (max-width: 768px) {
-      .overlay {
-        padding: 30px 6vw;
+      .section {
+        flex-direction: column;
+        text-align: center;
       }
-
-      img.connector-img {
-        width: 100%;
-        max-width: 300px;
+      .text ul {
+        text-align: left;
       }
     }
   </style>
@@ -75,71 +77,85 @@
     <h1>🔌 USB Connector Types</h1>
 
     <div class="section">
-      <h2>1. USB Type-A</h2>
-      <img src="usb_type_a.jpg" alt="USB Type-A" class="connector-img" />
-      <ul>
-        <li>Most common rectangular port.</li>
-        <li>Found on computers, TVs, game consoles.</li>
-        <li>Only inserts one way (non-reversible).</li>
-      </ul>
+      <img src="usb_type_a.jpg" alt="USB Type-A" class="connector-img">
+      <div class="text">
+        <h2>1. USB Type-A</h2>
+        <ul>
+          <li>Most common rectangular port.</li>
+          <li>Found on computers, TVs, game consoles.</li>
+          <li>Only inserts one way (non-reversible).</li>
+        </ul>
+      </div>
     </div>
 
     <div class="section">
-      <h2>2. USB Type-B</h2>
-      <img src="usb_type_b.jpg" alt="USB Type-B" class="connector-img" />
-      <ul>
-        <li>Square-ish with a slanted top.</li>
-        <li>Common on printers and some external hard drives.</li>
-      </ul>
+      <img src="usb_type_b.jpg" alt="USB Type-B" class="connector-img">
+      <div class="text">
+        <h2>2. USB Type-B</h2>
+        <ul>
+          <li>Square-ish with a slanted top.</li>
+          <li>Common on printers and some external hard drives.</li>
+        </ul>
+      </div>
     </div>
 
     <div class="section">
-      <h2>3. Mini-USB (Type-B)</h2>
-      <img src="mini_usb.jpg" alt="Mini USB" class="connector-img" />
-      <ul>
-        <li>Smaller version of USB-B.</li>
-        <li>Used in older cameras and MP3 players.</li>
-      </ul>
+      <img src="mini_usb.jpg" alt="Mini USB" class="connector-img">
+      <div class="text">
+        <h2>3. Mini-USB (Type-B)</h2>
+        <ul>
+          <li>Smaller version of USB-B.</li>
+          <li>Used in older cameras and MP3 players.</li>
+        </ul>
+      </div>
     </div>
 
     <div class="section">
-      <h2>4. Micro-USB (Type-B)</h2>
-      <img src="micro_usb.jpg" alt="Micro USB" class="connector-img" />
-      <ul>
-        <li>Smaller and flatter than Mini-USB.</li>
-        <li>Common on older Android phones and accessories.</li>
-        <li>Not reversible.</li>
-      </ul>
+      <img src="micro_usb.jpg" alt="Micro USB" class="connector-img">
+      <div class="text">
+        <h2>4. Micro-USB (Type-B)</h2>
+        <ul>
+          <li>Smaller and flatter than Mini-USB.</li>
+          <li>Common on older Android phones and accessories.</li>
+          <li>Not reversible.</li>
+        </ul>
+      </div>
     </div>
 
     <div class="section">
-      <h2>5. USB Type-C</h2>
-      <img src="usb_type_c.jpg" alt="USB Type-C" class="connector-img" />
-      <ul>
-        <li>Modern standard, reversible.</li>
-        <li>Used in new phones, laptops, tablets.</li>
-        <li>Supports power, data, video.</li>
-      </ul>
+      <img src="usb_type_c.jpg" alt="USB Type-C" class="connector-img">
+      <div class="text">
+        <h2>5. USB Type-C</h2>
+        <ul>
+          <li>Modern standard, reversible.</li>
+          <li>Used in new phones, laptops, tablets.</li>
+          <li>Supports power, data, video.</li>
+        </ul>
+      </div>
     </div>
 
     <div class="section">
-      <h2>⚡ USB Versions (Speed & Power)</h2>
-      <ul>
-        <li><strong>USB 2.0</strong>: 480 Mbps, 2.5W – still common.</li>
-        <li><strong>USB 3.0</strong>: 5 Gbps, 4.5W – blue-colored ports.</li>
-        <li><strong>USB 3.2</strong>: up to 20 Gbps, uses USB-C.</li>
-        <li><strong>USB4</strong>: up to 40 Gbps, up to 100W, supports Thunderbolt 3.</li>
-      </ul>
+      <div class="text">
+        <h2>⚡ USB Versions (Speed & Power)</h2>
+        <ul>
+          <li><strong>USB 2.0</strong>: 480 Mbps, 2.5W – still common.</li>
+          <li><strong>USB 3.0</strong>: 5 Gbps, 4.5W – blue-colored ports.</li>
+          <li><strong>USB 3.2</strong>: up to 20 Gbps, uses USB-C.</li>
+          <li><strong>USB4</strong>: up to 40 Gbps, up to 100W, supports Thunderbolt 3.</li>
+        </ul>
+      </div>
     </div>
 
     <div class="section">
-      <h2>🧩 Special USB Types</h2>
-      <ul>
-        <li><strong>Lightning</strong>: Apple’s proprietary reversible connector.</li>
-        <li><strong>Thunderbolt</strong>: High-speed data/video using USB-C-style connectors.</li>
-        <li><strong>USB 3.0 Micro-B</strong>: Dual segment plug used in some external drives.</li>
-        <li><strong>Barrel Jack</strong>: Round power connector used in some powered drives.</li>
-      </ul>
+      <div class="text">
+        <h2>🧩 Special USB Types</h2>
+        <ul>
+          <li><strong>Lightning</strong>: Apple’s proprietary reversible connector.</li>
+          <li><strong>Thunderbolt</strong>: High-speed data/video using USB-C-style connectors.</li>
+          <li><strong>USB 3.0 Micro-B</strong>: Dual segment plug used in some external drives.</li>
+          <li><strong>Barrel Jack</strong>: Round power connector used in some powered drives.</li>
+        </ul>
+      </div>
     </div>
   </div>
 </body>
