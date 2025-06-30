@@ -100,7 +100,7 @@
   <div class="overlay">
     <h1>🛡️ Watchdog Timer in Embedded Systems</h1>
 
-    <h2>3.17.1 What is a Watchdog Timer?</h2>
+    <h2>What is a Watchdog Timer?</h2>
     <p>A Watchdog Timer (WDT) is a hardware timer that resets the system if software crashes. It ensures the firmware is operating properly by expecting periodic "refresh" signals from the code.</p>
 
     <h3>a. How It Works</h3>
@@ -116,7 +116,7 @@
       <li>The WDT isn’t refreshed, so it resets the system automatically.</li>
     </ul>
 
-    <h2>3.17.2 Types of Watchdog Timers</h2>
+    <h2>Types of Watchdog Timers</h2>
 
     <h3>a. Independent Watchdog Timer (IWDG)</h3>
     <ul>
@@ -139,7 +139,7 @@
       <li>Used to detect faulty execution timing</li>
     </ul>
 
-    <h2>3.17.3 Key Considerations</h2>
+    <h2>Key Considerations</h2>
     <ul>
       <li>✅ Choose timeout wisely: too short = false resets; too long = delayed fault detection</li>
       <li>✅ Ensure WDT is refreshed periodically</li>
@@ -147,7 +147,7 @@
       <li>✅ WWDG helps detect timing issues</li>
     </ul>
 
-    <h2>3.17.4 Applications</h2>
+    <h2>Applications</h2>
     <ul>
       <li>🚑 Medical Devices</li>
       <li>🚗 Automotive ECUs</li>
@@ -155,10 +155,10 @@
       <li>🚀 Satellites & Drones</li>
     </ul>
 
-    <h2>3.17.5 Prescaler & Reload Value</h2>
+    <h2>Prescaler & Reload Value</h2>
     <p>Prescaler and reload determine the timeout duration before the WDT resets the system.</p>
 
-    <h3>3.17.5.1 Timeout Formula</h3>
+    <h3>Timeout Formula</h3>
     <p><code>Timeout = (Reload + 1) / (Clock / Prescaler)</code></p>
 
     <pre>
@@ -167,7 +167,7 @@
 = (2999 + 1) / (32,000 / 32) = 3 sec
     </pre>
 
-    <h3>3.17.5.2 Effect of Prescaler</h3>
+    <h3>Effect of Prescaler</h3>
     <table>
       <thead>
         <tr>
@@ -189,7 +189,7 @@
       🔁 <strong>Higher Reload</strong> = more wait time before reset
     </div>
 
-    <h2>3.17.6 Practical Use Cases</h2>
+    <h2>Practical Use Cases</h2>
     <h3>Case 1: Short Timeout for Critical System</h3>
     <ul>
       <li><strong>Prescaler:</strong> 16</li>
@@ -206,7 +206,7 @@
       <li>✅ Ideal for IoT sleep-mode apps</li>
     </ul>
 
-    <h2>3.17.7 Summary Table</h2>
+    <h2>Summary Table</h2>
     <table>
       <thead>
         <tr>
