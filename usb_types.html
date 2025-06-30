@@ -63,6 +63,31 @@
     .text p {
       line-height: 1.6;
     }
+
+    .usb-summary {
+      width: 100%;
+      max-width: 1000px;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 1em;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+    
+    .usb-summary th, .usb-summary td {
+      border: 1px solid #555;
+      padding: 12px;
+      text-align: left;
+    }
+    
+    .usb-summary thead {
+      background-color: rgba(0, 234, 255, 0.2);
+    }
+    
+    .usb-summary tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+    
   </style>
 </head>
 <body>
@@ -227,6 +252,96 @@
           Slower or limited functionality.<br>
           Expensive.</p>
       </div>
+    </div>
+
+        <div class="section">
+      <h2>📊 Final Summary Table</h2>
+      <table class="usb-summary">
+        <thead>
+          <tr>
+            <th>Connector Type</th>
+            <th>Data</th>
+            <th>Power</th>
+            <th>Reversible</th>
+            <th>Typical Devices</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>USB Type-A</td>
+            <td>✅ (up to 10 Gbps)</td>
+            <td>⚡ (low-moderate)</td>
+            <td>❌</td>
+            <td>PCs, chargers, keyboards</td>
+            <td>Still common</td>
+          </tr>
+          <tr>
+            <td>USB Type-B</td>
+            <td>✅ (up to 10 Gbps)</td>
+            <td>⚡</td>
+            <td>❌</td>
+            <td>Printers, hubs</td>
+            <td>Obsolete</td>
+          </tr>
+          <tr>
+            <td>Mini-USB</td>
+            <td>✅ (USB 2.0)</td>
+            <td>⚡</td>
+            <td>❌</td>
+            <td>Older cameras</td>
+            <td>Obsolete</td>
+          </tr>
+          <tr>
+            <td>Micro-USB</td>
+            <td>✅ (USB 2.0)</td>
+            <td>⚡ (up to 10W)</td>
+            <td>❌</td>
+            <td>Older phones, accessories</td>
+            <td>Fading out</td>
+          </tr>
+          <tr>
+            <td>USB 3.0 Micro-B</td>
+            <td>✅ (5 Gbps)</td>
+            <td>⚡ (USB 3.0)</td>
+            <td>❌</td>
+            <td>External HDDs</td>
+            <td>Rare now</td>
+          </tr>
+          <tr>
+            <td>USB Type-C</td>
+            <td>✅ (up to 40 Gbps)</td>
+            <td>⚡ (up to 240W)</td>
+            <td>✅</td>
+            <td>Modern phones, laptops</td>
+            <td>Industry standard</td>
+          </tr>
+          <tr>
+            <td>Apple Lightning</td>
+            <td>✅ (~480 Mbps)</td>
+            <td>⚡ (12W)</td>
+            <td>✅</td>
+            <td>iPhones, iPads (old)</td>
+            <td>Being phased out</td>
+          </tr>
+          <tr>
+            <td>Barrel Jack (DC)</td>
+            <td>❌</td>
+            <td>⚡ (12V–19V)</td>
+            <td>❌</td>
+            <td>HDDs, routers, old laptops</td>
+            <td>Niche use</td>
+          </tr>
+          <tr>
+            <td>Magnetic Connectors</td>
+            <td>⚠️ (Limited)</td>
+            <td>⚡</td>
+            <td>✅</td>
+            <td>iPads, Surfaces, MacBooks</td>
+            <td>Brand-specific</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
   </div>
