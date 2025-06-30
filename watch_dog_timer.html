@@ -1,27 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Watchdog Timer Explained</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Watchdog Timer | Embedded Insight</title>
   <style>
     body {
+      margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      line-height: 1.6;
-      margin: 20px;
-      padding: 0;
-      background-color: #f4f4f4;
-      color: #333;
+      background-image: url('background.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #ffffff;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.85);
+      padding: 40px 10%;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #00eaff;
+      text-align: center;
+      margin-bottom: 40px;
     }
 
     h2 {
-      color: #007acc;
+      color: #ffd700;
       margin-top: 30px;
     }
 
     h3 {
-      color: #ff6600;
+      color: #00ffff;
       margin-top: 20px;
+    }
+
+    p, ul, ol {
+      font-size: 1em;
+      line-height: 1.7;
     }
 
     ul, ol {
@@ -29,170 +48,187 @@
     }
 
     code {
-      background-color: #eee;
-      padding: 2px 4px;
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
       border-radius: 4px;
       font-family: monospace;
+      color: #00eaff;
+    }
+
+    pre {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px;
+      border-left: 4px solid #00eaff;
+      overflow-x: auto;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       margin-top: 10px;
+      font-size: 1em;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #fff;
     }
 
     th, td {
-      border: 1px solid #999;
-      padding: 8px;
+      border: 1px solid #555;
+      padding: 12px;
       text-align: left;
     }
 
     th {
-      background-color: #e0f7fa;
+      background-color: rgba(0, 234, 255, 0.2);
     }
 
     .note {
-      background: #fff8e1;
-      padding: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 12px;
       border-left: 4px solid #ff9800;
-      margin: 10px 0;
+      margin-top: 15px;
+      color: #fff;
+    }
+
+    @media (max-width: 768px) {
+      .overlay {
+        padding: 20px 5%;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="overlay">
+    <h1>🛡️ Watchdog Timer in Embedded Systems</h1>
 
-  <h1>🔒 3.17 Watchdog Timer</h1>
+    <h2>3.17.1 What is a Watchdog Timer?</h2>
+    <p>A Watchdog Timer (WDT) is a hardware timer that resets the system if software crashes. It ensures the firmware is operating properly by expecting periodic "refresh" signals from the code.</p>
 
-  <h2>3.17.1 What is a Watchdog Timer?</h2>
-  <p>A Watchdog Timer (WDT) is a safety feature in microcontrollers that helps detect software malfunctions. It resets the system if something goes wrong. Think of it as a guardian ensuring the firmware is running properly.</p>
+    <h3>a. How It Works</h3>
+    <ol>
+      <li>WDT starts counting down from a preset value.</li>
+      <li>The program must reset the WDT regularly.</li>
+      <li>If it isn't reset in time, it assumes failure and reboots the system.</li>
+    </ol>
 
-  <h3>a. How It Works</h3>
-  <ol>
-    <li>The WDT starts counting down from a preset value.</li>
-    <li>The firmware must periodically reset (or "kick") the watchdog before it reaches zero.</li>
-    <li>If the timer reaches zero, it assumes the system is stuck and forces a reset.</li>
-  </ol>
+    <h3>b. Example Scenario</h3>
+    <ul>
+      <li>MCU controls a motor but gets stuck due to a bug.</li>
+      <li>The WDT isn’t refreshed, so it resets the system automatically.</li>
+    </ul>
 
-  <h3>b. Example Scenario</h3>
-  <ul>
-    <li>A microcontroller controls a motor.</li>
-    <li>Due to a bug, it gets stuck in an infinite loop.</li>
-    <li>The WDT isn’t refreshed, so it triggers a reset.</li>
-  </ul>
+    <h2>3.17.2 Types of Watchdog Timers</h2>
 
-  <h2>3.17.2 Types of Watchdog Timers</h2>
+    <h3>a. Independent Watchdog Timer (IWDG)</h3>
+    <ul>
+      <li>Uses internal LSI (low-speed clock).</li>
+      <li>Works even if the main clock fails.</li>
+      <li>Cannot be disabled once started.</li>
+      <li>Used in critical systems.</li>
+    </ul>
+    <p><strong>Reference Code:</strong></p>
+    <ul>
+      <li><code>IWDG_PRESCALER_64</code> — sets prescaler speed</li>
+      <li><code>4095</code> — max reload value</li>
+      <li><code>HAL_IWDG_Refresh(&hiwdg);</code> — refreshes WDT</li>
+    </ul>
 
-  <h3>a. Independent Watchdog Timer (IWDG)</h3>
-  <ul>
-    <li>Uses an internal low-speed clock (LSI).</li>
-    <li>Works even if the main clock fails.</li>
-    <li>Once enabled, cannot be stopped.</li>
-    <li>Great for safety-critical applications.</li>
-  </ul>
-  <p><strong>Reference Code:</strong></p>
-  <ul>
-    <li><code>IWDG_PRESCALER_64</code>: Sets watchdog timer speed.</li>
-    <li><code>4095</code>: Reload value (defines duration).</li>
-    <li><code>HAL_IWDG_Refresh(&hiwdg);</code>: Resets the timer.</li>
-  </ul>
+    <h3>b. Windowed Watchdog Timer (WWDG)</h3>
+    <ul>
+      <li>WDT must be refreshed within a narrow window</li>
+      <li>Refresh too early or too late = reset</li>
+      <li>Used to detect faulty execution timing</li>
+    </ul>
 
-  <h3>b. Windowed Watchdog Timer (WWDG)</h3>
-  <ul>
-    <li>Must be reset within a specific time window.</li>
-    <li>If refreshed too early or too late, triggers reset.</li>
-    <li>Helps detect timing errors.</li>
-  </ul>
+    <h2>3.17.3 Key Considerations</h2>
+    <ul>
+      <li>✅ Choose timeout wisely: too short = false resets; too long = delayed fault detection</li>
+      <li>✅ Ensure WDT is refreshed periodically</li>
+      <li>⚠️ Some WDTs (like IWDG in STM32) cannot be stopped</li>
+      <li>✅ WWDG helps detect timing issues</li>
+    </ul>
 
-  <h2>3.17.3 Key Considerations</h2>
-  <ul>
-    <li><strong>Choose proper timeout:</strong> Too short = false resets, too long = delayed recovery.</li>
-    <li><strong>Reset watchdog periodically:</strong> Prevent resets during normal operation.</li>
-    <li><strong>Some watchdogs can’t be stopped once started.</strong></li>
-    <li><strong>Use WWDG</strong> for stricter timing checks.</li>
-  </ul>
+    <h2>3.17.4 Applications</h2>
+    <ul>
+      <li>🚑 Medical Devices</li>
+      <li>🚗 Automotive ECUs</li>
+      <li>🔧 IoT & Industrial Systems</li>
+      <li>🚀 Satellites & Drones</li>
+    </ul>
 
-  <h2>3.17.4 Applications</h2>
-  <ul>
-    <li>🚑 Safety Systems (Medical, Automotive)</li>
-    <li>🔧 Embedded Devices (IoT, Automation)</li>
-    <li>🚀 Remote Systems (Drones, Satellites)</li>
-  </ul>
+    <h2>3.17.5 Prescaler & Reload Value</h2>
+    <p>Prescaler and reload determine the timeout duration before the WDT resets the system.</p>
 
-  <h2>3.17.5 Prescaler and Reload Value</h2>
-  <p>These determine how long the watchdog waits before resetting the system.</p>
+    <h3>3.17.5.1 Timeout Formula</h3>
+    <p><code>Timeout = (Reload + 1) / (Clock / Prescaler)</code></p>
 
-  <h3>3.17.5.1 Watchdog Timeout Formula</h3>
-  <p><strong>Formula:</strong> <code>Timeout = (Reload + 1) / (Clock / Prescaler)</code></p>
-  <p>Example values using 32kHz clock:</p>
-  <pre>
-= (4095 + 1) / (32 × 10³ / 4)   = 0.512 sec
-= (4095 + 1) / (32 × 10³ / 64)  = 8.192 sec
-= (3999 + 1) / (32 × 10³ / 16)  = 2 sec
-= (2999 + 1) / (32 × 10³ / 32)  = 3 sec
-  </pre>
+    <pre>
+= (4095 + 1) / (32,000 / 4)   = 0.512 sec
+= (4095 + 1) / (32,000 / 64) = 8.192 sec
+= (2999 + 1) / (32,000 / 32) = 3 sec
+    </pre>
 
-  <h3>3.17.5.2 Effect of Prescaler</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Prescaler</th>
-        <th>Clock After Prescaler</th>
-        <th>Timeout (Reload = 4095)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr><td>4</td><td>8 kHz</td><td>0.512s</td></tr>
-      <tr><td>16</td><td>2 kHz</td><td>2.048s</td></tr>
-      <tr><td>64</td><td>500 Hz</td><td>8.192s</td></tr>
-      <tr><td>256</td><td>125 Hz</td><td>32.768s</td></tr>
-    </tbody>
-  </table>
+    <h3>3.17.5.2 Effect of Prescaler</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Prescaler</th>
+          <th>Clock After</th>
+          <th>Timeout (Reload = 4095)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>4</td><td>8 kHz</td><td>0.512s</td></tr>
+        <tr><td>16</td><td>2 kHz</td><td>2.048s</td></tr>
+        <tr><td>64</td><td>500 Hz</td><td>8.192s</td></tr>
+        <tr><td>256</td><td>125 Hz</td><td>32.768s</td></tr>
+      </tbody>
+    </table>
 
-  <div class="note">
-    ⏱️ <strong>Higher Prescaler</strong> = Longer Timeout<br>
-    🔄 <strong>Higher Reload</strong> = More time before reset
+    <div class="note">
+      ⏱️ <strong>Higher Prescaler</strong> = slower clock = longer timeout<br>
+      🔁 <strong>Higher Reload</strong> = more wait time before reset
+    </div>
+
+    <h2>3.17.6 Practical Use Cases</h2>
+    <h3>Case 1: Short Timeout for Critical System</h3>
+    <ul>
+      <li><strong>Prescaler:</strong> 16</li>
+      <li><strong>Reload:</strong> 1000</li>
+      <li><strong>Timeout:</strong> 0.5 sec</li>
+      <li>✅ Used for motor control</li>
+    </ul>
+
+    <h3>Case 2: Long Timeout for Low Priority</h3>
+    <ul>
+      <li><strong>Prescaler:</strong> 256</li>
+      <li><strong>Reload:</strong> 4095</li>
+      <li><strong>Timeout:</strong> 32 sec</li>
+      <li>✅ Ideal for IoT sleep-mode apps</li>
+    </ul>
+
+    <h2>3.17.7 Summary Table</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Parameter</th>
+          <th>Effect</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Prescaler</td>
+          <td>Slows down watchdog clock</td>
+        </tr>
+        <tr>
+          <td>Reload Value</td>
+          <td>How many counts before timeout</td>
+        </tr>
+        <tr>
+          <td>Timeout Formula</td>
+          <td><code>(Reload + 1) / (Clock / Prescaler)</code></td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-
-  <h2>3.17.6 Use Case Examples</h2>
-  <h3>Case 1: Fast Error Detection</h3>
-  <ul>
-    <li><strong>Prescaler:</strong> 16</li>
-    <li><strong>Reload:</strong> 1000</li>
-    <li><strong>Timeout:</strong> 0.5 seconds</li>
-    <li>✅ Ideal for motor control or critical tasks</li>
-  </ul>
-
-  <h3>Case 2: Longer Timeout (Non-Critical)</h3>
-  <ul>
-    <li><strong>Prescaler:</strong> 256</li>
-    <li><strong>Reload:</strong> 4095</li>
-    <li><strong>Timeout:</strong> ~32 seconds</li>
-    <li>✅ Ideal for IoT battery-powered applications</li>
-  </ul>
-
-  <h2>3.17.7 Summary</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Parameter</th>
-        <th>Effect</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Prescaler</td>
-        <td>Controls how fast the WDT runs (higher = slower clock)</td>
-      </tr>
-      <tr>
-        <td>Reload Value</td>
-        <td>Defines number of clock ticks before timeout</td>
-      </tr>
-      <tr>
-        <td>Timeout Period</td>
-        <td>Calculated as <code>(Reload + 1) / (Clock / Prescaler)</code></td>
-      </tr>
-    </tbody>
-  </table>
-
 </body>
 </html>
