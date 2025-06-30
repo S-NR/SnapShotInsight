@@ -2,66 +2,66 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>USB Connector Types</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>USB Connector Types | Snap Shot Insight</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-image: url('your-background.png'); /* Replace with your background */
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('background.png');
       background-size: cover;
       background-position: center;
+      background-repeat: no-repeat;
       background-attachment: fixed;
       color: #ffffff;
     }
 
     .overlay {
       background-color: rgba(0, 0, 0, 0.85);
-      padding: 40px;
+      padding: 40px 10%;
+      min-height: 100vh;
     }
 
     h1 {
-      text-align: center;
       color: #00eaff;
-      margin-bottom: 50px;
+      text-align: center;
     }
 
     .section {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       margin-bottom: 40px;
-      gap: 30px;
+      gap: 20px;
     }
 
     .section img {
-      width: 200px;
+      width: 180px;
       height: auto;
-      border-radius: 10px;
-      box-shadow: 0 0 10px #00eaff;
+      border-radius: 8px;
+      background-color: #fff;
+      padding: 5px;
     }
 
-    .section .text {
-      max-width: 700px;
+    .text {
+      max-width: 900px;
     }
 
-    .section .text h2 {
+    .text h2 {
       color: #ffd700;
       margin-bottom: 10px;
     }
 
-    .section .text ul {
-      padding-left: 20px;
-      line-height: 1.5;
+    .text strong {
+      color: #00ffff;
     }
 
-    @media screen and (max-width: 768px) {
-      .section {
-        flex-direction: column;
-        text-align: center;
-      }
+    .text ul {
+      margin-top: 0;
+      padding-left: 20px;
+    }
 
-      .section img {
-        margin-bottom: 20px;
-      }
+    .text p {
+      line-height: 1.6;
     }
   </style>
 </head>
@@ -72,58 +72,160 @@
     <div class="section">
       <img src="usb_type_a.jpg" alt="USB Type-A">
       <div class="text">
-        <h2>1. USB Type-A</h2>
-        <ul>
-          <li>Most common rectangular port.</li>
-          <li>Found on computers, TVs, game consoles.</li>
-          <li>Only inserts one way (non-reversible).</li>
-        </ul>
+        <h2>🔹 USB Type-A</h2>
+        <p><strong>Hardware:</strong> Large rectangular plug with 4 internal pins (USB 2.0) or 9 pins (USB 3.x). Not reversible.</p>
+        <p><strong>Usage:</strong> PCs, laptops, wall chargers, keyboards, mice, game controllers, flash drives.</p>
+        <p><strong>Why it was made:</strong> The original USB standard created in the 1990s for host-side connectivity — aimed to replace serial/parallel ports.</p>
+        <p><strong>Advantages:</strong><br>
+          Universal for many peripherals.<br>
+          Sturdy and standardized.<br>
+          Long industry life (still used).</p>
+        <p><strong>Limitations:</strong><br>
+          Not reversible – user frustration.<br>
+          Bulky – unsuitable for mobile devices.<br>
+          Slower and limited power by modern standards.</p>
       </div>
     </div>
 
     <div class="section">
       <img src="usb_type_b.jpg" alt="USB Type-B">
       <div class="text">
-        <h2>2. USB Type-B</h2>
-        <ul>
-          <li>Square-ish with a slanted top.</li>
-          <li>Common on printers and some external hard drives.</li>
-        </ul>
+        <h2>🔹 USB Type-B</h2>
+        <p><strong>Hardware:</strong> Square-shaped plug with a beveled top, 4 or 9 pins (USB 2.0 / 3.x). Not reversible.</p>
+        <p><strong>Usage:</strong> Printers, scanners, external hard drives, USB hubs.</p>
+        <p><strong>Why it was made:</strong> To clearly separate host (Type-A) and device (Type-B) roles — preventing damage or misconnection.</p>
+        <p><strong>Advantages:</strong><br>
+          Distinct shape avoids confusion.<br>
+          Robust for heavy devices like printers.</p>
+        <p><strong>Limitations:</strong><br>
+          Bulky.<br>
+          Rare in modern devices.<br>
+          Non-reversible.</p>
       </div>
     </div>
 
     <div class="section">
       <img src="mini_usb.jpg" alt="Mini USB">
       <div class="text">
-        <h2>3. Mini-USB (Type-B)</h2>
-        <ul>
-          <li>Smaller version of USB-B.</li>
-          <li>Used in older cameras and MP3 players.</li>
-        </ul>
+        <h2>🔹 Mini-USB (Type-B)</h2>
+        <p><strong>Hardware:</strong> Small trapezoidal plug (5 pins). Smaller than Type-B.</p>
+        <p><strong>Usage:</strong> Older cameras, MP3 players, PlayStation controllers.</p>
+        <p><strong>Why it was made:</strong> Designed for portable electronics needing compact connectors.</p>
+        <p><strong>Advantages:</strong><br>
+          Compact and durable (at the time).<br>
+          Supported USB OTG.</p>
+        <p><strong>Limitations:</strong><br>
+          Fragile by today’s standards.<br>
+          Phased out for Micro-USB.</p>
       </div>
     </div>
 
     <div class="section">
       <img src="micro_usb.jpg" alt="Micro USB">
       <div class="text">
-        <h2>4. Micro-USB (Type-B)</h2>
-        <ul>
-          <li>Smaller and flatter than Mini-USB.</li>
-          <li>Common on older Android phones and accessories.</li>
-          <li>Not reversible.</li>
-        </ul>
+        <h2>🔹 Micro-USB (Type-B)</h2>
+        <p><strong>Hardware:</strong> Very flat and small connector with 5 pins (including OTG ID pin). Not reversible.</p>
+        <p><strong>Usage:</strong> Android phones (pre-2019), power banks, Bluetooth headphones.</p>
+        <p><strong>Why it was made:</strong> Standardized by USB-IF as the universal mobile device port.</p>
+        <p><strong>Advantages:</strong><br>
+          Widely adopted.<br>
+          Lightweight.<br>
+          OTG support.</p>
+        <p><strong>Limitations:</strong><br>
+          Not reversible.<br>
+          Easy to damage the port.<br>
+          Slow charging and data compared to USB-C.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <img src="usb_3_micro_b.jpg" alt="USB 3.0 Micro-B">
+      <div class="text">
+        <h2>🔹 USB 3.0 Micro-B</h2>
+        <p><strong>Hardware:</strong> A dual-section connector — looks like a Micro-USB with an extra sidecar part. 10 total pins.</p>
+        <p><strong>Usage:</strong> External USB 3.0 hard drives.</p>
+        <p><strong>Why it was made:</strong> To maintain backward compatibility while enabling USB 3.0 speeds (5 Gbps).</p>
+        <p><strong>Advantages:</strong><br>
+          Backward compatible.<br>
+          Faster data transfer for large external drives.</p>
+        <p><strong>Limitations:</strong><br>
+          Awkward design.<br>
+          Not user-friendly.<br>
+          Fragile.<br>
+          Replaced by USB-C.</p>
       </div>
     </div>
 
     <div class="section">
       <img src="usb_type_c.jpg" alt="USB Type-C">
       <div class="text">
-        <h2>5. USB Type-C</h2>
-        <ul>
-          <li>Modern standard, reversible.</li>
-          <li>Used in new phones, laptops, tablets.</li>
-          <li>Supports power, data, video.</li>
-        </ul>
+        <h2>🔹 USB Type-C</h2>
+        <p><strong>Hardware:</strong> Slim oval connector with 24 pins, reversible, supports multiple roles (host, device, charging, video).</p>
+        <p><strong>Usage:</strong> Modern smartphones, laptops, tablets, SSDs, displays, docking stations.</p>
+        <p><strong>Why it was made:</strong> A universal solution to combine charging, data, and video — simplify everything with one port.</p>
+        <p><strong>Advantages:</strong><br>
+          Reversible, easy to plug in.<br>
+          High-speed (up to 40 Gbps).<br>
+          High power (up to 240W).<br>
+          Carries DisplayPort/HDMI.<br>
+          Future-proof.</p>
+        <p><strong>Limitations:</strong><br>
+          Confusing specs.<br>
+          Fragile in cheap designs.<br>
+          Needs complex controllers.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <img src="lightning.jpg" alt="Apple Lightning">
+      <div class="text">
+        <h2>🔹 Apple Lightning</h2>
+        <p><strong>Hardware:</strong> 8-pin reversible connector, exclusive to Apple.</p>
+        <p><strong>Usage:</strong> Older iPhones, iPads, AirPods, Apple Pencil (Gen 1).</p>
+        <p><strong>Why it was made:</strong> Replacement for 30-pin dock. Smaller and reversible before USB-C.</p>
+        <p><strong>Advantages:</strong><br>
+          Slim and reversible.<br>
+          Integrated well with Apple hardware.</p>
+        <p><strong>Limitations:</strong><br>
+          Proprietary.<br>
+          Slower than USB-C.<br>
+          Being phased out.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <img src="barrel_jack.jpg" alt="Barrel Jack">
+      <div class="text">
+        <h2>🔹 Barrel Jack (DC Power Jack)</h2>
+        <p><strong>Hardware:</strong> Cylindrical plug. Central pin (positive), outer sleeve (ground). Varies by diameter.</p>
+        <p><strong>Usage:</strong> Routers, modems, LED lights, Arduino boards, older laptops, powered external drives.</p>
+        <p><strong>Why it was made:</strong> Dedicated for power delivery before USB PD.</p>
+        <p><strong>Advantages:</strong><br>
+          Handles higher voltages.<br>
+          Reliable and simple.<br>
+          Cheap.</p>
+        <p><strong>Limitations:</strong><br>
+          Power only, no data.<br>
+          No universal sizing.<br>
+          Bulky.</p>
+      </div>
+    </div>
+
+    <div class="section">
+      <img src="magnetic_connector.jpg" alt="Magnetic Connector">
+      <div class="text">
+        <h2>🔹 Proprietary Magnetic Chargers</h2>
+        <p><strong>Hardware:</strong> Magnetic or pogo-pin based. Examples include Smart Connector, Surface Connect, MagSafe.</p>
+        <p><strong>Usage:</strong> Apple iPads, Microsoft Surface, iPhone MagSafe, MacBook chargers.</p>
+        <p><strong>Why it was made:</strong> For easy attach/detach charging/accessory connection without wear and tear.</p>
+        <p><strong>Advantages:</strong><br>
+          Snap-on convenience.<br>
+          Prevents damage from accidental pulls.<br>
+          Clean design.</p>
+        <p><strong>Limitations:</strong><br>
+          Often proprietary.<br>
+          Slower or limited functionality.<br>
+          Expensive.</p>
       </div>
     </div>
 
