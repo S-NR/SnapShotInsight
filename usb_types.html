@@ -94,6 +94,10 @@
       background-color: rgba(255, 255, 255, 0.03);
     }
 
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+    }
     /* Mobile responsive layout */
     @media (max-width: 768px) {
       .section {
@@ -281,8 +285,8 @@
       <h1>📊 Final Summary Table</h1>      
     </div>
           
-    <div class="section">
-      <table class="usb-summary">
+    <div class="section table-wrapper">
+  <table class="usb-summary">
         <thead>
           <tr>
             <th>Connector Type</th>
