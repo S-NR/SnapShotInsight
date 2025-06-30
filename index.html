@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>USB Connector Types | Snap Shot Insight</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome | Snap Shot Insight</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-image: url('background.png');
+      font-family: 'Times New Roman', Times, serif;
+      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -17,373 +17,177 @@
     }
 
     .overlay {
-      background-color: rgba(0, 0, 0, 0.85);
-      padding: 40px 10%;
+      background-color: rgba(0, 0, 0, 0.7);
       min-height: 100vh;
-    }
-
-    h1 {
-      color: #00eaff;
+      padding: 60px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       text-align: center;
     }
 
-    .section {
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      gap: 20px;
-      margin-bottom: 40px;
-      flex-wrap: wrap;
+    h1 {
+      font-size: 3em;
+      margin-bottom: 20px;
+      color: #00eaff;
     }
 
-    .section img {
-      width: 180px;
-      height: auto;
-      border-radius: 8px;
-      background-color: #fff;
-      padding: 5px;
-      flex-shrink: 0;
+    p {
+      font-size: 1.2em;
+      line-height: 1.7;
+      max-width: 800px;
+      margin: 0 auto 30px auto;
     }
 
-    .text {
-      flex: 1;
-      min-width: 250px;
-      max-width: 900px;
-    }
-
-    .text h2 {
-      color: #ffd700;
-      margin-bottom: 10px;
-    }
-
-    .text strong {
-      color: #00ffff;
-    }
-
-    .text ul {
-      margin-top: 0;
-      padding-left: 20px;
-    }
-
-    .text p {
-      line-height: 1.6;
-    }
-
-    .usb-summary {
-      width: 100%;
-      max-width: 1000px;
-      border-collapse: collapse;
+    .explore-button {
+      background-color: #00eaff;
+      color: #000;
+      border: none;
+      padding: 10px 25px;
+      font-size: 16px;
+      font-weight: bold;
+      border-radius: 6px;
+      cursor: pointer;
       margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+
+    .explore-button:hover {
+      background-color: #00c0cc;
+    }
+
+    #search-box {
+      margin-top: 10px;
+    }
+
+    #searchInput {
+      padding: 10px;
+      width: 240px;
+      border-radius: 4px;
+      border: none;
       font-size: 1em;
-      background-color: rgba(255, 255, 255, 0.05);
-      color: #fff;
     }
 
-    .usb-summary th,
-    .usb-summary td {
-      border: 1px solid #555;
-      padding: 12px;
+    #suggestions {
+      margin: 0 auto;
+      max-width: 240px;
+      background-color: white;
+      color: black;
       text-align: left;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      display: none;
+      position: relative;
+      z-index: 10;
     }
 
-    .usb-summary thead {
-      background-color: rgba(0, 234, 255, 0.2);
+    #suggestions div {
+      padding: 8px;
+      cursor: pointer;
     }
 
-    .usb-summary tr:nth-child(even) {
-      background-color: rgba(255, 255, 255, 0.03);
+    #suggestions div:hover {
+      background-color: #f0f0f0;
     }
 
-    .table-wrapper {
-      width: 100%;
-      overflow-x: auto;
-    }
-    .table-wrapper::-webkit-scrollbar {
-      height: 6px;
-    }
-    .table-wrapper::-webkit-scrollbar-thumb {
-      background: #00eaff;
-      border-radius: 3px;
-    }
-    
-    /* Mobile responsive layout */
-    @media (max-width: 768px) {
-      .section {
-        flex-direction: column;
-        align-items: center;
+    @media screen and (max-width: 600px) {
+      h1 {
+        font-size: 2em;
       }
 
-      .section img {
-        width: 100%;
-        max-width: 300px;
+      p {
+        font-size: 1em;
       }
 
-      .text {
-        max-width: 100%;
+      .btn, #searchInput {
+        font-size: 0.9em;
       }
     }
-    
   </style>
 </head>
+
 <body>
   <div class="overlay">
-    <h1>🔌 USB Connector Types</h1>
+    <h1>Welcome to Snap Shot Insight</h1>
+    <p>
+      Discover the art and science behind modern embedded systems, display technology, and intelligent interfaces.<br><br>
+      This space brings you simplified insights into memory computation, double buffering, system commands, and more — crafted for learners and developers alike.
+    </p>
+    <p>
+      Dive into a world where bytes meet beauty, pixels perform flawlessly, and logic drives innovation.
+    </p>
+    <h2>Explore Now</h2>
 
-    <div class="section">
-      <img src="USB Images/usb_type_a.jpg" alt="USB Type-A">
-      <div class="text">
-        <h2>🔹 USB Type-A</h2>
-        <p><strong>Hardware:</strong> Large rectangular plug with 4 internal pins (USB 2.0) or 9 pins (USB 3.x). Not reversible.</p>
-        <p><strong>Usage:</strong> PCs, laptops, wall chargers, keyboards, mice, game controllers, flash drives.</p>
-        <p><strong>Why it was made:</strong> The original USB standard created in the 1990s for host-side connectivity — aimed to replace serial/parallel ports.</p>
-        <p><strong>Advantages:</strong><br>
-          Universal for many peripherals.<br>
-          Sturdy and standardized.<br>
-          Long industry life (still used).</p>
-        <p><strong>Limitations:</strong><br>
-          Not reversible – user frustration.<br>
-          Bulky – unsuitable for mobile devices.<br>
-          Slower and limited power by modern standards.</p>
-      </div>
+    <!-- Search Box with Dropdown -->
+    <div id="search-box">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search..."
+        oninput="showSuggestions()"
+        onfocus="showSuggestions()" /> <!-- ✅ Added onfocus here -->
+      <div id="suggestions"></div>
     </div>
-
-    <div class="section">
-      <img src="USB Images/usb_type_b.jpg" alt="USB Type-B">
-      <div class="text">
-        <h2>🔹 USB Type-B</h2>
-        <p><strong>Hardware:</strong> Square-shaped plug with a beveled top, 4 or 9 pins (USB 2.0 / 3.x). Not reversible.</p>
-        <p><strong>Usage:</strong> Printers, scanners, external hard drives, USB hubs.</p>
-        <p><strong>Why it was made:</strong> To clearly separate host (Type-A) and device (Type-B) roles — preventing damage or misconnection.</p>
-        <p><strong>Advantages:</strong><br>
-          Distinct shape avoids confusion.<br>
-          Robust for heavy devices like printers.</p>
-        <p><strong>Limitations:</strong><br>
-          Bulky.<br>
-          Rare in modern devices.<br>
-          Non-reversible.</p>
-      </div>
-    </div>
-
-    <div class="section">
-      <img src="USB Images/mini_usb.jpg" alt="Mini USB">
-      <div class="text">
-        <h2>🔹 Mini-USB (Type-B)</h2>
-        <p><strong>Hardware:</strong> Small trapezoidal plug (5 pins). Smaller than Type-B.</p>
-        <p><strong>Usage:</strong> Older cameras, MP3 players, PlayStation controllers.</p>
-        <p><strong>Why it was made:</strong> Designed for portable electronics needing compact connectors.</p>
-        <p><strong>Advantages:</strong><br>
-          Compact and durable (at the time).<br>
-          Supported USB OTG.</p>
-        <p><strong>Limitations:</strong><br>
-          Fragile by today’s standards.<br>
-          Phased out for Micro-USB.</p>
-      </div>
-    </div>
-
-    <div class="section">
-      <img src="USB Images/micro_usb.jpg" alt="Micro USB">
-      <div class="text">
-        <h2>🔹 Micro-USB (Type-B)</h2>
-        <p><strong>Hardware:</strong> Very flat and small connector with 5 pins (including OTG ID pin). Not reversible.</p>
-        <p><strong>Usage:</strong> Android phones (pre-2019), power banks, Bluetooth headphones.</p>
-        <p><strong>Why it was made:</strong> Standardized by USB-IF as the universal mobile device port.</p>
-        <p><strong>Advantages:</strong><br>
-          Widely adopted.<br>
-          Lightweight.<br>
-          OTG support.</p>
-        <p><strong>Limitations:</strong><br>
-          Not reversible.<br>
-          Easy to damage the port.<br>
-          Slow charging and data compared to USB-C.</p>
-      </div>
-    </div>
-
-    <div class="section">
-      <img src="USB Images/usb_3_micro_b.jpg" alt="USB 3.0 Micro-B">
-      <div class="text">
-        <h2>🔹 USB 3.0 Micro-B</h2>
-        <p><strong>Hardware:</strong> A dual-section connector — looks like a Micro-USB with an extra sidecar part. 10 total pins.</p>
-        <p><strong>Usage:</strong> External USB 3.0 hard drives.</p>
-        <p><strong>Why it was made:</strong> To maintain backward compatibility while enabling USB 3.0 speeds (5 Gbps).</p>
-        <p><strong>Advantages:</strong><br>
-          Backward compatible.<br>
-          Faster data transfer for large external drives.</p>
-        <p><strong>Limitations:</strong><br>
-          Awkward design.<br>
-          Not user-friendly.<br>
-          Fragile.<br>
-          Replaced by USB-C.</p>
-      </div>
-    </div>
-
-    <div class="section">
-      <img src="USB Images/usb_type_c.jpg" alt="USB Type-C">
-      <div class="text">
-        <h2>🔹 USB Type-C</h2>
-        <p><strong>Hardware:</strong> Slim oval connector with 24 pins, reversible, supports multiple roles (host, device, charging, video).</p>
-        <p><strong>Usage:</strong> Modern smartphones, laptops, tablets, SSDs, displays, docking stations.</p>
-        <p><strong>Why it was made:</strong> A universal solution to combine charging, data, and video — simplify everything with one port.</p>
-        <p><strong>Advantages:</strong><br>
-          Reversible, easy to plug in.<br>
-          High-speed (up to 40 Gbps).<br>
-          High power (up to 240W).<br>
-          Carries DisplayPort/HDMI.<br>
-          Future-proof.</p>
-        <p><strong>Limitations:</strong><br>
-          Confusing specs.<br>
-          Fragile in cheap designs.<br>
-          Needs complex controllers.</p>
-      </div>
-    </div>
-
-    <div class="section">
-      <img src="USB Images/lightning.jpg" alt="Apple Lightning">
-      <div class="text">
-        <h2>🔹 Apple Lightning</h2>
-        <p><strong>Hardware:</strong> 8-pin reversible connector, exclusive to Apple.</p>
-        <p><strong>Usage:</strong> Older iPhones, iPads, AirPods, Apple Pencil (Gen 1).</p>
-        <p><strong>Why it was made:</strong> Replacement for 30-pin dock. Smaller and reversible before USB-C.</p>
-        <p><strong>Advantages:</strong><br>
-          Slim and reversible.<br>
-          Integrated well with Apple hardware.</p>
-        <p><strong>Limitations:</strong><br>
-          Proprietary.<br>
-          Slower than USB-C.<br>
-          Being phased out.</p>
-      </div>
-    </div>
-
-    <div class="section">
-      <img src="USB Images/barrel_jack.jpg" alt="Barrel Jack">
-      <div class="text">
-        <h2>🔹 Barrel Jack (DC Power Jack)</h2>
-        <p><strong>Hardware:</strong> Cylindrical plug. Central pin (positive), outer sleeve (ground). Varies by diameter.</p>
-        <p><strong>Usage:</strong> Routers, modems, LED lights, Arduino boards, older laptops, powered external drives.</p>
-        <p><strong>Why it was made:</strong> Dedicated for power delivery before USB PD.</p>
-        <p><strong>Advantages:</strong><br>
-          Handles higher voltages.<br>
-          Reliable and simple.<br>
-          Cheap.</p>
-        <p><strong>Limitations:</strong><br>
-          Power only, no data.<br>
-          No universal sizing.<br>
-          Bulky.</p>
-      </div>
-    </div>
-
-    <div class="section">
-      <img src="USB Images/magnetic_connector1.jpg" alt="Magnetic Connector">      
-      <img src="USB Images/magnetic_connector2.jpg" alt="Magnetic Connector">
-      <img src="USB Images/magnetic_connector3.jpg" alt="Magnetic Connector">
-      <div class="text">
-        <h2>🔹 Proprietary Magnetic Chargers</h2>
-        <p><strong>Hardware:</strong> Magnetic or pogo-pin based. Examples include Smart Connector, Surface Connect, MagSafe.</p>
-        <p><strong>Usage:</strong> Apple iPads, Microsoft Surface, iPhone MagSafe, MacBook chargers.</p>
-        <p><strong>Why it was made:</strong> For easy attach/detach charging/accessory connection without wear and tear.</p>
-        <p><strong>Advantages:</strong><br>
-          Snap-on convenience.<br>
-          Prevents damage from accidental pulls.<br>
-          Clean design.</p>
-        <p><strong>Limitations:</strong><br>
-          Often proprietary.<br>
-          Slower or limited functionality.<br>
-          Expensive.</p>
-      </div>
-    </div>
-
-    <div class="section">
-      <h1>📊 Final Summary Table</h1>      
-    </div>
-          
-    <div class="table-wrapper">
-      <table class="usb-summary">
-        <thead>
-          <tr>
-            <th>Connector Type</th>
-            <th>Data</th>
-            <th>Power</th>
-            <th>Reversible</th>
-            <th>Typical Devices</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>USB Type-A</td>
-            <td>✅ (up to 10 Gbps)</td>
-            <td>⚡ (low-moderate)</td>
-            <td>❌</td>
-            <td>PCs, chargers, keyboards</td>
-            <td>Still common</td>
-          </tr>
-          <tr>
-            <td>USB Type-B</td>
-            <td>✅ (up to 10 Gbps)</td>
-            <td>⚡</td>
-            <td>❌</td>
-            <td>Printers, hubs</td>
-            <td>Obsolete</td>
-          </tr>
-          <tr>
-            <td>Mini-USB</td>
-            <td>✅ (USB 2.0)</td>
-            <td>⚡</td>
-            <td>❌</td>
-            <td>Older cameras</td>
-            <td>Obsolete</td>
-          </tr>
-          <tr>
-            <td>Micro-USB</td>
-            <td>✅ (USB 2.0)</td>
-            <td>⚡ (up to 10W)</td>
-            <td>❌</td>
-            <td>Older phones, accessories</td>
-            <td>Fading out</td>
-          </tr>
-          <tr>
-            <td>USB 3.0 Micro-B</td>
-            <td>✅ (5 Gbps)</td>
-            <td>⚡ (USB 3.0)</td>
-            <td>❌</td>
-            <td>External HDDs</td>
-            <td>Rare now</td>
-          </tr>
-          <tr>
-            <td>USB Type-C</td>
-            <td>✅ (up to 40 Gbps)</td>
-            <td>⚡ (up to 240W)</td>
-            <td>✅</td>
-            <td>Modern phones, laptops</td>
-            <td>Industry standard</td>
-          </tr>
-          <tr>
-            <td>Apple Lightning</td>
-            <td>✅ (~480 Mbps)</td>
-            <td>⚡ (12W)</td>
-            <td>✅</td>
-            <td>iPhones, iPads (old)</td>
-            <td>Being phased out</td>
-          </tr>
-          <tr>
-            <td>Barrel Jack (DC)</td>
-            <td>❌</td>
-            <td>⚡ (12V–19V)</td>
-            <td>❌</td>
-            <td>HDDs, routers, old laptops</td>
-            <td>Niche use</td>
-          </tr>
-          <tr>
-            <td>Magnetic Connectors</td>
-            <td>⚠️ (Limited)</td>
-            <td>⚡</td>
-            <td>✅</td>
-            <td>iPads, Surfaces, MacBooks</td>
-            <td>Brand-specific</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
   </div>
+
+  <script>
+    const pages = [
+      { name: "Memory Computation", file: "memory_computation.html" },
+      { name: "Double Buffering", file: "double_buffering.html" },
+      { name: "Linux Commands", file: "linux_commands.html" },
+      { name: "Basics of memories : For Testers", file: "memory_testing_team.html" },
+      { name: "Memory : Testing Senarios", file: "memory_testing_senarios.html" },
+      { name: "PID Controller", file: "pid_ccontroller.html" },
+      { name: "Mutex and Semaphore", file: "mutex_semaphore.html" },
+      { name: "USB Types", file: "usb_types.html" },
+    ];
+
+    function showSuggestions() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const suggestionBox = document.getElementById("suggestions");
+      suggestionBox.innerHTML = '';
+
+      let matches;
+
+      if (input === '') {
+        const label = document.createElement('div');
+        label.textContent = 'Popular Topics';
+        label.style.fontWeight = 'bold';
+        label.style.backgroundColor = '#eee';
+        label.style.color = '#333';
+        label.style.padding = '8px';
+        suggestionBox.appendChild(label);
+
+        matches = pages.slice(0, 5); // Show first 5 items
+      } else {
+        matches = pages.filter(page => page.name.toLowerCase().includes(input));
+      }
+
+      if (matches.length === 0) {
+        suggestionBox.style.display = 'none';
+        return;
+      }
+
+      matches.forEach(match => {
+        const div = document.createElement('div');
+        div.textContent = match.name;
+        div.onclick = () => {
+          window.location.href = match.file;
+        };
+        suggestionBox.appendChild(div);
+      });
+
+      suggestionBox.style.display = 'block';
+    }
+
+    // ✅ Optional: Hide suggestions when clicking outside
+    document.addEventListener('click', (event) => {
+      const searchBox = document.getElementById("search-box");
+      const suggestions = document.getElementById("suggestions");
+      if (!searchBox.contains(event.target)) {
+        suggestions.style.display = "none";
+      }
+    });
+  </script>
 </body>
 </html>
