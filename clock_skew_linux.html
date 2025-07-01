@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Understanding Clock Skew | Snapshot Insight</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('background.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #ffffff;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.85);
+      padding: 40px 10%;
+      min-height: 100vh;
+    }
+
+    h1 {
+      color: #00eaff;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: #ffd700;
+      margin-top: 30px;
+    }
+
+    h3 {
+      color: #00ffff;
+      margin-top: 20px;
+    }
+
+    p, ul, ol {
+      font-size: 1em;
+      line-height: 1.7;
+    }
+
+    ul, ol {
+      padding-left: 20px;
+    }
+
+    code {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #00eaff;
+    }
+
+    pre {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 10px;
+      border-left: 4px solid #00eaff;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 1em;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+
+    th, td {
+      border: 1px solid #555;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: rgba(0, 234, 255, 0.2);
+    }
+
+    .note {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 12px;
+      border-left: 4px solid #ff9800;
+      margin-top: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .overlay {
+        padding: 20px 5%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h1>🕒 Understanding Clock Skew in Systems and Builds</h1>
+
+    <h2>🔍 What is Clock Skew?</h2>
+    <p>Clock skew occurs when timestamps of files or systems don’t match the actual system clock. This leads to errors in compiling, syncing, or running time-sensitive tools.</p>
+    <p><strong>Example:</strong> A file shows 10:05 AM, but your system time is 10:00 AM. Tools like <code>make</code> might get confused thinking a file is from the future.</p>
+
+    <h2>🧩 Where Clock Skew Matters</h2>
+    <h3>🛠️ Build Systems (like make)</h3>
+    <pre>warning: Clock skew detected. Your build may be incomplete.</pre>
+
+    <h3>🔄 Distributed Systems</h3>
+    <ul>
+      <li>Authentication errors due to expired tokens</li>
+      <li>Wrong log ordering</li>
+      <li>Inconsistent data timestamps</li>
+    </ul>
+
+    <h3>🔧 Source Control & Backup Tools</h3>
+    <ul>
+      <li>False conflicts in <code>git</code>, <code>svn</code>, or <code>rsync</code></li>
+      <li>Cron jobs running unexpectedly</li>
+    </ul>
+
+    <h2>🚨 Symptoms of Clock Skew</h2>
+    <ul>
+      <li>Build Warnings: “Clock skew detected”</li>
+      <li>Future or past-dated files</li>
+      <li>Authentication issues</li>
+      <li>Unexpected cron behavior</li>
+      <li>NFS/shared drive errors</li>
+    </ul>
+
+    <h2>⚠️ Common Causes</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Cause</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>🕰️ Manual Time Change</td><td>Changed without syncing hardware clock</td></tr>
+        <tr><td>🌐 No Internet Sync</td><td>NTP not configured</td></tr>
+        <tr><td>📤 Copied Files</td><td>From another system with wrong clock</td></tr>
+        <tr><td>💻 Dual Boot</td><td>Windows & Linux use hardware clocks differently</td></tr>
+        <tr><td>📡 Network Filesystems</td><td>NFS/SMB time mismatches</td></tr>
+      </tbody>
+    </table>
+
+    <h2>🛠️ How to Fix Clock Skew</h2>
+
+    <h3>✅ 1. Sync System Time</h3>
+    <pre>sudo date --set "$(date)"</pre>
+    <pre>sudo hwclock --systohc</pre>
+
+    <h3>✅ 2. Use NTP</h3>
+    <pre>sudo apt install ntp</pre>
+    <pre>sudo systemctl restart ntp</pre>
+    <pre>sudo timedatectl set-ntp true</pre>
+
+    <h3>✅ 3. Sync Hardware Clock</h3>
+    <pre>sudo hwclock --systohc</pre>
+    <pre>sudo hwclock --show</pre>
+
+    <h3>✅ 4. Reset File Timestamps</h3>
+    <pre>find . -type f -exec touch {} +</pre>
+
+    <h3>✅ 5. Rebuild the Project</h3>
+    <pre>make clean</pre>
+    <pre>make</pre>
+
+    <h3>✅ 6. Use UTC Across Systems</h3>
+    <pre>sudo timedatectl set-timezone UTC</pre>
+
+    <h3>✅ 7. Configure Dual Boot UTC</h3>
+    <ul>
+      <li><strong>Linux:</strong> <code>timedatectl set-local-rtc 0</code></li>
+      <li><strong>Windows:</strong> set registry key <code>RealTimeIsUniversal = 1</code></li>
+    </ul>
+
+    <h2>🧪 Preventive Measures</h2>
+    <ul>
+      <li>Enable NTP everywhere</li>
+      <li>Sync hardware clock after manual changes</li>
+      <li>Use UTC on all systems</li>
+      <li>Watch for clock issues in shared environments</li>
+    </ul>
+
+    <h2>📝 Summary Table</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Fix</th>
+          <th>Command</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Sync time</td><td><code>sudo date --set "$(date)" && sudo hwclock --systohc</code></td></tr>
+        <tr><td>Enable NTP</td><td><code>sudo timedatectl set-ntp true</code></td></tr>
+        <tr><td>Touch files</td><td><code>find . -type f -exec touch {} +</code></td></tr>
+        <tr><td>Clean build</td><td><code>make clean && make</code></td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      💡 <strong>Pro Tip:</strong> Clock skew can silently break critical systems. Keep it in check before it creates chaos!
+    </div>
+
+  </div>
+</body>
+</html>
