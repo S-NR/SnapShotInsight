@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Compiler Optimization Levels</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png'); /* 🔁 Replace with actual file name */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      color: #ffffff;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 50px 10vw;
+      box-sizing: border-box;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00eaff;
+      font-size: 2.8em;
+      margin-bottom: 30px;
+      border-bottom: 2px solid #00eaff;
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      color: #ffc107;
+      margin-top: 40px;
+    }
+
+    p, li {
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    img {
+      display: block;
+      margin: 20px auto;
+      max-width: 100%;
+      height: auto;
+      border: 2px solid #fff;
+      border-radius: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    th, td {
+      border: 1px solid #aaa;
+      padding: 10px;
+      text-align: left;
+      color: #fff;
+    }
+
+    th {
+      background-color: rgba(0, 234, 255, 0.2);
+    }
+
+    code {
+      background-color: rgba(255,255,255,0.1);
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+      color: #ffd54f;
+    }
+
+    pre {
+      background-color: rgba(0,0,0,0.6);
+      padding: 12px;
+      border-left: 4px solid #00eaff;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2em;
+      }
+
+      h2 {
+        font-size: 1.4em;
+      }
+
+      p, li, code {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h1>⚙️ Compiler Optimization Levels</h1>
+
+    <p><strong>Graphical representation of compiler optimization levels:</strong></p>
+    <img src="0f7e9fa4-ca94-4c8b-968a-481c8883c396.png" alt="Compiler optimization level graph" />
+
+    <h2>🔍 What the Graph Shows:</h2>
+    <ul>
+      <li><strong>X-axis:</strong> Code Size → Increases left to right</li>
+      <li><strong>Y-axis:</strong> Speed → Increases bottom to top</li>
+      <li><strong>Circles:</strong> Represent different GCC optimization levels</li>
+    </ul>
+
+    <h2>📊 Optimization Flag Table</h2>
+    <table>
+      <tr>
+        <th>Optimization Flag</th>
+        <th>Goal</th>
+        <th>Code Size</th>
+        <th>Speed</th>
+      </tr>
+      <tr>
+        <td>-O0</td>
+        <td>No optimization</td>
+        <td>🔺 Large</td>
+        <td>🔻 Slow</td>
+      </tr>
+      <tr>
+        <td>-O1</td>
+        <td>Basic optimization</td>
+        <td>🔽 Smaller</td>
+        <td>🔼 Faster</td>
+      </tr>
+      <tr>
+        <td>-O2</td>
+        <td>Balanced (Speed)</td>
+        <td>🔽🔽</td>
+        <td>🔼🔼</td>
+      </tr>
+      <tr>
+        <td>-O3</td>
+        <td>Max speed</td>
+        <td>🔽🔽🔽</td>
+        <td>🔼🔼🔼</td>
+      </tr>
+      <tr>
+        <td>-Os</td>
+        <td>Size optimized</td>
+        <td>🟢 Smallest</td>
+        <td>⚠️ Moderate</td>
+      </tr>
+    </table>
+
+    <h2>✅ Is This Logic Same for All Compilers?</h2>
+    <table>
+      <tr>
+        <th>Compiler</th>
+        <th>Supports -O0 to -O3</th>
+        <th>Supports -Os</th>
+        <th>Similar to GCC?</th>
+      </tr>
+      <tr>
+        <td>GCC</td>
+        <td>✅ Yes</td>
+        <td>✅ Yes</td>
+        <td>✅ Yes</td>
+      </tr>
+      <tr>
+        <td>Clang</td>
+        <td>✅ Yes</td>
+        <td>✅ Yes</td>
+        <td>✅ Yes</td>
+      </tr>
+      <tr>
+        <td>ARMCC / Keil</td>
+        <td>✅ Yes</td>
+        <td>✅ Yes</td>
+        <td>⚠️ Somewhat different</td>
+      </tr>
+      <tr>
+        <td>IAR</td>
+        <td>✅ Yes (--opt_level)</td>
+        <td>✅ Yes</td>
+        <td>⚠️ Slight variation</td>
+      </tr>
+      <tr>
+        <td>MSVC</td>
+        <td>✅ (/O1, /O2)</td>
+        <td>❌ No direct -Os</td>
+        <td>⚠️ Different optimization logic</td>
+      </tr>
+    </table>
+
+    <h2>🔧 When to Use Which?</h2>
+    <table>
+      <tr>
+        <th>Optimization Level</th>
+        <th>When to Use</th>
+      </tr>
+      <tr>
+        <td>-O0</td>
+        <td>For debugging — No optimization; preserves source line mapping</td>
+      </tr>
+      <tr>
+        <td>-O1</td>
+        <td>Basic development, moderate optimization</td>
+      </tr>
+      <tr>
+        <td>-O2</td>
+        <td>Default for release builds — good balance</td>
+      </tr>
+      <tr>
+        <td>-O3</td>
+        <td>Speed critical (e.g., real-time systems), but can bloat code</td>
+      </tr>
+      <tr>
+        <td>-Os</td>
+        <td>When flash/code space is tight</td>
+      </tr>
+    </table>
+
+    <h2>⚠️ Caution with <code>-O3</code></h2>
+    <ul>
+      <li>May inline too much, bloating Flash</li>
+      <li>May reorder instructions, making debugging harder</li>
+      <li>Test thoroughly on real hardware</li>
+    </ul>
+
+    <h2>🧪 Real Embedded Example (STM32 or AVR)</h2>
+    <pre><code># For size optimization
+arm-none-eabi-gcc -Os main.c -o main.elf
+
+# For speed optimization
+arm-none-eabi-gcc -O3 main.c -o main.elf</code></pre>
+
+    <h2>✅ Summary:</h2>
+    <p>Yes, the graph logic is broadly consistent across most compilers.  
+    But the exact impact on code size and speed depends on:</p>
+    <ul>
+      <li>Target architecture (AVR, ARM, etc.)</li>
+      <li>Specific compiler used</li>
+      <li>MCU-specific quirks and optimizations</li>
+    </ul>
+    <p>✅ Always benchmark your build and inspect the <code>.map</code> file for accurate results.</p>
+  </div>
+</body>
+</html>
