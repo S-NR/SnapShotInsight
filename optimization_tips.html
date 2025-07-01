@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Code Memory vs Data Memory</title>
+  <title>Code vs Data Memory</title>
   <style>
     body {
       margin: 0;
       font-family: 'Segoe UI', sans-serif;
-      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png');
+      background-image: url('An_infographic_titled_%22🔧_Code_Memory_vs_Data_Memor.png'); /* Replace with actual image path */
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
@@ -18,7 +18,7 @@
     }
 
     .overlay {
-      background-color: rgba(0, 0, 0, 0.75);
+      background-color: rgba(0, 0, 0, 0.78);
       min-height: 100vh;
       padding: 50px 10vw;
       box-sizing: border-box;
@@ -30,7 +30,7 @@
     }
 
     .header h1 {
-      font-size: 2.5em;
+      font-size: 2.6em;
       color: #00eaff;
       border-bottom: 2px solid #00eaff;
       padding-bottom: 10px;
@@ -43,8 +43,13 @@
       margin-top: 50px;
     }
 
-    p, ul, li, pre {
-      font-size: 18px;
+    h3 {
+      font-size: 1.5em;
+      color: #ffc107;
+    }
+
+    p, ul, li, pre, code {
+      font-size: 17px;
       margin-bottom: 18px;
     }
 
@@ -52,12 +57,8 @@
       padding-left: 20px;
     }
 
-    .code-block {
-      background-color: rgba(255,255,255,0.1);
-      padding: 10px;
-      border-left: 4px solid #00eaff;
-      border-radius: 5px;
-      white-space: pre-wrap;
+    .section {
+      margin-bottom: 40px;
     }
 
     .quote {
@@ -66,9 +67,41 @@
       margin: 15px 0;
       padding-left: 20px;
       border-left: 4px solid #ffc107;
-      background-color: rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.08);
+      border-radius: 6px;
       padding: 15px;
+    }
+
+    code {
+      background-color: rgba(255,255,255,0.1);
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    pre {
+      background-color: rgba(0,0,0,0.4);
+      padding: 10px;
+      border-left: 3px solid #00eaff;
+      overflow-x: auto;
+      border-radius: 6px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+      color: #fff;
+    }
+
+    th {
+      background-color: rgba(0, 234, 255, 0.3);
     }
 
     @media screen and (max-width: 768px) {
@@ -84,7 +117,7 @@
         font-size: 1.5em;
       }
 
-      p, li {
+      p, li, code {
         font-size: 16px;
       }
     }
@@ -97,87 +130,131 @@
     </div>
 
     <div class="section">
+      <p><strong>Deep Dive for Freshers with Practical C Examples</strong></p>
       <h2>🔹 First: Understand the Two Key Memories</h2>
-      <p><strong>Program Memory (Flash/ROM)</strong> is non-volatile and stores code and constants.<br/>
-         <strong>Data Memory (RAM/SRAM)</strong> is volatile and used for variables and stack.</p>
+      <table>
+        <tr><th>Memory Type</th><th>Location</th><th>Volatile?</th><th>What It Stores</th><th>Example Use</th></tr>
+        <tr><td>Program Memory (Flash/ROM)</td><td>Non-volatile</td><td>❌</td><td>Code, constant strings, lookup tables</td><td><code>const char *msg = "Hi";</code></td></tr>
+        <tr><td>Data Memory (RAM/SRAM)</td><td>Volatile</td><td>✅</td><td>Variables, buffers, function stack frames</td><td><code>int x = 10;</code></td></tr>
+      </table>
     </div>
 
     <div class="section">
       <h2>✅ 1. Program Memory Optimization</h2>
-      <div class="code-block">const char welcome_msg[] = "Welcome!";</div>
-      <p><em>Explanation:</em> Stored in Flash due to <code>const</code>, saving RAM.</p>
+      <h3>🧪 Example 1: const keyword usage</h3>
+      <pre><code>const char welcome_msg[] = "Welcome!";</code></pre>
+      <p><strong>Explanation:</strong> Stored in Flash, not RAM — saves RAM space.</p>
 
-      <div class="code-block">const uint8_t square_lookup[] = {0, 1, 4, 9, 16, 25};
-uint8_t result = square_lookup[input];</div>
-      <p><em>Explanation:</em> Uses Flash lookup instead of computation.</p>
+      <h3>🧪 Example 2: Flash lookup vs computation</h3>
+      <pre><code>// Good (Flash)
+const uint8_t square_lookup[] = {0, 1, 4, 9, 16, 25};
+uint8_t result = square_lookup[input];</code></pre>
+      <pre><code>// Bad (uses CPU cycles)
+uint8_t result = input * input;</code></pre>
 
-      <div class="code-block">// Bad:
+      <h3>🧪 Example 3: Avoid duplicated logic</h3>
+      <pre><code>// Bad
 led_on(); delay(100); led_off();
 led_on(); delay(100); led_off();
 
-// Good:
+// Good
 void blink_once(void) {
-    led_on(); delay(100); led_off();
-}</div>
-      <p><em>Explanation:</em> Reduces duplication and Flash size.</p>
+  led_on();
+  delay(100);
+  led_off();
+}
+blink_once();
+blink_once();</code></pre>
     </div>
 
     <div class="section">
       <h2>✅ 2. Data Memory Optimization (RAM)</h2>
-      <div class="code-block">// Global buffer
-uint8_t buffer[1024];</div>
-      <div class="code-block">// Local buffer
+      <h3>🧪 Example 4: Global vs Local buffer</h3>
+      <pre><code>// Global
+uint8_t buffer[1024];
+
+// Local
 void process() {
-    uint8_t buffer[256];
-}</div>
-      <p><em>Best Practice:</em> Use local unless global is needed. Avoid big stacks.</p>
+  uint8_t buffer[256];
+}</code></pre>
 
-      <div class="code-block">uint8_t count = 0;
+      <h3>🧪 Example 5: Smaller data types</h3>
+      <pre><code>uint8_t count = 0;
 uint16_t id = 1000;
-uint32_t total = 10000;</div>
-      <p>Use smallest required data types.</p>
+uint32_t total = 10000;</code></pre>
 
-      <div class="code-block">struct Flags {
-    uint8_t a : 1;
-    uint8_t b : 1;
-    uint8_t c : 1;
-};</div>
-      <p>Use bit-fields for memory savings.</p>
+      <h3>🧪 Example 6: Bit-fields</h3>
+      <pre><code>// Full
+struct Flags { uint8_t a, b, c; };
+
+// Compressed
+struct Flags {
+  uint8_t a : 1;
+  uint8_t b : 1;
+  uint8_t c : 1;
+};</code></pre>
+
+      <h3>🧪 Example 7: Flash vs RAM string</h3>
+      <pre><code>// RAM (bad)
+char msg[] = "Hello";
+
+// Flash (good)
+const char *msg = "Hello";</code></pre>
     </div>
 
     <div class="section">
       <h2>✅ 3. Combined Optimization</h2>
-      <div class="code-block">// Shared buffer
-uint8_t shared_buffer[128];</div>
-      <p>Reuse buffers between UART, I2C etc. to save RAM.</p>
+      <h3>🧪 Example 8: Reuse buffers</h3>
+      <pre><code>// Bad
+uint8_t uart_buffer[128];
+uint8_t i2c_buffer[128];
 
-      <div class="code-block">void counter() {
-    static int count = 0;
-    count++;
-}</div>
-      <p><code>static</code> helps retain value with limited scope.</p>
+// Good
+uint8_t shared_buffer[128];</code></pre>
+
+      <h3>🧪 Example 9: static for persistent locals</h3>
+      <pre><code>void counter() {
+  static int count = 0;
+  count++;
+}</code></pre>
     </div>
 
     <div class="section">
-      <h2>✅ 4. EEPROM (Config Settings)</h2>
-      <div class="code-block">#include <avr/eeprom.h>
+      <h2>✅ 4. MCU-Specific Keywords (AVR)</h2>
+      <pre><code>#include &lt;avr/pgmspace.h&gt;
+
+const char msg[] PROGMEM = "Flash string";
+char buffer[20];
+strcpy_P(buffer, msg);</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>✅ 5. EEPROM Settings</h2>
+      <pre><code>#include &lt;avr/eeprom.h&gt;
 
 uint8_t EEMEM stored_value;
 
-eeprom_write_byte(&stored_value, 42);
-uint8_t val = eeprom_read_byte(&stored_value);</div>
-      <p>Use for rare, persistent storage (avoid frequent writes).</p>
+void write_value(uint8_t val) {
+  eeprom_write_byte(&stored_value, val);
+}
+
+uint8_t read_value() {
+  return eeprom_read_byte(&stored_value);
+}</code></pre>
+      <p>EEPROM is non-volatile but slow. Avoid real-time logging to EEPROM.</p>
     </div>
 
     <div class="section">
-      <h2>🖚 Summary Table</h2>
-      <ul>
-        <li><strong>Program Memory:</strong> Use <code>const</code>, Flash tables, reduce duplicates.</li>
-        <li><strong>Data Memory:</strong> Bit-fields, buffer reuse, local vars, correct data size.</li>
-        <li><strong>Combined:</strong> Share buffers, <code>static</code> vars, optimize logic.</li>
-        <li><strong>EEPROM:</strong> For configs/settings only.</li>
-      </ul>
+      <h2>🔚 Summary Table</h2>
+      <table>
+        <tr><th>Optimization Type</th><th>Techniques</th></tr>
+        <tr><td>Program Memory</td><td>const, remove duplication, Flash tables, avoid inlining</td></tr>
+        <tr><td>Data Memory (RAM)</td><td>Bit-fields, reuse buffers, local over global, size types</td></tr>
+        <tr><td>Both Combined</td><td>Move const to Flash, share buffers, optimize algorithms</td></tr>
+        <tr><td>EEPROM</td><td>Use for settings, avoid frequent writes</td></tr>
+      </table>
     </div>
+
   </div>
 </body>
 </html>
