@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Effective Code Development Strategies | Snap Shot Insight</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #ffffff;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.85);
+      padding: 40px 10%;
+      min-height: 100vh;
+    }
+
+    h1, h2 {
+      color: #00eaff;
+      text-align: center;
+    }
+
+    h2 {
+      margin-top: 40px;
+      color: #ffd700;
+    }
+
+    p, ul, li {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    strong {
+      color: #00ffff;
+    }
+
+    .tips-box {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-left: 4px solid #00eaff;
+      padding: 15px 20px;
+      margin: 20px 0;
+    }
+
+    .summary-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      background-color: rgba(255, 255, 255, 0.05);
+      color: #fff;
+    }
+
+    .summary-table th,
+    .summary-table td {
+      border: 1px solid #555;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .summary-table thead {
+      background-color: rgba(0, 234, 255, 0.2);
+    }
+
+    .summary-table tr:nth-child(even) {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+
+    @media (max-width: 768px) {
+      .overlay {
+        padding: 20px 5%;
+      }
+
+      .summary-table {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    <h1>🛠️ Effective Code Development Strategies</h1>
+
+    <div class="section">
+      <h2>✅ 1. Code Memory Optimization</h2>
+      <ul>
+        <li>Use <code>-Os</code> or <code>-Oz</code> compiler flag for size optimization.</li>
+        <li>Avoid unnecessary libraries and static tables.</li>
+        <li>Use smaller data types like <code>uint8_t</code> instead of <code>uint32_t</code>.</li>
+        <li>Use bit-fields and packed structs for memory efficiency.</li>
+        <li>Inline only when necessary; excessive inlining increases size.</li>
+        <li>Enable Link Time Optimization (LTO) to eliminate unused code.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🚀 2. Speed Optimization</h2>
+      <ul>
+        <li>Use compiler flags like <code>-O2</code> or <code>-O3</code>.</li>
+        <li>Unroll small, predictable loops.</li>
+        <li>Inline frequently called functions.</li>
+        <li>Replace repeated calculations with lookup tables.</li>
+        <li>Avoid branching in performance-critical paths.</li>
+        <li>Use DMA and interrupts to offload work from the CPU.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🧩 3. Maintainability & Readability</h2>
+      <ul>
+        <li>Use meaningful names and follow naming conventions.</li>
+        <li>Modularize code (drivers, logic, UI, etc.).</li>
+        <li>Avoid magic numbers — use enums or constants.</li>
+        <li>Write clean comments for complex logic only.</li>
+        <li>Adopt coding standards (e.g., MISRA-C).</li>
+        <li>Use version control with clear commit messages.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>⚖️ 4. Portability & Scalability</h2>
+      <ul>
+        <li>Avoid platform-specific APIs unless abstracted.</li>
+        <li>Parameterize hardware configurations.</li>
+        <li>Separate HAL from business logic.</li>
+        <li>Support multi-platforms with conditional compilation.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🔍 5. Debuggability & Testability</h2>
+      <ul>
+        <li>Use macro-based logging (can be disabled in production).</li>
+        <li>Write unit-testable and loosely coupled functions.</li>
+        <li>Use assertions and state monitoring.</li>
+        <li>Use frameworks like Unity or Ceedling for testing C code.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>🧠 6. Combined Scenarios</h2>
+      <div class="tips-box">
+        <strong>Memory + Speed:</strong> Use lookup tables in Flash, avoid fragmentation, reuse buffers.<br>
+        <strong>Speed + Maintainability:</strong> Profile and optimize hot paths only, document trade-offs.<br>
+        <strong>Memory + Maintainability:</strong> Use compile-time flags for features, structure modularly.
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>⚡ 7. Other Considerations</h2>
+      <ul>
+        <li><strong>Power Optimization:</strong> Use sleep modes, interrupts, and reduce CPU wake time.</li>
+        <li><strong>Safety/Security:</strong> Follow MISRA/DO-178, add watchdogs, avoid dynamic memory.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>💾 Memory Optimization by Type</h2>
+      <ul>
+        <li><strong>Program Memory (Flash):</strong> Avoid big tables, static code, templates.</li>
+        <li><strong>Data Memory (RAM):</strong> Use small types, avoid deep call stacks, reuse buffers.</li>
+        <li><strong>EEPROM:</strong> Use for configs, avoid frequent writes.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>📊 Quick Design Table</h2>
+      <table class="summary-table">
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>Suggestion</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Large const lookup table</td>
+            <td>Store in Flash using <code>const</code></td>
+          </tr>
+          <tr>
+            <td>Temporary buffer</td>
+            <td>Use local or static variables</td>
+          </tr>
+          <tr>
+            <td>Many large strings</td>
+            <td>Move to Flash and access via pointers</td>
+          </tr>
+          <tr>
+            <td>Huge structs with sparse data</td>
+            <td>Use bit-fields or compress data</td>
+          </tr>
+          <tr>
+            <td>Code duplication for speed</td>
+            <td>Inline only hot paths</td>
+          </tr>
+          <tr>
+            <td>Cross-file variables</td>
+            <td>Keep global but use <code>static</code> if internal</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h2>🧠 Final Thoughts</h2>
+      <p>
+        In embedded and system-level programming, it's important to make deliberate trade-offs between size, speed, maintainability, and power. Profiling and measurement should guide what you optimize.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
