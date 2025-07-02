@@ -164,25 +164,24 @@
       <h2>When Double Buffering is Not Enough</h2>
       <p class="quote">
       Double buffering greatly improves visuals, but it can introduce slight input lag, especially if V-Sync is enabled and the rendering is slower than the display's refresh rate.
-
-      In such cases, **Triple Buffering** can help. It adds a third buffer, allowing the rendering engine to write to a free buffer while the others are queued for display. This reduces lag while still avoiding tearing, at the cost of more memory.
-
-      > Double Buffering: 2 buffers (front, back)  
-      > Triple Buffering: 3 buffers (front, middle, back)
+      <p>
+        In such cases, **Triple Buffering** can help. It adds a third buffer, allowing the rendering engine to write to a free buffer while the others are queued for display. This reduces lag while still avoiding tearing, at the cost of more memory.
+      </p>
+      <ul>
+        <li><strong>Double Buffering:</strong> Two buffers (front, back)</li>
+        <li><strong>Triple Buffering:</strong> Three buffers (front, middle, back)</li> 
+      </ul>
       </p>
     </div>
 
     <h3>Code Snippet (Embedded System Example)</h3>
-      <pre><code>
-// Pseudo STM32-style double buffering logic
+      <pre><code>// Pseudo STM32-style double buffering logic
 while (1) {
     render_to_back_buffer();         // Draw graphics here
     wait_for_vsync();               // Ensure display has finished current refresh
     swap_buffers();                 // Swap front and back buffers
 }
 </code></pre>
-      <pre><code>// Bad (uses CPU cycles)
-uint8_t result = input * input;</code></pre>
 
     <div class="section">
       <ul>
@@ -217,8 +216,8 @@ uint8_t result = input * input;</code></pre>
         <li><strong>Dirty Region Updates:</strong> Keep track of areas that changed and redraw only those.</li>
         <li><strong>Monochrome Buffers:</strong> If color is not essential, reduce bit depth (e.g., 1-bit or 4-bit buffer).</li>
         <li><strong>DMA Transfers:</strong> Use DMA to transfer buffer data directly to display, freeing up CPU.</li>
-        These strategies help embedded systems achieve smooth UI with less RAM.
       </ul>
+        These strategies help embedded systems achieve smooth UI with less RAM.
     </div>
 
     <div class="section">
@@ -232,7 +231,7 @@ uint8_t result = input * input;</code></pre>
         These provide deeper insights and practical use cases.
       </ul>
     </div>
-        
+
   </div>
 </body>
 </html>
