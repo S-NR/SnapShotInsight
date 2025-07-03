@@ -153,22 +153,37 @@ code {
   }
 
   .header h1 {
-    font-size: 2em;
+    font-size: 1.8em;
   }
 
   h2 {
-    font-size: 1.5em;
+    font-size: 1.4em;
+    margin-top: 30px;
   }
 
   p, li {
-    font-size: 16px;
+    font-size: 15px;
+    line-height: 1.6;
+    padding: 0 5px;         /* Add some horizontal padding */
   }
-/*   
-  p {
-    font-size: 1em;
-  } */
 
-  .btn, #searchInput {
-    font-size: 0.9em;
+  .opt-img {
+    width: 90%;
+    max-width: 300px;       /* Reduce image size on mobile */
+  }
+
+  .quote {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .explore-button {
+    font-size: 14px;
+    padding: 8px 18px;
+  }
+
+  #searchInput {
+    width: 200px;
   }
 }
+
