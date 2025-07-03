@@ -158,32 +158,31 @@ code {
 
   h2 {
     font-size: 1.4em;
-    margin-top: 30px;
+    margin-top: 40px;
+    margin-bottom: 20px;
   }
 
   p, li {
     font-size: 15px;
     line-height: 1.6;
-    padding: 0 5px;         /* Add some horizontal padding */
+    padding: 0;
+    margin-bottom: 20px;
   }
 
   .opt-img {
-    width: 90%;
-    max-width: 300px;       /* Reduce image size on mobile */
+    max-width: 90%;
+    width: 300px;
   }
 
-  .quote {
+  pre, code {
+    display: block;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 12px;
+    border-radius: 6px;
     font-size: 14px;
-    padding: 10px;
-  }
-
-  .explore-button {
-    font-size: 14px;
-    padding: 8px 18px;
-  }
-
-  #searchInput {
-    width: 200px;
   }
 }
 
