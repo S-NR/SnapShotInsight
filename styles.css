@@ -27,10 +27,38 @@ body {
   box-sizing: border-box;
 }
 
-h1 {
+/* h1 {
   font-size: 3em;
   margin-bottom: 20px;
   color: #00eaff;
+} */
+
+.header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.header h1 {
+  font-size: 2.8em;
+  color: #00eaff;
+  border-bottom: 2px solid #00eaff;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
+}
+
+h2 {
+  color: #00eaff;
+  font-size: 1.8em;
+  margin-top: 50px;
+}
+
+p, ul, li {
+  font-size: 18px;
+  margin-bottom: 18px;
+}
+
+ul {
+  padding-left: 20px;
 }
 
 p {
@@ -120,13 +148,25 @@ code {
 }
 
 @media screen and (max-width: 600px) {
-  h1 {
+  .overlay {
+    padding: 30px 6vw;
+  }
+
+  .header h1 {
     font-size: 2em;
   }
 
+  h2 {
+    font-size: 1.5em;
+  }
+
+  p, li {
+    font-size: 16px;
+  }
+/*   
   p {
     font-size: 1em;
-  }
+  } */
 
   .btn, #searchInput {
     font-size: 0.9em;
