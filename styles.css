@@ -147,7 +147,7 @@ code {
   font-family: monospace;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 786px) {
   .overlay {
     padding: 30px 6vw;
   }
