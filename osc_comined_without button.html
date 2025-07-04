@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧭 Clocks and Oscilloscope Integration</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      padding: 1em;
+    }
+    .section {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      background: #fff;
+      border-radius: 10px;
+      margin-bottom: 2em;
+      padding: 1.5em;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .concept, .waveform {
+      flex: 1 1 300px;
+      padding: 1em;
+      box-sizing: border-box;
+    }
+    h2, h3 {
+      color: #333;
+    }
+    .waveform {
+      background: #1a1a1a;
+      color: #00ffcc;
+      border-left: 4px solid #ffaa00;
+      white-space: pre-wrap;
+    }
+    @media (max-width: 768px) {
+      .section {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="section">
+    <div class="concept">
+      <h2>📍 Step 1: Blink LED using Internal Clock (HSI)</h2>
+      <p>Using HSI (~8 MHz), toggle GPIO with HAL_Delay(1000ms).</p>
+    </div>
+    <div class="waveform">
+Zoomed View:
+       ┌────────────┐
+       │  1s HIGH   │ 
+───────┘            └────────────
+                    ↑ 1s LOW
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="concept">
+      <h2>📍 Step 2: Blink LED using External Crystal (HSE)</h2>
+      <p>External XTAL used for clock, LED toggling monitored.</p>
+    </div>
+    <div class="waveform">
+CH1 (LED Blink):
+       ┌────────────┐
+       │  1s HIGH   │ 
+───────┘            └────────────
+                    ↑ 1s LOW
+
+CH2 (XTAL Pin):
+~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~ ← ~8 MHz (~125 ns)
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="concept">
+      <h2>📍 Step 3: PLL Enabled (HSE × 9 = 72 MHz)</h2>
+      <p>Fast toggling GPIO loop with PLL active to measure SYSCLK.</p>
+    </div>
+    <div class="waveform">
+CH1 (Toggling GPIO):
+   ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
+───┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘
+
+Zoom into a single cycle:
+   ┌────┐
+   │    │ ← e.g., 13.8 ns HIGH
+───┘    └────┐ ← 13.8 ns LOW
+             │
+Total: ~27.6 ns = 36.2 MHz GPIO toggle freq
+→ SYSCLK = 36.2 × 2 = ~72 MHz
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="concept">
+      <h2>📍 Step 4: Delay Accuracy Test with DWT/Timer</h2>
+      <p>GPIO pulsed with delay_us(100); scope should show 100µs.</p>
+    </div>
+    <div class="waveform">
+Zoomed: ┌────────┐
+        │        │ ← 100 µs
+────────┘        └────────
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="concept">
+      <h2>📍 Step 5: Clock Failure Fallback Test</h2>
+      <p>Simulate HSE fault, observe system switch to HSI.</p>
+    </div>
+    <div class="waveform">
+        HSE ON                 CLOCK FAIL               HSI Fallback
+CH1: ┌─────────────┐         (no toggling)         ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
+     │             │                               │ │ │ │ │ │ │ │ │ │
+─────┘             └───────────────────────────────┘ └─┘ └─┘ └─┘ └─┘
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="concept">
+      <h2>📍 Step 6: RTC with LSE</h2>
+      <p>1 Hz toggling from RTC, 32.768 kHz from LSE pin.</p>
+    </div>
+    <div class="waveform">
+CH1 (1 Hz):
+        ┌────────┐       ┌────────┐
+        │        │       │        │
+────────┘        └───────┘        └───────
+
+CH2 (32.768 kHz):
+~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~ (~30.5 µs period)
+    </div>
+  </div>
+
+</body>
+</html>
