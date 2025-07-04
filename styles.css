@@ -52,6 +52,12 @@ h2 {
   margin-top: 50px;
 }
 
+h3 {
+  color: #65999e;
+  font-size: 1.8em;
+  margin-top: 50px;
+}
+
 p, ul, li {
   font-size: 18px;
   margin-bottom: 18px;
