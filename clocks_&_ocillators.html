@@ -73,12 +73,24 @@
     <p>Every digital system works by changing its state — but how do we know <em>when</em> to change state?</p>
     <ul>
       <li>Clock signals are like the <strong>heartbeat</strong> of a digital system.</li>
-      <li>Used for fetch-decode-execute timing in CPUs, delays, PWM, communication, etc.</li>
+      <li>They provide a <strong>timing reference</strong> for all operations.</li>
+      <li>Without timing, CPUs wouldn’t know when to fetch, decode, execute, or write.... everything would happen at once — chaos!</li>
+      <li>Clocks ensure orderly execution of tasks in a predictable manner.</li>
+      <li>Think of it like a conductor for an orchestra, keeping everything in sync.</li>
+      <li>Timers, communication, delays, PWM — all need accurate timing.</li>
+      <li><strong>In General</strong>Clocks are used for fetch-decode-execute timing in CPUs, delays, PWM, communication, etc.</li>
     </ul>
 
     <h2>📍 2. Oscillator Basics (Zero Knowledge Start)</h2>
     <p><strong>Oscillator:</strong> Generates a repetitive waveform (e.g., square wave).</p>
-    <p>It acts like a metronome. In electronics: high… low… high… low…</p>
+    <p><strong>What does it do?</strong> 
+      <li>Produces a clock signal.</li>
+      <li>Used to time operations in microcontrollers, CPUs, etc.</li>
+    </p>
+    <p><strong>🔁 Analogy:</strong> 
+      <li>Think of it like a metronome in music – tick… tick… tick…</li>
+      <li>In electronics: high… low… high… low…</li>
+    </p>
 
     <h2>📍 3. Types of Oscillators (for Embedded)</h2>
     <table>
@@ -94,7 +106,12 @@
     </table>
 
     <h2>📍 4. Clock in Microcontrollers</h2>
+    
+    <p><strong>🧠 Concept:</strong> 
+      <li>A clock is the signal that drives all internal logic transitions.</li>
+    </p>
     <ul>
+      <p><strong>🧩 Internal Clock System</strong> </p>
       <li><strong>HSI</strong>: Internal high-speed oscillator</li>
       <li><strong>HSE</strong>: External high-speed crystal</li>
       <li><strong>PLL</strong>: Multiplies base frequency</li>
@@ -103,7 +120,7 @@
 
     <pre><code>
 +----------------+      +-----+
-| HSE (Crystal)  | ---> | PLL | --> SYSCLK
+| HSE (Crystal)  | ---> | PLL | --> System Clock (CPU, Timers)
 +----------------+      +-----+
        |
 +----------------+
@@ -113,13 +130,29 @@
 
     <h2>📍 5. Clock Configuration (STM32 Example)</h2>
     <p><strong>Goal:</strong> Run CPU at 72 MHz using 8 MHz crystal and PLL (×9).</p>
+    <ul>
+      <p><strong>Steps : </strong> </p>
+      <li>Start with HSE (8 MHz crystal)</li>
+      <li>Enable PLL</li>
+      <li>Configure PLL to multiply (8 × 9 = 72 MHz)</li>
+      <li>Set system clock source = PLL</li>
+    </ul>
     <pre><code>
+RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
 RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
 RCC_OscInitStruct.HSEState = RCC_HSE_ON;
 RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
 RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
 RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
 HAL_RCC_OscConfig(&RCC_OscInitStruct);
+
+// Set PLL as system clock
+RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_SYSCLK;
+RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2);
+
     </code></pre>
 
     <h2>📍 6. Where Clocks Are Used in Embedded</h2>
@@ -149,6 +182,10 @@ HAL_RCC_OscConfig(&RCC_OscInitStruct);
         <tr><td>Jitter</td><td>Short-term clock variation</td></tr>
       </tbody>
     </table>
+    <ul>
+      <li>Use crystals for accuracy-sensitive tasks (USB, RTC).</li>
+      <li>Use RC for low-cost, non-critical functions.</li>
+    </ul>
 
     <h2>📍 8. Debugging & Measurements</h2>
     <ul>

@@ -169,7 +169,7 @@ table {
 th, td {
   padding: 14px 12px;
   border-bottom: 1px solid rgba(255,255,255,0.15);
-  text-align: center;
+  text-align: left;
   color: #fff;
 }
 
