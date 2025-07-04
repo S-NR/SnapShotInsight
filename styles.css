@@ -166,6 +166,16 @@ th {
   font-weight: bold;
 }
 
+.note {
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 6px solid #ffc107;
+  color: #fffbe6;
+  padding: 18px 25px;
+  font-size: 17px;
+  margin-bottom: 35px;
+  border-radius: 10px;
+}
+
 @media screen and (max-width: 786px) {
   .overlay {
     padding: 30px 6vw;
@@ -181,7 +191,7 @@ th {
     margin-bottom: 20px;
   }
 
-  p, li {
+  p, li, .note{
     font-size: 15px;
     line-height: 1.6;
     padding: 0;
