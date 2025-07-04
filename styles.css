@@ -154,6 +154,18 @@ code {
   padding: 0 6vw;
 }
 
+th, td {
+  padding: 14px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+  text-align: center;
+  color: #fff;
+}
+
+th {
+  background-color: rgba(0,0,0,0.5);
+  font-weight: bold;
+}
+
 @media screen and (max-width: 786px) {
   .overlay {
     padding: 30px 6vw;
@@ -189,6 +201,10 @@ code {
     background-color: rgba(0, 0, 0, 0.6);
     padding: 12px;
     border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  th, td {
     font-size: 14px;
   }
 }
