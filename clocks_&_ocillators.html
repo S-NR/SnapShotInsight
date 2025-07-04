@@ -1,1 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clocks and Oscillators - Embedded Systems Walkthrough</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 2em;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('https://images.unsplash.com/photo-1504280390368-361c6d9f38f4'); /* Replace with your image */
+      background-size: cover;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      background-position: center;
+      color: white;
+      backdrop-filter: brightness(0.9);
+    }
+    .container {
+      max-width: 960px;
+      margin: auto;
+      background: rgba(0, 0, 0, 0.7);
+      padding: 2em;
+      border-radius: 15px;
+    }
+    h1, h2, h3 {
+      color: #ffcc00;
+    }
+    code {
+      background-color: rgba(255,255,255,0.1);
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: monospace;
+    }
+    pre {
+      background-color: rgba(255,255,255,0.1);
+      padding: 1em;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1em 0;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 0.5em;
+      background-color: rgba(255,255,255,0.05);
+    }
+    th {
+      background-color: #222;
+    }
+    .note {
+      background: rgba(255, 255, 0, 0.1);
+      padding: 1em;
+      margin: 1em 0;
+      border-left: 4px solid yellow;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧭 Full Walkthrough: Clocks and Oscillators for Embedded Systems</h1>
+
+    <h2>📍 1. Introduction – Why Timing Matters?</h2>
+    <p>Every digital system works by changing its state — but how do we know <em>when</em> to change state?</p>
+    <ul>
+      <li>Clock signals are like the <strong>heartbeat</strong> of a digital system.</li>
+      <li>Used for fetch-decode-execute timing in CPUs, delays, PWM, communication, etc.</li>
+    </ul>
+
+    <h2>📍 2. Oscillator Basics (Zero Knowledge Start)</h2>
+    <p><strong>Oscillator:</strong> Generates a repetitive waveform (e.g., square wave).</p>
+    <p>It acts like a metronome. In electronics: high… low… high… low…</p>
+
+    <h2>📍 3. Types of Oscillators (for Embedded)</h2>
+    <table>
+      <thead>
+        <tr><th>Type</th><th>Key Use</th><th>Accuracy</th><th>Cost</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>RC Oscillator</td><td>Internal MCU startup</td><td>±5%</td><td>Low</td></tr>
+        <tr><td>Crystal Oscillator</td><td>System/Peripheral Clock</td><td>±0.005%</td><td>Medium</td></tr>
+        <tr><td>Ceramic Resonator</td><td>Cheaper alternative</td><td>±0.5%</td><td>Low</td></tr>
+        <tr><td>PLL</td><td>Frequency multiplication</td><td>High</td><td>Varies</td></tr>
+      </tbody>
+    </table>
+
+    <h2>📍 4. Clock in Microcontrollers</h2>
+    <ul>
+      <li><strong>HSI</strong>: Internal high-speed oscillator</li>
+      <li><strong>HSE</strong>: External high-speed crystal</li>
+      <li><strong>PLL</strong>: Multiplies base frequency</li>
+      <li><strong>LSI/LSE</strong>: Low-speed internal/external for RTC or watchdog</li>
+    </ul>
+
+    <pre><code>
++----------------+      +-----+
+| HSE (Crystal)  | ---> | PLL | --> SYSCLK
++----------------+      +-----+
+       |
++----------------+
+| HSI (Internal) |
++----------------+
+    </code></pre>
+
+    <h2>📍 5. Clock Configuration (STM32 Example)</h2>
+    <p><strong>Goal:</strong> Run CPU at 72 MHz using 8 MHz crystal and PLL (×9).</p>
+    <pre><code>
+RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
+HAL_RCC_OscConfig(&RCC_OscInitStruct);
+    </code></pre>
+
+    <h2>📍 6. Where Clocks Are Used in Embedded</h2>
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>Clock Used</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>CPU</td><td>System Clock</td></tr>
+        <tr><td>UART</td><td>Peripheral Clock</td></tr>
+        <tr><td>Timers</td><td>Timer Clock</td></tr>
+        <tr><td>PWM</td><td>Timer Clock</td></tr>
+        <tr><td>ADC/DAC</td><td>Internal Clock</td></tr>
+        <tr><td>RTC</td><td>LSE / LSI</td></tr>
+        <tr><td>Watchdog</td><td>LSI</td></tr>
+      </tbody>
+    </table>
+
+    <h2>📍 7. Accuracy & Stability</h2>
+    <table>
+      <thead>
+        <tr><th>Term</th><th>Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>ppm</td><td>Parts per million (accuracy)</td></tr>
+        <tr><td>Drift</td><td>Change in frequency over time/temp</td></tr>
+        <tr><td>Jitter</td><td>Short-term clock variation</td></tr>
+      </tbody>
+    </table>
+
+    <h2>📍 8. Debugging & Measurements</h2>
+    <ul>
+      <li>Use oscilloscope on oscillator pins</li>
+      <li>Check frequency with DWT counter</li>
+      <li>Look for clean square/sine wave at expected frequency</li>
+    </ul>
+
+    <h2>📍 9. Test Questions</h2>
+    <ul>
+      <li>What is PLL and why is it used?</li>
+      <li>How to decide between HSI and HSE?</li>
+      <li>What happens if your oscillator fails?</li>
+      <li>Why use 32.768 kHz for RTC?</li>
+      <li>How does an oscillator differ from a timer?</li>
+    </ul>
+
+    <h2>📍 10. Summary</h2>
+    <ul>
+      <li>✅ What is a clock</li>
+      <li>✅ Oscillator types</li>
+      <li>✅ Clock tree</li>
+      <li>✅ PLL usage</li>
+      <li>✅ Real configuration</li>
+      <li>✅ Applications and testing</li>
+    </ul>
+
+    <div class="note">
+      Tip: Want a version with circuit diagrams, project files, or oscilloscope readings? Ask your mentor or instructor for an advanced bundle.
+    </div>
+  </div>
+</body>
+</html>
 
