@@ -133,11 +133,12 @@ HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);</code></pre>
 |                |
 |________________|
     </div> -->    
-    <pre><code>
+    
+    <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
 Zoomed: ┌────────┐
         │        │ ← 100 µs
 ────────┘        └────────
-</code></pre>
+</pre>
 
     <h4>✅ Step 5: Clock Failure Fallback Test</h4>
     <p><strong>Action:</strong> Disable HSE or simulate fault</p>
@@ -149,12 +150,13 @@ Zoomed: ┌────────┐
  (pause)
 |¯¯¯|¯¯¯|   HSI fallback (faster toggle)
     </div> -->
-    <pre><code>
+    
+    <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
             HSE ON                 CLOCK FAIL               HSI Fallback
 CH1:  ┌─────────────┐         (no toggling)          ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
       │             │                               │ │ │ │ │ │ │ │ │ │
 ──────┘             └───────────────────────────────┘ └─┘ └─┘ └─┘ └─┘
-</code></pre>
+</pre>
 
     <h4>✅ Step 6: RTC with LSE</h4>
     <p><strong>Connection:</strong> CH1 → GPIO toggled on 1s RTC callback, CH2 → LSE pin</p>
@@ -168,7 +170,7 @@ CH2:
 ~\~~/~~\~~/~~\~~/~~\~~/   (~30 µs period)
     </div> -->
 
-    <pre><code>
+<pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
 CH1 (1 Hz):
         ┌────────┐       ┌────────┐
         │        │       │        │
@@ -176,11 +178,13 @@ CH1 (1 Hz):
 
 CH2 (32.768 kHz):
     ~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~ (~30.5 µs period)
-    </code></pre>
+    </pre>
 
 
     <h2>📊 Clock Tree Diagram (Simplified STM32 Example)</h2>
-    <pre><code>                +------------------+
+    <pre>
+      <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
+                +------------------+
                 | HSI (8 MHz)      |
                 +--------+---------+
                          |
@@ -202,7 +206,8 @@ CH2 (32.768 kHz):
      |                |             |               |
 +----v---+       +----v---+     +----v----+    +----v----+
 | Core   |       | Timers |     | UART    |    | ADC/DAC  |
-+--------+       +--------+     +---------+    +----------+</code></pre>
++--------+       +--------+     +---------+    +----------+
+</pre>
 
     <h2>🎯 Learning Outcome for Freshers</h2>
     <table>
