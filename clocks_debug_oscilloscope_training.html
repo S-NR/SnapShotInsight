@@ -51,161 +51,162 @@
 <body>
     <div class="overlay">
 
-    <div class="header">
-        <h1>🛠 Step-by-Step Training: Clocks & Oscillators on STM32</h1>
-    </div>
-    <div class="section">
+        <div class="header">
+            <h1>🛠 Step-by-Step Training: Clocks & Oscillators on STM32</h1>
+        </div>
+        <div class="section">
 
-    <h2>🧪 Oscilloscope Integration in Clock Training</h2>
+        <h2>🧪 Oscilloscope Integration in Clock Training</h2>
 
-    <h3>📍 Tools Required</h3>
-    <ul>
-      <li>Oscilloscope (2-channel preferred)</li>
-      <li>STM32 Board (with accessible GPIOs and external crystal)</li>
-      <li>Probes for capturing signals</li>
-      <li>Optional: UART USB bridge for verification logs</li>
-    </ul>
+        <h3>📍 Tools Required</h3>
+        <ul>
+        <li>Oscilloscope (2-channel preferred)</li>
+        <li>STM32 Board (with accessible GPIOs and external crystal)</li>
+        <li>Probes for capturing signals</li>
+        <li>Optional: UART USB bridge for verification logs</li>
+        </ul>
 
-    <h3>🔹 Step-wise Oscilloscope Usage</h3>
+        <h3>🔹 Step-wise Oscilloscope Usage</h3>
 
-    <h4>✅ Step 1: Blink LED using Internal Clock (HSI)</h4>
-    <p><strong>Connection:</strong> Probe CH1 → LED GPIO (e.g., PC13)</p>
-    <p><strong>Expected Waveform:</strong> 1Hz square wave (1s HIGH, 1s LOW)</p>
-    <p><strong>Purpose:</strong> Confirm LED timing using HSI (~8 MHz)</p>
-    <pre><code>HSI (8 MHz) ---> SysTick Timer ---> HAL_Delay(1000ms) ---> GPIO_Toggle</code></pre>
-    <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
-Zoomed View:
-       ┌────────────┐
-       │  1s HIGH   │ 
-───────┘            └────────────
-                    ↑ 1s LOW
-    </pre>
-
-    <h4>✅ Step 2: Blink LED using External Crystal (HSE)</h4>
-    <p><strong>Connection:</strong> CH1 → LED GPIO, CH2 → XTAL pin</p>
-    <p><strong>Expected:</strong> Same 1Hz LED blink, CH2 shows 8 MHz sine wave</p>
-    <pre><code>[XTAL 8MHz] ---> MCU Clock ---> SysTick ---> LED Toggle</code></pre>
-
-    <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #33ccff;">
-CH1 (LED Blink):
-       ┌────────────┐
-       │  1s HIGH   │ 
-───────┘            └────────────
-                    ↑ 1s LOW
-
-CH2 (XTAL Pin):
-~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~ ← ~8 MHz (~125 ns)
-    </pre>
-
-    <h4>✅ Step 3: PLL Enabled (HSE × 9 = 72 MHz)</h4>
-    <p><strong>Connection:</strong> CH1 → LED, CH2 → GPIO toggled in loop</p>
-    <pre><code>while(1) {
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
-}</code></pre>
-    <p><strong>Expected:</strong> High-frequency square wave to measure CPU speed</p>
-    <pre><code>XTAL (8 MHz) → PLL × 9 → 72 MHz → SystemCoreClock</code></pre>
-    <p><strong>Scope Reading:</strong> Frequency = toggle freq × 2</p>
-    <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #44dd88;">
-CH1 (Toggling GPIO):
-   ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
-───┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ ← Fast toggling (~6–14 ns per edge depending on code)
-
-Zoom into a single cycle:
-   ┌────┐
-   │    │ ← e.g., 13.8 ns HIGH
-───┘    └────┐ ← 13.8 ns LOW
-            │
-    Total: ~27.6 ns = 36.2 MHz GPIO toggle freq
-           → SYSCLK = 36.2 × 2 = ~72 MHz
-    </pre>
-
-    <p><strong>Measure toggle period and multiply by 2 to estimate SYSCLK</p>
-
-    <h4>✅ Step 4: Delay Accuracy Test with DWT/Timer</h4>
-    <p><strong>Connection:</strong> CH1 → GPIO used in delay_us</p>
-    <pre><code>HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET);
-delay_us(100);
-HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);</code></pre>
-    <p><strong>Expected:</strong> Pulse of 100 µs (verify via cursor tool)</p>    
-    <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
-Zoomed: ┌────────┐
-        │        │ ← 100 µs
-────────┘        └────────
-    </pre>
-
-    <h4>✅ Step 5: Clock Failure Fallback Test</h4>
-    <p><strong>Action:</strong> Disable HSE or simulate fault</p>
-    <p><strong>Expected:</strong> LED halts briefly then resumes with different rate (HSI)</p>
-    <p><strong>Debug Pin:</strong> Optional GPIO HIGH for HSE, LOW for HSI</p>
-    <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
-            HSE ON                 CLOCK FAIL               HSI Fallback
-CH1:  ┌─────────────┐         (no toggling)          ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
-      │             │                               │ │ │ │ │ │ │ │ │ │
-──────┘             └───────────────────────────────┘ └─┘ └─┘ └─┘ └─┘
-    </pre>
-
-    <h4>✅ Step 6: RTC with LSE</h4>
-    <p><strong>Connection:</strong> CH1 → GPIO toggled on 1s RTC callback, CH2 → LSE pin</p>
-    <p><strong>Expected:</strong> 1Hz square wave on CH1, 32.768 kHz sine wave on CH2</p>
-    <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
-CH1 (1 Hz):
-        ┌────────┐       ┌────────┐
-        │        │       │        │
-────────┘        └───────┘        └───────
-
-CH2 (32.768 kHz):
-    ~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~ (~30.5 µs period)
-    </pre>
-
-
-    <h2>📊 Clock Tree Diagram (Simplified STM32 Example)</h2>
-    <pre>
+        <h4>✅ Step 1: Blink LED using Internal Clock (HSI)</h4>
+        <p><strong>Connection:</strong> Probe CH1 → LED GPIO (e.g., PC13)</p>
+        <p><strong>Expected Waveform:</strong> 1Hz square wave (1s HIGH, 1s LOW)</p>
+        <p><strong>Purpose:</strong> Confirm LED timing using HSI (~8 MHz)</p>
+        <pre><code>HSI (8 MHz) ---> SysTick Timer ---> HAL_Delay(1000ms) ---> GPIO_Toggle</code></pre>
         <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
-                +------------------+
-                | HSI (8 MHz)      |
-                +--------+---------+
-                         |
-              +----------v------------+
-              |      Multiplexer      |<--- LSE / LSI (RTC)
-              |  Select Clock Source  |
-              +----------+------------+
-                         |
-                    +----v-----+
-                    |   PLL    | <--- Optional (x2 to x16)
-                    +----+-----+
-                         |
-                  +------v------+
-                  | System Clock |
-                  | (SYSCLK)     |
-                  +------+-------+
-                         |
-     +----------------+------+------+---------------+
-     |                |             |               |
-+----v---+       +----v---+     +----v----+    +----v----+
-| Core   |       | Timers |     | UART    |    | ADC/DAC  |
-+--------+       +--------+     +---------+    +----------+
+    Zoomed View:
+        ┌────────────┐
+        │  1s HIGH   │ 
+    ───────┘            └────────────
+                        ↑ 1s LOW
         </pre>
-    </pre>
 
-    <h2>🎯 Learning Outcome for Freshers</h2>
-    <table>
-      <thead>
-        <tr><th>Skill</th><th>Verified by Scope</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Clock source switching</td><td>✅</td></tr>
-        <tr><td>Delay accuracy vs frequency</td><td>✅</td></tr>
-        <tr><td>PLL frequency multiplication</td><td>✅</td></tr>
-        <tr><td>Oscillator waveform shape</td><td>✅</td></tr>
-        <tr><td>Real-time ticking with RTC</td><td>✅</td></tr>
-        <tr><td>Detecting clock fault</td><td>✅</td></tr>
-      </tbody>
-    </table>
+        <h4>✅ Step 2: Blink LED using External Crystal (HSE)</h4>
+        <p><strong>Connection:</strong> CH1 → LED GPIO, CH2 → XTAL pin</p>
+        <p><strong>Expected:</strong> Same 1Hz LED blink, CH2 shows 8 MHz sine wave</p>
+        <pre><code>[XTAL 8MHz] ---> MCU Clock ---> SysTick ---> LED Toggle</code></pre>
 
-    <div class="note">
-      💡 Tip: Use clean ground reference for oscilloscope and calibrate probe before precise frequency/time measurements.
+        <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #33ccff;">
+    CH1 (LED Blink):
+        ┌────────────┐
+        │  1s HIGH   │ 
+    ───────┘            └────────────
+                        ↑ 1s LOW
+
+    CH2 (XTAL Pin):
+    ~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~ ← ~8 MHz (~125 ns)
+        </pre>
+
+        <h4>✅ Step 3: PLL Enabled (HSE × 9 = 72 MHz)</h4>
+        <p><strong>Connection:</strong> CH1 → LED, CH2 → GPIO toggled in loop</p>
+        <pre><code>while(1) {
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
+    }</code></pre>
+        <p><strong>Expected:</strong> High-frequency square wave to measure CPU speed</p>
+        <pre><code>XTAL (8 MHz) → PLL × 9 → 72 MHz → SystemCoreClock</code></pre>
+        <p><strong>Scope Reading:</strong> Frequency = toggle freq × 2</p>
+        <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #44dd88;">
+    CH1 (Toggling GPIO):
+    ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
+    ───┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ ← Fast toggling (~6–14 ns per edge depending on code)
+
+    Zoom into a single cycle:
+    ┌────┐
+    │    │ ← e.g., 13.8 ns HIGH
+    ───┘    └────┐ ← 13.8 ns LOW
+                │
+        Total: ~27.6 ns = 36.2 MHz GPIO toggle freq
+            → SYSCLK = 36.2 × 2 = ~72 MHz
+        </pre>
+
+        <p><strong>Measure toggle period and multiply by 2 to estimate SYSCLK</p>
+
+        <h4>✅ Step 4: Delay Accuracy Test with DWT/Timer</h4>
+        <p><strong>Connection:</strong> CH1 → GPIO used in delay_us</p>
+        <pre><code>HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_SET);
+    delay_us(100);
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);</code></pre>
+        <p><strong>Expected:</strong> Pulse of 100 µs (verify via cursor tool)</p>    
+        <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
+    Zoomed: ┌────────┐
+            │        │ ← 100 µs
+    ────────┘        └────────
+        </pre>
+
+        <h4>✅ Step 5: Clock Failure Fallback Test</h4>
+        <p><strong>Action:</strong> Disable HSE or simulate fault</p>
+        <p><strong>Expected:</strong> LED halts briefly then resumes with different rate (HSI)</p>
+        <p><strong>Debug Pin:</strong> Optional GPIO HIGH for HSE, LOW for HSI</p>
+        <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
+                HSE ON                 CLOCK FAIL               HSI Fallback
+    CH1:  ┌─────────────┐         (no toggling)          ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
+        │             │                               │ │ │ │ │ │ │ │ │ │
+    ──────┘             └───────────────────────────────┘ └─┘ └─┘ └─┘ └─┘
+        </pre>
+
+        <h4>✅ Step 6: RTC with LSE</h4>
+        <p><strong>Connection:</strong> CH1 → GPIO toggled on 1s RTC callback, CH2 → LSE pin</p>
+        <p><strong>Expected:</strong> 1Hz square wave on CH1, 32.768 kHz sine wave on CH2</p>
+        <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
+    CH1 (1 Hz):
+            ┌────────┐       ┌────────┐
+            │        │       │        │
+    ────────┘        └───────┘        └───────
+
+    CH2 (32.768 kHz):
+        ~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~ (~30.5 µs period)
+        </pre>
+
+
+        <h2>📊 Clock Tree Diagram (Simplified STM32 Example)</h2>
+        <pre>
+            <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
+                    +------------------+
+                    | HSI (8 MHz)      |
+                    +--------+---------+
+                            |
+                +----------v------------+
+                |      Multiplexer      |<--- LSE / LSI (RTC)
+                |  Select Clock Source  |
+                +----------+------------+
+                            |
+                        +----v-----+
+                        |   PLL    | <--- Optional (x2 to x16)
+                        +----+-----+
+                            |
+                    +------v------+
+                    | System Clock |
+                    | (SYSCLK)     |
+                    +------+-------+
+                            |
+        +----------------+------+------+---------------+
+        |                |             |               |
+    +----v---+       +----v---+     +----v----+    +----v----+
+    | Core   |       | Timers |     | UART    |    | ADC/DAC  |
+    +--------+       +--------+     +---------+    +----------+
+            </pre>
+        </pre>
+
+        <h2>🎯 Learning Outcome for Freshers</h2>
+        <table>
+        <thead>
+            <tr><th>Skill</th><th>Verified by Scope</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Clock source switching</td><td>✅</td></tr>
+            <tr><td>Delay accuracy vs frequency</td><td>✅</td></tr>
+            <tr><td>PLL frequency multiplication</td><td>✅</td></tr>
+            <tr><td>Oscillator waveform shape</td><td>✅</td></tr>
+            <tr><td>Real-time ticking with RTC</td><td>✅</td></tr>
+            <tr><td>Detecting clock fault</td><td>✅</td></tr>
+        </tbody>
+        </table>
+
+        <div class="note">
+        💡 Tip: Use clean ground reference for oscilloscope and calibrate probe before precise frequency/time measurements.
+        </div>
     </div>
-  </div>
+</div>
 </body>
 </html>
