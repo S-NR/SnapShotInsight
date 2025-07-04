@@ -75,8 +75,8 @@
         <pre><code>HSI (8 MHz) ---> SysTick Timer ---> HAL_Delay(1000ms) ---> GPIO_Toggle</code></pre>
         <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
     Zoomed View:
-        ┌────────────┐
-        │  1s HIGH   │ 
+           ┌────────────┐
+           │  1s HIGH   │ 
     ───────┘            └────────────
                         ↑ 1s LOW
         </pre>
@@ -88,8 +88,8 @@
 
         <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #33ccff;">
     CH1 (LED Blink):
-        ┌────────────┐
-        │  1s HIGH   │ 
+           ┌────────────┐
+           │  1s HIGH   │ 
     ───────┘            └────────────
                         ↑ 1s LOW
 
@@ -108,14 +108,14 @@
         <p><strong>Scope Reading:</strong> Frequency = toggle freq × 2</p>
         <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #44dd88;">
     CH1 (Toggling GPIO):
-    ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
+       ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
     ───┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ ← Fast toggling (~6–14 ns per edge depending on code)
 
     Zoom into a single cycle:
-    ┌────┐
-    │    │ ← e.g., 13.8 ns HIGH
+       ┌────┐
+       │    │ ← e.g., 13.8 ns HIGH
     ───┘    └────┐ ← 13.8 ns LOW
-                │
+                 │
         Total: ~27.6 ns = 36.2 MHz GPIO toggle freq
             → SYSCLK = 36.2 × 2 = ~72 MHz
         </pre>
@@ -140,8 +140,8 @@
         <p><strong>Debug Pin:</strong> Optional GPIO HIGH for HSE, LOW for HSI</p>
         <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;">
                 HSE ON                 CLOCK FAIL               HSI Fallback
-    CH1:  ┌─────────────┐         (no toggling)          ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
-        │             │                               │ │ │ │ │ │ │ │ │ │
+    CH1:  ┌─────────────┐         (no toggling)         ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
+          │             │                               │ │ │ │ │ │ │ │ │ │
     ──────┘             └───────────────────────────────┘ └─┘ └─┘ └─┘ └─┘
         </pre>
 
