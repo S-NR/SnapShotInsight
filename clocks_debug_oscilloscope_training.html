@@ -35,11 +35,17 @@
             <div style="overflow-x:auto;">
   <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em;">
 
-    Zoomed View:
+    <!-- Zoomed View:
            ┌────────────┐
            │  1s HIGH   │ 
     ───────┘            └────────────
-                        ↑ 1s LOW
+                        ↑ 1s LOW -->
+
+Zoomed View:
+    ┌────────────┐
+    │  1s HIGH   │ 
+────┘            └────
+                    ↑ 1s LOW
         </pre>
 
         <h4>✅ Step 2: Blink LED using External Crystal (HSE)</h4>
@@ -50,14 +56,23 @@
         <!-- <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #33ccff;"> -->
             <div style="overflow-x:auto;">
   <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em;">
-    CH1 (LED Blink):
+    <!-- CH1 (LED Blink):
            ┌────────────┐
            │  1s HIGH   │ 
     ───────┘            └────────────
                         ↑ 1s LOW
 
     CH2 (XTAL Pin):
-    ~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~ ← ~8 MHz (~125 ns)
+    ~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~ ← ~8 MHz (~125 ns) -->
+CH1 (LED Blink):
+    ┌────────────┐
+    │  1s HIGH   │ 
+────┘            └────
+                 ↑ 1s LOW
+
+CH2 (XTAL Pin):
+~\~/~\~/~\~/~\~/~\~/~\~/~
+← ~8 MHz (~125 ns)
         </pre>
 
         <h4>✅ Step 3: PLL Enabled (HSE × 9 = 72 MHz)</h4>
@@ -72,7 +87,7 @@
         <!-- <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #44dd88;"> -->
             <div style="overflow-x:auto;">
   <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em;">
-    CH1 (Toggling GPIO):
+    <!-- CH1 (Toggling GPIO):
        ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
     ───┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ ← Fast toggling (~6–14 ns per edge depending on code)
 
@@ -82,7 +97,20 @@
     ───┘    └────┐ ← 13.8 ns LOW
                  │
         Total: ~27.6 ns = 36.2 MHz GPIO toggle freq
-            → SYSCLK = 36.2 × 2 = ~72 MHz
+            → SYSCLK = 36.2 × 2 = ~72 MHz -->
+CH1 (Toggling GPIO):
+    ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
+────┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘
+← Fast toggling (~6–14 ns per edge)
+
+Zoom into a single cycle:
+    ┌────┐
+    │    │ ← e.g., 13.8 ns HIGH
+────┘    └────┐ ← 13.8 ns LOW
+              │
+
+Total: ~27.6 ns = 36.2 MHz GPIO toggle freq  
+→ SYSCLK = 36.2 × 2 = ~72 MHz  
         </pre>
 
         <p><strong>Measure toggle period and multiply by 2 to estimate SYSCLK</p>
@@ -96,9 +124,13 @@
         <!-- <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;"> -->
             <div style="overflow-x:auto;">
   <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em;">
-    Zoomed: ┌────────┐
+    <!-- Zoomed: ┌────────┐
             │        │ ← 100 µs
-    ────────┘        └────────
+    ────────┘        └──────── -->
+    Zoomed:
+    ┌────────┐
+    │        │ ← 100 µs
+────┘        └────────
         </pre>
 
         <h4>✅ Step 5: Clock Failure Fallback Test</h4>
@@ -108,10 +140,14 @@
         <!-- <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;"> -->
             <div style="overflow-x:auto;">
   <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em;">
-                HSE ON                 CLOCK FAIL               HSI Fallback
+                <!-- HSE ON                 CLOCK FAIL               HSI Fallback
     CH1:  ┌─────────────┐         (no toggling)         ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
           │             │                               │ │ │ │ │ │ │ │ │ │
-    ──────┘             └───────────────────────────────┘ └─┘ └─┘ └─┘ └─┘
+    ──────┘             └───────────────────────────────┘ └─┘ └─┘ └─┘ └─┘ -->
+    HSE ON          CLOCK FAIL         HSI Fallback
+CH1: ┌───────┐       (no toggling)      ┌─┐ ┌─┐ ┌─┐
+     │       │                          │ │ │ │ │ │
+─────┘       └──────────────────────────┘ └─┘ └─┘ └─┘
         </pre>
 
         <h4>✅ Step 6: RTC with LSE</h4>
@@ -120,13 +156,21 @@
         <!-- <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;"> -->
             <div style="overflow-x:auto;">
   <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em;">
-    CH1 (1 Hz):
+    <!-- CH1 (1 Hz):
             ┌────────┐       ┌────────┐
             │        │       │        │
     ────────┘        └───────┘        └───────
 
     CH2 (32.768 kHz):
-        ~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~ (~30.5 µs period)
+        ~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~ (~30.5 µs period) -->
+CH1 (1 Hz):
+    ┌────────┐       ┌────────┐
+    │        │       │        │
+────┘        └───────┘        └───────
+
+CH2 (32.768 kHz):
+~\~/~\~/~\~/~\~/~\~/~\~/~\~/~\~/~
+← ~30.5 µs period
         </pre>
 
 
