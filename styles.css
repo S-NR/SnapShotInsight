@@ -217,16 +217,15 @@ th {
 }
 
 .waveform {
-  background: #1a1a1a;
-  color: #00ffcc;
-  border-left: 4px solid #ffaa00;
-  font-family: 'Courier New', Courier, monospace !important;
-  white-space: pre;           /* Keep original spacing */
-  overflow-x: auto;           /* Allow horizontal scroll if needed */
-  font-size: 13px;            /* Uniform for mobile/desktop */
+  white-space: pre;
+  font-family: monospace;
+  background: #111;
+  color: #0ff;
   padding: 1em;
+  font-size: 13px;
+  overflow-x: auto;
+  margin: 0;
 }
-
 
 
 @media screen and (max-width: 786px) {
