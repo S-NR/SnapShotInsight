@@ -216,6 +216,16 @@ th {
   color: white;
 }
 
+.waveform {
+  background: #111;
+  color: #0f0;
+  padding: 0.5em 1em;
+  margin: 1em 0;
+  white-space: pre;
+  font-family: monospace;
+  border: 1px dashed #0f0;
+}
+
 
 @media screen and (max-width: 786px) {
   .overlay {
