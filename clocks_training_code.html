@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🛠 STM32 Clock Training Guide</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- <style>
+    body {
+      margin: 0;
+      padding: 2em;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #1e1e1e;
+      color: #ffffff;
+    }
+    .container {
+      max-width: 960px;
+      margin: auto;
+    }
+    h1, h2, h3 {
+      color: #ffcc00;
+    }
+    pre, code {
+      background: #2d2d2d;
+      color: #00ff88;
+      padding: 1em;
+      border-radius: 10px;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1em 0;
+    }
+    th, td {
+      border: 1px solid #555;
+      padding: 0.5em;
+      text-align: left;
+    }
+    th {
+      background-color: #333;
+    }
+    .note {
+      background: #333;
+      border-left: 4px solid #ffcc00;
+      padding: 1em;
+      margin: 1em 0;
+    }
+  </style> -->
+</head>
+<body>
+  <div class="container">
+    <h1>🛠 Step-by-Step Training: Clocks & Oscillators on STM32</h1>
+
+    <h2>✅ Step 1: Blink LED using Internal Clock (HSI)</h2>
+    <p><strong>Goal:</strong> Use HSI (~8 MHz) to blink LED every 1s.</p>
+    <pre><code>while (1) {
+  HAL_GPIO_TogglePin(GPIOC, GPIO_PIN_13);
+  HAL_Delay(1000);
+}</code></pre>
+
+    <h2>✅ Step 2: Switch to External Crystal (HSE)</h2>
+    <p><strong>Goal:</strong> Configure system clock using external 8 MHz crystal.</p>
+    <pre><code>RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+RCC_OscInitStruct.HSEState = RCC_HSE_ON;
+RCC_OscInitStruct.HSIState = RCC_HSI_OFF;
+RCC_OscInitStruct.PLL.PLLState = RCC_PLL_OFF;</code></pre>
+
+    <h2>✅ Step 3: Enable PLL (HSE × 9 = 72 MHz)</h2>
+    <p><strong>Goal:</strong> Boost system clock to 72 MHz using PLL.</p>
+    <pre><code>RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;</code></pre>
+
+    <h2>✅ Step 4: Use DWT to Measure Delay</h2>
+    <p><strong>Goal:</strong> Generate precise microsecond delays and verify.</p>
+    <pre><code>void delay_us(uint32_t us) {
+  DWT->CTRL |= 1;
+  uint32_t start = DWT->CYCCNT;
+  while ((DWT->CYCCNT - start) < (us * (SystemCoreClock / 1000000)));
+}</code></pre>
+
+    <h2>✅ Step 5: Clock Failure Fallback (HSE → HSI)</h2>
+    <p><strong>Goal:</strong> Detect HSE failure and switch to HSI.</p>
+    <pre><code>// In error handler
+HAL_RCC_DeInit();
+SystemClock_HSI_ReConfig();</code></pre>
+
+    <h2>✅ Step 6: Use RTC with LSE (32.768 kHz)</h2>
+    <p><strong>Goal:</strong> Configure RTC using LSE for real-time tracking.</p>
+    <pre><code>RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSE;
+RCC_OscInitStruct.LSEState = RCC_LSE_ON;
+HAL_RCC_OscConfig(&RCC_OscInitStruct);</code></pre>
+
+    <h2>📊 Clock Measurement with Oscilloscope</h2>
+    <ul>
+      <li>CH1 → LED pin (check 1Hz square wave)</li>
+      <li>CH2 → XTAL pin (verify 8 MHz sine wave)</li>
+      <li>Use cursor tool to verify pulse width, frequency, jitter</li>
+    </ul>
+
+    <h2>📋 Summary Table</h2>
+    <table>
+      <thead>
+        <tr><th>Step</th><th>Description</th><th>Clock Source</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Blink with internal oscillator</td><td>HSI</td></tr>
+        <tr><td>2</td><td>Switch to external crystal</td><td>HSE</td></tr>
+        <tr><td>3</td><td>Enable PLL</td><td>HSE × 9 = 72 MHz</td></tr>
+        <tr><td>4</td><td>Measure using DWT</td><td>SYSCLK</td></tr>
+        <tr><td>5</td><td>Clock failure fallback</td><td>HSI</td></tr>
+        <tr><td>6</td><td>RTC ticking</td><td>LSE</td></tr>
+      </tbody>
+    </table>
+
+    <div class="note">
+      💡 Tip: You can also toggle a GPIO inside a tight loop to measure real-time toggling frequency with oscilloscope.
+    </div>
+  </div>
+</body>
+</html>

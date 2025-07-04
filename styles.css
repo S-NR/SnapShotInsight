@@ -188,6 +188,29 @@ th {
   border-radius: 10px;
 }
 
+.button-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.button-container button {
+  background-color: #00eaff;
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 1em;
+  margin: 0 10px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.button-container button:hover {
+  background-color: #00bcd4;
+  color: white;
+}
+
+
 @media screen and (max-width: 786px) {
   .overlay {
     padding: 30px 6vw;
