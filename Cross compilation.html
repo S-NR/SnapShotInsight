@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cross Compilation in C - Embedded Systems Guide</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="overlay">    
+    <div class="header">
+  <h1>🌐 Cross Compilation in C</h1>
+    </div>
+    <div class="section">
+  <p><strong>Cross-compilation</strong> is the process of compiling code on one machine (the <strong>host</strong>) to run on another machine (the <strong>target</strong>), typically with a different CPU architecture or operating system.</p>
+
+  <div class="note">
+    <strong>Why is it important?</strong>  
+    In embedded systems, the target board (e.g., STM32, Raspberry Pi) doesn’t have the resources to compile code itself. So, we build the code on a PC and transfer the output binary to the board.
+  </div>
+
+  <h2>🎯 Real-World Use Case</h2>
+  <p>You're writing C code for an ARM Cortex-M4 chip (like STM32). Your PC runs on x86 (Intel/AMD), but the STM32 runs on ARM. You cannot run x86-compiled binaries on ARM, so you use a cross-compiler.</p>
+
+  <h2>🔁 Key Concepts</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Term</th>
+        <th>Meaning</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Host</strong></td>
+        <td>The system where you write and compile the code (e.g., your laptop)</td>
+      </tr>
+      <tr>
+        <td><strong>Target</strong></td>
+        <td>The system that runs the compiled code (e.g., STM32 or Raspberry Pi)</td>
+      </tr>
+      <tr>
+        <td><strong>Toolchain</strong></td>
+        <td>A collection of tools (compiler, linker, etc.) that can generate code for the target</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>🛠️ Common Toolchains</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Target</th>
+        <th>Toolchain Prefix</th>
+        <th>Compiler</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>ARM Bare Metal</td>
+        <td><code>arm-none-eabi-</code></td>
+        <td><code>arm-none-eabi-gcc</code></td>
+      </tr>
+      <tr>
+        <td>ARM Linux</td>
+        <td><code>arm-linux-gnueabihf-</code></td>
+        <td><code>arm-linux-gnueabihf-gcc</code></td>
+      </tr>
+      <tr>
+        <td>Windows (from Linux)</td>
+        <td><code>x86_64-w64-mingw32-</code></td>
+        <td><code>x86_64-w64-mingw32-gcc</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>📄 Sample C Code</h2>
+  <pre><code>// hello.c
+#include &lt;stdio.h&gt;
+int main() {
+    printf("Hello from cross-compiled program!\n");
+    return 0;
+}
+</code></pre>
+
+  <h2>⚙️ Native Compilation (PC)</h2>
+  <pre><code>$ gcc hello.c -o hello
+$ ./hello
+Hello from cross-compiled program!
+</code></pre>
+
+  <h2>🚀 Cross Compilation Example: ARM Cortex-M</h2>
+  <h3>Step 1: Install Toolchain</h3>
+  <pre><code>$ sudo apt install gcc-arm-none-eabi</code></pre>
+
+  <h3>Step 2: Compile for ARM</h3>
+  <pre><code>$ arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -o hello.elf hello.c</code></pre>
+
+  <h3>Step 3: Flash to Board</h3>
+  <p>Use tools like <code>OpenOCD</code>, <code>ST-Link</code>, or <code>J-Link</code> to flash <code>hello.elf</code> to the microcontroller.</p>
+
+  <h2>📦 Makefile Example</h2>
+  <pre><code>CC = arm-none-eabi-gcc
+CFLAGS = -mcpu=cortex-m3 -mthumb -Wall
+
+all: hello.elf
+
+hello.elf: hello.c
+	$(CC) $(CFLAGS) -o $@ $&lt;
+</code></pre>
+
+  <h2>💡 Tips for Beginners</h2>
+  <ul>
+    <li>Don't run your cross-compiled binary on your PC — it won’t work!</li>
+    <li>Choose the correct <code>-mcpu</code> and <code>-mfloat-abi</code> flags for your microcontroller.</li>
+    <li>Some embedded systems don’t have a standard C library — use <code>newlib</code> or minimal libc.</li>
+  </ul>
+
+  <h2>📚 Tools to Explore Later</h2>
+  <ul>
+    <li><strong>CMake Toolchain Files</strong> - for larger projects</li>
+    <li><strong>Buildroot / Yocto</strong> - for creating Linux images and cross-compiling for Linux boards</li>
+    <li><strong>GDB + OpenOCD</strong> - for debugging cross-compiled code on target</li>
+  </ul>
+
+  <hr>
+  <p style="text-align:center;"><strong>Created for Embedded Systems Beginners ❤️</strong></p>
+    </div>
+</body>
+</html>

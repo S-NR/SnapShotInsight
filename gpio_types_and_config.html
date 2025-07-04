@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GPIO Types and Configuration</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <div class="overlay">    
+    <div class="header">
+  <h1>🧠 GPIO (General Purpose Input/Output) – Types and Configuration</h1>
+    </div>
+    <div class="section">
+
+  <h2>1. GPIO Modes</h2>
+  <table>
+    <tr><th>Mode</th><th>Description</th></tr>
+    <tr><td>Input</td><td>Reads digital signal (HIGH/LOW) from external source</td></tr>
+    <tr><td>Output</td><td>Sends digital signal to devices like LED, relay, etc.</td></tr>
+    <tr><td>Alternate Function</td><td>Used by internal peripherals (UART, SPI, I2C...)</td></tr>
+    <tr><td>Analog</td><td>Used for ADC input or DAC output</td></tr>
+  </table>
+
+  <h2>2. Input Configuration Options</h2>
+  <table>
+    <tr><th>Type</th><th>Description</th></tr>
+    <tr><td>Floating Input</td><td>No pull resistor; may pick up noise</td></tr>
+    <tr><td>Pull-Up Input</td><td>Internally pulled HIGH when unconnected</td></tr>
+    <tr><td>Pull-Down Input</td><td>Internally pulled LOW when unconnected</td></tr>
+  </table>
+
+  <h2>3. Output Configuration Options</h2>
+  <table>
+    <tr><th>Type</th><th>Description</th></tr>
+    <tr><td>Push-Pull</td><td>Drives pin HIGH or LOW directly; most common mode</td></tr>
+    <tr><td>Open-Drain</td><td>Can pull LOW, relies on pull-up resistor to go HIGH</td></tr>
+  </table>
+
+  <h2>4. Output Speed (e.g., STM32)</h2>
+  <table>
+    <tr><th>Speed</th><th>Description</th></tr>
+    <tr><td>Low Speed</td><td>Slow toggling signals</td></tr>
+    <tr><td>Medium Speed</td><td>Balanced use; general-purpose</td></tr>
+    <tr><td>High / Very High Speed</td><td>Fast signals (clocks, SPI), may cause EMI</td></tr>
+  </table>
+
+  <h2>5. Pin State and Voltage</h2>
+  <table>
+    <tr><th>State</th><th>Digital Value</th><th>Voltage (3.3V system)</th></tr>
+    <tr><td>LOW</td><td>0</td><td>~0V</td></tr>
+    <tr><td>HIGH</td><td>1</td><td>~3.3V</td></tr>
+  </table>
+
+  <h2>6. Sample GPIO Configuration (STM32 HAL)</h2>
+  <pre><code>GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+__HAL_RCC_GPIOA_CLK_ENABLE();
+
+GPIO_InitStruct.Pin = GPIO_PIN_5;
+GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+GPIO_InitStruct.Pull = GPIO_NOPULL;
+GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);</code></pre>
+
+  <h2>7. Interrupt Configuration (Optional)</h2>
+  <ul>
+    <li><code>GPIO_MODE_IT_RISING</code> – Detect rising edge</li>
+    <li><code>GPIO_MODE_IT_FALLING</code> – Detect falling edge</li>
+    <li><code>GPIO_MODE_IT_RISING_FALLING</code> – Detect both edges</li>
+  </ul>
+
+  <p class="note">Tip: Don't forget to enable NVIC for the interrupt line!</p>
+    </div>
+</body>
+</html>

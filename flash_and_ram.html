@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flash vs RAM – Embedded Systems Guide</title>
+  <link rel="stylesheet" href="styles.css" /> 
+</head>
+<body>
+
+  <div class="overlay">
+    <div class="header">
+  <h1>Flash and RAM in Embedded Systems – A Guide for Freshers</h1>
+    </div>
+    <div class="section">
+  <h2>🧠 What is Memory in Embedded Systems?</h2>
+  <p>Microcontrollers use internal memory for two key purposes:</p>
+  <ul>
+    <li><strong>Flash</strong>: To store the program code and constants.</li>
+    <li><strong>RAM</strong>: To store variables and runtime data.</li>
+  </ul>
+
+  <h2>🔹 Flash Memory – The Non-Volatile Storage</h2>
+  <table>
+    <tr><th>Feature</th><th>Flash Memory</th></tr>
+    <tr><td>Non-volatile?</td><td>✅ Yes (retains data after power off)</td></tr>
+    <tr><td>Usage</td><td>Stores program code (firmware), constants</td></tr>
+    <tr><td>Write/Erase</td><td>Slower, sector-based</td></tr>
+    <tr><td>Write Lifetime</td><td>Limited (~10k-100k cycles)</td></tr>
+  </table>
+
+  <p>🧩 <strong>Analogy:</strong> Like a <em>pen drive</em>—it holds data even after shutdown.</p>
+
+  <h3>📦 Example Code (Flash)</h3>
+  <pre><code>const char firmware_version[] = "v1.0.5";</code></pre>
+
+  <h2>🔸 RAM – The Volatile Working Area</h2>
+  <table>
+    <tr><th>Feature</th><th>RAM</th></tr>
+    <tr><td>Volatile?</td><td>✅ Yes (data lost on power off)</td></tr>
+    <tr><td>Usage</td><td>Stack, heap, buffers, local/global variables</td></tr>
+    <tr><td>Speed</td><td>✅ Fast</td></tr>
+  </table>
+
+  <p>🧩 <strong>Analogy:</strong> Like your <em>work desk</em>—everything is cleared when power is lost.</p>
+
+  <h3>📦 Example Code (RAM)</h3>
+  <pre><code>char rx_buffer[64];  // Stored in RAM for UART communication</code></pre>
+
+  <h2>🔍 Memory Map of an MCU</h2>
+  <pre><code>
++---------------------+ <- Higher address
+| Peripheral Registers|
++---------------------+
+| SRAM (RAM)          | <- Variables, stack, heap
++---------------------+
+| FLASH Memory        | <- Program Code
++---------------------+ <- Address 0x00000000
+| Vector Table        |
++---------------------+
+  </code></pre>
+
+  <h3>Common Sections:</h3>
+  <table>
+    <tr><th>Section</th><th>Stored In</th><th>Description</th></tr>
+    <tr><td>.text</td><td>Flash</td><td>Code (functions)</td></tr>
+    <tr><td>.rodata</td><td>Flash</td><td>Constants</td></tr>
+    <tr><td>.data</td><td>RAM</td><td>Initialized variables</td></tr>
+    <tr><td>.bss</td><td>RAM</td><td>Uninitialized variables</td></tr>
+  </table>
+
+  <h2>⚙️ Boot Process After Power-On</h2>
+  <ol>
+    <li>MCU starts from <code>0x00000000</code> (usually Flash)</li>
+    <li>Reads vector table</li>
+    <li>Executes Reset Handler</li>
+    <li>Copies data to RAM and calls <code>main()</code></li>
+  </ol>
+
+  <h2>✅ Flash vs RAM Summary</h2>
+  <table>
+    <tr><th>Feature</th><th>Flash</th><th>RAM</th></tr>
+    <tr><td>Volatile</td><td>No</td><td>Yes</td></tr>
+    <tr><td>Stores</td><td>Code, constants</td><td>Variables, stack</td></tr>
+    <tr><td>Speed</td><td>Slower</td><td>Faster</td></tr>
+    <tr><td>Size</td><td>Larger (e.g., 512KB)</td><td>Smaller (e.g., 64KB)</td></tr>
+  </table>
+
+  <h2>🛠 Tips for Embedded Freshers</h2>
+  <ul>
+    <li>Use <code>const</code> to move data to Flash.</li>
+    <li>Avoid deep function calls to prevent stack overflow.</li>
+    <li>Check memory usage with <code>.map</code> files.</li>
+    <li>Understand linker script memory assignments.</li>
+  </ul>
+    </div>
+</body>
+</html>
