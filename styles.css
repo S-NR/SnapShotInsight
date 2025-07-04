@@ -220,9 +220,9 @@ th {
   background: #1a1a1a;
   color: #00ffcc;
   border-left: 4px solid #ffaa00;
+  font-family: 'Courier New', Courier, monospace !important;
   white-space: pre;           /* Keep original spacing */
   overflow-x: auto;           /* Allow horizontal scroll if needed */
-  font-family: monospace;
   font-size: 13px;            /* Uniform for mobile/desktop */
   padding: 1em;
 }
@@ -256,15 +256,16 @@ th {
     width: 300px;
   }
 
-  pre, code {
-    display: block;
-    white-space: pre;
+  pre {
+    white-space: pre; /* ✅ Preserve ASCII */
+    font-family: 'Courier New', monospace !important;
     overflow-x: auto;
     font-size: 13px;
+  }
+
+  code {
+    white-space: pre-wrap; /* Only code blocks wrap */
     word-break: break-word;
-    background-color: rgba(0, 0, 0, 0.6);
-    padding: 12px;
-    border-radius: 6px;
   }
   
   th, td {
