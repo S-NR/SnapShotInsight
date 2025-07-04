@@ -32,6 +32,7 @@
         <p><strong>Purpose:</strong> Confirm LED timing using HSI (~8 MHz)</p>
         <pre><code>HSI (8 MHz) ---> SysTick Timer ---> HAL_Delay(1000ms) ---> GPIO_Toggle</code></pre>
         <!-- <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;"> -->
+<div style="overflow-x:auto;">
 <div class="waveform-block">
 
     <!-- Zoomed View:
@@ -46,7 +47,7 @@ Zoomed View:
 ────┘            └────
                     ↑ 1s LOW
 </div>
-
+</div>
         <h4>✅ Step 2: Blink LED using External Crystal (HSE)</h4>
         <p><strong>Connection:</strong> CH1 → LED GPIO, CH2 → XTAL pin</p>
         <p><strong>Expected:</strong> Same 1Hz LED blink, CH2 shows 8 MHz sine wave</p>
