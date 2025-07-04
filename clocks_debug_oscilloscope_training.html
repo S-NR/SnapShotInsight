@@ -74,8 +74,8 @@
     <p><strong>Purpose:</strong> Confirm LED timing using HSI (~8 MHz)</p>
     <pre><code>HSI (8 MHz) ---> SysTick Timer ---> HAL_Delay(1000ms) ---> GPIO_Toggle</code></pre>
     <pre><code>|¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯¯|     1s HIGH
-|               |
-|_______________|     1s LOW</code></pre>
+ |               |
+ |_______________|     1s LOW</code></pre>
 
     <h4>✅ Step 2: Blink LED using External Crystal (HSE)</h4>
     <p><strong>Connection:</strong> CH1 → LED GPIO, CH2 → XTAL pin</p>
@@ -127,11 +127,11 @@ HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1, GPIO_PIN_RESET);</code></pre>
                   | (SYSCLK)     |
                   +------+-------+
                          |
- +----------------+------+------+---------------+
- |                |             |               |
- |   Core         |  Timers     |   UART        |
- |                |             |               |
- +----------------+-------------+---------------+</code></pre>
+     +----------------+------+------+---------------+
+     |                |             |               |
++----v---+       +----v---+     +----v----+    +----v----+
+| Core   |       | Timers |     | UART    |    | ADC/DAC  |
++--------+       +--------+     +---------+    +----------+</code></pre>
 
     <h2>🎯 Learning Outcome for Freshers</h2>
     <table>
