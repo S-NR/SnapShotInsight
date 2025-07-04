@@ -61,13 +61,13 @@ ul {
   padding-left: 20px;
 }
 
-p {
+/* p {
   font-size: 1.2em;
   line-height: 1.7;
   max-width: 800px;
   margin: 0 auto 30px auto;
   text-align: left;
-}
+} */
 
 .explore-button {
   background-color: #00eaff;
