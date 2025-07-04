@@ -33,7 +33,7 @@
         <pre><code>HSI (8 MHz) ---> SysTick Timer ---> HAL_Delay(1000ms) ---> GPIO_Toggle</code></pre>
         <!-- <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;"> -->
             <div style="overflow-x:auto;">
-  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em;">
+  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em; font-size: 13px; margin: 0;">
 
     <!-- Zoomed View:
            ┌────────────┐
@@ -55,7 +55,7 @@ Zoomed View:
 
         <!-- <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #33ccff;"> -->
             <div style="overflow-x:auto;">
-  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em;">
+  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em; font-size: 13px; margin: 0;">
     <!-- CH1 (LED Blink):
            ┌────────────┐
            │  1s HIGH   │ 
@@ -86,7 +86,7 @@ CH2 (XTAL Pin):
         <p><strong>Scope Reading:</strong> Frequency = toggle freq × 2</p>
         <!-- <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #44dd88;"> -->
             <div style="overflow-x:auto;">
-  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em;">
+  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em; font-size: 13px; margin: 0;">
     <!-- CH1 (Toggling GPIO):
        ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
     ───┘ └─┘ └─┘ └─┘ └─┘ └─┘ └─┘ ← Fast toggling (~6–14 ns per edge depending on code)
@@ -123,7 +123,7 @@ Total: ~27.6 ns = 36.2 MHz GPIO toggle freq
         <p><strong>Expected:</strong> Pulse of 100 µs (verify via cursor tool)</p>    
         <!-- <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;"> -->
             <div style="overflow-x:auto;">
-  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em;">
+  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em; font-size: 13px; margin: 0;">
     <!-- Zoomed: ┌────────┐
             │        │ ← 100 µs
     ────────┘        └──────── -->
@@ -139,7 +139,7 @@ Total: ~27.6 ns = 36.2 MHz GPIO toggle freq
         <p><strong>Debug Pin:</strong> Optional GPIO HIGH for HSE, LOW for HSI</p>
         <!-- <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;"> -->
             <div style="overflow-x:auto;">
-  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em;">
+  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em; font-size: 13px; margin: 0;">
                 <!-- HSE ON                 CLOCK FAIL               HSI Fallback
     CH1:  ┌─────────────┐         (no toggling)         ┌─┐ ┌─┐ ┌─┐ ┌─┐ ┌─┐
           │             │                               │ │ │ │ │ │ │ │ │ │
@@ -155,7 +155,7 @@ CH1: ┌───────┐       (no toggling)      ┌─┐ ┌─┐ �
         <p><strong>Expected:</strong> 1Hz square wave on CH1, 32.768 kHz sine wave on CH2</p>
         <!-- <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;"> -->
             <div style="overflow-x:auto;">
-  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em;">
+  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em; font-size: 13px; margin: 0;">
     <!-- CH1 (1 Hz):
             ┌────────┐       ┌────────┐
             │        │       │        │
@@ -178,7 +178,7 @@ CH2 (32.768 kHz):
         <pre>
             <!-- <pre style="background:#1a1a1a; color:#00ffcc; padding:1em; border-left: 4px solid #ffaa00;"> -->
             <div style="overflow-x:auto;">
-  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em;">
+  <pre style="white-space: pre; font-family: monospace; background:#111; color:#0ff; padding:1em; font-size: 13px; margin: 0;">
                     +------------------+
                     | HSI (8 MHz)      |
                     +--------+---------+
