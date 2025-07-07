@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Microcontroller Memory Map Comparison</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f9f9f9;
+      padding: 20px;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    pre {
+      background-color: #fff;
+      padding: 15px;
+      border-left: 5px solid #007acc;
+      font-family: monospace;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+      background-color: #fff;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #eee;
+    }
+  </style> -->
+</head>
+<body>
+
+<h1>📊 Microcontroller Memory Map Comparison</h1>
+
+<h2>🔧 STM32 (ARM Cortex-M)</h2>
+<pre>
++---------------------------+  0xE000E000  
+| System Control Space      | (SysTick, NVIC, SCB)
++---------------------------+  0x50000000  
+| Peripheral Registers       | (Advanced peripherals)
++---------------------------+  0x40000000  
+| Peripheral Registers       | (GPIO, UART, SPI, I2C)
++---------------------------+  0x2001FFFF  
+|        SRAM (RAM)          |
+|  - .data, .bss             |
+|  - Heap (↑), Stack (↓)     |
++---------------------------+  0x20000000  
+|        Reserved            |
++---------------------------+  0x080FFFFF  
+|        FLASH Memory        |
+|  - .text, .rodata          |
+|  - Vector Table            |
++---------------------------+  0x08000000  
+|       Aliased at           |
++---------------------------+  0x00000000  
+</pre>
+
+<h2>🔧 ATmega328P (AVR - Arduino Uno)</h2>
+<pre>
++---------------------------+  0x08FF  
+| SRAM (2KB)                |
+| - Stack, .data, .bss      |
++---------------------------+  0x0100  
+| Internal SRAM Start       |
++---------------------------+  0x00FF  
+| SFR (Special Function Reg)|
++---------------------------+  0x0020  
+| I/O Registers             |
++---------------------------+  0x0000  
+| FLASH (32KB)              |
+| - .text, .rodata, vectors |
++---------------------------+  0x7FFF  
+</pre>
+
+<h2>🔧 PIC32 (MIPS M4K)</h2>
+<pre>
++---------------------------+  0xBFC02FFF  
+|  Debug Exec Memory        |
++---------------------------+  0xBFC02000  
+| Debug Code                |
++---------------------------+  0xA000FFFF  
+| Uncached RAM (kseg1)      |
++---------------------------+  0xA0000000  
+|                           |
++---------------------------+  0x9D1FFFFF  
+| Flash Program Memory      |
+| - .text, .rodata          |
++---------------------------+  0x9D000000  
+| kseg0 Code (cached)       |
++---------------------------+  0x8000FFFF  
+| Cached RAM (kseg0)        |
+| - .data, .bss             |
++---------------------------+  0x80000000  
+</pre>
+
+<h2>🔧 8051 Microcontroller</h2>
+<pre>
++---------------------------+  0xFFFF  
+| External Data (XDATA)     | (accessed via MOVX)
++---------------------------+  0x0000  
+|                           |
++---------------------------+  0xFF  
+| Internal RAM (upper)      | 128 bytes (indirect)
++---------------------------+  0x80  
+| SFR (I/O Registers)       |
++---------------------------+  0x7F  
+| Bit-addressable RAM       |
++---------------------------+  0x20  
+| General-purpose RAM       |
++---------------------------+  0x00  
+| Internal RAM (lower)      |
++---------------------------+  0x0000  
+| Flash Program Memory      | up to 64 KB (accessed via PC)
++---------------------------+  0xFFFF  
+</pre>
+
+<h2>🔧 MSP430 (TI Low Power MCU)</h2>
+<pre>
++---------------------------+  0xFFFF  
+| Interrupt Vectors         |
++---------------------------+  0xFC00  
+| Flash Memory              |
+| - .text, .const           |
++---------------------------+  0xC000  
+| Info Flash (calibration)  |
++---------------------------+  0x1000  
+| RAM                       |
+| - .bss, .data, Stack      |
++---------------------------+  0x0200  
+| Special Function Registers|
++---------------------------+  0x0100  
+| Peripherals               |
++---------------------------+  0x0000  
+</pre>
+
+<h2>🔧 RP2040 (Raspberry Pi Pico – Dual Cortex-M0+)</h2>
+<pre>
++---------------------------+  0x20042000  
+| SRAM5 (8 KB)              |
++---------------------------+  0x20040000  
+| SRAM4 (8 KB)              |
++---------------------------+  0x2003C000  
+| SRAM3 (16 KB)             |
++---------------------------+  0x20030000  
+| SRAM2 (16 KB)             |
++---------------------------+  0x20020000  
+| SRAM1 (16 KB)             |
++---------------------------+  0x20000000  
+| SRAM0 (128 KB total)      |
++---------------------------+  0x10000000  
+| XIP FLASH (16 MB mapped)  |
+| - Firmware starts here    |
++---------------------------+  0x00000000  
+</pre>
+
+<h2>🗂 Summary Table</h2>
+<table>
+  <thead>
+    <tr>
+      <th>MCU</th>
+      <th>Flash Start</th>
+      <th>SRAM Start</th>
+      <th>Peripherals</th>
+      <th>Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>STM32</td>
+      <td>0x08000000</td>
+      <td>0x20000000</td>
+      <td>0x40000000</td>
+      <td>Cortex-M layout</td>
+    </tr>
+    <tr>
+      <td>ATmega328P</td>
+      <td>0x0000</td>
+      <td>0x0100</td>
+      <td>0x0020–0x00FF</td>
+      <td>Separate EEPROM</td>
+    </tr>
+    <tr>
+      <td>PIC32</td>
+      <td>0x9D000000</td>
+      <td>0x80000000</td>
+      <td>0xBF800000</td>
+      <td>MIPS (kseg0/kseg1)</td>
+    </tr>
+    <tr>
+      <td>8051</td>
+      <td>0x0000</td>
+      <td>0x00</td>
+      <td>0x80–0xFF</td>
+      <td>Split RAM, XRAM</td>
+    </tr>
+    <tr>
+      <td>MSP430</td>
+      <td>0xFC00</td>
+      <td>0x0200</td>
+      <td>0x0100–0x01FF</td>
+      <td>Info Flash & Vectors</td>
+    </tr>
+    <tr>
+      <td>RP2040</td>
+      <td>0x10000000</td>
+      <td>0x20000000</td>
+      <td>Memory-mapped IO</td>
+      <td>XIP Flash via QSPI</td>
+    </tr>
+  </tbody>
+</table>
+
+</body>
+</html>
