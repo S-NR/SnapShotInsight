@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STM32 GPIO Example - Button and LED</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9fcff;
+      color: #222;
+      padding: 20px;
+    }
+    h1, h2 {
+      color: #005792;
+    }
+    pre, code {
+      background: #eef;
+      padding: 10px;
+      display: block;
+      white-space: pre-wrap;
+      border-left: 4px solid #005792;
+      border-radius: 4px;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    th {
+      background: #005792;
+      color: white;
+    }
+    td {
+      background: #fff;
+    }
+  </style> -->
+</head>
+<body>
+  <div class="overlay">
+    
+    <div class="header">
+      <div class="button-container">
+        <button onclick="location.href='gpio_types_and_config.html'">📘 Types and configurations</button>
+      </div>
+  <h1>🧪 STM32 GPIO Practical Example – Button Controls LED</h1>
+    </div>
+    <div class="section">
+
+  <p>This is a basic STM32 example using HAL (via STM32CubeMX) where:</p>
+  <ul>
+    <li>A button is connected to <strong>GPIOA Pin 0</strong> (configured as <em>input with pull-up</em>).</li>
+    <li>An LED is connected to <strong>GPIOA Pin 5</strong> (configured as <em>output push-pull</em>).</li>
+    <li>When the button is pressed, the LED turns ON. When released, the LED turns OFF.</li>
+  </ul>
+
+  <h2>🛠️ Hardware Configuration</h2>
+  <table>
+    <tr><th>Component</th><th>Pin</th><th>Mode</th></tr>
+    <tr><td>Button</td><td>PA0</td><td>Input + Pull-up</td></tr>
+    <tr><td>LED</td><td>PA5</td><td>Output Push-Pull</td></tr>
+  </table>
+
+  <h2>🔧 GPIO Initialization Code (CubeMX generated)</h2>
+  <pre><code>void MX_GPIO_Init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
+
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  // Configure PA0 as input with pull-up
+  GPIO_InitStruct.Pin = GPIO_PIN_0;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  // Configure PA5 as output push-pull
+  GPIO_InitStruct.Pin = GPIO_PIN_5;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+}
+</code></pre>
+
+  <h2>🧠 Main Logic (LED Control)</h2>
+  <pre><code>int main(void)
+{
+  HAL_Init();
+  SystemClock_Config();
+  MX_GPIO_Init();
+
+  while (1)
+  {
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0) == GPIO_PIN_RESET)
+    {
+      // Button pressed (pull-up = active LOW)
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET); // LED ON
+    }
+    else
+    {
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET); // LED OFF
+    }
+
+    HAL_Delay(10); // Debounce delay
+  }
+}
+</code></pre>
+
+  <h2>📝 Notes</h2>
+  <ul>
+    <li><code>HAL_GPIO_ReadPin()</code> reads the status of an input pin.</li>
+    <li><code>HAL_GPIO_WritePin()</code> sets/reset an output pin.</li>
+    <li><code>GPIO_PULLUP</code> keeps the input HIGH when button is not pressed.</li>
+    <li>Simple debouncing is done using <code>HAL_Delay(10)</code>.</li>
+  </ul>
+
+  <p><strong>✅ Result:</strong> When button on PA0 is pressed, LED on PA5 turns ON.</p>
+
+</body>
+</html>
