@@ -51,7 +51,8 @@
   <pre><code>char rx_buffer[64];  // Stored in RAM for UART communication</code></pre>
 
   <h2>🔍 Memory Map of an MCU</h2>
-  <pre><code>
+  <div style="overflow-x:auto;">
+    <pre style="    white-space: pre;    font-family: 'Courier New', monospace;    background: #111;    color: #0ff;    padding: 1em;    font-size: 13px;    line-height: 1.4;    margin: 0;    word-break: normal;">
 +---------------------+ <- Higher address
 | Peripheral Registers|
 +---------------------+
@@ -61,7 +62,7 @@
 +---------------------+ <- Address 0x00000000
 | Vector Table        |
 +---------------------+
-  </code></pre>
+    </pre></div>
 
   <h3>Common Sections:</h3>
   <table>
