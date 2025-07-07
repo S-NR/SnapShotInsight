@@ -96,37 +96,41 @@
   <h3>🔹 Vector Table (0x00000000)</h3>
   <p>Located at the start of the memory map, it contains addresses for startup and interrupts.</p>
   <pre>
-// First two entries in vector table
+// First three entries in vector table
 0x00000000 → Initial Stack Pointer
 0x00000004 → Reset_Handler address
+0x00000008 → NMI_Handler()
   </pre>
 
-  <h3>🔹 .text Section (Flash)</h3>
+  <h3>Flash Memory (.text, .rodata) (0x08000000 – 0x080FFFFF)</h3>
+  <h4>🔹 .text Section (Flash)</h4>
   <p>Stores executable code. This is where your firmware logic lives.</p>
   <pre><code>void blinkLED(void) {
     // Code stored in Flash
     GPIOA->ODR ^= (1 << 5);
 }</code></pre>
 
-  <h3>🔹 .rodata Section (Flash)</h3>
+  <h4>🔹 .rodata Section (Flash)</h4>
   <p>Stores constant data (read-only).</p>
   <pre><code>const char msg[] = "Hello, World!";  // Stored in .rodata</code></pre>
 
-  <h3>🔹 .data Section (RAM)</h3>
+  <h3>SRAM (RAM): .data, .bss, stack, heap (0x20000000 – 0x2001FFFF : 128KB)</h3>
+  <p>Temporary workspace while the MCU is running</p>
+  <h4>🔹 .data Section (RAM)</h4>
   <p>Global/static variables that are initialized (copied from Flash to RAM on startup).</p>
   <pre><code>int speed = 100;  // Stored in .data section</code></pre>
 
-  <h3>🔹 .bss Section (RAM)</h3>
+  <h4>🔹 .bss Section (RAM)</h4>
   <p>Global/static variables that are uninitialized. Zeroed at startup.</p>
   <pre><code>int counter;  // Stored in .bss section</code></pre>
 
-  <h3>🔹 Stack (RAM)</h3>
+  <h4>🔹 Stack (RAM)</h4>
   <p>Used for local variables, function calls. Grows downward.</p>
   <pre><code>void func() {
   int temp = 42;  // Stored on the stack
 }</code></pre>
 
-  <h3>🔹 Heap (RAM)</h3>
+  <h4>🔹 Heap (RAM)</h4>
   <p>Dynamic memory (malloc/free). Grows upward.</p>
   <pre><code>char *buffer = malloc(100);  // From heap</code></pre>
 
@@ -143,6 +147,12 @@ GPIOA_CRL |= (0x1 << 20);     // Set PA5 as output</code></pre>
   <p>Handles interrupts, system exceptions, and timers (e.g., SysTick).</p>
   <pre><code>SysTick_Config(SystemCoreClock / 1000);  // Configure 1 ms SysTick interrupt</code></pre>
 
+  <h3>Aliased Memory at 0x00000000</h3>
+  <pre> 
+    <strong>Purpose :</strong> Some MCUs mirror Flash to 0x00000000 so that the Reset vector and boot process always start from there.
+    <strong>Aliased To :</strong> Real Flash address (e.g., 0x08000000)
+    <strong>Why It Exists :</strong> ARM Cortex-M always starts from 0x00000000. MCU vendors map actual Flash here using a memory alias.
+  </pre>
   <h2>🛠 Tips for Freshers</h2>
   <ul>
     <li>Use <code>const</code> for data that doesn't change — it saves RAM.</li>
@@ -151,6 +161,55 @@ GPIOA_CRL |= (0x1 << 20);     // Set PA5 as output</code></pre>
     <li>Use <code>volatile</code> for registers and shared memory with interrupts.</li>
     <li>Understand how the linker script places sections in memory.</li>
   </ul>
+
+  <h2>🧪 Summary Table</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Section</th>
+      <th>Address Range</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Vector Table</td>
+      <td>0x00000000</td>
+      <td>Reset & interrupt pointers (aliased to Flash)</td>
+    </tr>
+    <tr>
+      <td>Flash (.text)</td>
+      <td>0x08000000 – 0x080FFFFF</td>
+      <td>Code & constants</td>
+    </tr>
+    <tr>
+      <td>SRAM (.data, .bss)</td>
+      <td>0x20000000 – 0x2001FFFF</td>
+      <td>Runtime variables</td>
+    </tr>
+    <tr>
+      <td>Stack</td>
+      <td>Top of SRAM (grows down)</td>
+      <td>Function calls</td>
+    </tr>
+    <tr>
+      <td>Heap</td>
+      <td>After .bss (grows up)</td>
+      <td>Dynamic memory</td>
+    </tr>
+    <tr>
+      <td>Peripheral Regs</td>
+      <td>0x40000000 – 0x50000000</td>
+      <td>Hardware control</td>
+    </tr>
+    <tr>
+      <td>Sys Control</td>
+      <td>0xE000E000+</td>
+      <td>NVIC, SysTick, SCB</td>
+    </tr>
+  </tbody>
+</table>
+
     </div>
 </body>
 </html>
