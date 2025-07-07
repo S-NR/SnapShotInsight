@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Memory Map – Embedded Systems</title>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      color: #333;
+    }
+
+    pre {
+      background-color: #fff;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-left: 5px solid #007acc;
+      font-family: monospace;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      margin-bottom: 20px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 10px;
+      background-color: #fff;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px;
+      border: 1px solid #aaa;
+    }
+
+    th {
+      background-color: #ddd;
+    }
+
+    ul {
+      background-color: #fff;
+      padding: 15px;
+      border: 1px solid #ccc;
+      list-style-type: square;
+    }
+  </style> -->
+</head>
+<body>
+<div class="overlay">
+    
+    <div class="header">
+  <h1>🧠 Embedded System Memory Map</h1>
+    </div>
+    <div class="section">
+
+  <h2>📊 Visual Representation</h2>
+  <pre>
++---------------------------+ ← Top of memory
+|    Peripheral Registers   | ← Memory-mapped I/O (e.g., UART, SPI)
++---------------------------+
+|         SRAM (RAM)        |
+|  - Global Variables       |
+|  - Stack (grows downward) |
+|  - Heap (grows upward)    |
++---------------------------+
+|       Reserved Gap        |
++---------------------------+
+|        Flash Memory       |
+|  - Program Code (.text)   |
+|  - Const Data (.rodata)   |
++---------------------------+
+|       Vector Table        | ← Reset & interrupt vectors
++---------------------------+ ← 0x00000000
+  </pre>
+
+  <h2>📌 Explanation of Sections</h2>
+  <table>
+    <tr><th>Section</th><th>Memory Type</th><th>Description</th></tr>
+    <tr><td>Vector Table</td><td>Flash</td><td>Startup vectors (Reset, NMI, IRQ handlers)</td></tr>
+    <tr><td>.text</td><td>Flash</td><td>All functions and executable code</td></tr>
+    <tr><td>.rodata</td><td>Flash</td><td>Read-only constants and strings</td></tr>
+    <tr><td>.data</td><td>RAM</td><td>Initialized global/static variables</td></tr>
+    <tr><td>.bss</td><td>RAM</td><td>Uninitialized global/static variables</td></tr>
+    <tr><td>Stack</td><td>RAM</td><td>Function call information, grows downward</td></tr>
+    <tr><td>Heap</td><td>RAM</td><td>Dynamic memory (malloc, etc.) grows upward</td></tr>
+    <tr><td>Peripheral Registers</td><td>Mapped Memory</td><td>Used to control hardware (GPIO, UART, etc.)</td></tr>
+  </table>
+
+  <h2>📍 Example Address Mapping (STM32F103)</h2>
+  <table>
+    <tr><th>Address</th><th>Description</th></tr>
+    <tr><td>0x00000000</td><td>Start of Flash / Vector Table</td></tr>
+    <tr><td>0x08000000</td><td>Base of Flash Memory (code)</td></tr>
+    <tr><td>0x20000000</td><td>Start of SRAM (RAM)</td></tr>
+    <tr><td>0x40000000</td><td>Peripheral Registers (I/O)</td></tr>
+    <tr><td>0xE000E000</td><td>System Control Space (NVIC, SysTick)</td></tr>
+  </table>
+
+  <h2>🛠 Tips for Freshers</h2>
+  <ul>
+    <li>Understand which memory your variables go to — Flash or RAM</li>
+    <li>Check .map file or debugger memory viewer</li>
+    <li>Stack overflows can crash your program — watch recursion and large arrays</li>
+    <li>Use <code>const</code> to store in Flash and save RAM</li>
+    <li>Always know the total size of your Flash and RAM before compiling</li>
+  </ul>
+    </div>
+</body>
+</html>

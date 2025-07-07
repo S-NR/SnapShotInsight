@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -126,5 +126,214 @@ hello.elf: hello.c
   <hr>
   <p style="text-align:center;"><strong>Created for Embedded Systems Beginners ❤️</strong></p>
     </div>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🛠 Cross Compilation in C – From Zero to Expert</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+  <!-- <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f2f2f2;
+      color: #333;
+      padding: 20px;
+      max-width: 960px;
+      margin: auto;
+    }
+    h1, h2, h3 {
+      color: #2c3e50;
+    }
+    code, pre {
+      background-color: #eaeaea;
+      padding: 6px;
+      border-radius: 4px;
+      font-family: "Courier New", monospace;
+    }
+    pre {
+      background-color: #272822;
+      color: #f8f8f2;
+      padding: 10px;
+      overflow-x: auto;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+    }
+    th, td {
+      border: 1px solid #999;
+      padding: 10px;
+    }
+    .highlight {
+      background: #fff9c4;
+      border-left: 5px solid #fbc02d;
+      padding: 10px;
+      margin: 15px 0;
+    }
+    ul {
+      padding-left: 1.5em;
+    }
+  </style> -->
+</head>
+<body>
+  <div class="overlay">    
+    <div class="header">
+<h1>🛠 Cross Compilation in C – From Zero to Expert</h1>
+    </div>
+    <div class="section">
+<p>This guide is meant for freshers in Embedded Systems to learn <strong>Cross Compilation</strong> — a key skill required to build firmware or applications for different hardware architectures like ARM, MIPS, etc.</p>
+
+<hr>
+
+<h2>🔰 What is Cross Compilation?</h2>
+<p><strong>Cross compilation</strong> means compiling code on one machine (called <em>host</em>) to run it on another machine (called <em>target</em>), which often has a different CPU architecture or operating system.</p>
+
+<div class="highlight">
+  Example: You compile a C program on your laptop for an STM32 microcontroller. Your laptop is x86 (Intel), STM32 is ARM Cortex-M → so you <strong>cross compile</strong> using a special compiler.
+</div>
+
+<h2>🧠 Basic Concepts</h2>
+<table>
+  <tr>
+    <th>Term</th>
+    <th>Description</th>
+  </tr>
+  <tr>
+    <td>Host</td>
+    <td>System where code is written and compiled (your PC)</td>
+  </tr>
+  <tr>
+    <td>Target</td>
+    <td>System where binary is executed (microcontroller or board)</td>
+  </tr>
+  <tr>
+    <td>Toolchain</td>
+    <td>Set of tools (compiler, linker, assembler) for the target</td>
+  </tr>
+  <tr>
+    <td>Architecture</td>
+    <td>CPU type like x86, ARM, MIPS, RISC-V etc.</td>
+  </tr>
+</table>
+
+<h2>🔧 Common Toolchains</h2>
+<table>
+  <tr>
+    <th>Target</th>
+    <th>Toolchain Prefix</th>
+    <th>Example Compiler</th>
+  </tr>
+  <tr>
+    <td>ARM Cortex-M (bare metal)</td>
+    <td>arm-none-eabi-</td>
+    <td>arm-none-eabi-gcc</td>
+  </tr>
+  <tr>
+    <td>ARM Linux (e.g., Raspberry Pi)</td>
+    <td>arm-linux-gnueabihf-</td>
+    <td>arm-linux-gnueabihf-gcc</td>
+  </tr>
+  <tr>
+    <td>MIPS Linux</td>
+    <td>mipsel-linux-gnu-</td>
+    <td>mipsel-linux-gnu-gcc</td>
+  </tr>
+  <tr>
+    <td>Windows (from Linux)</td>
+    <td>x86_64-w64-mingw32-</td>
+    <td>x86_64-w64-mingw32-gcc</td>
+  </tr>
+</table>
+
+<h2>📄 Sample C Code</h2>
+<pre><code>// hello.c
+#include &lt;stdio.h&gt;
+
+int main() {
+  printf("Hello from embedded system!\n");
+  return 0;
+}
+</code></pre>
+
+<h2>🧪 Native Compilation (x86)</h2>
+<pre><code>$ gcc hello.c -o hello
+$ ./hello
+Hello from embedded system!
+</code></pre>
+
+<h2>🚀 Cross Compilation (ARM Cortex-M)</h2>
+<h3>Step 1: Install Toolchain</h3>
+<pre><code>$ sudo apt install gcc-arm-none-eabi</code></pre>
+
+<h3>Step 2: Compile for ARM</h3>
+<pre><code>$ arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -o hello.elf hello.c</code></pre>
+
+<h3>Step 3: Flash to Board</h3>
+<p>Use tools like ST-Link Utility, OpenOCD, J-Link, or pyOCD to load the <code>hello.elf</code> to your board.</p>
+
+<h2>🧰 Flashing Tools</h2>
+<ul>
+  <li>ST-Link (STM32)</li>
+  <li>J-Link (Segger)</li>
+  <li>OpenOCD (Generic ARM)</li>
+  <li>esptool (ESP32/ESP8266)</li>
+</ul>
+
+<h2>📦 Makefile Example</h2>
+<pre><code>CC = arm-none-eabi-gcc
+CFLAGS = -mcpu=cortex-m4 -mthumb -Wall
+
+all: main.elf
+
+main.elf: main.c
+	$(CC) $(CFLAGS) -o $@ $&lt;
+</code></pre>
+
+<h2>💡 Advanced: Using CMake Toolchain File</h2>
+<p>Create a file named <code>arm-gcc-toolchain.cmake</code>:</p>
+<pre><code>set(CMAKE_SYSTEM_NAME Generic)
+set(CMAKE_SYSTEM_PROCESSOR arm)
+set(CMAKE_C_COMPILER arm-none-eabi-gcc)
+set(CMAKE_CXX_COMPILER arm-none-eabi-g++)
+</code></pre>
+
+<p>Then run:</p>
+<pre><code>$ cmake -DCMAKE_TOOLCHAIN_FILE=arm-gcc-toolchain.cmake .
+$ make
+</code></pre>
+
+<h2>📋 Good Practices</h2>
+<ul>
+  <li>Use versioned toolchains to avoid inconsistency</li>
+  <li>Write Makefiles or use CMake to automate builds</li>
+  <li>Always test your code on real hardware</li>
+  <li>Use <code>objdump</code>, <code>nm</code>, <code>size</code> to inspect binaries</li>
+</ul>
+
+<h2>📚 Tools to Master</h2>
+<ul>
+  <li><code>gdb</code> – Debugging</li>
+  <li><code>objcopy</code> – Convert .elf to .bin/.hex</li>
+  <li><code>map files</code> – Inspect memory layout</li>
+  <li>Linker scripts – Custom memory management</li>
+  <li>Buildroot/Yocto – For embedded Linux targets</li>
+</ul>
+
+<hr>
+
+<h2>👨‍🔬 Final Notes</h2>
+<p>Cross compilation is essential for embedded systems engineers. Once you master it, you'll be able to write code on your PC and run it on any hardware, no matter how constrained. This skill bridges the gap between development and hardware deployment.</p>
+
+<p><strong>Next Step:</strong> Try writing your own driver, compile using the cross compiler, and flash it to an MCU. Then, debug it using <code>gdb</code> + <code>OpenOCD</code>.</p>
+
+<hr>
+<p style="text-align:center;">Built for learners 👩‍💻👨‍💻 from <strong>Zero ➜ Expert</strong> 🚀</p>
+
 </body>
 </html>
