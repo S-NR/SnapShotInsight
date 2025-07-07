@@ -150,11 +150,11 @@ GPIOA_CRL |= (0x1 << 20);     // Set PA5 as output</code></pre>
   <pre><code>SysTick_Config(SystemCoreClock / 1000);  // Configure 1 ms SysTick interrupt</code></pre>
 
   <h3>Aliased Memory at 0x00000000</h3>
-  <pre> 
+  <p> 
     <strong>Purpose :</strong> Some MCUs mirror Flash to 0x00000000 so that the Reset vector and boot process always start from there.
     <strong>Aliased To :</strong> Real Flash address (e.g., 0x08000000)
     <strong>Why It Exists :</strong> ARM Cortex-M always starts from 0x00000000. MCU vendors map actual Flash here using a memory alias.
-  </pre>
+  </p>
   <h2>🛠 Tips for Freshers</h2>
   <ul>
     <li>Use <code>const</code> for data that doesn't change — it saves RAM.</li>
