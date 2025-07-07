@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GPIO – From Zero to Expert</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f2f6fa;
+      padding: 20px;
+      color: #222;
+    }
+    h1, h2 {
+      color: #005792;
+    }
+    h1 {
+      border-bottom: 2px solid #005792;
+      padding-bottom: 5px;
+    }
+    section {
+      margin-bottom: 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      margin-bottom: 20px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #bbb;
+      text-align: left;
+    }
+    th {
+      background-color: #005792;
+      color: #fff;
+    }
+    td {
+      background-color: #fff;
+    }
+    code, pre {
+      background-color: #eef;
+      padding: 5px 10px;
+      border-radius: 5px;
+      display: block;
+      margin-top: 10px;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    .level {
+      font-weight: bold;
+      color: #444;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay">
+    
+    <div class="header">
+      <div class="button-container">
+        <button onclick="location.href='gpio_types_and_config.html'">📘 Types and configurations</button>
+      </div>
+      <h1>🧠 GPIO – General Purpose Input/Output</h1>
+    </div>
+    <div class="section">
+
+  <section>
+    <h2>What is GPIO?</h2>
+    <p><strong>GPIO</strong> stands for <em>General Purpose Input/Output</em>. It refers to the digital pins on a microcontroller that can be programmed to either <strong>receive signals (input)</strong> or <strong>send signals (output)</strong>.</p>
+  </section>
+
+  <section>
+    <h2>🪜 GPIO: From Zero to Expert</h2>
+
+    <div class="level">🟢 Level 0: Beginner</div>
+    <p>Think of a microcontroller like a mini computer. The "pins" are its physical connectors. GPIO pins let it interact with the outside world.</p>
+    <ul>
+      <li>Button → GPIO input → Detect press</li>
+      <li>LED ← GPIO output ← Turn LED ON/OFF</li>
+    </ul>
+
+    <div class="level">🟡 Level 1: Basic Understanding</div>
+    <p><strong>Input Mode:</strong> Microcontroller listens to a signal. <br><strong>Output Mode:</strong> Sends a digital signal (HIGH/LOW).</p>
+    <p><strong>Digital Logic:</strong></p>
+    <ul>
+      <li>HIGH = 1 (usually 3.3V or 5V)</li>
+      <li>LOW = 0 (0V)</li>
+    </ul>
+
+    <pre><code>pinMode(PIN_X, INPUT);
+pinMode(PIN_Y, OUTPUT);</code></pre>
+
+    <div class="level">🟠 Level 2: Practical Knowledge</div>
+    <p><strong>Input Configurations:</strong> Floating, Pull-Up, Pull-Down<br>
+       <strong>Output Types:</strong> Push-Pull, Open-Drain</p>
+    <p><strong>Interrupts:</strong> GPIO can trigger ISR on edge detection.</p>
+
+    <h3>GPIO Input Use Cases</h3>
+    <table>
+      <tr><th>Use Case</th><th>Example</th></tr>
+      <tr><td>Button Press</td><td>Control UI with button</td></tr>
+      <tr><td>Motion Sensor</td><td>Detect movement</td></tr>
+      <tr><td>Limit Switch</td><td>Detect physical limit in machine</td></tr>
+    </table>
+
+    <h3>GPIO Output Use Cases</h3>
+    <table>
+      <tr><th>Use Case</th><th>Example</th></tr>
+      <tr><td>LED Control</td><td>Toggle indicator LED</td></tr>
+      <tr><td>Relay Control</td><td>Turn on fan or motor</td></tr>
+      <tr><td>Buzzer Alert</td><td>Trigger audio alert</td></tr>
+    </table>
+
+    <div class="level">🔵 Level 3: Intermediate – Alternate Functions</div>
+    <p>Many GPIOs can perform multiple functions via multiplexing.</p>
+    <table>
+      <tr><th>Mode</th><th>Function</th></tr>
+      <tr><td>AF</td><td>UART, SPI, I2C, PWM, etc.</td></tr>
+      <tr><td>Analog</td><td>ADC or DAC</td></tr>
+      <tr><td>Digital</td><td>Standard GPIO logic</td></tr>
+    </table>
+
+    <div class="level">🟣 Level 4: Advanced – Register-Level Example (STM32)</div>
+    <pre><code>// Enable clock
+RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
+
+// Set PA5 as output
+GPIOA->MODER &= ~(3 << (5 * 2));
+GPIOA->MODER |=  (1 << (5 * 2));
+
+// Set PA5 HIGH
+GPIOA->ODR |=  (1 << 5);
+
+// Set PA5 LOW
+GPIOA->ODR &= ~(1 << 5);
+</code></pre>
+
+    <div class="level">🔴 Level 5: Expert Concepts</div>
+    <ul>
+      <li><strong>Debouncing:</strong> Filter noisy input from mechanical buttons.</li>
+      <li><strong>Interrupt Priorities:</strong> Handle events in real-time systems.</li>
+      <li><strong>Drive Strength:</strong> Adjust how strong the pin drives signals.</li>
+      <li><strong>EMI Management:</strong> Reduce electromagnetic noise in fast toggles.</li>
+      <li><strong>Low Power:</strong> Disable unused GPIOs to save power.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>📊 Summary Table</h2>
+    <table>
+      <tr><th>Level</th><th>Focus</th></tr>
+      <tr><td>0</td><td>Basic I/O Concept</td></tr>
+      <tr><td>1</td><td>Digital High/Low, Modes</td></tr>
+      <tr><td>2</td><td>Practical Input/Output Use</td></tr>
+      <tr><td>3</td><td>Multiplexed Alternate Functions</td></tr>
+      <tr><td>4</td><td>Register-Level Configuration</td></tr>
+      <tr><td>5</td><td>Interrupts, Power, EMI</td></tr>
+    </table>
+  </section>
+
+  <footer>
+    <p><em>Mastering GPIO is the first step toward embedded excellence!</em></p>
+  </footer>
+    </div>
+</body>
+</html>
