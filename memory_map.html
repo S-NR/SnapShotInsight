@@ -2,8 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Embedded System Memory Map Explained</title>
-  <style>
+  <link rel="stylesheet" href="styles.css" />
+  <!-- <style>
     body {
       font-family: 'Segoe UI', sans-serif;
       background-color: #f9f9f9;
@@ -46,11 +48,15 @@
       padding: 2px 5px;
       border-radius: 4px;
     }
-  </style>
+  </style> -->
 </head>
 <body>
-
+  <div class="overlay">
+    
+    <div class="header">
   <h1>🧠 Embedded System Memory Map</h1>
+    </div>
+    <div class="section">
 
   <h2>📊 Visual Layout with Address Ranges</h2>
   <pre>
@@ -145,6 +151,6 @@ GPIOA_CRL |= (0x1 << 20);     // Set PA5 as output</code></pre>
     <li>Use <code>volatile</code> for registers and shared memory with interrupts.</li>
     <li>Understand how the linker script places sections in memory.</li>
   </ul>
-
+    </div>
 </body>
 </html>
