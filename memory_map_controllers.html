@@ -80,11 +80,11 @@
 | Internal SRAM Start       |
 +---------------------------+  0x00FF  
 | SFR (Special Function Reg)|
-+---------------------------+  0x0020  
++---------------------------+  0x0020  logical address space 2
 | I/O Registers             |
-+---------------------------+  0x0000  
-| FLASH (32KB)              |
-| - .text, .rodata, vectors |
++---------------------------+  0x0000  -------------
+| FLASH (32KB)              |           
+| - .text, .rodata, vectors |          logical address space 1
 +---------------------------+  0x7FFF  
 </pre>
 
