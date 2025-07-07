@@ -85,7 +85,7 @@
     </ul>
 
     <div class="level">🟡 Level 1: Basic Understanding</div>
-    <p><strong>Input Mode:</strong> Microcontroller listens to a signal. <br><strong>Output Mode:</strong> Sends a digital signal (HIGH/LOW).</p>
+    <p><strong>Input Mode:</strong> Microcontroller listens to a signal. <strong> E.g., button, sensor.</strong><br><strong>Output Mode:</strong> Sends a digital signal (HIGH/LOW).<strong> E.g., turn on LED, buzzer.</strong></p>
     <p><strong>Digital Logic:</strong></p>
     <ul>
       <li>HIGH = 1 (usually 3.3V or 5V)</li>
@@ -96,33 +96,33 @@
 pinMode(PIN_Y, OUTPUT);</code></pre>
 
     <div class="level">🟠 Level 2: Practical Knowledge</div>
-    <p><strong>Input Configurations:</strong> Floating, Pull-Up, Pull-Down<br>
-       <strong>Output Types:</strong> Push-Pull, Open-Drain</p>
-    <p><strong>Interrupts:</strong> GPIO can trigger ISR on edge detection.</p>
+    <p><strong>Input Configurations:</strong> Floating, Pull-Up (default HIGH), Pull-Down (default LOW)<br>
+       <strong>Output Types:</strong> Push-Pull (Directly HIGH or LOW), Open-Drain (Can only pull LOW (external pull-up needed))</p>
+    <p><strong>Interrupt Mode:</strong> GPIO can trigger an interrupt on signal change.</p>
 
     <h3>GPIO Input Use Cases</h3>
     <table>
       <tr><th>Use Case</th><th>Example</th></tr>
-      <tr><td>Button Press</td><td>Control UI with button</td></tr>
-      <tr><td>Motion Sensor</td><td>Detect movement</td></tr>
-      <tr><td>Limit Switch</td><td>Detect physical limit in machine</td></tr>
+      <tr><td>Button Press</td><td>Control UI with digital button</td></tr>
+      <tr><td>Motion Sensor</td><td>GPIO reads HIGH when motion is detected</td></tr>
+      <tr><td>Limit Switch</td><td>Detect physical limit in machine (boundary conditions)</td></tr>
     </table>
 
     <h3>GPIO Output Use Cases</h3>
     <table>
       <tr><th>Use Case</th><th>Example</th></tr>
       <tr><td>LED Control</td><td>Toggle indicator LED</td></tr>
-      <tr><td>Relay Control</td><td>Turn on fan or motor</td></tr>
-      <tr><td>Buzzer Alert</td><td>Trigger audio alert</td></tr>
+      <tr><td>Relay Control</td><td>Turn on fan, bulb or motor</td></tr>
+      <tr><td>Buzzer Alert</td><td>	Alert for alarms, warnings</td></tr>
     </table>
 
     <div class="level">🔵 Level 3: Intermediate – Alternate Functions</div>
     <p>Many GPIOs can perform multiple functions via multiplexing.</p>
     <table>
       <tr><th>Mode</th><th>Function</th></tr>
-      <tr><td>AF</td><td>UART, SPI, I2C, PWM, etc.</td></tr>
-      <tr><td>Analog</td><td>ADC or DAC</td></tr>
-      <tr><td>Digital</td><td>Standard GPIO logic</td></tr>
+      <tr><td>AF</td><td>UART (TX/RX), SPI, I2C, PWM, etc.</td></tr>
+      <tr><td>Analog</td><td>For ADC input or DAC output</td></tr>
+      <tr><td>Digital</td><td>Standard GPIO logic (Normal high/low signals)</td></tr>
     </table>
 
     <div class="level">🟣 Level 4: Advanced – Register-Level Example (STM32)</div>
@@ -139,6 +139,7 @@ GPIOA->ODR |=  (1 << 5);
 // Set PA5 LOW
 GPIOA->ODR &= ~(1 << 5);
 </code></pre>
+<p>🧠 This is faster and more efficient but requires deep understanding of MCU datasheets and memory-mapped registers.</p>
 
     <div class="level">🔴 Level 5: Expert Concepts</div>
     <ul>
