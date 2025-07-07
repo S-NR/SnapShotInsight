@@ -113,19 +113,19 @@
 <pre>
 +---------------------------+  0xFFFF  
 | External Data (XDATA)     | (accessed via MOVX)
-+---------------------------+  0x0000  
-|                           |
-+---------------------------+  0xFF  
++---------------------------+  0x0000  logical address space 3
+|                           |          -----------------
++---------------------------+  0xFF    
   Internal RAM (upper)        128 bytes (indirect)
 +---------------------------+  0x80  
 | SFR (I/O Registers)       |
 +---------------------------+  0x7F  
 | Bit-addressable RAM       |
-+---------------------------+  0x20  
++---------------------------+  0x20    logical address space 2
 | General-purpose RAM       |
-+---------------------------+  0x00  
-  Internal RAM (lower)      
-+---------------------------+  0x0000  
++---------------------------+  0x00    
+  Internal RAM (lower)                 -----------------
++---------------------------+  0x0000  logical address space 1
 | Flash Program Memory      | up to 64 KB (accessed via PC)
 +---------------------------+  0xFFFF  
 </pre>
