@@ -41,8 +41,12 @@
   </style> -->
 </head>
 <body>
-
-<h1>📊 Microcontroller Memory Map Comparison</h1>
+  <div class="overlay">
+    
+    <div class="header">
+     <h1>📊 Microcontroller Memory Map Comparison</h1>
+     </div>
+    <div class="section">
 
 <h2>🔧 STM32 (ARM Cortex-M)</h2>
 <pre>
@@ -76,11 +80,11 @@
 | Internal SRAM Start       |
 +---------------------------+  0x00FF  
 | SFR (Special Function Reg)|
-+---------------------------+  0x0020  
++---------------------------+  0x0020  logical address space 2
 | I/O Registers             |
-+---------------------------+  0x0000  
-| FLASH (32KB)              |
-| - .text, .rodata, vectors |
++---------------------------+  0x0000  -------------
+| FLASH (32KB)              |           
+| - .text, .rodata, vectors |          logical address space 1
 +---------------------------+  0x7FFF  
 </pre>
 
@@ -109,19 +113,19 @@
 <pre>
 +---------------------------+  0xFFFF  
 | External Data (XDATA)     | (accessed via MOVX)
-+---------------------------+  0x0000  
-|                           |
-+---------------------------+  0xFF  
-| Internal RAM (upper)      | 128 bytes (indirect)
++---------------------------+  0x0000  logical address space 3
+|                           |          -----------------
++---------------------------+  0xFF    
+  Internal RAM (upper)        128 bytes (indirect)
 +---------------------------+  0x80  
 | SFR (I/O Registers)       |
 +---------------------------+  0x7F  
 | Bit-addressable RAM       |
-+---------------------------+  0x20  
++---------------------------+  0x20    logical address space 2
 | General-purpose RAM       |
-+---------------------------+  0x00  
-| Internal RAM (lower)      |
-+---------------------------+  0x0000  
++---------------------------+  0x00    
+  Internal RAM (lower)                 -----------------
++---------------------------+  0x0000  logical address space 1
 | Flash Program Memory      | up to 64 KB (accessed via PC)
 +---------------------------+  0xFFFF  
 </pre>
@@ -167,7 +171,6 @@
 
 <h2>🗂 Summary Table</h2>
 <table>
-  <thead>
     <tr>
       <th>MCU</th>
       <th>Flash Start</th>
@@ -175,8 +178,6 @@
       <th>Peripherals</th>
       <th>Notes</th>
     </tr>
-  </thead>
-  <tbody>
     <tr>
       <td>STM32</td>
       <td>0x08000000</td>
@@ -219,8 +220,8 @@
       <td>Memory-mapped IO</td>
       <td>XIP Flash via QSPI</td>
     </tr>
-  </tbody>
 </table>
-
+    </div>
+      </div>
 </body>
 </html>
