@@ -93,6 +93,29 @@
     <tr><td>Aliased Memory</td><td>0x00000000</td><td>Reset vector (mirrors Flash)</td></tr>
   </table>
 
+  <h2>🔁 Boot-Up Steps (STM32):</h2>
+  <ul>
+    <li>Power ON or Reset</li>
+    <li>CPU fetches first two words from Flash:</li>
+    <ul>
+      <li>0x00000000 → Set MSP (Main Stack Pointer)</li>
+      <li>0x00000004 → Load Reset_Handler address into PC</li>
+    </ul>
+    <li>Control jumps to Reset_Handler</li>
+    <li>Reset_Handler typically:</li>
+    <ul>
+      <li>Copies .data from Flash to RAM</li>
+      <li>Zeros out .bss</li>
+      <li>Calls SystemInit() (clock, PLL, etc.)</li>
+      <li>Jumps to main()</li>
+    </ul>
+    <li>If an interrupt happens later:</li>
+    <ul>
+      <li>CPU finds the handler's address in the vector table</li>
+      <li>Jumps to it automatically</li>
+    </ul>
+  </ul>
+
   <h2>📌 Detailed Explanation with Examples</h2>
 
   <h3>🔹 Vector Table (0x00000000)</h3>
