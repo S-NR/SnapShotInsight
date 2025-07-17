@@ -7,7 +7,12 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-
+  <div class="overlay">
+    
+    <div class="header">
+  <h1>🧠 Mean Time Between Failures</h1>
+    </div>
+    <div class="section">
   <h2>🔧 What is MTBF?</h2>
   <p><strong>MTBF</strong> (Mean Time Between Failures) is a <em>reliability metric</em> that predicts the average time a component or system operates before failing.</p>
 
@@ -87,5 +92,85 @@
     <li>Apply proper <strong>thermal management</strong> to prevent accelerated aging.</li>
   </ul>
 
+    <h2>✅ EEPROM Lifetime Example (with MTBF Context)</h2>
+
+  <p>EEPROMs (<strong>Electrically Erasable Programmable Read-Only Memory</strong>) have limited endurance — typically specified in terms of write/erase cycles and data retention time.</p>
+
+  <h3>📌 Key Specs (Typical for 24Cxx Series)</h3>
+  <table>
+    <tr>
+      <th>Parameter</th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <td>Endurance</td>
+      <td>1,000,000 write/erase cycles per byte</td>
+    </tr>
+    <tr>
+      <td>Data retention</td>
+      <td>100 years @ 25 °C</td>
+    </tr>
+    <tr>
+      <td>Write time</td>
+      <td>~5 ms per byte/page</td>
+    </tr>
+  </table>
+
+  <h3>🧠 Design Scenario</h3>
+  <p><strong>Assumption:</strong> Write to 1 byte of EEPROM once every 10 seconds. EEPROM endurance = 1,000,000 cycles.</p>
+
+  <div class="highlight">
+    <strong>🔍 Lifetime Calculation</strong><br>
+    <div class="code">
+      Total lifetime = Endurance × Interval between writes<br>
+      = 1,000,000 × 10 sec = 10,000,000 sec<br>
+      = 10,000,000 / 3600 ≈ 2777.8 hours<br>
+      ≈ 115.7 days
+    </div>
+    <p>👉 So, the EEPROM byte will wear out in ~116 days if written every 10 seconds.</p>
+  </div>
+
+  <h3>📘 MTBF Interpretation</h3>
+  <p>While EEPROM failure is not random (it's predictable wear), this lifetime estimate acts similarly to MTBF in planning reliability.</p>
+  <div class="highlight">
+    <strong>Statement:</strong> "This EEPROM byte has a predicted lifetime of ~2800 hours based on current usage."
+  </div>
+
+  <h3>🛠️ How to Improve EEPROM Lifetime</h3>
+  <table>
+    <tr>
+      <th>Technique</th>
+      <th>Description</th>
+    </tr>
+    <tr>
+      <td>Wear leveling</td>
+      <td>Distribute writes across different EEPROM locations</td>
+    </tr>
+    <tr>
+      <td>Page buffering</td>
+      <td>Cache in RAM and write only when needed</td>
+    </tr>
+    <tr>
+      <td>Write only on change</td>
+      <td>Check if value changed before writing</td>
+    </tr>
+    <tr>
+      <td>Lower write frequency</td>
+      <td>Write once per minute instead of every 10 seconds</td>
+    </tr>
+    <tr>
+      <td>Use FRAM / MRAM</td>
+      <td>Memory types with virtually unlimited endurance</td>
+    </tr>
+  </table>
+
+  <h3>🧮 Want 10-Year EEPROM Life?</h3>
+  <div class="code">
+    10 years = 87,600 hours = 315,360,000 seconds<br>
+    Max writes = 315,360,000 / 1,000,000 = 315.36 seconds
+  </div>
+  <p>✅ So, limit writes to <strong>once every 5 minutes (315 seconds)</strong> to ensure 10-year life per byte.</p>
+    </div>
+  </div>
 </body>
 </html>
