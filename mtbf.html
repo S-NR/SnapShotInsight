@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MTBF Explained</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <h2>🔧 What is MTBF?</h2>
+  <p><strong>MTBF</strong> (Mean Time Between Failures) is a <em>reliability metric</em> that predicts the average time a component or system operates before failing.</p>
+
+  <p><strong>Formula:</strong></p>
+  <code>MTBF = Total Operating Time / Number of Failures</code>
+
+  <ul>
+    <li>Expressed in <strong>hours</strong> (e.g., 100,000 hrs)</li>
+    <li>Assumes <strong>random, repairable</strong> failures (not due to wear-out)</li>
+  </ul>
+
+  <h3>📊 Example Interpretation</h3>
+  <p>If a power supply has an MTBF of 200,000 hours:</p>
+  <ul>
+    <li>It does <strong>not</strong> mean it will last 200,000 hours.</li>
+    <li>It means: In 1,000 units, <strong>5 may fail per 1,000 hours</strong>.</li>
+  </ul>
+
+  <h3>📌 Why MTBF is Important</h3>
+  <table>
+    <tr><th>Purpose</th><th>Use Case Example</th></tr>
+    <tr><td>Reliability comparison</td><td>Choose between relays or PSUs</td></tr>
+    <tr><td>System design margin</td><td>Ensure uptime in medical/industrial systems</td></tr>
+    <tr><td>Maintenance planning</td><td>Schedule replacements before failure</td></tr>
+    <tr><td>Warranty estimation</td><td>Predict service life</td></tr>
+  </table>
+
+  <details>
+    <summary>⚙️ MTBF Calculation – Detailed</summary>
+    <h4>1. Empirical MTBF (observed data)</h4>
+    <p><code>MTBF = Total Run Time of All Units / Failures Observed</code></p>
+    <p>Example: 100 devices × 1000 hours, 2 failed ⇒ MTBF = 50,000 hrs</p>
+
+    <h4>2. Predicted MTBF (standards-based)</h4>
+    <p>Engineers use standards like:</p>
+    <ul>
+      <li><strong>MIL-HDBK-217F</strong> – Military electronic systems</li>
+      <li><strong>Telcordia SR-332</strong> – Telecom/commercial equipment</li>
+      <li><strong>FIDES</strong> – European aerospace/defense</li>
+    </ul>
+    <p><code>MTBF = 1 / λ_total</code> where λ = failure rate</p>
+  </details>
+
+  <h3>📉 MTBF vs. Other Metrics</h3>
+  <table>
+    <tr><th>Metric</th><th>Meaning</th><th>Used For</th></tr>
+    <tr><td>MTBF</td><td>Time between failures</td><td>Repairable systems</td></tr>
+    <tr><td>MTTF</td><td>Mean Time To Failure</td><td>Non-repairable (e.g. LED)</td></tr>
+    <tr><td>FIT</td><td>Failures in 10⁹ hours</td><td>Mission-critical apps</td></tr>
+    <tr><td>MTTR</td><td>Mean Time To Repair</td><td>Maintenance planning</td></tr>
+  </table>
+
+  <h3>🧠 Common MTBF Values</h3>
+  <table>
+    <tr><th>Component</th><th>Typical MTBF</th></tr>
+    <tr><td>Electrolytic capacitors</td><td>2,000–20,000 hrs</td></tr>
+    <tr><td>Fans (with bearings)</td><td>30,000–70,000 hrs</td></tr>
+    <tr><td>Industrial power supplies</td><td>100,000–500,000 hrs</td></tr>
+    <tr><td>Solid-state relays</td><td>>1,000,000 hrs</td></tr>
+    <tr><td>Embedded controllers</td><td>>1,000,000 hrs</td></tr>
+  </table>
+
+  <div class="myth">
+    <strong>MYTH:</strong> “My PSU has 500,000-hour MTBF, so it will last 50 years.”
+  </div>
+
+  <div class="fact">
+    <strong>FACT:</strong> MTBF is a <em>statistical average</em>, not a guarantee.
+  </div>
+
+  <h3>✅ How to Use MTBF in Design</h3>
+  <ul>
+    <li>Compare vendor reliability before choosing components.</li>
+    <li>Use <strong>redundancy</strong> for critical systems.</li>
+    <li>Include <strong>watchdog timers</strong> and <strong>self-diagnostics</strong>.</li>
+    <li><strong>Derate</strong> components to reduce stress (e.g. 60% of rated voltage).</li>
+    <li>Apply proper <strong>thermal management</strong> to prevent accelerated aging.</li>
+  </ul>
+
+</body>
+</html>
