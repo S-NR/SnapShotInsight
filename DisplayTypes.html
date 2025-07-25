@@ -1,203 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">  
-  <title>Types of Displays in Embedded Systems</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Embedded Display Types Visual Guide</title>
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #222; color: #eee; }
+    .overlay { padding: 40px 10%; }
+    h1 { text-align: center; color: #00eaff; }
+    .section { display: flex; align-items: flex-start; gap: 20px; margin-bottom: 40px; flex-wrap: wrap; }
+    .section img { width: 200px; height: auto; border-radius: 8px; background: #fff; padding: 5px; flex-shrink: 0; }
+    .text { flex: 1; min-width: 250px; }
+    .text h2 { color: #ffd700; margin-bottom: 10px; }
+    .text p, .text ul { line-height: 1.6; }
+    @media (max-width: 768px) {
+      .section { flex-direction: column; align-items: center; }
+      .section img { width: 100%; max-width: 300px; }
+    }
+  </style>
 </head>
-<body>  
+<body>
   <div class="overlay">
-    <div class="header">
-      <h1>Types of Displays in Embedded Systems</h1>
+    <h1>🖥️ Embedded Systems Display Types</h1>
+    
+    <div class="section">
+      <img src="https://www.buydisplay.com/character-display/samples/1602-module.jpg" alt="Character LCD">
+      <div class="text">
+        <h2>Character LCD (e.g. 16×2, 20×4)</h2>
+        <p><strong>Interface:</strong> Parallel or I²C (HD44780‑type)</p>
+        <p><strong>Use Cases:</strong> Simple text display, meters, clocks</p>
+        <ul><li>Low cost; easy to drive</li><li>No graphics support</li></ul>
+      </div>
     </div>
-  <div class="section">
-    <h2>1. Character Displays</h2>
-    <ul>
-      <li>
-        <span class="title">Alphanumeric LCD (e.g., 16x2, 20x4)</span><br>
-        <span class="subtitle">Technology:</span> LCD with HD44780 controller<br>
-        <span class="subtitle">Interface:</span> Parallel / I2C<br>
-        <span class="subtitle">Use Case:</span> Simple text displays, clocks, meters
-      </li>
-    </ul>
-    <opt-img src="USB Images/usb_type_a.jpg" alt="USB Type-A">
-  </div>
 
-  <div class="section">
-    <h2>2. Graphical Displays</h2>
-    <ul>
-      <li>
-        <span class="title">Monochrome Graphic LCD (e.g., 128x64)</span><br>
-        <span class="subtitle">Technology:</span> LCD<br>
-        <span class="subtitle">Interface:</span> Parallel / SPI<br>
-        <span class="subtitle">Use Case:</span> Graphs, icons, meters
-      </li>
-      <li>
-        <span class="title">OLED Displays (e.g., SSD1306)</span><br>
-        <span class="subtitle">Technology:</span> OLED<br>
-        <span class="subtitle">Interface:</span> I2C / SPI<br>
-        <span class="subtitle">Use Case:</span> Wearables, small gadgets
-      </li>
-    </ul>
-  </div>
+    <div class="section">
+      <img src="https://www.winstar.com.tw/uploads/Products/oled/graphic-oled-display.jpg" alt="Graphic OLED">
+      <div class="text">
+        <h2>OLED / Graphic OLED</h2>
+        <p><strong>Interface:</strong> SPI or I²C</p>
+        <p><strong>Use Cases:</strong> Wearables, small UIs, IoT device indicators</p>
+        <ul><li>High contrast; no backlight needed</li><li>Small size modules (0.96″–1.5″)</li></ul>
+      </div>
+    </div>
 
-  <div class="section">
-    <h2>3. Color Displays</h2>
-    <ul>
-      <li>
-        <span class="title">TFT LCD</span><br>
-        <span class="subtitle">Technology:</span> Thin Film Transistor LCD<br>
-        <span class="subtitle">Interface:</span> SPI / RGB / MIPI DSI<br>
-        <span class="subtitle">Use Case:</span> HMI, GUI interfaces
-      </li>
-      <li>
-        <span class="title">IPS LCD</span><br>
-        <span class="subtitle">Improved viewing angle and color vs TFT</span><br>
-        <span class="subtitle">Use Case:</span> Industrial or medical-grade UIs
-      </li>
-    </ul>
-  </div>
+    <div class="section">
+      <img src="https://example.com/tft-lcd.jpg" alt="TFT LCD">
+      <div class="text">
+        <h2>TFT / IPS LCD</h2>
+        <p><strong>Interface:</strong> SPI / RGB / MIPI</p>
+        <p><strong>Use Cases:</strong> Industrial HMIs, portable GUIs</p>
+        <ul><li>Full‑color, high refresh</li><li>Often paired with touch panels</li></ul>
+      </div>
+    </div>
 
-  <div class="section">
-    <h2>4. Touchscreen Displays</h2>
-    <ul>
-      <li>
-        <span class="title">Resistive or Capacitive Touch Panels</span><br>
-        <span class="subtitle">Combined with TFT/IPS</span><br>
-        <span class="subtitle">Use Case:</span> Smart interfaces, kiosks
-      </li>
-    </ul>
-  </div>
+    <div class="section">
+      <img src="https://shopkits.eink.com/assets/images/epaper-module.jpg" alt="E‑Ink Display">
+      <div class="text">
+        <h2>E‑Ink / E‑Paper</h2>
+        <p><strong>Interface:</strong> SPI</p>
+        <p><strong>Use Cases:</strong> e‑readers, low‑power IoT dashboards</p>
+        <ul><li>Ultra‑low power (image holds without energy)</li><li>Excellent sunlight readability</li><li>Slow refresh rate</li></ul>
+      </div>
+    </div>
 
-  <div class="section">
-    <h2>5. Segment Displays</h2>
-    <ul>
-      <li>
-        <span class="title">7-Segment Display</span><br>
-        <span class="subtitle">Displays numbers 0–9</span><br>
-        <span class="subtitle">Use Case:</span> Digital clocks, counters
-      </li>
-      <li>
-        <span class="title">14/16-Segment Display</span><br>
-        <span class="subtitle">Displays letters and numbers</span><br>
-        <span class="subtitle">Use Case:</span> Elevators, status panels
-      </li>
-    </ul>
-  </div>
+    <div class="section">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/56/VFD_display_module.jpg" alt="VFD Display">
+      <div class="text">
+        <h2>VFD (Vacuum Fluorescent Display)</h2>
+        <p><strong>Interface:</strong> Parallel / custom driver</p>
+        <p><strong>Use Cases:</strong> Legacy audio panels, meters, POS displays</p>
+        <ul><li>Bright & distinct, wide temp range</li><li>Self‑emissive glowing segments</li></ul>
+      </div>
+    </div>
 
-  <div class="section">
-    <h2>6. E-Ink / E-Paper Displays</h2>
-    <ul>
-      <li>
-        <span class="title">E-Ink Display</span><br>
-        <span class="subtitle">Very low power, readable in sunlight</span><br>
-        <span class="subtitle">Use Case:</span> eReaders, low-power IoT dashboards
-      </li>
-    </ul>
-  </div>
+    <div class="section">
+      <img src="https://nextion.tech/wp-content/uploads/2022/07/Basic-Series-800x800-1.jpg" alt="Nextion HMI">
+      <div class="text">
+        <h2>Nextion HMI Display</h2>
+        <p><strong>Interface:</strong> UART serial</p>
+        <p><strong>Use Cases:</strong> Industrial touch UIs, appliances</p>
+        <ul><li>On‑board MCU + GUI builder</li><li>Offloads graphics from main MCU</li></ul>
+      </div>
+    </div>
 
-  <div class="section">
-    <h2>7. VFD (Vacuum Fluorescent Displays)</h2>
-    <ul>
-      <li>
-        <span class="title">VFD Display</span><br>
-        <span class="subtitle">Bright and fast, but outdated</span><br>
-        <span class="subtitle">Use Case:</span> Audio systems, legacy devices
-      </li>
-    </ul>
-  </div>
+    <div class="section">
+      <img src="https://createdby-you.com/Led-Matrix-MCU-8x32-Control-LED-Display-Module-886375.jpg" alt="LED Matrix">
+      <div class="text">
+        <h2>LED Matrix (8×8 up to 32×8…)</h2>
+        <p><strong>Interface:</strong> MAX7219/SPI or WS2812 RGB</p>
+        <p><strong>Use Cases:</strong> Scrolling text, icons, visual notifications</p>
+        <ul><li>Chainable modules; dynamic display</li><li>Mono or full‑color+animation</li></ul>
+      </div>
+    </div>
 
-  <div class="section">
-    <h2>8. Nextion HMI Displays</h2>
-    <ul>
-      <li>
-        <span class="title">Smart TFT with Touch + Onboard Processor</span><br>
-        <span class="subtitle">Interface:</span> UART<br>
-        <span class="subtitle">Use Case:</span> HMIs, appliances
-      </li>
-    </ul>
-  </div>
+    <div class="section">
+      <img src="https://www.crystalfontz.com/products/CFAL16032A0018PW_flex.jpg" alt="Flexible OLED">
+      <div class="text">
+        <h2>Flexible OLED</h2>
+        <p><strong>Interface:</strong> SPI or RGB driver</p>
+        <p><strong>Use Cases:</strong> Wearables, curved/foldable displays</p>
+        <ul><li>Bendable modules (e.g. 160×32 pixels)</li><li>Durable plastic substrate</li></ul>
+      </div>
+    </div>
 
-  <div class="section">
-    <h2>9. LED Matrix Displays</h2>
-    <ul>
-      <li>
-        <span class="title">8x8, 32x8, 16x16 LED Matrix</span><br>
-        <span class="subtitle">Use Case:</span> Scrolling text, icons
-      </li>
-    </ul>
-  </div>
+    <div class="section">
+      <img src="https://via.placeholder.com/200x120?text=Transparent+Display" alt="Transparent Display">
+      <div class="text">
+        <h2>Transparent Displays</h2>
+        <p><strong>Type:</strong> Transparent OLED / specialty screens</p>
+        <p><strong>Use Cases:</strong> AR windows, futuristic UIs</p>
+        <ul><li>See‑through display glass</li><li>Used in high‑end concepts</li></ul>
+      </div>
+    </div>
 
-  <div class="section">
-    <h2>10. SPI/I2C LCD Modules</h2>
-    <ul>
-      <li>
-        <span class="title">Character or Graphic LCD with Serial Interface</span><br>
-        <span class="subtitle">Use Case:</span> MCU with few GPIO pins
-      </li>
-    </ul>
-  </div>
+    <div class="section">
+      <img src="https://via.placeholder.com/200x120?text=Bar+Graph+Display" alt="Bar Graph Display">
+      <div class="text">
+        <h2>Bar Graph Displays</h2>
+        <p><strong>Type:</strong> LED or LCD bar segments</p>
+        <p><strong>Use Cases:</strong> Volume meters, signal strength indicators</p>
+        <ul><li>Analog-style level representation</li><li>Easy to read at a glance</li></ul>
+      </div>
+    </div>
 
-  <div class="section">
-    <h2>11. Bar Graph Displays</h2>
-    <ul>
-      <li>
-        <span class="title">Visual bar-style indicator</span><br>
-        <span class="subtitle">Use Case:</span> Volume, temperature, signal strength
-      </li>
-    </ul>
-  </div>
+    <div class="section">
+      <img src="https://via.placeholder.com/200x120?text=Segment+Display" alt="Segment Display">
+      <div class="text">
+        <h2>7‑Segment / 14‑Segment Displays</h2>
+        <p><strong>Type:</strong> LED or LCD segmented digits/letters</p>
+        <p><strong>Use Cases:</strong> Clocks, elevator panels, simple readouts</p>
+        <ul><li>Numeric (7‑segment) or alphanumeric (14/16‑segment)</li><li>Low power, easy to drive</li></ul>
+      </div>
+    </div>
 
-  <div class="section">
-    <h2>12. Transparent Displays</h2>
-    <ul>
-      <li>
-        <span class="title">See-through display (TFT or OLED)</span><br>
-        <span class="subtitle">Use Case:</span> AR glasses, futuristic UIs
-      </li>
-    </ul>
-  </div>
+    <div class="section">
+      <img src="https://via.placeholder.com/200x120?text=Laser+Projection+Display" alt="Laser Projection Display">
+      <div class="text">
+        <h2>Laser / Projection Displays</h2>
+        <p><strong>Type:</strong> Scanning laser projector or LCoS</p>
+        <p><strong>Use Cases:</strong> HUDs, medical, near‑eye systems</p>
+        <ul><li>Projects image onto surfaces</li><li>Very niche, specialized use</li></ul>
+      </div>
+    </div>
 
-  <div class="section">
-    <h2>13. Flexible OLED Displays</h2>
-    <ul>
-      <li>
-        <span class="title">Bendable or curved OLED</span><br>
-        <span class="subtitle">Use Case:</span> Wearables, foldables
-      </li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>14. MicroLED Displays</h2>
-    <ul>
-      <li>
-        <span class="title">Emerging display technology with high brightness and efficiency</span><br>
-        <span class="subtitle">Use Case:</span> High-end smart wearables, AR
-      </li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>15. Laser Projection Displays</h2>
-    <ul>
-      <li>
-        <span class="title">Laser projection-based visual output</span><br>
-        <span class="subtitle">Use Case:</span> HUDs, medical displays
-      </li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>16. Capacitive Touch Bar Displays</h2>
-    <ul>
-      <li>
-        <span class="title">Touch slider or touch-sensitive bar</span><br>
-        <span class="subtitle">Use Case:</span> Volume, brightness sliders
-      </li>
-    </ul>
-  </div>
   </div>
 </body>
 </html>
-  
