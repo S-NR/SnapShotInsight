@@ -34,15 +34,12 @@
         <li>Use bit-fields, packed structs</li>
         <li>Enable LTO</li>
       </ul>
-        <pre><code>
-        // Better: Stored in Flash<br/>
+        <pre><code>// Better: Stored in Flash<br/>
         const char msg[] = "Hello!";<br/><br/>
         // Worse: Stored in RAM<br/>
         char msg[] = "Hello!";
         </code></pre>
-    </div>
 
-    <div class="section">
       <h2>🚀 2. Speed Optimization (Execution Time)</h2>
       <ul>
         <li>Use <span class="highlight">-O2</span> or <span class="highlight">-O3</span></li>
