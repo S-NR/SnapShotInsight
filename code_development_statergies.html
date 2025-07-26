@@ -48,7 +48,7 @@
         <li>Use lookup tables if possible</li>
         <li>Use DMA, interrupts</li>
       </ul>
-      <div class="code-block">
+      <div class="code">
         const uint8_t square[10] = {0,1,4,9,16,25,36,49,64,81};<br/>
         result = square[input];  // Fast<br/><br/>
         result = input * input;  // Slower
@@ -63,7 +63,7 @@
         <li>Avoid magic numbers; use <span class="highlight">#define</span></li>
         <li>Follow MISRA or coding standards</li>
       </ul>
-      <div class="code-block">
+      <div class="code">
         #define MOTOR_LEFT 1<br/>
         motor_ctrl(MOTOR_LEFT, 100);
       </div>
@@ -85,7 +85,7 @@
         <li>Use <span class="highlight">assert()</span> to validate assumptions</li>
         <li>Write unit tests</li>
       </ul>
-      <div class="code-block">
+      <div class="code">
         #define LOG(msg) printf("DEBUG: %s\\n", msg);<br/>
         LOG("Motor started");
       </div>
