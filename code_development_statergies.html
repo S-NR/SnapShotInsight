@@ -34,11 +34,10 @@
         <li>Use bit-fields, packed structs</li>
         <li>Enable LTO</li>
       </ul>
-        <pre><code>// Better: Stored in Flash
-        const char msg[] = "Hello!";
-        // Worse: Stored in RAM
-        char msg[] = "Hello!";
-        </code></pre>
+<pre><code>// Better: Stored in Flash
+const char msg[] = "Hello!";
+// Worse: Stored in RAM
+char msg[] = "Hello!";</code></pre>
 
       <h2>🚀 2. Speed Optimization (Execution Time)</h2>
       <ul>
@@ -48,11 +47,9 @@
         <li>Use lookup tables if possible</li>
         <li>Use DMA, interrupts</li>
       </ul>
-      <div class="code">
-        const uint8_t square[10] = {0,1,4,9,16,25,36,49,64,81};<br/>
-        result = square[input];  // Fast<br/><br/>
-        result = input * input;  // Slower
-      </div>
+<pre><code>const uint8_t square[10] = {0,1,4,9,16,25,36,49,64,81};
+result = square[input];  // Fast
+result = input * input;  // Slower</pre></code>
     </div>
 
     <div class="section">
@@ -63,10 +60,8 @@
         <li>Avoid magic numbers; use <span class="highlight">#define</span></li>
         <li>Follow MISRA or coding standards</li>
       </ul>
-      <div class="code">
-        #define MOTOR_LEFT 1<br/>
-        motor_ctrl(MOTOR_LEFT, 100);
-      </div>
+<pre><code>#define MOTOR_LEFT 1
+motor_ctrl(MOTOR_LEFT, 100);</pre></code>
     </div>
 
     <div class="section">
@@ -85,10 +80,8 @@
         <li>Use <span class="highlight">assert()</span> to validate assumptions</li>
         <li>Write unit tests</li>
       </ul>
-      <div class="code">
-        #define LOG(msg) printf("DEBUG: %s\\n", msg);<br/>
-        LOG("Motor started");
-      </div>
+<pre><code>#define LOG(msg) printf("DEBUG: %s\\n", msg);<br/>
+LOG("Motor started");</pre></code>
     </div>
 
     <div class="section">
