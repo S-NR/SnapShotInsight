@@ -1,47 +1,89 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Adventure Activity Receipt</title>
+  <title>Adventure Receipt - Highland Escape Resort</title>
   <style>
     @media print {
       body {
         width: 210mm;
         height: 297mm;
-        margin: 20mm;
-        font-family: Arial, sans-serif;
+        margin: 20mm auto;
+        font-family: "Segoe UI", Arial, sans-serif;
         font-size: 14px;
+        color: #000;
       }
     }
+
     body {
       max-width: 800px;
-      margin: auto;
+      margin: 0 auto;
       padding: 20px;
-      border: 2px solid #444;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
     }
+
     h1, h2 {
       text-align: center;
-      margin: 0;
+      margin: 5px 0;
     }
-    hr {
-      margin: 15px 0;
+
+    h1 {
+      font-size: 22px;
+      color: #2E8B57;
     }
-    .info, .cost {
-      margin: 15px 0;
+
+    h2 {
+      font-size: 18px;
+      color: #000;
     }
-    .cost-table {
+
+    .info p {
+      margin: 6px 0;
+      line-height: 1.4;
+    }
+
+    .info p strong {
+      display: inline-block;
+      width: 120px;
+    }
+
+    table {
       width: 100%;
       border-collapse: collapse;
+      margin-top: 15px;
     }
-    .cost-table th, .cost-table td {
-      border: 1px solid #444;
+
+    th, td {
+      border: 1px solid #888;
       padding: 8px;
       text-align: left;
     }
+
+    th {
+      background-color: #f0f0f0;
+    }
+
+    .total-row th {
+      text-align: right;
+    }
+
+    .total-row td {
+      font-weight: bold;
+      background-color: #e6ffe6;
+    }
+
     .footer {
       margin-top: 30px;
       text-align: center;
       font-style: italic;
+      font-size: 15px;
+    }
+
+    .contact {
+      margin-top: 5px;
+      font-size: 13px;
+      color: #555;
     }
   </style>
 </head>
@@ -49,48 +91,44 @@
 
   <h1>Highland Escape Resort</h1>
   <h2>Adventure Activities Receipt</h2>
-  <hr>
 
   <div class="info">
     <p><strong>Customer Name:</strong> Nishma</p>
-    <p><strong>Date:</strong> 06-August-2025</p>
-    <p><strong>Location:</strong> Highland Escape Resort, Chikkamagaluru</p>
+    <p><strong>Date:</strong> 31-July-2025</p>
+    <p><strong>Location:</strong> Chikkamagaluru</p>
     <p><strong>Activities:</strong> Kayaking, Rafting, Zip Line, Fishing, Plank Walk, Rope Net Traverse</p>
     <p><strong>Participants:</strong> 3 Adults + 1 Kid (4 years)</p>
   </div>
 
-  <div class="cost">
-    <table class="cost-table">
-      <tr>
-        <th>Description</th>
-        <th>Qty</th>
-        <th>Rate (₹)</th>
-        <th>Amount (₹)</th>
-      </tr>
-      <tr>
-        <td>Adult Adventure Pass</td>
-        <td>3</td>
-        <td>1800</td>
-        <td>5400</td>
-      </tr>
-      <tr>
-        <td>Kid Adventure Pass (Below 5)</td>
-        <td>1</td>
-        <td>1100</td>
-        <td>1100</td>
-      </tr>
-      <tr>
-        <th colspan="3" style="text-align:right;">Total</th>
-        <th>₹6,500</th>
-      </tr>
-    </table>
-  </div>
+  <table>
+    <tr>
+      <th>Description</th>
+      <th>Qty</th>
+      <th>Rate (₹)</th>
+      <th>Amount (₹)</th>
+    </tr>
+    <tr>
+      <td>Adult Adventure Pass</td>
+      <td>3</td>
+      <td>1800</td>
+      <td>5400</td>
+    </tr>
+    <tr>
+      <td>Kid Adventure Pass (Below 5)</td>
+      <td>1</td>
+      <td>1100</td>
+      <td>1100</td>
+    </tr>
+    <tr class="total-row">
+      <th colspan="3">Total</th>
+      <td>₹6,500</td>
+    </tr>
+  </table>
 
   <div class="footer">
-    <p>Thank you for choosing Highland Escape Resort for your adventure experience!</p>
-    <p>For support or queries, contact: +91-9876543210</p>
+    Thank you for choosing Highland Escape Resort for your adventure experience!
+    <div class="contact">For support or queries, contact: +91-9876543210</div>
   </div>
 
 </body>
-  </html>
-  
+</html>
