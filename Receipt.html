@@ -1,64 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Adventure Activities Receipt</title>
+  <meta charset="UTF-8" />
+  <title>Adventure Receipt - Chikkamagaluru</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #f9f9f9;
-      padding: 30px;
+      font-family: "Segoe UI", sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
     }
     .receipt {
-      max-width: 700px;
+      background: #ffffff;
+      max-width: 600px;
       margin: auto;
-      background: white;
       padding: 30px;
-      border-radius: 12px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-    h1, h2 {
+    .receipt h1 {
       text-align: center;
-      margin-bottom: 8px;
+      font-size: 1.8em;
+      margin-bottom: 5px;
     }
-    h2 {
-      color: #3a7f3a;
-      margin-top: 0;
+    .receipt h2 {
+      text-align: center;
+      font-size: 1.2em;
+      color: #2e7d32;
+      margin-bottom: 20px;
     }
     .info p {
-      margin: 4px 0;
+      margin: 5px 0;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
-      margin-bottom: 20px;
+      margin: 20px 0;
     }
     th, td {
-      border: 1px solid #ddd;
       padding: 10px;
+      border: 1px solid #ccc;
       text-align: left;
-    }
-    th {
-      background-color: #f0f0f0;
     }
     .right {
       text-align: right;
     }
     .total {
+      background: #e8f5e9;
       font-weight: bold;
-      background-color: #f8f8f8;
     }
-    .note {
+    .note, .footer {
       font-size: 0.9em;
       color: #555;
-      margin-top: -10px;
-      margin-bottom: 20px;
+      margin-top: 10px;
     }
     .footer {
       text-align: center;
-      font-size: 0.9em;
-      color: #777;
       margin-top: 30px;
     }
   </style>
@@ -86,12 +83,6 @@
       </thead>
       <tbody>
         <tr>
-          <td>Resort Stay Charges (Adult) <i>(not included)</i></td>
-          <td class="right">6,600</td>
-          <td class="right">3</td>
-          <td class="right">19,800</td>
-        </tr>
-        <tr>
           <td>Adventure Activity Package (Adult)</td>
           <td class="right">1,500</td>
           <td class="right">3</td>
@@ -113,12 +104,12 @@
         </tr>
         <tr class="total">
           <td colspan="3" class="right">Total Payable</td>
-          <td class="right">₹5,310</td>
+          <td class="right"><strong>₹5,310</strong></td>
         </tr>
       </tbody>
     </table>
 
-    <p class="note"><strong>Note:</strong> Resort stay charges shown for reference only. They are not included in the total as no overnight stay was availed.</p>
+    <p class="note"><strong>Note:</strong> Resort stay charges are not included as this is a day activity only.</p>
 
     <p><strong>Payment Mode:</strong> UPI</p>
     <p><strong>Transaction ID:</strong> TRX-CHIKK20250806</p>
