@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>2-Point Calibration Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    label, input {
+      display: block;
+      margin: 10px 0;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🔧 2-Point Calibration Calculator</h2>
+
+  <label for="raw1">Raw1:</label>
+  <input type="number" id="raw1" />
+
+  <label for="actual1">Actual1:</label>
+  <input type="number" id="actual1" />
+
+  <label for="raw2">Raw2:</label>
+  <input type="number" id="raw2" />
+
+  <label for="actual2">Actual2:</label>
+  <input type="number" id="actual2" />
+
+  <hr>
+
+  <label for="rawInput">New Raw Input:</label>
+  <input type="number" id="rawInput" />
+
+  <button onclick="calculate()">Calibrate</button>
+
+  <div class="result" id="output"></div>
+
+  <script>
+    function calculate() {
+      const raw1 = parseFloat(document.getElementById("raw1").value);
+      const actual1 = parseFloat(document.getElementById("actual1").value);
+      const raw2 = parseFloat(document.getElementById("raw2").value);
+      const actual2 = parseFloat(document.getElementById("actual2").value);
+      const rawInput = parseFloat(document.getElementById("rawInput").value);
+
+      if (isNaN(raw1) || isNaN(actual1) || isNaN(raw2) || isNaN(actual2) || isNaN(rawInput)) {
+        document.getElementById("output").innerText = "❗ Please fill in all fields correctly.";
+        return;
+      }
+
+      // Calculate gain and offset
+      const gain = (actual2 - actual1) / (raw2 - raw1);
+      const offset = actual1 - (gain * raw1);
+
+      const calibrated = (rawInput * gain) + offset;
+
+      document.getElementById("output").innerText = 
+        `✅ Calibrated Value: ${calibrated.toFixed(2)}`;
+    }
+  </script>
+
+</body>
+</html>
