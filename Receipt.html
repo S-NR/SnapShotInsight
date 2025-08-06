@@ -2,70 +2,86 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Adventure Receipt - Chikkamagaluru</title>
+  <title>Adventure Receipt</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     body {
-      font-family: "Segoe UI", sans-serif;
-      background-color: #f4f4f4;
-      padding: 20px;
-    }
-    .receipt {
-      background: #ffffff;
-      max-width: 600px;
-      margin: auto;
+      font-family: 'Arial', sans-serif;
+      background: #ececec;
+      margin: 0;
       padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
-    .receipt h1 {
-      text-align: center;
-      font-size: 1.8em;
-      margin-bottom: 5px;
+    .receipt-container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
     }
-    .receipt h2 {
+    .header {
       text-align: center;
-      font-size: 1.2em;
-      color: #2e7d32;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
       margin-bottom: 20px;
     }
-    .info p {
+    .header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+    .header h2 {
+      margin: 5px 0;
+      font-size: 16px;
+      color: #2e7d32;
+    }
+    .details, .footer {
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .details p {
       margin: 5px 0;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 20px 0;
+      font-size: 14px;
     }
     th, td {
-      padding: 10px;
+      padding: 8px;
       border: 1px solid #ccc;
-      text-align: left;
+    }
+    th {
+      background-color: #f8f8f8;
     }
     .right {
       text-align: right;
     }
     .total {
-      background: #e8f5e9;
       font-weight: bold;
+      background-color: #e0f7e9;
     }
-    .note, .footer {
-      font-size: 0.9em;
-      color: #555;
-      margin-top: 10px;
+    .note {
+      font-size: 12px;
+      color: #777;
     }
     .footer {
       text-align: center;
-      margin-top: 30px;
+      font-size: 13px;
+      border-top: 1px dashed #aaa;
+      padding-top: 10px;
+      color: #555;
     }
   </style>
 </head>
 <body>
-  <div class="receipt">
-    <h1>Adventure Activities Receipt</h1>
-    <h2>Coffee Grove Retreat, Chikkamagaluru</h2>
+  <div class="receipt-container">
+    <div class="header">
+      <h1>Adventure Activities Receipt</h1>
+      <h2>Coffee Grove Retreat, Chikkamagaluru</h2>
+    </div>
 
-    <div class="info">
+    <div class="details">
       <p><strong>Guest Name:</strong> Nishma</p>
       <p><strong>Date:</strong> August 6, 2025</p>
       <p><strong>Members:</strong> 3 Adults, 1 Kid (4 years)</p>
@@ -89,7 +105,7 @@
           <td class="right">4,500</td>
         </tr>
         <tr>
-          <td>Kid Below 5 Years (Free)</td>
+          <td>Kid Below 5 Years</td>
           <td class="right">0</td>
           <td class="right">1</td>
           <td class="right">0</td>
@@ -104,13 +120,12 @@
         </tr>
         <tr class="total">
           <td colspan="3" class="right">Total Payable</td>
-          <td class="right"><strong>₹5,310</strong></td>
+          <td class="right">₹5,310</td>
         </tr>
       </tbody>
     </table>
 
-    <p class="note"><strong>Note:</strong> Resort stay charges are not included as this is a day activity only.</p>
-
+    <p class="note"><strong>Note:</strong> Resort stay charges not included. This is a day activity only.</p>
     <p><strong>Payment Mode:</strong> UPI</p>
     <p><strong>Transaction ID:</strong> TRX-CHIKK20250806</p>
 
