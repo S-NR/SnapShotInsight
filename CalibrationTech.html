@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Calibration Overview</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 40px;
+      background-color: #f4f4f4;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    .section {
+      background: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table, th, td {
+      border: 1px solid #aaa;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    code {
+      background: #eef;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📏 Calibration Overview</h1>
+
+  <div class="section">
+    <h2>🔧 What is Calibration?</h2>
+    <p>
+      Calibration is the process of adjusting and verifying a device or sensor to ensure its output matches a known standard. This is crucial for accurate measurements and consistent system behavior.
+    </p>
+  </div>
+
+  <div class="section">
+    <h2>🎯 Why is Calibration Needed?</h2>
+    <ul>
+      <li>✅ Ensure <strong>accuracy</strong> of sensor readings</li>
+      <li>✅ Maintain <strong>consistency</strong> across measurements</li>
+      <li>✅ Meet <strong>industry standards</strong> and regulations</li>
+      <li>✅ Compensate for <strong>offsets, gain errors, or drift</strong></li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>📐 Types of Calibration (with Formulas)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Calibration Type</th>
+          <th>Description</th>
+          <th>Formula</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Single-Point Calibration</td>
+          <td>Corrects only offset error</td>
+          <td><code>Corrected = Raw - Offset</code></td>
+        </tr>
+        <tr>
+          <td>Two-Point Calibration</td>
+          <td>Corrects both offset and gain (linear)</td>
+          <td><code>Corrected = (Raw × Gain) + Offset</code></td>
+        </tr>
+        <tr>
+          <td>Multi-Point Calibration</td>
+          <td>Used for slightly nonlinear devices</td>
+          <td><em>Uses interpolation between known values</em></td>
+        </tr>
+        <tr>
+          <td>Polynomial Calibration</td>
+          <td>Fits a curve for highly nonlinear devices</td>
+          <td><code>Corrected = a0 + a1×Raw + a2×Raw² + ...</code></td>
+        </tr>
+        <tr>
+          <td>Zero & Span Calibration</td>
+          <td>Industrial term for 2-point calibration</td>
+          <td>Same as 2-point formula</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>📊 Two-Point Calibration – In Detail</h2>
+    <p>This is the most common method used when sensors behave linearly.</p>
+    <ol>
+      <li>Take two reference points: <code>(Raw1, Actual1)</code> and <code>(Raw2, Actual2)</code></li>
+      <li>Calculate <strong>Gain</strong>:<br />
+        <code>Gain = (Actual2 - Actual1) / (Raw2 - Raw1)</code></li>
+      <li>Calculate <strong>Offset</strong>:<br />
+        <code>Offset = Actual1 - (Gain × Raw1)</code></li>
+      <li>Final formula:<br />
+        <code>Calibrated = (Raw × Gain) + Offset</code></li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>🧮 Example</h2>
+    <p>Given:</p>
+    <ul>
+      <li>Raw1 = 100, Actual1 = 0</li>
+      <li>Raw2 = 900, Actual2 = 100</li>
+      <li>Raw input = 500</li>
+    </ul>
+    <p>
+      Gain = (100 - 0) / (900 - 100) = 0.125<br />
+      Offset = 0 - (0.125 × 100) = -12.5<br />
+      <strong>Result:</strong> Calibrated = (500 × 0.125) - 12.5 = <code>50</code>
+    </p>
+  </div>
+
+</body>
+</html>
