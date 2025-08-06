@@ -1,138 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Adventure Receipt</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>Adventure Activity Receipt</title>
   <style>
+    @media print {
+      body {
+        width: 210mm;
+        height: 297mm;
+        margin: 20mm;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+      }
+    }
     body {
-      font-family: 'Arial', sans-serif;
-      background: #ececec;
-      margin: 0;
-      padding: 30px;
-    }
-    .receipt-container {
-      max-width: 500px;
+      max-width: 800px;
       margin: auto;
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
       padding: 20px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      border: 2px solid #444;
     }
-    .header {
+    h1, h2 {
       text-align: center;
-      border-bottom: 1px solid #ddd;
-      padding-bottom: 10px;
-      margin-bottom: 20px;
-    }
-    .header h1 {
       margin: 0;
-      font-size: 22px;
     }
-    .header h2 {
-      margin: 5px 0;
-      font-size: 16px;
-      color: #2e7d32;
+    hr {
+      margin: 15px 0;
     }
-    .details, .footer {
-      font-size: 14px;
-      margin-bottom: 20px;
+    .info, .cost {
+      margin: 15px 0;
     }
-    .details p {
-      margin: 5px 0;
-    }
-    table {
+    .cost-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
     }
-    th, td {
+    .cost-table th, .cost-table td {
+      border: 1px solid #444;
       padding: 8px;
-      border: 1px solid #ccc;
-    }
-    th {
-      background-color: #f8f8f8;
-    }
-    .right {
-      text-align: right;
-    }
-    .total {
-      font-weight: bold;
-      background-color: #e0f7e9;
-    }
-    .note {
-      font-size: 12px;
-      color: #777;
+      text-align: left;
     }
     .footer {
+      margin-top: 30px;
       text-align: center;
-      font-size: 13px;
-      border-top: 1px dashed #aaa;
-      padding-top: 10px;
-      color: #555;
+      font-style: italic;
     }
   </style>
 </head>
 <body>
-  <div class="receipt-container">
-    <div class="header">
-      <h1>Adventure Activities Receipt</h1>
-      <h2>Coffee Grove Retreat, Chikkamagaluru</h2>
-    </div>
 
-    <div class="details">
-      <p><strong>Guest Name:</strong> Nishma</p>
-      <p><strong>Date:</strong> August 6, 2025</p>
-      <p><strong>Members:</strong> 3 Adults, 1 Kid (4 years)</p>
-      <p><strong>Activities:</strong> Kayaking & Rafting, Zip-Line, Fishing, Plank Walk, Rope Net Traverse</p>
-    </div>
+  <h1>Highland Escape Resort</h1>
+  <h2>Adventure Activities Receipt</h2>
+  <hr>
 
-    <table>
-      <thead>
-        <tr>
-          <th>Description</th>
-          <th class="right">Rate (₹)</th>
-          <th class="right">Qty</th>
-          <th class="right">Amount (₹)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Adventure Activity Package (Adult)</td>
-          <td class="right">1,500</td>
-          <td class="right">3</td>
-          <td class="right">4,500</td>
-        </tr>
-        <tr>
-          <td>Kid Below 5 Years</td>
-          <td class="right">0</td>
-          <td class="right">1</td>
-          <td class="right">0</td>
-        </tr>
-        <tr>
-          <td colspan="3" class="right">Subtotal</td>
-          <td class="right">4,500</td>
-        </tr>
-        <tr>
-          <td colspan="3" class="right">GST (18%)</td>
-          <td class="right">810</td>
-        </tr>
-        <tr class="total">
-          <td colspan="3" class="right">Total Payable</td>
-          <td class="right">₹5,310</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <p class="note"><strong>Note:</strong> Resort stay charges not included. This is a day activity only.</p>
-    <p><strong>Payment Mode:</strong> UPI</p>
-    <p><strong>Transaction ID:</strong> TRX-CHIKK20250806</p>
-
-    <div class="footer">
-      Thank you for choosing Coffee Grove Retreat, Chikkamagaluru.<br>
-      We hope you had an adventurous and memorable day!
-    </div>
+  <div class="info">
+    <p><strong>Customer Name:</strong> Nishma</p>
+    <p><strong>Date:</strong> 06-August-2025</p>
+    <p><strong>Location:</strong> Highland Escape Resort, Chikkamagaluru</p>
+    <p><strong>Activities:</strong> Kayaking, Rafting, Zip Line, Fishing, Plank Walk, Rope Net Traverse</p>
+    <p><strong>Participants:</strong> 3 Adults + 1 Kid (4 years)</p>
   </div>
+
+  <div class="cost">
+    <table class="cost-table">
+      <tr>
+        <th>Description</th>
+        <th>Qty</th>
+        <th>Rate (₹)</th>
+        <th>Amount (₹)</th>
+      </tr>
+      <tr>
+        <td>Adult Adventure Pass</td>
+        <td>3</td>
+        <td>1800</td>
+        <td>5400</td>
+      </tr>
+      <tr>
+        <td>Kid Adventure Pass (Below 5)</td>
+        <td>1</td>
+        <td>1100</td>
+        <td>1100</td>
+      </tr>
+      <tr>
+        <th colspan="3" style="text-align:right;">Total</th>
+        <th>₹6,500</th>
+      </tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    <p>Thank you for choosing Highland Escape Resort for your adventure experience!</p>
+    <p>For support or queries, contact: +91-9876543210</p>
+  </div>
+
 </body>
-</html>
+  </html>
+  
