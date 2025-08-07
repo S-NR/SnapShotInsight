@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>5-Point Calibration Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    label, input {
+      display: block;
+      margin: 10px 0;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>🔧 5-Point Calibration Calculator (Linear Interpolation)</h2>
+
+  <!-- Calibration Points -->
+  <label>Raw1: <input type="number" id="raw1"></label>
+  <label>Actual1: <input type="number" id="actual1"></label>
+
+  <label>Raw2: <input type="number" id="raw2"></label>
+  <label>Actual2: <input type="number" id="actual2"></label>
+
+  <label>Raw3: <input type="number" id="raw3"></label>
+  <label>Actual3: <input type="number" id="actual3"></label>
+
+  <label>Raw4: <input type="number" id="raw4"></label>
+  <label>Actual4: <input type="number" id="actual4"></label>
+
+  <label>Raw5: <input type="number" id="raw5"></label>
+  <label>Actual5: <input type="number" id="actual5"></label>
+
+  <hr>
+
+  <label>New Raw Input: <input type="number" id="rawInput"></label>
+  <button onclick="calculate()">Calibrate</button>
+
+  <div class="result" id="output"></div>
+
+  <script>
+    function calculate() {
+      const raws = [
+        parseFloat(document.getElementById("raw1").value),
+        parseFloat(document.getElementById("raw2").value),
+        parseFloat(document.getElementById("raw3").value),
+        parseFloat(document.getElementById("raw4").value),
+        parseFloat(document.getElementById("raw5").value)
+      ];
+
+      const actuals = [
+        parseFloat(document.getElementById("actual1").value),
+        parseFloat(document.getElementById("actual2").value),
+        parseFloat(document.getElementById("actual3").value),
+        parseFloat(document.getElementById("actual4").value),
+        parseFloat(document.getElementById("actual5").value)
+      ];
+
+      const rawInput = parseFloat(document.getElementById("rawInput").value);
+
+      // Check for invalid inputs
+      if (raws.some(isNaN) || actuals.some(isNaN) || isNaN(rawInput)) {
+        document.getElementById("output").innerText = "❗ Please fill in all fields correctly.";
+        return;
+      }
+
+      // Sort by raw value (in case user entered unordered)
+      const combined = raws.map((r, i) => ({ raw: r, actual: actuals[i] }));
+      combined.sort((a, b) => a.raw - b.raw);
+
+      // Find segment to interpolate
+      for (let i = 0; i < combined.length - 1; i++) {
+        const r1 = combined[i].raw;
+        const r2 = combined[i + 1].raw;
+        const a1 = combined[i].actual;
+        const a2 = combined[i + 1].actual;
+
+        if (rawInput >= r1 && rawInput <= r2) {
+          const gain = (a2 - a1) / (r2 - r1);
+          const offset = a1 - gain * r1;
+          const calibrated = gain * rawInput + offset;
+
+          document.getElementById("output").innerText =
+            `✅ Calibrated Value: ${calibrated.toFixed(2)} (Interpolated between Raw${i+1} and Raw${i+2})`;
+          return;
+        }
+      }
+
+      document.getElementById("output").innerText = "⚠️ Raw input is outside calibration range.";
+    }
+  </script>
+
+</body>
+</html>
