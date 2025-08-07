@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>1-Point Calibration Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    label, input {
+      display: block;
+      margin: 10px 0;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📍 1-Point Calibration Calculator</h2>
+
+  <label for="rawRef">Reference Raw Value (Measured):</label>
+  <input type="number" id="rawRef" />
+
+  <label for="actualRef">Actual Known Value:</label>
+  <input type="number" id="actualRef" />
+
+  <hr>
+
+  <label for="rawInput">New Raw Input:</label>
+  <input type="number" id="rawInput" />
+
+  <button onclick="calculate()">Calibrate</button>
+
+  <div class="result" id="output"></div>
+
+  <script>
+    function calculate() {
+      const rawRef = parseFloat(document.getElementById("rawRef").value);
+      const actualRef = parseFloat(document.getElementById("actualRef").value);
+      const rawInput = parseFloat(document.getElementById("rawInput").value);
+
+      if (isNaN(rawRef) || isNaN(actualRef) || isNaN(rawInput)) {
+        document.getElementById("output").innerText = "❗ Please fill in all fields correctly.";
+        return;
+      }
+
+      const offset = rawRef - actualRef;
+      const calibrated = rawInput - offset;
+
+      document.getElementById("output").innerText =
+        `✅ Calibrated Value: ${calibrated.toFixed(2)} (Offset = ${offset.toFixed(2)})`;
+    }
+  </script>
+
+</body>
+</html>
