@@ -14,24 +14,41 @@
     </div>
 
   <!-- Calibration Points -->
-  <caliblabel>Raw1: <input type="number" id="raw1"></caliblabel>
-  <caliblabel>Actual1: <input type="number" id="actual1"></caliblabel>
+  <caliblabel for="rawRef">Raw 1: (Measured):</caliblabel>
+  <input type="number" id="rawRef" />
 
-  <caliblabel>Raw2: <input type="number" id="raw2"></caliblabel>
-  <caliblabel>Actual2: <input type="number" id="actual2"></caliblabel>
+  <caliblabel for="actualRef">Actual 1 Known Value:</caliblabel>
+  <input type="number" id="actualRef" />
 
-  <caliblabel>Raw3: <input type="number" id="raw3"></caliblabel>
-  <caliblabel>Actual3: <input type="number" id="actual3"></caliblabel>
+  <caliblabel for="rawRef">Raw 2: (Measured):</caliblabel>
+  <input type="number" id="rawRef" />
 
-  <caliblabel>Raw4: <input type="number" id="raw4"></caliblabel>
-  <caliblabel>Actual4: <input type="number" id="actual4"></caliblabel>
+  <caliblabel for="actualRef">Actual 2 Known Value:</caliblabel>
+  <input type="number" id="actualRef" />
 
-  <caliblabel>Raw5: <input type="number" id="raw5"></caliblabel>
-  <caliblabel>Actual5: <input type="number" id="actual5"></caliblabel>
+  <caliblabel for="rawRef">Raw 3: (Measured):</caliblabel>
+  <input type="number" id="rawRef" />
 
+  <caliblabel for="actualRef">Actual 3 Known Value:</caliblabel>
+  <input type="number" id="actualRef" />
+
+  <caliblabel for="rawRef">Raw 4: (Measured):</caliblabel>
+  <input type="number" id="rawRef" />
+
+  <caliblabel for="actualRef">Actual 4 Known Value:</caliblabel>
+  <input type="number" id="actualRef" />
+
+  <caliblabel for="rawRef">Raw 5: (Measured):</caliblabel>
+  <input type="number" id="rawRef" />
+
+  <caliblabel for="actualRef">Actual 5 Known Value:</caliblabel>
+  <input type="number" id="actualRef" />
+    
   <hr>
 
-  <caliblabel>New Raw Input: <input type="number" id="rawInput"></caliblabel>
+  <caliblabel for="actualRef">New Raw Input: </caliblabel>
+  <input type="number" id="rawInput" />
+
   <button onclick="calculate()">Calibrate</button>
 
   <div class="result" id="output"></div>
