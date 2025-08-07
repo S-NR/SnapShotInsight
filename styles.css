@@ -234,7 +234,7 @@ th {
   overflow-x: auto;
   margin: 0;
 }
-label, input {
+caliblabel, calibinput {
       display: block;
       margin: 10px 0;
     }
