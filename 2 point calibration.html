@@ -3,41 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <title>2-Point Calibration Tool</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 40px;
-    }
-    label, input {
-      display: block;
-      margin: 10px 0;
-    }
-    .result {
-      margin-top: 20px;
-      font-weight: bold;
-      color: green;
-    }
-  </style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body>
+<body>  
+  <div class="overlay">
+    
+    <div class="header">
+      <h1> 📍 2-Point Calibration Calculator </h1>
+    </div>
 
-  <h2>🔧 2-Point Calibration Calculator</h2>
-
-  <label for="raw1">Raw1:</label>
+  <!-- Calibration Points -->
+  <caliblabel for="rawRef">Raw 1: (Measured):</caliblabel>
   <input type="number" id="raw1" />
 
-  <label for="actual1">Actual1:</label>
+  <caliblabel for="actualRef">Actual 1 Known Value:</caliblabel>
   <input type="number" id="actual1" />
 
-  <label for="raw2">Raw2:</label>
+  <caliblabel for="rawRef">Raw 2: (Measured):</caliblabel>
   <input type="number" id="raw2" />
 
-  <label for="actual2">Actual2:</label>
+  <caliblabel for="actualRef">Actual 2 Known Value:</caliblabel>
   <input type="number" id="actual2" />
 
   <hr>
 
-  <label for="rawInput">New Raw Input:</label>
+  <caliblabel for="rawInput">New Raw Input:</caliblabel>
   <input type="number" id="rawInput" />
 
   <button onclick="calculate()">Calibrate</button>
@@ -67,6 +58,6 @@
         `✅ Calibrated Value: ${calibrated.toFixed(2)}`;
     }
   </script>
-
+  </div>
 </body>
 </html>
