@@ -234,6 +234,15 @@ th {
   overflow-x: auto;
   margin: 0;
 }
+label, input {
+      display: block;
+      margin: 10px 0;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
 
 
 @media screen and (max-width: 786px) {
