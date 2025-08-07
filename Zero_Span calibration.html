@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zero and Span Calibration Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+    }
+    label, input {
+      display: block;
+      margin: 10px 0;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>📏 Zero & Span Calibration Tool</h2>
+
+  <label for="zeroRaw">Zero Raw Value (raw at 0% input):</label>
+  <input type="number" id="zeroRaw" />
+
+  <label for="spanRaw">Span Raw Value (raw at 100% input):</label>
+  <input type="number" id="spanRaw" />
+
+  <label for="spanActual">Span Actual Value (e.g. 100, 500 etc):</label>
+  <input type="number" id="spanActual" />
+
+  <hr>
+
+  <label for="rawInput">New Raw Input:</label>
+  <input type="number" id="rawInput" />
+
+  <button onclick="calculate()">Calibrate</button>
+
+  <div class="result" id="output"></div>
+
+  <script>
+    function calculate() {
+      const zeroRaw = parseFloat(document.getElementById("zeroRaw").value);
+      const spanRaw = parseFloat(document.getElementById("spanRaw").value);
+      const spanActual = parseFloat(document.getElementById("spanActual").value);
+      const rawInput = parseFloat(document.getElementById("rawInput").value);
+
+      if (isNaN(zeroRaw) || isNaN(spanRaw) || isNaN(spanActual) || isNaN(rawInput)) {
+        document.getElementById("output").innerText = "❗ Please fill in all fields correctly.";
+        return;
+      }
+
+      const spanRange = spanRaw - zeroRaw;
+
+      if (spanRange === 0) {
+        document.getElementById("output").innerText = "❗ Invalid span: Zero and Span raw values cannot be the same.";
+        return;
+      }
+
+      const calibrated = (rawInput - zeroRaw) * (spanActual / spanRange);
+
+      document.getElementById("output").innerText =
+        `✅ Calibrated Value: ${calibrated.toFixed(2)}`;
+    }
+  </script>
+
+</body>
+</html>
