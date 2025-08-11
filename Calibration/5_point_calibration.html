@@ -53,6 +53,20 @@
 
   <div class="result" id="output"></div>
 
+    <div class="waveform">
+      <b>Formula:</b><br>
+Interpolated Value = value between nearest calibration points using linear interpolation
+</div>
+<div class="waveform">
+<b>Example:</b><br>
+Table:<br>
+90°C → 92°C<br>
+150°C → 153°C<br>
+If measured = 120°C, interpolate between 90°C and 150°C:<br>
+Correction factor = (153-92)/(150-90) = 61/60 ≈ 1.0167<br>
+Corrected ≈ 92 + (120-90) × 1.0167 ≈ 122.5°C
+</div>
+    
   <script>
     function calculate() {
       const raws = [
