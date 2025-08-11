@@ -243,8 +243,8 @@ caliblabel, calibinput {
       font-weight: bold;
       color: green;
     }
-.formula { background: #eef; padding: 10px; border-left: 4px solid #336699; margin-bottom: 15px; }
-    .example { background: #f9f9f9; padding: 10px; border-left: 4px solid #4CAF50; margin-bottom: 15px; }
+.formula {  border-left: 4px solid #336699; margin-bottom: 15px; }
+    .example {  border-left: 4px solid #4CAF50; margin-bottom: 15px; }
 
 
 @media screen and (max-width: 786px) {
