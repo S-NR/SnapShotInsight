@@ -28,6 +28,18 @@
 
   <div class="result" id="output"></div>
 
+    <h3>1. One-Point Calibration</h3>
+<p>Uses a single known standard point to adjust the sensor's output. Assumes slope remains the same, only offset is corrected.</p>
+<div class="formula">
+Formula: <code>Corrected Value = Measured Value + (Reference - Measured at Cal Point)</code>
+</div>
+<div class="example">
+<b>Example:</b><br>
+Measured value at reference 100°C = 98°C<br>
+Offset = 100 - 98 = 2°C<br>
+If sensor reads 150°C, corrected value = 150 + 2 = 152°C
+</div>
+    
   <script>
     function calculate() {
       const rawRef = parseFloat(document.getElementById("rawRef").value);
