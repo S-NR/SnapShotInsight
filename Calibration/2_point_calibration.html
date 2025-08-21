@@ -16,6 +16,35 @@
       <h1> 📍 2-Point Calibration Calculator </h1>
     </div>
 
+      <div class="section">
+    <h2>📊 Two-Point Calibration – In Detail</h2>
+    <p>This is the most common method used when sensors behave linearly.</p>
+    <ol>
+      <li>Take two reference points: <code>(Raw1, Actual1)</code> and <code>(Raw2, Actual2)</code></li>
+      <li>Calculate <strong>Gain</strong>:<br />
+        <code>Gain = (Actual2 - Actual1) / (Raw2 - Raw1)</code></li>
+      <li>Calculate <strong>Offset</strong>:<br />
+        <code>Offset = Actual1 - (Gain × Raw1)</code></li>
+      <li>Final formula:<br />
+        <code>Calibrated = (Raw × Gain) + Offset</code></li>
+    </ol>
+  </div>
+
+  <div class="section">
+    <h2>🧮 Example</h2>
+    <p>Given:</p>
+    <ul>
+      <li>Raw1 = 100, Actual1 = 0</li>
+      <li>Raw2 = 900, Actual2 = 100</li>
+      <li>Raw input = 500</li>
+    </ul>
+    <p>
+      Gain = (100 - 0) / (900 - 100) = 0.125<br />
+      Offset = 0 - (0.125 × 100) = -12.5<br />
+      <strong>Result:</strong> Calibrated = (500 × 0.125) - 12.5 = <code>50</code>
+    </p>
+  </div>
+  
   <!-- Calibration Points -->
   <caliblabel for="rawRef">Raw 1: (Measured):</caliblabel>
   <input type="number" id="raw1" />
@@ -48,8 +77,8 @@
 <b>Example:</b><br>
       Point 1: Measured=98°C, Reference=100°C<br>
       Point 2: Measured=198°C, Reference=200°C<br>
-        m = (200 - 100) / (198 - 98) = 100 / 100 = 1<br>
-        b = 100 - (1 × 98) = 2<br>
+            m = (200 - 100) / (198 - 98) = 100 / 100 = 1<br>
+            b = 100 - (1 × 98) = 2<br>
 
       If measured = 150°C → Corrected = 1 × 150 + 2 = 152°C
 </div>
