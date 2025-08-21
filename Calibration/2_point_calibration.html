@@ -11,6 +11,9 @@
     
     <div class="header">
       <h1> 📍 2-Point Calibration Calculator </h1>
+      <div class="button-container">
+        <button onclick="location.href='Calibration/Calibration_method.html'">📘 2 point calibration Flow</button>
+      </div>
     </div>
 
   <!-- Calibration Points -->
@@ -38,16 +41,17 @@
     <div class="waveform">
 <b>Formula:</b><br>
       Slope (<i>m</i>) = (Y₂ - Y₁) / (X₂ - X₁) <br>
-Offset (<i>b</i>) = Y₁ - m × X₁ <br>
-Corrected Value = m × Measured + b
+      Offset (<i>b</i>) = Y₁ - m × X₁ <br>
+      Corrected Value = m × Measured + b
 </div>
 <div class="waveform">
 <b>Example:</b><br>
-Point 1: Measured=98°C, Reference=100°C<br>
-Point 2: Measured=198°C, Reference=200°C<br>
-m = (200 - 100) / (198 - 98) = 100 / 100 = 1<br>
-b = 100 - (1 × 98) = 2<br>
-If measured = 150°C → Corrected = 1 × 150 + 2 = 152°C
+      Point 1: Measured=98°C, Reference=100°C<br>
+      Point 2: Measured=198°C, Reference=200°C<br>
+        m = (200 - 100) / (198 - 98) = 100 / 100 = 1<br>
+        b = 100 - (1 × 98) = 2<br>
+
+      If measured = 150°C → Corrected = 1 × 150 + 2 = 152°C
 </div>
     
   <script>
