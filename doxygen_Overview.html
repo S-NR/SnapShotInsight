@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Doxygen — Complete Guide From Scratch</title>
+  <style>
+    :root{
+      --bg:#0b1220;--panel:#0f172a;--panel2:#0b1530;--text:#e5edf7;--muted:#9fb0c9;--border:#1e2a45;--accent:#7dd3fc;--accent2:#a78bfa;--ok:#34d399;--warn:#fbbf24;--bad:#fb7185
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#0b1430 60%,var(--bg));color:var(--text);font:500 16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    .wrap{max-width:1080px;margin:auto;padding:32px}
+    h1{margin:0 0 10px;font-size:clamp(26px,3.4vw,40px)}
+    p.lead{margin:0 0 18px;color:var(--muted)}
+    .card{background:linear-gradient(180deg,var(--panel),#0c1735);border:1px solid var(--border);border-radius:14px;padding:18px;margin:16px 0;box-shadow:0 10px 30px #0005}
+    h2{margin:0 0 10px;font-size:clamp(18px,2.4vw,26px)}
+    h3{margin:16px 0 8px;font-size:clamp(16px,2vw,22px)}
+    ol,ul{margin:8px 0 0 22px}
+    pre{background:#0b1329;border:1px solid var(--border);padding:14px;border-radius:12px;overflow:auto}
+    code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    code.inline{padding:.15rem .4rem;background:#0b1329;border:1px solid var(--border);border-radius:8px}
+    a{color:var(--accent)}
+    .callout{border:1px dashed var(--border);background:#0b1426;border-radius:12px;padding:12px;color:#cbd5e1}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+    .tag{display:inline-block;padding:.15rem .5rem;border:1px solid var(--border);border-radius:999px;color:var(--muted);font-size:12px}
+    .ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+    .kbd{border:1px solid var(--border);border-bottom-width:2px;padding:.05rem .35rem;border-radius:6px;background:#0b1328}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Doxygen — Complete Guide From Scratch</h1>
+    <p class="lead">Understand what Doxygen is, why to use it, how it works, and how to produce HTML and PDF docs with practical examples.</p>
+
+    <div class="card">
+      <h2>1) What is Doxygen?</h2>
+      <p><strong>Doxygen</strong> is a documentation generator that reads your source code, extracts specially formatted comments (<em>doxygen comments</em>), and produces documentation in multiple formats such as <strong>HTML</strong> (web) and <strong>PDF</strong> (printable manual via LaTeX).</p>
+      <div class="grid">
+        <div>
+          <h3>Key Benefits</h3>
+          <ul>
+            <li>Keeps docs <strong>in sync</strong> with code.</li>
+            <li>Automatic <strong>cross-references</strong> (functions ↔ files ↔ classes).</li>
+            <li>Optional <strong>graphs</strong> (call/class/dependency) via Graphviz.</li>
+            <li>Supports many languages: C/C++, C#, Java, Python, IDL, etc.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Typical Outputs</h3>
+          <ul>
+            <li>HTML site with search</li>
+            <li>LaTeX → PDF manual</li>
+            <li>RTF, man pages, XML</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>2) How Doxygen Works (Conceptual)</h2>
+      <ol>
+        <li>You add structured comments near code elements (files, functions, structs, classes).</li>
+        <li>Doxygen scans your source tree using a configuration file (<code class="inline">Doxyfile</code>).</li>
+        <li>It generates HTML and/or LaTeX. LaTeX can then be compiled to PDF.</li>
+      </ol>
+      <pre><code>// Example (C)
+/**
+ * @brief Adds two numbers
+ * @param a First integer
+ * @param b Second integer
+ * @return Sum of a and b
+ */
+int add(int a, int b);
+      </code></pre>
+    </div>
+
+    <div class="card">
+      <h2>3) Installation (Windows)</h2>
+      <div class="grid">
+        <div>
+          <h3>Doxygen</h3>
+          <ol>
+            <li>Download and install from the official site.</li>
+            <li>Optional: add <code class="inline">doxygen.exe</code> to your <span class="kbd">PATH</span>.</li>
+          </ol>
+        </div>
+        <div>
+          <h3>LaTeX (for PDF)</h3>
+          <ol>
+            <li>Install <strong>MiKTeX</strong> (lighter) or <strong>TeX Live</strong>.</li>
+            <li>Enable <em>Install missing packages on the fly</em> and ensure binaries are in <span class="kbd">PATH</span>.</li>
+            <li>Verify with: <code class="inline">pdflatex --version</code></li>
+          </ol>
+        </div>
+      </div>
+      <div class="callout">For diagrams, install <strong>Graphviz</strong> and enable DOT support in <code class="inline">Doxyfile</code> (see below).</div>
+    </div>
+
+    <div class="card">
+      <h2>4) Minimal Workflow</h2>
+      <ol>
+        <li><strong>Create</strong> a config file in your project root: <code class="inline">doxygen -g Doxyfile</code></li>
+        <li><strong>Edit</strong> the key settings (see sample below).</li>
+        <li><strong>Run</strong> Doxygen: <code class="inline">doxygen Doxyfile</code></li>
+        <li><strong>Open</strong> <code class="inline">docs/html/index.html</code> for web docs.</li>
+        <li><strong>Build PDF</strong>: go to <code class="inline">docs/latex</code> and run <code class="inline">make.bat</code> or <code class="inline">pdflatex refman.tex</code> (twice).</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <h2>5) Sample <code class="inline">Doxyfile</code> (Good Defaults)</h2>
+      <pre><code># --- Project ---
+PROJECT_NAME           = "MyProject"
+PROJECT_BRIEF          = "Firmware and API Documentation"
+OUTPUT_DIRECTORY       = docs
+OPTIMIZE_OUTPUT_FOR_C  = YES
+JAVADOC_AUTOBRIEF      = YES
+WARN_IF_UNDOCUMENTED   = YES
+WARN_AS_ERROR          = NO
+
+# --- Inputs ---
+INPUT                  = ./Sources ./Include
+FILE_PATTERNS          = *.h *.c *.hpp *.cpp
+RECURSIVE              = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = YES
+
+# --- HTML ---
+GENERATE_HTML          = YES
+SEARCHENGINE           = YES
+GENERATE_TREEVIEW      = YES
+
+# --- LaTeX/PDF ---
+GENERATE_LATEX         = YES
+LATEX_BATCHMODE        = YES
+PDF_HYPERLINKS         = YES
+USE_PDFLATEX           = YES
+
+# --- Graphs (needs Graphviz) ---
+HAVE_DOT               = YES
+DOT_IMAGE_FORMAT       = svg
+CALL_GRAPH             = YES
+CALLER_GRAPH           = YES
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = YES
+
+# --- Misc ---
+QUIET                  = NO
+      </code></pre>
+    </div>
+
+    <div class="card">
+      <h2>6) Comment Styles & Common Tags</h2>
+      <div class="grid">
+        <div>
+          <h3>Block &amp; Line Comments</h3>
+          <pre><code>/** Brief description */
+void foo(void);
+
+/// Brief description (C++ style)
+void bar();
+          </code></pre>
+        </div>
+        <div>
+          <h3>Popular Tags</h3>
+          <ul>
+            <li><code class="inline">@brief</code> One-liner summary</li>
+            <li><code class="inline">@param</code> Document parameters</li>
+            <li><code class="inline">@return</code> Return value</li>
+            <li><code class="inline">@note</code>, <code class="inline">@warning</code>, <code class="inline">@todo</code></li>
+            <li><code class="inline">@file</code> File-level docs</li>
+            <li><code class="inline">@defgroup</code>, <code class="inline">@ingroup</code> Grouping APIs</li>
+          </ul>
+        </div>
+      </div>
+      <h3>Function Example</h3>
+      <pre><code>/**
+ * @brief Initialize UART at a given baud rate.
+ * @param baud Desired baud rate (e.g., 115200)
+ * @return 0 on success, negative on error
+ */
+int uart_init(uint32_t baud);
+      </code></pre>
+      <h3>File Example</h3>
+      <pre><code>/**
+ * @file drivers/uart.c
+ * @brief UART driver implementation for HS25 platform.
+ * @author Team
+ */
+      </code></pre>
+    </div>
+
+    <div class="card">
+      <h2>7) Build Outputs</h2>
+      <div class="grid">
+        <div>
+          <h3>HTML</h3>
+          <pre><code>docs/html/index.html</code></pre>
+        </div>
+        <div>
+          <h3>PDF</h3>
+          <ol>
+            <li><code class="inline">cd docs/latex</code></li>
+            <li>Windows: <code class="inline">make.bat</code> <em>or</em> <code class="inline">pdflatex refman.tex</code> (run twice)</li>
+            <li>Output: <code class="inline">refman.pdf</code></li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>8) Advanced Features</h2>
+      <ul>
+        <li><strong>Custom Pages</strong>: Add Markdown/HTML content via <code class="inline">.dox</code> or <code class="inline">.md</code> files and list them in <code class="inline">INPUT</code>.</li>
+        <li><strong>Diagrams</strong>: Enable DOT (Graphviz) to render call graphs and class diagrams.</li>
+        <li><strong>Groups/Modules</strong>: Use <code class="inline">@defgroup</code> and <code class="inline">@ingroup</code> to organize APIs.</li>
+        <li><strong>Private APIs</strong>: Toggle visibility with <code class="inline">EXTRACT_PRIVATE</code>.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>9) Best Practices</h2>
+      <ul>
+        <li>Keep <em>brief</em> lines short; add details in the body.</li>
+        <li>Document behavior, constraints, error codes, and units.</li>
+        <li>Use consistent tense and style; avoid duplicating code in comments.</li>
+        <li>Run Doxygen in CI to keep docs updated; fail on undocumented if needed.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>10) Troubleshooting</h2>
+      <ul>
+        <li><strong class="bad">'pdflatex' is not recognized</strong> → Install MiKTeX/TeX Live and add to PATH, reopen terminal.</li>
+        <li><strong>Graphs not showing</strong> → Install Graphviz, set <code class="inline">HAVE_DOT=YES</code>, and ensure <code class="inline">dot</code> is in PATH.</li>
+        <li><strong>Empty docs</strong> → Check <code class="inline">INPUT</code>, <code class="inline">FILE_PATTERNS</code>, and <code class="inline">RECURSIVE</code> settings.</li>
+        <li><strong>Functions missing</strong> → Ensure comments are in a recognized style and <code class="inline">EXTRACT_ALL=YES</code> (if needed).</li>
+        <li><strong>Broken links/TOC</strong> → Run <code class="inline">pdflatex</code> multiple times or just use <code class="inline">make.bat</code>.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>11) Mini Project Structure Example</h2>
+      <pre><code>MyProject/
+├─ Doxyfile
+├─ Sources/
+│  ├─ main.c
+│  ├─ drivers/
+│  │  └─ uart.c
+│  └─ include/
+│     └─ uart.h
+└─ docs/ (generated)
+   ├─ html/
+   └─ latex/
+      </code></pre>
+    </div>
+
+    <div class="card">
+      <h2>12) Quick Start Commands</h2>
+      <pre><code># In project root
+> doxygen -g Doxyfile
+# edit Doxyfile (see sample above)
+> doxygen Doxyfile
+# HTML: open docs/html/index.html
+# PDF:
+> cd docs/latex
+> make.bat   # or: pdflatex refman.tex (run twice)
+      </code></pre>
+    </div>
+
+    <div class="card">
+      <h2>13) Optional: No-LaTeX PDF (RTF route)</h2>
+      <p>Set <code class="inline">GENERATE_RTF = YES</code>, run Doxygen, open the <code class="inline">.rtf</code> in Word, then export as PDF.</p>
+    </div>
+
+    <p class="lead">That’s it — you now have the concepts, configuration, and commands to produce both HTML and PDF docs from your code comments.</p>
+  </div>
+</body>
+</html>
