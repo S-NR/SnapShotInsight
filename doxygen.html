@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Generate PDF from Doxygen (Windows)</title>
+  <style>
+    :root{
+      --bg:#0b1220; --card:#0f172a; --muted:#94a3b8; --text:#e2e8f0; --accent:#22d3ee; --accent-2:#60a5fa;
+      --border:#1f2a44; --green:#34d399; --red:#fb7185; --yellow:#fbbf24
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#0e1530 60%,#0b1220);color:var(--text);
+         font:500 16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,sans-serif}
+    .wrap{max-width:1000px;margin:auto;padding:32px}
+    header{display:flex;gap:18px;align-items:center;margin-bottom:24px}
+    .dot{width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#fff3,transparent),var(--accent)}
+    h1{font-size:clamp(24px,3vw,36px);margin:0;letter-spacing:.3px}
+    p.lead{color:var(--muted);margin:.3rem 0 1.2rem}
+    .card{background:linear-gradient(180deg,#0f1a35, #0d1630);border:1px solid var(--border);border-radius:16px;padding:22px;margin:18px 0;box-shadow:0 8px 30px #0006}
+    h2{font-size:clamp(18px,2.4vw,24px);margin:0 0 10px}
+    ol,ul{margin:8px 0 0 22px}
+    code, pre{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace}
+    pre{background:#0b1328;border:1px solid var(--border);padding:14px;border-radius:12px;overflow:auto}
+    code.inline{padding:.2rem .4rem;background:#0b1328;border:1px solid var(--border);border-radius:8px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+    .tag{display:inline-block;padding:.15rem .5rem;border:1px solid var(--border);border-radius:999px;color:var(--muted);font-size:12px}
+    .ok{color:var(--green)} .warn{color:var(--yellow)} .bad{color:var(--red)}
+    .footer{color:#9aa7bd;font-size:13px;margin-top:24px}
+    .kbd{border:1px solid var(--border);border-bottom-width:2px;padding:.05rem .35rem;border-radius:6px;background:#0b1328}
+    a{color:var(--accent-2);text-decoration:none}
+    a:hover{text-decoration:underline}
+    .hr{height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);margin:22px 0}
+    .callout{border:1px dashed var(--border);border-radius:14px;padding:14px;background:#0b1426;color:#cbd5e1}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="dot" aria-hidden="true"></div>
+      <div>
+        <h1>Generate a PDF from Doxygen (Windows)</h1>
+        <p class="lead">Doxygen → LaTeX → PDF using MiKTeX. Copy‑paste friendly commands included.</p>
+      </div>
+    </header>
+
+    <div class="card">
+      <h2>Prerequisites</h2>
+      <ul>
+        <li>Doxygen is installed and a <code class="inline">Doxyfile</code> exists in your project.</li>
+        <li>Enable LaTeX output in <code class="inline">Doxyfile</code>:</li>
+      </ul>
+      <pre><code>GENERATE_HTML  = YES
+GENERATE_LATEX = YES
+# Optional, recommended to keep output tidy
+OUTPUT_DIRECTORY = docs
+      </code></pre>
+    </div>
+
+    <div class="card">
+      <h2>1) Install LaTeX (MiKTeX)</h2>
+      <ol>
+        <li>Download and install <a href="https://miktex.org/download" target="_blank" rel="noopener">MiKTeX</a>.</li>
+        <li>During setup, choose <em>Install missing packages on the fly → Yes</em> and <em>Add MiKTeX to PATH</em>.</li>
+      </ol>
+      <div class="callout">You can use TeX Live instead, but it’s a much larger download.</div>
+    </div>
+
+    <div class="card">
+      <h2>2) Verify <code class="inline">pdflatex</code> is available</h2>
+      <pre><code>C:\&gt; pdflatex --version
+      </code></pre>
+      <p>
+        If you see version info (e.g., <span class="tag">MiKTeX‑pdfTeX</span>), you’re good. If not, add MiKTeX’s <code class="inline">bin\x64</code> folder to your <span class="kbd">PATH</span> via
+        <em>System Properties → Environment Variables</em>, then open a new terminal and run
+        <code class="inline">where pdflatex</code>.
+      </p>
+    </div>
+
+    <div class="card">
+      <h2>3) Generate LaTeX with Doxygen</h2>
+      <pre><code># From your project root (where Doxyfile lives)
+&gt; doxygen Doxyfile
+
+# Expected folders (if OUTPUT_DIRECTORY=docs)
+./docs/html/
+./docs/latex/
+      </code></pre>
+    </div>
+
+    <div class="card">
+      <h2>4) Build the PDF</h2>
+      <p>Go to the LaTeX output folder and use the generated build script:</p>
+      <pre><code>&gt; cd "D:\Projects\Head start training\a3_demo_project\Technical\Sources\Software\HS25_A3_Demo_Project\docs\latex"
+&gt; make.bat
+      </code></pre>
+      <p>Alternatively, build manually:</p>
+      <pre><code>&gt; pdflatex refman.tex
+&gt; makeindex refman.idx
+&gt; pdflatex refman.tex
+&gt; pdflatex refman.tex
+      </code></pre>
+      <p class="ok">Output: <code class="inline">refman.pdf</code> in the same <code class="inline">latex</code> folder.</p>
+    </div>
+
+    <div class="card">
+      <h2>Troubleshooting</h2>
+      <ul>
+        <li><strong class="bad">'pdflatex' is not recognized…</strong> → MiKTeX not installed or not in PATH. Add e.g. <code class="inline">C:\\Program Files\\MiKTeX\\miktex\\bin\\x64</code> to PATH and reopen terminal.</li>
+        <li><strong>Missing LaTeX packages</strong> → Allow MiKTeX to install on-demand when prompted, or pre‑install via MiKTeX Console.</li>
+        <li><strong>Cross‑refs/TOC wrong</strong> → Run <code class="inline">pdflatex</code> multiple times (Doxygen’s <code class="inline">make.bat</code> does this).</li>
+        <li><strong>Spaces in paths</strong> → Always wrap with quotes: <code class="inline">"D:\\path with spaces\\..."</code>.</li>
+        <li><strong>Clean build</strong> → Delete aux files then rebuild:
+          <pre><code>del /s /f *.ps *.dvi *.aux *.toc *.idx *.ind *.ilg *.log *.out *.brf *.blg *.bbl refman.pdf</code></pre>
+        </li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Optional: Quick RTF → PDF (no LaTeX)</h2>
+      <p>If you can’t install LaTeX, enable RTF output and print to PDF:</p>
+      <pre><code>GENERATE_RTF = YES
+      </code></pre>
+      <p>Run Doxygen, open the generated <code class="inline">.rtf</code> in Word, then <em>Save as → PDF</em>.</p>
+    </div>
+
+    <div class="card">
+      <h2>Helpful <code class="inline">Doxyfile</code> snippet</h2>
+      <pre><code># --- Project ---
+PROJECT_NAME      = "HS25_A3_Demo_Project"
+OUTPUT_DIRECTORY  = docs
+OPTIMIZE_OUTPUT_FOR_C = YES
+
+# --- Inputs ---
+INPUT             = ./Sources ./Include
+FILE_PATTERNS     = *.h *.c *.hpp *.cpp
+EXTRACT_ALL       = YES
+RECURSIVE         = YES
+
+# --- Outputs ---
+GENERATE_HTML     = YES
+GENERATE_LATEX    = YES
+HAVE_DOT          = YES
+DOT_IMAGE_FORMAT  = svg
+CALL_GRAPH        = YES
+CALLER_GRAPH      = YES
+      </code></pre>
+    </div>
+
+    <div class="hr"></div>
+    <p class="footer">Tip: Commit the generated <code class="inline">docs/</code> to a separate branch (or publish only <code class="inline">docs/html</code> via GitHub Pages) and keep LaTeX artifacts out of main.</p>
+  </div>
+</body>
+</html>
