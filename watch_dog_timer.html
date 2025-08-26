@@ -229,6 +229,46 @@
         </tr>
       </tbody>
     </table>
+
+    <h2>Time selction for WDT</h2>
+    <p>The best time configuration for a Watchdog Timer (WDT) really depends on your application and how often your system can safely be expected to refresh the watchdog. <br>
+      There isn’t a single "universal" best time — instead, you balance safety (resetting quickly if stuck) and practicality (not resetting during normal long operations).</p>
+    
+    <h3>General Guidelines</h3>
+    <ul>
+      <li><strong>WDT timeout > longest expected blocking task:</strong> <br>
+        Pick a timeout slightly longer than your worst-case execution time of the main loop, task, or critical function.
+        Example: If your loop normally takes 50 ms but can occasionally take 200 ms, set WDT ≥ 300 ms.</li>
+      <li><strong>Avoid too short timeouts:</strong> <br>
+        If set too short, normal delays (e.g., communication wait, flash writes, sensor response) may falsely trigger resets.</li>
+      <li><strong>Avoid too long timeouts:</strong> <br>
+        If set too long, it defeats the purpose — the system may stay stuck for several seconds before recovery.</li>
+      <li>✅ Used for motor control</li>
+    </ul>
+
+    <h3>Typical Ranges</h3>
+      <ul>
+      <li><strong>Real-time / safety-critical (motor control, medical, etc.):</strong> <br>
+        10 ms – 500 ms
+        (Fast recovery is required. Usually paired with a window watchdog.)</li>
+
+      <li><strong> General embedded systems (sensors, communication, IoT):</strong> <br>
+        100 ms – 2 s</li>
+
+      <li><strong></strong> Systems with long transactions (flash writes, firmware updates, slow comms):</strong> <br>
+        1 s – 10 s</li>
+      </ul>
+
+        <h3>Practical Tip</h3>
+        Many designs use:
+        <ul>
+          <li>Main loop / RTOS task runs every 10–100 ms → WDT = 500 ms to 2 s</li>
+          <li>Heartbeat or periodic ISR “kicks” to refresh WDT</li>
+          <li>Sometimes window WDT (must refresh within a time window, not too fast or too slow) for better fault detection</li>
+        </ul>
+
+        <h3>Set WDT to about 2× the maximum expected execution time of your longest normal operation.</h3>
+
   </div>
 </body>
 </html>
