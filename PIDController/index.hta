@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>PID Controller - Overview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>  
+  <link rel="stylesheet" href="styles.css" />
+  <script type="text/javascript">
+    function runTouchGFX() {
+      try {
+        var shell = new ActiveXObject("WScript.Shell");
+        shell.Run("PIDController\\TOUCHGFX.exe");
+      } catch(e) {
+        alert("Unable to run the EXE. Please make sure you opened this file as .hta and the path is correct.");
+      }
+    }
+  </script>
+</head>
+<body>
+  <div class="overlay">
+    <h1>Proportional–Integral–Derivative Controller (PID Controller)</h1>
+
+    <!-- Run EXE button -->
+    <div style="margin:20px 0; text-align:center;">
+      <button onclick="runTouchGFX()" 
+              style="padding:10px 20px; font-size:16px; border:none; background:#00eaff; color:#000; border-radius:6px; cursor:pointer;">
+        ▶ Run TouchGFX.exe
+      </button>
+    </div>
+
+    <div class="section">
+      <p>A <strong>PID controller</strong> is a feedback-based control loop mechanism used for continuous control and automatic adjustment of machines and processes.</p>
+      <p>It compares the target value (<strong>Setpoint, SP</strong>) with the actual system value (<strong>Process Variable, PV</strong>), and computes the <code>error e(t) = SP - PV</code>.</p>
+
+      <h2>Corrective Actions</h2>
+      <ul>
+        <li><strong>Proportional (P)</strong></li>
+        <li><strong>Integral (I)</strong></li>
+        <li><strong>Derivative (D)</strong></li>
+      </ul>
+
+      <img src="PIDController/BlockDiagram.png" alt="PID Controller Block Diagram" style="background-color: #f0f0f0; display: block; margin: 0 auto; max-width: 100%;"><br>
+      <p>The PID controller applies a combination of these terms for accurate and responsive control.</p>
+
+      <div class="note">
+        <strong>Control Function:</strong><br>
+        <span class="formula">Output = Kp × e(t) + Ki × ∫e(t)dt + Kd × de(t)/dt</span><br><br>
+        Where:<br>
+        <span class="formula">Ki = Kp / Ti</span><br>
+        <span class="formula">Kd = Kp × Td</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>Proportional Term</h2>
+      <p>The proportional term generates output based on the current error, scaled by <code>Kp</code>. A higher gain yields faster response but can cause instability.</p>
+      <img src="PIDController/proportional.png" alt="Proportional Term"><br>
+      <span class="formula">Pout = Kp × e(t)</span><br><br>
+
+      <h3>Steady-State Error (SSE)</h3>
+      <p>SSE is the residual error in the system. It's proportional to process gain and inversely proportional to <code>Kp</code>. Adding an integral term or bias helps reduce SSE.</p>
+    </div>
+
+    <div class="section">
+      <h2>Integral Term</h2>
+      <p>The integral term accumulates past errors and applies correction accordingly. It helps eliminate steady-state error:</p>
+      <img src="PIDController/integral.png" alt="Integral Term"><br>
+      <span class="formula">Ki × ∫e(t) dt</span>
+      <p>But too much integral gain may lead to overshooting the target value.</p>
+    </div>
+
+    <div class="section">
+      <h2>Derivative Term</h2>
+      <p>This term anticipates future error by evaluating the rate of change:</p>
+      <img src="PIDController/derivative.png" alt="Derivative Term"><br>
+      <span class="formula">Kd × de(t)/dt</span>
+      <p>It improves system stability and settling time but is sensitive to noise. Often filtered or avoided in noisy environments.</p>
+    </div>
+
+    <img src="PIDController/Table.png" alt="PID Controller Parameters"><br>
+  </div>
+</body>
+</html>
