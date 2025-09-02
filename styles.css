@@ -254,7 +254,7 @@ caliblabel, calibinput {
       font-weight: bold;
       color: green;
     }
-.formula {  border-left: 4px solid #336699; margin-bottom: 15px; }
+/* .formula {  border-left: 4px solid #336699; margin-bottom: 15px; } */
     .example {  border-left: 4px solid #4CAF50; margin-bottom: 15px; }
 
 
