@@ -1,0 +1,46 @@
+sudo dpkg --add-architecture i386
+sudo apt update
+sudo apt install wine64 wine32
+   - Y
+
+wine --version
+
+wine ./TOUCHGFX.exe
+
+libgcc_s_dw2-1.dll
+libstdc++-6.dll
+libwinpthread-1.dll
+
+
+check for versions :
+file TOUCHGFX.exe
+file libstdc++-6.dll
+
+
+sudo apt update
+sudo apt install wine64 winetricks xorg xserver-xorg
+
+winetricks corefonts vcrun2015
+
+
+WINEARCH=win32 WINEPREFIX=~/.wine32 winecfg
+
+sudo apt remove wine
+sudo dpkg --add-architecture i386
+sudo mkdir -pm755 /etc/apt/keyrings
+sudo wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+sudo wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/ubuntu/dists/$(lsb_release -cs)/winehq-$(lsb_release -cs).sources
+sudo apt update
+sudo apt install --install-recommends winehq-stable
+wine --version
+
+
+winecfg
+
+
+echo $DISPLAY
+   Response : 0
+if no resp : export DISPLAY=:0
+
+
+sudo apt install nvidia-driver-<version>
