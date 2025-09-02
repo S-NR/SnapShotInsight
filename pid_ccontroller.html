@@ -82,6 +82,15 @@
       margin-bottom: 60px;
     }
 
+    .section img {
+      width: 180px;
+      height: auto;
+      border-radius: 8px;
+      background-color: #fff;
+      padding: 5px;
+      flex-shrink: 0;
+    }
+
     @media screen and (max-width: 768px) {
       .overlay {
         padding: 30px 6vw;
@@ -102,6 +111,11 @@
       p, li, .note {
         font-size: 16px;
       }
+
+      .section img {
+        width: 100%;
+        max-width: 300px;
+      }
     }
   </style>
 </head>
@@ -120,6 +134,7 @@
         <li><strong>Derivative (D)</strong></li>
       </ul>
 
+      <img src="PIDController/BlockDiagram.jpg" alt="PID Controller Block Diagram">
       <p>The PID controller applies a combination of these terms for accurate and responsive control.</p>
 
       <div class="note">
@@ -134,6 +149,8 @@
     <div class="section">
       <h2>Proportional Term</h2>
       <p>The proportional term generates output based on the current error, scaled by <code>Kp</code>. A higher gain yields faster response but can cause instability.</p>
+      <img src="PIDController/proportional.png" alt="Proportional Term">
+      <span class="formula">Pout = Kp × e(t)</span><br><br>
 
       <h3>Steady-State Error (SSE)</h3>
       <p>SSE is the residual error in the system. It's proportional to process gain and inversely proportional to <code>Kp</code>. Adding an integral term or bias helps reduce SSE.</p>
@@ -142,6 +159,7 @@
     <div class="section">
       <h2>Integral Term</h2>
       <p>The integral term accumulates past errors and applies correction accordingly. It helps eliminate steady-state error:</p>
+      <img src="PIDController/integral.png" alt="Integral Term">
       <span class="formula">Ki × ∫e(t) dt</span>
       <p>But too much integral gain may lead to overshooting the target value.</p>
     </div>
@@ -149,9 +167,12 @@
     <div class="section">
       <h2>Derivative Term</h2>
       <p>This term anticipates future error by evaluating the rate of change:</p>
+      <img src="PIDController/derivative.png" alt="Derivative Term">
       <span class="formula">Kd × de(t)/dt</span>
       <p>It improves system stability and settling time but is sensitive to noise. Often filtered or avoided in noisy environments.</p>
     </div>
   </div>
+
+  <img src="PIDController/Table.png" alt="PID Controller Parameters">
 </body>
 </html>
