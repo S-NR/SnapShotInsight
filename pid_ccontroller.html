@@ -135,7 +135,7 @@
         <li><strong>Derivative (D)</strong></li>
       </ul>
 
-      <img src="PIDController/BlockDiagram.jpg" alt="PID Controller Block Diagram">
+      <img src="PIDController/BlockDiagram.png" alt="PID Controller Block Diagram"><br>
       <p>The PID controller applies a combination of these terms for accurate and responsive control.</p>
 
       <div class="note">
@@ -150,7 +150,7 @@
     <div class="section">
       <h2>Proportional Term</h2>
       <p>The proportional term generates output based on the current error, scaled by <code>Kp</code>. A higher gain yields faster response but can cause instability.</p>
-      <img src="PIDController/proportional.png" alt="Proportional Term">
+      <img src="PIDController/proportional.png" alt="Proportional Term"><br>
       <span class="formula">Pout = Kp × e(t)</span><br><br>
 
       <h3>Steady-State Error (SSE)</h3>
@@ -160,7 +160,7 @@
     <div class="section">
       <h2>Integral Term</h2>
       <p>The integral term accumulates past errors and applies correction accordingly. It helps eliminate steady-state error:</p>
-      <img src="PIDController/integral.png" alt="Integral Term">
+      <img src="PIDController/integral.png" alt="Integral Term"><br>
       <span class="formula">Ki × ∫e(t) dt</span>
       <p>But too much integral gain may lead to overshooting the target value.</p>
     </div>
@@ -168,12 +168,12 @@
     <div class="section">
       <h2>Derivative Term</h2>
       <p>This term anticipates future error by evaluating the rate of change:</p>
-      <img src="PIDController/derivative.png" alt="Derivative Term">
+      <img src="PIDController/derivative.png" alt="Derivative Term"><br>
       <span class="formula">Kd × de(t)/dt</span>
       <p>It improves system stability and settling time but is sensitive to noise. Often filtered or avoided in noisy environments.</p>
     </div>
-    
-  <img src="PIDController/Table.png" alt="PID Controller Parameters">
+
+  <img src="PIDController/Table.png" alt="PID Controller Parameters"><br>
   </div>
 
 </body>

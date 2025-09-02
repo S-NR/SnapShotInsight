@@ -234,6 +234,17 @@ th {
   overflow-x: auto;
   margin: 0;
 }
+
+.formula {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-family: Consolas, monospace;
+  color: #00ffcc;
+  display: inline-block;
+  margin: 5px 0;
+}
+
 caliblabel, calibinput {
       display: block;
       margin: 10px 0;
