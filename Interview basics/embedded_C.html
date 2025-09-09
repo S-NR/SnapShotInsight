@@ -1,367 +1,205 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Advanced C Interview Questions & Answers (7–9 Years)</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced C Interview Questions (7–9 Yrs Experience)</title>
   <style>
-    :root{
-      --bg:#0b1220; --card:#111a2b; --muted:#9fb0d1; --text:#e7efff; --accent:#6aa9ff; --border:#1d2b45; --code:#0d1626;
+    /* === Your CSS Theme Applied === */
+    body {
+      margin: 0;
+      font-family: 'Times New Roman', Times, serif;
+      background-image: url('62b9f57a-8adb-43cb-8cba-e6cbcafe2fa4.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      color: #ffffff;
+      line-height: 1.8;
     }
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,"Apple Color Emoji","Segoe UI Emoji";}
-    .wrap{max-width:1100px;margin:40px auto;padding:0 20px;}
-    header{margin-bottom:24px}
-    h1{font-size:clamp(28px,4vw,40px);line-height:1.1;margin:0 0 8px}
-    p.subtitle{color:var(--muted);margin:0 0 16px}
-    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin:14px 0}
-    h2{font-size:24px;margin:18px 0 8px;border-left:4px solid var(--accent);padding-left:10px}
-    h3{font-size:18px;margin:16px 0 8px;color:#cfe1ff}
-    a{color:var(--accent);text-decoration:none}
-    a:hover{text-decoration:underline}
-    .toc{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin:12px 0}
-    .toc a{display:block;background:var(--card);border:1px solid var(--border);padding:10px;border-radius:12px}
-    code, pre{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace}
-    pre{background:var(--code);border:1px solid var(--border);padding:14px;border-radius:12px;overflow:auto}
-    code.inline{background:var(--code);padding:2px 6px;border-radius:6px;border:1px solid var(--border)}
-    .qa{margin:14px 0}
-    .q{font-weight:700}
-    .tip{color:#a7ffdf}
-    .hr{height:1px;background:var(--border);margin:24px 0}
-    ul{margin:8px 0 8px 20px}
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.75);
+      min-height: 100vh;
+      padding: 50px 10vw;
+      box-sizing: border-box;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+
+    .header h1 {
+      font-size: 2.8em;
+      color: #00eaff;
+      border-bottom: 2px solid #00eaff;
+      padding-bottom: 10px;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: #00eaff;
+      font-size: 1.8em;
+      margin-top: 40px;
+    }
+
+    h3 {
+      color: #65999e;
+      font-size: 1.5em;
+      margin-top: 30px;
+    }
+
+    p, ul, li {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    .quote {
+      font-style: italic;
+      color: #e0e0e0;
+      margin: 15px 0;
+      padding-left: 20px;
+      border-left: 4px solid #ffc107;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 15px;
+    }
+
+    code {
+      background-color: rgba(255,255,255,0.1);
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+
+    .content-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 6vw;
+    }
+
+    table {
+      overflow-x: auto;
+      display: block;
+      width: 100%;
+      border-collapse: collapse;
+      margin: 25px 0 40px 0;
+      background-color: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(6px);
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+      color: #fff;
+    }
+
+    th, td {
+      padding: 14px 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.15);
+      text-align: left;
+      color: #fff;
+    }
+
+    th {
+      background-color: rgba(0,0,0,0.5);
+      font-weight: bold;
+    }
+
+    @media screen and (max-width: 786px) {
+      .overlay {
+        padding: 30px 6vw;
+      }
+      .header h1 {
+        font-size: 1.8em;
+      }
+      h2 {
+        font-size: 1.4em;
+      }
+      p, li {
+        font-size: 15px;
+      }
+    }
   </style>
-  <link rel="stylesheet" href="styles.css" /> 
 </head>
-<body>    
+<body>
   <div class="overlay">
-  <div class="wrap">
-    <header>
-      <h1>Advanced C Interview Questions & Answers</h1>
-      <p class="subtitle">For 7–9 years experienced Embedded/Firmware engineers • Focus: memory, pointers, bitwise, volatile, concurrency, tricky cases, design</p>
-      <div class="card">
-        <strong>How to use:</strong>
-        <ul>
-          <li>Skim the Table of Contents and jump to any section.</li>
-          <li>Copy-paste code snippets directly into your editor.</li>
-          <li class="tip">Tip: Practice saying the answers out loud in 30–60 seconds each.</li>
-        </ul>
-      </div>
-    </header>
-
-    <div class="card">
-      <h2>Table of Contents</h2>
-      <nav class="toc">
-        <a href="#mem">1) Memory &amp; Pointers</a>
-        <a href="#bitwise">2) Bitwise Operations</a>
-        <a href="#structs">3) Structures &amp; Unions</a>
-        <a href="#volatile">4) Volatile &amp; Optimization</a>
-        <a href="#rtos">5) Concurrency &amp; RTOS</a>
-        <a href="#tricky">6) Tricky / Edge Cases</a>
-        <a href="#design">7) Design &amp; Problem Solving</a>
-      </nav>
+    <div class="header">
+      <h1>Advanced C Interview Questions (7–9 Yrs Experience)</h1>
     </div>
+    <div class="content-wrapper">
+      
+      <h2>1. Explain memory layout of a C program.</h2>
+      <p>
+        A typical C program memory layout contains:
+      </p>
+      <ul>
+        <li><b>Text/Code Segment</b> – stores instructions.</li>
+        <li><b>Data Segment</b> – initialized global & static variables.</li>
+        <li><b>BSS Segment</b> – uninitialized global & static variables.</li>
+        <li><b>Heap</b> – dynamic memory allocation.</li>
+        <li><b>Stack</b> – function call frames, local variables.</li>
+      </ul>
 
-    <!-- 1. Memory & Pointers -->
-    <section id="mem" class="card">
-      <h2>1) Memory &amp; Pointers</h2>
+      <h2>2. Difference between stack memory and heap memory?</h2>
+      <ul>
+        <li><b>Stack:</b> Auto-managed, grows/shrinks with function calls, fast, limited size.</li>
+        <li><b>Heap:</b> Dynamically allocated with <code>malloc/calloc</code>, manually freed, slower, larger but fragmentation possible.</li>
+      </ul>
 
-      <div class="qa">
-        <div class="q">Q: Difference between <code class="inline">const int *p</code>, <code class="inline">int * const p</code>, and <code class="inline">const int * const p</code>?</div>
-        <div class="a">
-          <ul>
-            <li><code class="inline">const int *p</code>: pointer to <em>const int</em> — pointer can change; value cannot.</li>
-            <li><code class="inline">int * const p</code>: <em>const pointer</em> to int — pointer cannot change; value can.</li>
-            <li><code class="inline">const int * const p</code>: const pointer to const int — neither can change.</li>
-          </ul>
-        </div>
-      </div>
+      <h2>3. How would you debug memory leaks in a large embedded C project?</h2>
+      <p>
+        Use tools like <code>valgrind</code>, <code>mtrace</code>, or implement custom memory allocation wrappers. 
+        Add counters/logs in <code>malloc</code> and <code>free</code>. Static analysis (Coverity, SonarQube) also helps.
+      </p>
 
-      <div class="qa">
-        <div class="q">Q: What happens if you dereference an unaligned pointer on ARM Cortex‑M?</div>
-        <div class="a">Some cores permit unaligned 16/32‑bit access but with penalties; others may HardFault. Align to natural word boundaries for correctness &amp; speed.</div>
-      </div>
+      <h2>4. Explain volatile and const together.</h2>
+      <p>
+        <code>const volatile int *p;</code><br>
+        - <code>const</code>: Code cannot modify the value.<br>
+        - <code>volatile</code>: Value can change unexpectedly (e.g., hardware register).<br>
+        Example: Read-only hardware status register.
+      </p>
 
-      <div class="qa">
-        <div class="q">Q: Difference between stack, heap, static, and global memory?</div>
-        <div class="a">
-          <ul>
-            <li><strong>Stack</strong>: automatic lifetime, fast, limited.</li>
-            <li><strong>Heap</strong>: dynamic (<code>malloc</code>), fragmentation risk.</li>
-            <li><strong>Static</strong>: persists for program lifetime, internal linkage if inside function.</li>
-            <li><strong>Global</strong>: program‑wide visibility, program lifetime.</li>
-          </ul>
-        </div>
-      </div>
+      <h2>5. How to prevent structure padding/alignment issues across compilers?</h2>
+      <p>
+        Use <code>#pragma pack(1)</code> or <code>__attribute__((packed))</code>. 
+        For cross-platform, use explicit serialization instead of direct struct dumps.
+      </p>
 
-      <div class="qa">
-        <div class="q">Q: How would you implement a simple <code>malloc()</code> for embedded?</div>
-        <div class="a">
-<pre><code>#define HEAP_SIZE 1024
-static unsigned char pool[HEAP_SIZE];
-static size_t off = 0;
-void* my_malloc(size_t sz){
-  if (off + sz > HEAP_SIZE) return NULL;
-  void* p = &pool[off];
-  off += sz; // bump allocator
-  return p;
-}
-</code></pre>
-          Use fixed pools or free lists for production; avoid fragmentation.
-        </div>
-      </div>
+      <h2>6. What are function pointers? Give a real use-case.</h2>
+      <p>
+        A function pointer stores the address of a function.  
+        Example: callback functions in drivers, or jump tables in protocol handlers.
+      </p>
+      <pre><code>void (*fptr)(int);
+fptr = &myFunction;
+fptr(10);</code></pre>
 
-      <div class="qa">
-        <div class="q">Q: Function pointers example?</div>
-        <div class="a">
-<pre><code>void hello(void){ puts("Hi"); }
-void (*fp)(void) = hello;
-fp(); // calls hello
-</code></pre>
-          Useful for callbacks, ISRs, driver vtables.
-        </div>
-      </div>
-    </section>
+      <h2>7. What is the difference between deep copy and shallow copy?</h2>
+      <ul>
+        <li><b>Shallow copy:</b> Copies only pointers, not the data they point to.</li>
+        <li><b>Deep copy:</b> Allocates new memory and copies actual data.</li>
+      </ul>
 
-    <div class="hr"></div>
+      <h2>8. Explain reentrant vs non-reentrant functions.</h2>
+      <ul>
+        <li><b>Reentrant:</b> Can be safely interrupted and re-entered (no static/global state).</li>
+        <li><b>Non-reentrant:</b> Uses static/global data, unsafe in multi-threaded or ISR contexts.</li>
+      </ul>
 
-    <!-- 2. Bitwise Operations -->
-    <section id="bitwise" class="card">
-      <h2>2) Bitwise Operations</h2>
+      <h2>9. What happens if malloc fails?</h2>
+      <p><code>malloc</code> returns NULL. Always check before use.</p>
 
-      <div class="qa">
-        <div class="q">Q: Count number of set bits efficiently.</div>
-        <div class="a">
-<pre><code>int popcount(unsigned int n){
-  int c = 0; while(n){ n &= (n-1); ++c; } return c;
-}
-</code></pre>
-        </div>
-      </div>
+      <h2>10. What are race conditions? How do you prevent them in C?</h2>
+      <p>
+        Occurs when multiple threads access shared data concurrently without synchronization.
+        Prevent using mutexes, semaphores, atomic operations, or disabling interrupts in embedded.
+      </p>
 
-      <div class="qa">
-        <div class="q">Q: Extract the leftmost (MSB) set bit.</div>
-        <div class="a">
-<pre><code>unsigned int msb_only(unsigned int n){
-  if(!n) return 0;
-  n |= n>>1; n |= n>>2; n |= n>>4; n |= n>>8; n |= n>>16;
-  return n ^ (n>>1);
-}
-</code></pre>
-        </div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: Check if number is power of 4.</div>
-        <div class="a">
-<pre><code>int is_pow4(int n){ return (n>0) && !(n & (n-1)) && (n & 0x55555555); }
-</code></pre>
-        </div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: Reverse bits in a byte.</div>
-        <div class="a">
-<pre><code>unsigned char rev8(unsigned char b){
-  b = (b & 0xF0)>>4 | (b & 0x0F)<<4;
-  b = (b & 0xCC)>>2 | (b & 0x33)<<2;
-  b = (b & 0xAA)>>1 | (b & 0x55)<<1;
-  return b;
-}
-</code></pre>
-        </div>
-      </div>
-    </section>
-
-    <div class="hr"></div>
-
-    <!-- 3. Structures & Unions -->
-    <section id="structs" class="card">
-      <h2>3) Structures &amp; Unions</h2>
-
-      <div class="qa">
-        <div class="q">Q: Padding vs packing?</div>
-        <div class="a">
-          Padding aligns members for performance; packing removes padding (smaller size, potential slowdown).
-<pre><code>struct A { char c; int i; }; // likely size 8 due to padding
-#pragma pack(1)
-struct B { char c; int i; }; // size 5, no padding
-#pragma pack()
-</code></pre>
-        </div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: Why <code>sizeof(struct)</code> differs across compilers?</div>
-        <div class="a">Different ABI alignment rules, packing pragmas, and target architecture constraints.</div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: Map hardware registers with <code>struct</code>.</div>
-        <div class="a">
-<pre><code>typedef struct { volatile uint32_t CR, SR, DR; } ADC_TypeDef;
-#define ADC1 ((ADC_TypeDef*)0x40012400u)
-</code></pre>
-        </div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: Use <code>union</code> to alias float and int.</div>
-        <div class="a">
-<pre><code>union { float f; uint32_t u; } U;
-U.f = 3.14f; printf("%08x\n", U.u);
-</code></pre>
-        </div>
-      </div>
-    </section>
-
-    <div class="hr"></div>
-
-    <!-- 4. Volatile & Optimization -->
-    <section id="volatile" class="card">
-      <h2>4) Volatile &amp; Optimization</h2>
-
-      <div class="qa">
-        <div class="q">Q: Why use <code>volatile</code>?</div>
-        <div class="a">Variables may change outside normal flow (ISRs, MMIO). Prevents unwanted optimization of reads/writes.</div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: Difference between <code>volatile int i</code> and <code>int volatile *p</code>?</div>
-        <div class="a"><code class="inline">volatile int i</code> marks the variable as volatile; <code class="inline">int volatile *p</code> is a pointer to a volatile int (target is volatile).</div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: Are volatile accesses atomic or reorderable?</div>
-        <div class="a">They are <em>not</em> atomic and compilers must not reorder volatile accesses relative to each other, but you still need locks/critical sections for atomicity.</div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: Why not rely on volatile for atomicity?</div>
-        <div class="a">It only prevents optimization; it does not prevent race conditions. Use critical sections or hardware atomics.</div>
-      </div>
-    </section>
-
-    <div class="hr"></div>
-
-    <!-- 5. Concurrency & RTOS -->
-    <section id="rtos" class="card">
-      <h2>5) Concurrency &amp; RTOS</h2>
-
-      <div class="qa">
-        <div class="q">Q: Protect shared variables between ISR and Task?</div>
-        <div class="a">Use short critical sections (<code>__disable_irq/__enable_irq</code>) or RTOS primitives (mutex/semaphore) depending on context.</div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: Explain priority inversion and solution.</div>
-        <div class="a">High-priority task blocked by low-priority task holding a resource while a medium task runs. Use <em>priority inheritance</em> or ceilings.</div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: Circular buffer (UART Rx) sketch.</div>
-        <div class="a">
-<pre><code>#define N 128
-volatile uint8_t q[N]; volatile uint16_t h=0,t=0;
-void put(uint8_t d){ q[h++ & (N-1)] = d; }
-uint8_t get(void){ return q[t++ & (N-1)]; }
-</code></pre>
-        </div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: What if ISR is too long?</div>
-        <div class="a">Missed interrupts, increased latency, watchdog resets. Keep ISRs short; defer work to tasks/DMAs.</div>
-      </div>
-    </section>
-
-    <div class="hr"></div>
-
-    <!-- 6. Tricky / Edge Cases -->
-    <section id="tricky" class="card">
-      <h2>6) Tricky / Edge Cases</h2>
-
-      <div class="qa">
-        <div class="q">Q: Output of <code>printf("%d %d %d\n", x, x++, ++x);</code></div>
-        <div class="a">Undefined behavior (multiple modifications of <code>x</code> between sequence points). Avoid such expressions.</div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: <code>#define MAX 100</code> vs <code>const int MAX = 100;</code></div>
-        <div class="a">Macro is a textual substitution (no type, no scope); <code>const</code> is typed, scoped, debuggable, respects the compiler.</div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: Why is <code>memcpy</code> unsafe for overlapping regions? Alternative?</div>
-        <div class="a"><code>memcpy</code> may clobber source on overlap. Use <code>memmove</code> which handles overlap safely.</div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: What if <code>main()</code> has no return in C99?</div>
-        <div class="a">In hosted C99, reaching end of <code>main</code> implies <code>return 0;</code>. In freestanding/embedded, behavior may vary—be explicit.</div>
-      </div>
-    </section>
-
-    <div class="hr"></div>
-
-    <!-- 7. Design & Problem Solving -->
-    <section id="design" class="card">
-      <h2>7) Design &amp; Problem Solving</h2>
-
-      <div class="qa">
-        <div class="q">Q: Design a GPIO driver API.</div>
-        <div class="a">
-<pre><code>typedef enum { LOW=0, HIGH=1 } pin_state_t;
-void gpio_init(GPIO_TypeDef* port, uint8_t pin, uint32_t mode);
-void gpio_write(GPIO_TypeDef* port, uint8_t pin, pin_state_t s);
-pin_state_t gpio_read(GPIO_TypeDef* port, uint8_t pin);
-</code></pre>
-        </div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: Data structure to hold IPv4 &amp; IPv6.</div>
-        <div class="a">
-<pre><code>typedef struct {
-  uint8_t version; // 4 or 6
-  union { uint8_t v4[4]; uint8_t v6[16]; } addr;
-} ip_addr_t;
-</code></pre>
-        </div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: Debounce a switch (simple).</div>
-        <div class="a">
-<pre><code>bool debounce_read(GPIO_TypeDef* p, uint8_t pin){
-  int stable = 0; for(int i=0;i<5;i++){ stable += gpio_read(p,pin); delay_ms(10); }
-  return stable &gt;= 3;
-}
-</code></pre>
-        </div>
-      </div>
-
-      <div class="qa">
-        <div class="q">Q: UART protocol finite‑state machine.</div>
-        <div class="a">
-<pre><code>typedef enum { IDLE, START, DATA, STOP } uart_st;
-void uart_fsm_step(int bit){
-  static uart_st s = IDLE; static uint8_t b=0,cnt=0;
-  switch(s){
-    case IDLE: if(bit==0){ s=START; cnt=0; b=0; } break;
-    case START: s=DATA; break;
-    case DATA:  b |= (bit & 1) &lt;&lt; cnt++; if(cnt==8) s=STOP; break;
-    case STOP:  // use byte b
-               s=IDLE; break;
-  }
-}
-</code></pre>
-        </div>
-      </div>
-    </section>
-
-    <footer class="card" style="margin-top:18px">
-      <strong>Prep tip:</strong> Keep answers concise (30–60s), add one short example, and finish with a trade‑off or best‑practice note.
-    </footer>
-  </div>
+    </div>
   </div>
 </body>
 </html>
