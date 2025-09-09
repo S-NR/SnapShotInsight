@@ -78,7 +78,7 @@
     }
 
     .content-wrapper {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 0 6vw;
     }
@@ -108,6 +108,15 @@
       font-weight: bold;
     }
 
+    pre {
+      background: #111;
+      color: #0ff;
+      padding: 10px;
+      border-radius: 6px;
+      overflow-x: auto;
+      font-size: 14px;
+    }
+
     @media screen and (max-width: 786px) {
       .overlay {
         padding: 30px 6vw;
@@ -130,74 +139,101 @@
       <h1>Advanced C Interview Questions (7–9 Yrs Experience)</h1>
     </div>
     <div class="content-wrapper">
-      
+
       <h2>1. Explain memory layout of a C program.</h2>
-      <p>
-        A typical C program memory layout contains:
-      </p>
+      <p>A typical C program is divided into several segments:</p>
       <ul>
-        <li><b>Text/Code Segment</b> – stores instructions.</li>
-        <li><b>Data Segment</b> – initialized global & static variables.</li>
-        <li><b>BSS Segment</b> – uninitialized global & static variables.</li>
-        <li><b>Heap</b> – dynamic memory allocation.</li>
-        <li><b>Stack</b> – function call frames, local variables.</li>
+        <li><b>Text (Code) Segment:</b> Stores compiled machine instructions. Usually read-only.</li>
+        <li><b>Data Segment:</b> Stores initialized global and static variables.</li>
+        <li><b>BSS Segment:</b> Stores uninitialized or zero-initialized global and static variables.</li>
+        <li><b>Heap:</b> Used for dynamic memory allocation (<code>malloc</code>, <code>calloc</code>, etc.).</li>
+        <li><b>Stack:</b> Function call frames, local variables, return addresses.</li>
       </ul>
+      <pre>
+| Text | Data | BSS | Heap (grows up) ... | Free Space | ... (grows down) Stack |
+      </pre>
 
       <h2>2. Difference between stack memory and heap memory?</h2>
-      <ul>
-        <li><b>Stack:</b> Auto-managed, grows/shrinks with function calls, fast, limited size.</li>
-        <li><b>Heap:</b> Dynamically allocated with <code>malloc/calloc</code>, manually freed, slower, larger but fragmentation possible.</li>
-      </ul>
+      <table>
+        <tr><th>Aspect</th><th>Stack</th><th>Heap</th></tr>
+        <tr><td>Allocation</td><td>Automatic (function calls)</td><td>Manual (<code>malloc/free</code>)</td></tr>
+        <tr><td>Speed</td><td>Fast</td><td>Slower</td></tr>
+        <tr><td>Size</td><td>Limited</td><td>Large but fragmented</td></tr>
+        <tr><td>Lifespan</td><td>Until function exits</td><td>Until explicitly freed</td></tr>
+      </table>
 
-      <h2>3. How would you debug memory leaks in a large embedded C project?</h2>
+      <h2>3. How would you debug memory leaks?</h2>
       <p>
-        Use tools like <code>valgrind</code>, <code>mtrace</code>, or implement custom memory allocation wrappers. 
-        Add counters/logs in <code>malloc</code> and <code>free</code>. Static analysis (Coverity, SonarQube) also helps.
+        - Use <code>valgrind</code>, <code>mtrace</code>, or address sanitizers.<br>
+        - Wrap <code>malloc</code> and <code>free</code> to log allocations.<br>
+        - Maintain allocation counters.<br>
+        - Use static analysis (Coverity, SonarQube).<br>
+        - In embedded: Use a custom heap monitor with watermarking.
       </p>
 
       <h2>4. Explain volatile and const together.</h2>
       <p>
-        <code>const volatile int *p;</code><br>
-        - <code>const</code>: Code cannot modify the value.<br>
-        - <code>volatile</code>: Value can change unexpectedly (e.g., hardware register).<br>
-        Example: Read-only hardware status register.
+        <code>const volatile int *reg;</code><br>
+        - <b>const:</b> Application cannot modify the value.<br>
+        - <b>volatile:</b> Value can change unexpectedly (e.g., hardware register).<br>
+        Example: A read-only hardware status register updated by hardware.
       </p>
 
-      <h2>5. How to prevent structure padding/alignment issues across compilers?</h2>
+      <h2>5. Prevent structure padding/alignment issues across compilers?</h2>
       <p>
-        Use <code>#pragma pack(1)</code> or <code>__attribute__((packed))</code>. 
-        For cross-platform, use explicit serialization instead of direct struct dumps.
+        - Use <code>#pragma pack(1)</code> (MSVC) or <code>__attribute__((packed))</code> (GCC).<br>
+        - Explicitly serialize to byte streams instead of raw struct copy.<br>
+        - Example:
       </p>
+      <pre><code>struct __attribute__((packed)) {
+  uint8_t a;
+  uint16_t b;
+  uint32_t c;
+};</code></pre>
 
-      <h2>6. What are function pointers? Give a real use-case.</h2>
+      <h2>6. Function pointers? Use-case?</h2>
       <p>
-        A function pointer stores the address of a function.  
-        Example: callback functions in drivers, or jump tables in protocol handlers.
+        Function pointers allow storing addresses of functions.<br>
+        <b>Use cases:</b> Callbacks, interrupt vectors, jump tables.
       </p>
-      <pre><code>void (*fptr)(int);
-fptr = &myFunction;
-fptr(10);</code></pre>
+      <pre><code>void hello(int x) { printf("%d\n", x); }
+void (*fp)(int) = hello;
+fp(42);</code></pre>
 
-      <h2>7. What is the difference between deep copy and shallow copy?</h2>
+      <h2>7. Deep copy vs Shallow copy?</h2>
       <ul>
-        <li><b>Shallow copy:</b> Copies only pointers, not the data they point to.</li>
-        <li><b>Deep copy:</b> Allocates new memory and copies actual data.</li>
+        <li><b>Shallow copy:</b> Copies only pointers, not the underlying data.</li>
+        <li><b>Deep copy:</b> Allocates new memory and copies data recursively.</li>
       </ul>
 
-      <h2>8. Explain reentrant vs non-reentrant functions.</h2>
-      <ul>
-        <li><b>Reentrant:</b> Can be safely interrupted and re-entered (no static/global state).</li>
-        <li><b>Non-reentrant:</b> Uses static/global data, unsafe in multi-threaded or ISR contexts.</li>
-      </ul>
+      <h2>8. Reentrant vs Non-Reentrant?</h2>
+      <p>
+        - <b>Reentrant:</b> Safe to call simultaneously in multi-threaded/ISR context, no static/global states.<br>
+        - <b>Non-Reentrant:</b> Uses static/global data, not thread/ISR safe.<br>
+        Example: <code>strtok()</code> is non-reentrant, <code>strtok_r()</code> is reentrant.
+      </p>
 
       <h2>9. What happens if malloc fails?</h2>
-      <p><code>malloc</code> returns NULL. Always check before use.</p>
-
-      <h2>10. What are race conditions? How do you prevent them in C?</h2>
       <p>
-        Occurs when multiple threads access shared data concurrently without synchronization.
-        Prevent using mutexes, semaphores, atomic operations, or disabling interrupts in embedded.
+        It returns <code>NULL</code>. Always check before dereferencing.<br>
+        Example:
       </p>
+      <pre><code>int *p = malloc(100 * sizeof(int));
+if (!p) {
+   // Handle error
+}</code></pre>
+
+      <h2>10. Race conditions? Prevention?</h2>
+      <p>
+        Race condition: Multiple threads/ISRs access shared data concurrently without proper synchronization.<br>
+        <b>Prevention:</b>
+      </p>
+      <ul>
+        <li>Mutexes and semaphores.</li>
+        <li>Atomic operations.</li>
+        <li>Disable interrupts in critical sections (embedded).</li>
+        <li>Use memory barriers with <code>volatile</code> or atomic built-ins.</li>
+      </ul>
 
     </div>
   </div>
