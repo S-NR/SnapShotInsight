@@ -15,6 +15,29 @@
     /* svg responsiveness */
     .diagram { max-width: 100%; height: auto; display: block; margin: 18px 0; border-radius: 8px; }
     .diagram-caption { font-size: 14px; color: #dfeff0; margin-bottom: 18px; }
+
+    body {
+    text-align: left;
+    padding: 20px;
+    }
+    table {
+    border-collapse: collapse;
+    margin: 20px 0;
+    width: 90%;
+    }
+    table, th, td {
+    border: 1px solid #333;
+    }
+    th, td {
+    padding: 8px 12px;
+    text-align: left;
+    }
+    .diagram {
+    margin: 20px 0;
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    }
   </style>
 </head>
 <body>
@@ -257,6 +280,91 @@
       </table>
 
       <p class="note">In the example above the final BRR value used by many HAL implementations is <strong>139</strong> for PCLK=16MHz, baud=115200, oversampling ×16.</p>
+
+      <h2>🔹 Configuration Settings: Cause & Effect</h2>
+      <table>
+      <thead>
+      <tr>
+      <th>Configuration</th>
+      <th>Options</th>
+      <th>Effect if Changed</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr>
+      <td><b>Baud Rate</b></td>
+      <td>9600, 115200, etc.</td>
+      <td>Higher baud = faster but error-prone; lower baud = slower but reliable. Must match on both ends.</td>
+      </tr>
+      <tr>
+      <td><b>Word Length</b></td>
+      <td>7, 8, 9 bits</td>
+      <td>Defines data bits per frame. If mismatch → data corruption.</td>
+      </tr>
+      <tr>
+      <td><b>Parity</b></td>
+      <td>None, Even, Odd</td>
+      <td>Error detection. Reduces payload if enabled. Mismatch → parity errors.</td>
+      </tr>
+      <tr>
+      <td><b>Stop Bits</b></td>
+      <td>1, 1.5, 2</td>
+      <td>Frame alignment. More stop bits = tolerant to mismatch but slower. Wrong setting → framing errors.</td>
+      </tr>
+      <tr>
+      <td><b>Oversampling</b></td>
+      <td>8x, 16x</td>
+      <td>16x = more robust, but limits max baud. 8x = allows higher baud, less robust.</td>
+      </tr>
+      <tr>
+      <td><b>Flow Control</b></td>
+      <td>None, RTS, CTS, RTS/CTS</td>
+      <td>Prevents buffer overflow in high-speed comms. Ignoring can cause data loss.</td>
+      </tr>
+      <tr>
+      <td><b>Mode</b></td>
+      <td>Async, Sync, Single-wire, LIN, etc.</td>
+      <td>Defines protocol behavior. Async = normal UART; others for special use cases.</td>
+      </tr>
+      </tbody>
+      </table>
+
+
+      <h2>🔹 Visual Diagram: UART Configuration Impact</h2>
+      <div class="diagram">
+      <svg width="700" height="400">
+      <!-- UART Frame -->
+      <rect x="20" y="30" width="660" height="80" fill="#f4f4f4" stroke="#444" rx="10" ry="10"/>
+      <text x="30" y="55" font-size="14" fill="#000">Start Bit</text>
+      <text x="130" y="55" font-size="14" fill="#000">Data Bits (Word Length)</text>
+      <text x="380" y="55" font-size="14" fill="#000">Parity Bit</text>
+      <text x="480" y="55" font-size="14" fill="#000">Stop Bits</text>
+
+
+      <!-- Arrows for cause/effect -->
+      <line x1="100" y1="150" x2="100" y2="110" stroke="blue" marker-end="url(#arrow)"/>
+      <text x="30" y="170" font-size="13" fill="blue">Baud affects timing</text>
+
+
+      <line x1="300" y1="150" x2="300" y2="110" stroke="green" marker-end="url(#arrow)"/>
+      <text x="230" y="170" font-size="13" fill="green">Word length mismatch → corruption</text>
+
+
+      <line x1="450" y1="150" x2="450" y2="110" stroke="red" marker-end="url(#arrow)"/>
+      <text x="380" y="170" font-size="13" fill="red">Parity adds error check</text>
+
+
+      <line x1="600" y1="150" x2="600" y2="110" stroke="purple" marker-end="url(#arrow)"/>
+      <text x="550" y="170" font-size="13" fill="purple">Stop bits affect sync</text>
+
+
+      <defs>
+      <marker id="arrow" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="black" />
+      </marker>
+      </defs>
+      </svg>
+      </div>
 
       <h2 id="mcu-block">4) What’s inside a typical MCU UART block</h2>
       <ul>
