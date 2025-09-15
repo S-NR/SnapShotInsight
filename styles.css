@@ -299,6 +299,7 @@ caliblabel, calibinput {
 
       .text {
         max-width: 100%;
+        font-size: 8px;
       }
   
   .opt-img {
