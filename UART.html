@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>UART: Hardware → Embedded C (Guide)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="overlay">
+    <div class="header">
+      <h1>UART: From Hardware Basics to Embedded-C Integration</h1>
+      <p class="quote">A practical, step-by-step guide — hardware, wiring, timing, MCU internals, firmware patterns, and ready-to-use C snippets.</p>
+    </div>
+
+    <div class="content-wrapper">
+
+      <h2 id="overview">1) Quick overview (what UART <em>is</em>)</h2>
+      <p>
+        <strong>UART</strong> = Universal Asynchronous Receiver/Transmitter. Asynchronous serial: data is sent bit-by-bit with a shared baud (bit rate) but <strong>no separate clock line</strong>.
+      </p>
+      <p>Typical UART frame: <strong>start bit (0)</strong> + <strong>N data bits (LSB first)</strong> + optional parity + <strong>stop bit(s) (1 or 2)</strong>. Idle line state is logic <em>1</em> (high). Start bit is low.</p>
+
+      <h2 id="physical">2) Physical layer & voltage levels</h2>
+      <ul>
+        <li><strong>TTL/CMOS UART:</strong> 0V = LOW, VCC (3.3V or 5V) = HIGH. Used inside MCU and with USB–TTL adapters (FTDI, CP2102).</li>
+        <li><strong>RS-232:</strong> ± voltage and inverted logic → needs level-shifter (MAX232).</li>
+        <li><strong>RS-485:</strong> differential, multi-drop bus → transceiver chip required.</li>
+        <li><strong>Wiring:</strong> TX(A) → RX(B), RX(A) ← TX(B). Always share GND.</li>
+        <li><strong>Cable lengths:</strong> TTL — short (few meters at low baud); RS-485 — much longer.</li>
+      </ul>
+
+      <h2 id="timing">3) Frame timing and baud</h2>
+      <p>Bit time = <span class="formula">1 / baud</span>. Example at <span class="formula">115200</span> baud → bit time ≈ <span class="formula">8.680556 μs</span>.</p>
+
+      <h3>UART sampling and baud generator</h3>
+      <p>MCUs commonly oversample (×16 or ×8). Baud divisor formula (×16):</p>
+      <p class="formula">USARTDIV = PCLK / (16 × baud)</p>
+      <p>Worked example (digit-by-digit rounding):</p>
+
+      <table>
+        <thead>
+          <tr><th>Parameter</th><th>Value (example)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>PCLK</td><td>16,000,000 Hz</td></tr>
+          <tr><td>baud</td><td>115,200</td></tr>
+          <tr><td>oversampling</td><td>16</td></tr>
+          <tr><td>16 × baud</td><td>1,843,200</td></tr>
+          <tr><td>USARTDIV = PCLK / (16×baud)</td><td><strong>≈ 8.680555555555556</strong></td></tr>
+          <tr><td>mantissa</td><td>8</td></tr>
+          <tr><td>fraction</td><td>0.6805555555555554 (×16 = 10.8889 → round ≈ 11)</td></tr>
+          <tr><td>BRR (mantissa<<4 | fraction)</td><td><strong>139</strong></td></tr>
+        </tbody>
+      </table>
+
+      <p class="note">In the example above the final BRR value used by many HAL implementations is <strong>139</strong> for PCLK=16MHz, baud=115200, oversampling ×16.</p>
+
+      <h2 id="mcu-block">4) What’s inside a typical MCU UART block</h2>
+      <ul>
+        <li><strong>TX / RX shift registers</strong> — shift bits out/in.</li>
+        <li><strong>Baud generator</strong> — produces bit clock from PCLK.</li>
+        <li><strong>FIFO</strong> — small TX/RX FIFOs (1..32 bytes) buffer bursts.</li>
+        <li><strong>Control registers</strong> — word length, parity, stop bits, flow control.</li>
+        <li><strong>Status registers</strong> — TXE (transmit empty), TC (transmit complete), RXNE (rx not empty), error flags.</li>
+        <li><strong>Interrupts & DMA</strong> — RXNE, TXE, TC, errors; DMA handshake support for high throughput.</li>
+      </ul>
+
+      <h2 id="flow">5) Flow control options</h2>
+      <ul>
+        <li><strong>None</strong> — simplest.</li>
+        <li><strong>Hardware:</strong> RTS / CTS lines.</li>
+        <li><strong>Software:</strong> XON/XOFF (in-band ASCII).</li>
+      </ul>
+
+      <h2 id="wiring-tests">6) How to wire & initial tests</h2>
+      <ul>
+        <li><strong>Loopback:</strong> short TX → RX on same UART and send bytes; they should echo back.</li>
+        <li>Connect MCU TX/RX to a USB–TTL adapter (match voltage) and open terminal (PuTTY / Tera Term / minicom) with matching settings.</li>
+        <li>Use logic analyzer / oscilloscope to check idle high, start bit low, bit timing and stop width.</li>
+      </ul>
+
+      <h2 id="fw-checklist">7) Firmware integration steps (high level checklist)</h2>
+      <ol>
+        <li>Decide baud, parity, data bits, stop bits, flow control.</li>
+        <li>Enable peripheral clock (APB / AHB).</li>
+        <li>Configure pins (GPIO alternate function, speed, pull-ups if needed).</li>
+        <li>Program baud generator (BRR) using PCLK and oversampling formula.</li>
+        <li>Configure frame format (8N1 etc.).</li>
+        <li>Enable receiver and transmitter.</li>
+        <li>Choose transfer method: polling / interrupt / DMA.</li>
+        <li>If using interrupts, enable NVIC and implement ISR.</li>
+        <li>Test with loopback and external terminal.</li>
+      </ol>
+
+      <h2 id="code-patterns">8) Driver patterns & C code examples</h2>
+
+      <h3>8.1 Portable ring-buffer + IRQ driven approach (platform-agnostic)</h3>
+      <p>Keep low-level hooks separate from portable code. ISR just enqueues bytes; application dequeues.</p>
+
+      <pre class="waveform"><code>
+/* uart_ring.h (portable) */
+#include &lt;stdint.h&gt;
+#include &lt;stdbool.h&gt;
+
+#define UART_RX_BUF_SIZE 256
+typedef struct {
+    volatile uint16_t head;
+    volatile uint16_t tail;
+    uint8_t buf[UART_RX_BUF_SIZE];
+} ringbuf_t;
+
+static ringbuf_t rxbuf = {0};
+
+static inline uint16_t next_index(uint16_t i){ return (i + 1) & (UART_RX_BUF_SIZE - 1); }
+
+void uart_isr_on_rx(uint8_t byte) {
+    uint16_t n = next_index(rxbuf.head);
+    if (n == rxbuf.tail) {
+        // overflow: drop or set flag
+    } else {
+        rxbuf.buf[rxbuf.head] = byte;
+        rxbuf.head = n;
+    }
+}
+
+int uart_read_nonblocking(uint8_t *out) {
+    if (rxbuf.head == rxbuf.tail) return 0; // empty
+    *out = rxbuf.buf[rxbuf.tail];
+    rxbuf.tail = next_index(rxbuf.tail);
+    return 1;
+}
+
+void uart_tx_blocking(const uint8_t *data, unsigned len) {
+    for (unsigned i=0; i&lt;len; ++i) {
+        while (!uart_hw_tx_ready()) { /* wait */ }
+        uart_hw_writebyte(data[i]);
+    }
+}
+
+/* Low-level platform hooks to implement:
+   bool uart_hw_tx_ready(void);
+   void uart_hw_writebyte(uint8_t b);
+   void uart_hw_enable_rx_interrupt(void);
+   void uart_hw_disable_rx_interrupt(void);
+   uint8_t uart_hw_readbyte(void);
+*/
+      </code></pre>
+
+      <p class="note">Make <code>UART_RX_BUF_SIZE</code> a power-of-two for the mask trick used above; keep ISR short.</p>
+
+      <h3>8.2 STM32Cube HAL example (common case)</h3>
+      <pre class="waveform"><code>
+/* Common HAL pattern: receive 1 byte in interrupt and re-arm. */
+UART_HandleTypeDef huart2;
+uint8_t rx_byte;
+
+void uart_init(void) {
+    huart2.Instance = USART2;
+    huart2.Init.BaudRate = 115200;
+    huart2.Init.WordLength = UART_WORDLENGTH_8B;
+    huart2.Init.StopBits = UART_STOPBITS_1;
+    huart2.Init.Parity = UART_PARITY_NONE;
+    huart2.Init.Mode = UART_MODE_TX_RX;
+    huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+    huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+    HAL_UART_Init(&huart2);
+
+    HAL_UART_Receive_IT(&huart2, &rx_byte, 1);
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+    if (huart == &huart2) {
+        uart_isr_on_rx(rx_byte);
+        HAL_UART_Receive_IT(&huart2, &rx_byte, 1);
+    }
+}
+
+void uart_send(const uint8_t *buf, size_t len) {
+    HAL_UART_Transmit(&huart2, (uint8_t*)buf, len, HAL_MAX_DELAY);
+}
+      </code></pre>
+
+      <h3>8.3 DMA circular RX (high throughput)</h3>
+      <p>
+        Configure UART RX with DMA in <strong>circular</strong> mode into a large buffer. Periodically compute
+        <code>head = buffer_size - DMA->NDTR</code> (or use the peripheral-specific pointer) and process bytes
+        between tail and head. This avoids per-byte IRQ overhead.
+      </p>
+
+      <h2 id="freertos">9) FreeRTOS integration ideas</h2>
+      <ul>
+        <li>ISR pushes bytes into an RTOS queue using <code>xQueueSendFromISR()</code> — consumer task blocks on <code>xQueueReceive()</code>.</li>
+        <li>Or ISR signals a task using <code>vTaskNotifyGiveFromISR()</code>, and the task reads a shared ring buffer.</li>
+        <li>Important: UART ISR priority must be at or below <code>configMAX_SYSCALL_INTERRUPT_PRIORITY</code> if using FreeRTOS ISR APIs.</li>
+      </ul>
+
+      <h2 id="debug">10) Debug checklist — common mistakes & fixes</h2>
+      <ul>
+        <li>No RX/TX: Did you enable the peripheral clock? Did you set GPIO to alternate function?</li>
+        <li>Wrong baud: Check the PCLK used and recompute BRR; verify oversampling setting.</li>
+        <li>Inverted bits / garbage: Are you accidentally connected to RS-232 without a level shifter?</li>
+        <li>Parity/stop mismatch: Terminal settings must match MCU settings (baud/parity/data/stop).</li>
+        <li>NVIC not enabled or priority wrong → interrupts not firing.</li>
+        <li>Buffer overflow: implement flow control or increase buffer size.</li>
+        <li>DMA not started or wrong direction: double-check DMA stream/channel & direction settings.</li>
+      </ul>
+
+      <h2 id="how-i-would">11) How I’d proceed on a real board (recommended sequence)</h2>
+      <ol>
+        <li>Read your MCU datasheet's UART/USART section (registers & features).</li>
+        <li>Hook up a USB–TTL adapter to your TX/RX + GND.</li>
+        <li>Do a loopback test (TX→RX) to validate code path.</li>
+        <li>Implement IRQ-driven ring buffer first (simple & reliable).</li>
+        <li>Switch to DMA circular RX for higher throughput if needed.</li>
+        <li>Add RTS/CTS for hardware flow-control if you see backpressure/overflow.</li>
+      </ol>
+
+      <h2 id="next">12) Want exact, ready-to-flash code for your MCU?</h2>
+      <p class="note">
+        I can produce a register-level init + IRQ + echo example for a specific MCU (GPIO setup, RCC enabling, BRR calculation using your actual PCLK, NVIC config, ISR, and a test <code>main()</code> that echoes characters). If you provide your MCU model (for example <code>STM32F207ZG</code>), the IDE/toolchain you use (STM32CubeIDE, Keil, IAR, PlatformIO) and whether you want HAL/LL or bare-metal register code, I'll produce a complete single-file example you can flash.
+      </p>
+
+      <div class="button-container">
+        <button class="explore-button" onclick="document.getElementById('overview').scrollIntoView({behavior:'smooth'})">Jump to Overview</button>
+        <button class="explore-button" onclick="document.getElementById('code-patterns').scrollIntoView({behavior:'smooth'})">Jump to Code</button>
+      </div>
+
+      <p style="margin-top:40px; font-size:14px;">
+        <strong>Save instructions:</strong> Save this file as <code>uart_guide.html</code> and place it in the same folder as your provided <code>style.css</code> (and the referenced background image). Open in a browser to view the styled page.
+      </p>
+
+      <p class="quote">If you want, I can now generate:
+        <ul>
+          <li>a register-level example for an exact MCU (STM32, PIC, AVR)</li>
+          <li>a DMA circular RX example with pointer math</li>
+          <li>a portable library you can drop into your project with platform hooks</li>
+        </ul>
+      </p>
+
+    </div> <!-- content-wrapper -->
+  </div> <!-- overlay -->
+</body>
+</html>
