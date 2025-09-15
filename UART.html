@@ -91,6 +91,138 @@
         <text x="520" y="15" class="t">Receiver</text>
         </svg>
 
+        <h2>UART Frame Format (8N1 example)</h2>
+        <p class="diagram-caption">Start bit, 8 data bits (LSB first), optional parity, stop bit(s).</p>
+
+        <!-- Frame SVG -->
+        <svg class="diagram" viewBox="0 0 900 140" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="UART frame format">
+        <style>
+        .box { fill: rgba(0,0,0,0.45); stroke: #00eaff; stroke-width:1.5; }
+        .label { fill:#ffffff; font-family: 'Times New Roman', Times, serif; font-size:13px; }
+        .bitline { stroke:#98f3f8; stroke-width:2; }
+        </style>
+
+
+        <!-- Idle region -->
+        <rect x="10" y="10" width="60" height="40" class="box"/>
+        <text x="30" y="35" class="label">Idle (1)</text>
+
+
+        <!-- Start bit -->
+        <rect x="80" y="10" width="60" height="40" class="box"/>
+        <text x="100" y="35" class="label">Start (0)</text>
+
+
+        <!-- Data bits (8) -->
+        <g>
+        <rect x="150" y="10" width="400" height="40" class="box"/>
+        <!-- eight sub-boxes -->
+        <g fill="#dff7f7" font-size="12" fill-opacity="0.95" stroke="#00eaff">
+        <rect x="150" y="10" width="50" height="40"/>
+        <rect x="200" y="10" width="50" height="40"/>
+        <rect x="250" y="10" width="50" height="40"/>
+        <rect x="300" y="10" width="50" height="40"/>
+        <rect x="350" y="10" width="50" height="40"/>
+        <rect x="400" y="10" width="50" height="40"/>
+        <rect x="450" y="10" width="50" height="40"/>
+        <rect x="500" y="10" width="50" height="40"/>
+        </g>
+        <text x="165" y="35" class="label">b0 (LSB)</text>
+        <text x="210" y="35" class="label">b1</text>
+        <text x="260" y="35" class="label">b2</text>
+        <text x="310" y="35" class="label">b3</text>
+        <text x="360" y="35" class="label">b4</text>
+        <text x="410" y="35" class="label">b5</text>
+        <text x="460" y="35" class="label">b6</text>
+        <text x="510" y="35" class="label">b7 (MSB)</text>
+        </g>
+
+
+        <!-- Stop bit -->
+        <rect x="560" y="10" width="80" height="40" class="box"/>
+        <text x="590" y="35" class="label">Stop (1)</text>
+
+
+        <!-- Optional parity -->
+        <rect x="650" y="10" width="80" height="40" class="box"/>
+        <text x="665" y="35" class="label">Parity (opt)</text>
+
+
+        </svg>
+
+        <h2>Oscilloscope Waveform (visual)</h2>
+        <p class="diagram-caption">How one byte looks on the TX pin over time (time axis left→right).</p>
+
+
+        <!-- Waveform SVG -->
+        <svg class="diagram" viewBox="0 0 900 160" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="UART waveform">
+        <style>
+        .wave { fill:none; stroke:#00ffcc; stroke-width:2.5; }
+        .axis { stroke:#65999e; stroke-width:1; }
+        .grid { stroke: rgba(255,255,255,0.05); }
+        .label { fill:#ffffff; font-family: 'Times New Roman', Times, serif; font-size:13px; }
+        </style>
+
+
+        <!-- axis -->
+        <line x1="30" y1="30" x2="30" y2="130" class="axis" />
+        <line x1="30" y1="130" x2="870" y2="130" class="axis" />
+
+
+        <!-- idle high before -->
+        <path d="M30 50 H80" class="wave" />
+        <!-- start bit (low) -->
+        <path d="M80 50 V120 H160" class="wave" />
+        <!-- data bits (example pattern: 1,0,0,0,0,0,1,0 LSB first -> 0x41 ) -->
+        <!-- bit 0 (1) -->
+        <path d="M160 120 V50 H240" class="wave" />
+        <!-- bit 1 (0) -->
+        <path d="M240 50 V120 H320" class="wave" />
+        <!-- bit 2 (0) -->
+        <path d="M320 50 V120 H400" class="wave" />
+        <!-- bit 3 (0) -->
+        <path d="M400 50 V120 H480" class="wave" />
+        <!-- bit 4 (0) -->
+        <path d="M480 50 V120 H560" class="wave" />
+        <!-- bit 5 (0) -->
+        <path d="M560 50 V120 H640" class="wave" />
+        <!-- bit 6 (1) -->
+        <path d="M640 120 V50 H720" class="wave" />
+        <!-- bit 7 (0) -->
+        <path d="M720 50 V120 H800" class="wave" />
+        <!-- stop bit (high) -->
+        <path d="M800 120 V50 H870" class="wave" />
+
+
+        <!-- labels under waveform -->
+        <text x="70" y="145" class="label">Idle</text>
+        <text x="120" y="145" class="label">Start</text>
+        <text x="200" y="145" class="label">b0</text>
+        <text x="280" y="145" class="label">b1</text>
+        <text x="360" y="145" class="label">b2</text>
+        <text x="440" y="145" class="label">b3</text>
+        <text x="520" y="145" class="label">b4</text>
+        <text x="600" y="145" class="label">b5</text>
+        <text x="680" y="145" class="label">b6</text>
+        <text x="760" y="145" class="label">b7</text>
+        <text x="820" y="145" class="label">Stop</text>
+
+
+        <!-- vertical guides for bit boundaries -->
+        <g stroke="#3b6b6c" stroke-width="0.6">
+        <line x1="80" y1="30" x2="80" y2="130"/>
+        <line x1="160" y1="30" x2="160" y2="130"/>
+        <line x1="240" y1="30" x2="240" y2="130"/>
+        <line x1="320" y1="30" x2="320" y2="130"/>
+        <line x1="400" y1="30" x2="400" y2="130"/>
+        <line x1="480" y1="30" x2="480" y2="130"/>
+        <line x1="560" y1="30" x2="560" y2="130"/>
+        <line x1="640" y1="30" x2="640" y2="130"/>
+        <line x1="720" y1="30" x2="720" y2="130"/>
+        <line x1="800" y1="30" x2="800" y2="130"/>
+        </g>
+        </svg>
+
       <h2 id="physical">2) Physical layer & voltage levels</h2>
       <ul>
         <li><strong>TTL/CMOS UART:</strong> 0V = LOW, VCC (3.3V or 5V) = HIGH. Used inside MCU and with USB–TTL adapters (FTDI, CP2102).</li>
