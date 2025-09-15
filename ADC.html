@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADC Overview</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="overlay">
+    <div class="header">
+      <h1>Analog to Digital Converter (ADC) Overview</h1>
+    </div>
+
+    <div class="content-wrapper">
+      <h2>1. Hardware Level (Analog Domain)</h2>
+      <ul>
+        <li><b>Analog Input:</b> Voltage or current signals (e.g., sensors).</li>
+        <li><b>Sample & Hold:</b> Captures the analog value at an instant.</li>
+        <li><b>ADC Core:</b> Converts analog voltage to binary digital value.</li>
+        <li><b>Resolution:</b> Defines precision (8-bit, 10-bit, 12-bit, etc.).</li>
+        <li><b>Reference Voltage:</b> Sets conversion scale (e.g., 0–3.3V).</li>
+      </ul>
+
+      <h2>2. Firmware Level (Digital Domain)</h2>
+      <ul>
+        <li><b>Initialization:</b> Configure ADC registers (channel, sampling rate, resolution).</li>
+        <li><b>Start Conversion:</b> Trigger ADC (polling, interrupt, DMA).</li>
+        <li><b>Read Data:</b> Fetch digital values from ADC data register.</li>
+        <li><b>Scaling:</b> Convert raw ADC values to engineering units (°C, voltage, etc.).</li>
+      </ul>
+
+      <h2>3. Debugging ADC</h2>
+      <ul>
+        <li>Check <b>reference voltage</b> stability.</li>
+        <li>Verify <b>GPIO pin configuration</b> as analog input.</li>
+        <li>Ensure <b>sampling time</b> matches sensor characteristics.</li>
+        <li>Test by applying known voltage and verifying digital value.</li>
+      </ul>
+
+      <h2>4. Typical ADC Workflow</h2>
+      <p>
+        Sensor (Analog Signal) → Sample & Hold → ADC Conversion → Digital Value → Processing in MCU → Application Output
+      </p>
+
+      <h2>5. Example Code (STM32 HAL)</h2>
+      <pre><code>
+ADC_HandleTypeDef hadc1;
+
+HAL_ADC_Start(&hadc1);
+if (HAL_ADC_PollForConversion(&hadc1, 100) == HAL_OK)
+{
+    uint32_t adcValue = HAL_ADC_GetValue(&hadc1);
+    float voltage = (adcValue * 3.3) / 4095; // For 12-bit ADC
+}
+HAL_ADC_Stop(&hadc1);
+      </code></pre>
+
+      <div class="note">
+        <b>Note:</b> Debugging ADC often requires an oscilloscope or multimeter to validate input signals.
+      </div>
+    </div>
+  </div>
+</body>
+</html>
