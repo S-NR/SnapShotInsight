@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>UART: Hardware → Embedded C (Guide)</title>
   <link rel="stylesheet" href="styles.css">
+  <style>
+    /* Override to ensure left-aligned content while keeping your theme */
+    .content-wrapper, .header, .overlay { text-align: left; }
+    .header { text-align: left; }
+    .header h1 { margin-top: 0; }
+    /* tighten pre formatting for code blocks */
+    pre.waveform { white-space: pre; }
+    /* svg responsiveness */
+    .diagram { max-width: 100%; height: auto; display: block; margin: 18px 0; border-radius: 8px; }
+    .diagram-caption { font-size: 14px; color: #dfeff0; margin-bottom: 18px; }
+  </style>
 </head>
 <body>
   <div class="overlay">
@@ -20,6 +31,65 @@
         <strong>UART</strong> = Universal Asynchronous Receiver/Transmitter. Asynchronous serial: data is sent bit-by-bit with a shared baud (bit rate) but <strong>no separate clock line</strong>.
       </p>
       <p>Typical UART frame: <strong>start bit (0)</strong> + <strong>N data bits (LSB first)</strong> + optional parity + <strong>stop bit(s) (1 or 2)</strong>. Idle line state is logic <em>1</em> (high). Start bit is low.</p>
+
+      <h2>Hardware Block Diagram</h2>
+        <p class="diagram-caption">Basic UART transmitter ↔ receiver and their connection to CPU registers.</p>
+
+
+        <!-- Block diagram SVG -->
+        <svg class="diagram" viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="UART block diagram">
+        <defs>
+        <style>
+        .b { fill:#071016; stroke:#00eaff; stroke-width:2; }
+        .t { fill:#ffffff; font-family: 'Times New Roman', Times, serif; font-size:14px; }
+        .arrow { stroke:#00eaff; stroke-width:2; marker-end:url(#arrow); }
+        </style>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 z" fill="#00eaff" />
+        </marker>
+        </defs>
+
+
+        <!-- Left CPU -->
+        <rect x="20" y="40" width="180" height="120" rx="8" class="b"/>
+        <text x="30" y="75" class="t">CPU / Registers</text>
+        <text x="30" y="95" class="t">(write parallel data)</text>
+
+
+        <!-- UART TX -->
+        <rect x="230" y="25" width="160" height="70" rx="8" class="b"/>
+        <text x="250" y="55" class="t">UART Tx</text>
+        <text x="250" y="75" class="t">Serializer + Baud</text>
+
+
+        <!-- UART RX -->
+        <rect x="510" y="25" width="160" height="70" rx="8" class="b"/>
+        <text x="530" y="55" class="t">UART Rx</text>
+        <text x="530" y="75" class="t">Deserializer + Sample</text>
+
+
+        <!-- Right CPU -->
+        <rect x="700" y="40" width="180" height="120" rx="8" class="b"/>
+        <text x="710" y="75" class="t">CPU / Registers</text>
+        <text x="710" y="95" class="t">(read parallel data)</text>
+
+
+        <!-- Connections -->
+        <path d="M390 60 L510 60" class="arrow" />
+        <text x="420" y="48" class="t">TX line (serial)</text>
+        <path d="M480 120 L390 120" stroke="#65999e" stroke-width="1" stroke-dasharray="6 4" />
+        <text x="420" y="140" class="t">Shared GND</text>
+
+
+        <!-- CPU->UART arrows -->
+        <path d="M200 90 L230 60" stroke="#00eaff" stroke-width="2" marker-end="url(#arrow)" />
+        <path d="M670 60 L700 90" stroke="#00eaff" stroke-width="2" marker-end="url(#arrow)" />
+
+
+        <!-- Labels -->
+        <text x="260" y="15" class="t">Transmitter</text>
+        <text x="520" y="15" class="t">Receiver</text>
+        </svg>
 
       <h2 id="physical">2) Physical layer & voltage levels</h2>
       <ul>
