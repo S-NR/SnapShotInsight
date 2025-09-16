@@ -418,6 +418,113 @@
     </defs>
   </svg>
 
+  <!-- START: Synchronous UART Section -->
+<section id="sync-uart" style="text-align:left; margin-top:30px;">
+  <h2>Synchronous UART (USART) — Practical Notes</h2>
+
+  <p>
+    <strong>Short summary:</strong> Synchronous UART (commonly available as the MCU's <code>USART</code> synchronous mode)
+    uses a separate <em>clock</em> line in addition to TX and RX. The clock is used to sample data bits so start/stop bits are
+    not required and data alignment is driven by the clock.
+  </p>
+
+  <h3>Key differences (at-a-glance)</h3>
+  <table>
+    <thead>
+      <tr><th>Feature</th><th>Asynchronous UART</th><th>Synchronous UART</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Clock line</td><td>None</td><td>Required (CK pin)</td></tr>
+      <tr><td>Start/Stop bits</td><td>Used</td><td>Not required (clocked data)</td></tr>
+      <tr><td>Voltage levels</td><td>TTL / RS-232 (hardware dependent)</td><td>TTL (typically MCU I/O levels)</td></tr>
+      <tr><td>Typical use</td><td>PC serial, debug, sensors</td><td>MCU↔MCU high-reliability links, some legacy protocols</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Recommended hardware to experiment with synchronous UART</h3>
+  <ul>
+    <li><strong>MCUs with USART (sync mode)</strong>: STM32 family (USART peripheral), PIC USART, many Atmel/AVR (USART), TI MSP430 — configure in synchronous mode.</li>
+    <li><strong>FPGAs / CPLDs</strong>: you can implement custom synchronous serial interfaces and provide/consume clock lines.</li>
+    <li><strong>Multi-protocol bridge chips</strong> (advanced): FT2232H / FT4232H or programmable USB controllers (Cypress FX series) can be programmed to emulate sync protocols, but are more complex.</li>
+    <li><strong>Avoid USB→TTL adapters like FT232RL/CP2102/CH340</strong> for sync UART: those provide async TX/RX only and do NOT forward a CK pin to the PC virtual COM port.</li>
+  </ul>
+
+  <h3>Voltage levels & TTL</h3>
+  <p>
+    TTL describes voltage levels (logic_LOW ≈ 0 V, logic_HIGH ≈ MCU VCC e.g. 3.3 V). Synchronous UART simply adds a TTL clock line — the clock is
+    another TTL-level signal and you wire it directly between devices (MCU to MCU) if both use the same voltage domain.
+  </p>
+
+  <h3>How to wire synchronous UART (MCU ↔ MCU)</h3>
+  <div style="max-width:900px;">
+    <svg class="diagram" viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sync UART wiring">
+      <style>
+        .box { fill: rgba(0,0,0,0.5); stroke: #00eaff; stroke-width:2; rx:8; ry:8; }
+        .lbl { fill:#ffffff; font-family: 'Times New Roman', Times, serif; font-size:14px; }
+        .line { stroke:#98f3f8; stroke-width:3; marker-end:url(#arr); }
+      </style>
+      <defs>
+        <marker id="arr" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L6,3 z" fill="#98f3f8"/>
+        </marker>
+      </defs>
+
+      <!-- Left MCU -->
+      <rect x="30" y="40" width="180" height="120" rx="8" class="box"/>
+      <text x="120" y="70" text-anchor="middle" class="lbl">MCU 1 (Master)</text>
+      <text x="120" y="92" text-anchor="middle" class="lbl">TX | RX | CK (3.3V TTL)</text>
+
+      <!-- Right MCU -->
+      <rect x="690" y="40" width="180" height="120" rx="8" class="box"/>
+      <text x="780" y="70" text-anchor="middle" class="lbl">MCU 2 (Slave)</text>
+      <text x="780" y="92" text-anchor="middle" class="lbl">TX | RX | CK (3.3V TTL)</text>
+
+      <!-- Connections -->
+      <line x1="210" y1="70" x2="690" y2="70" class="line"/>
+      <text x="450" y="60" text-anchor="middle" class="lbl">TX⟶RX (direct TTL)</text>
+
+      <line x1="210" y1="100" x2="690" y2="100" class="line"/>
+      <text x="450" y="90" text-anchor="middle" class="lbl">RX⟵TX (direct TTL)</text>
+
+      <line x1="210" y1="130" x2="690" y2="130" class="line"/>
+      <text x="450" y="120" text-anchor="middle" class="lbl">CK (clock line, master drives)</text>
+    </svg>
+  </div>
+
+  <h3>Practical tips</h3>
+  <ul>
+    <li><strong>Master vs Slave:</strong> The master generates the CK; the slave samples data on the clock edges. Choose who drives CK and match settings on both devices (clock polarity/phase if configurable).</li>
+    <li><strong>Voltage matching:</strong> Ensure both devices use the same IO voltage (e.g., both 3.3 V). Use level shifters if mixing 5 V and 3.3 V devices.</li>
+    <li><strong>PC connectivity:</strong> Standard USB↔TTL adapters (FT232RL, CP2102, CH340) do NOT support CK. To log/monitor synchronous traffic on a PC you’ll need a logic analyzer or custom bridge (FT2232H or programmable USB controller).</li>
+    <li><strong>Use existing MCU peripherals:</strong> Easiest way to try sync UART is to use two dev boards (e.g., two STM32 Nucleo/Discovery boards) and set one USART to synchronous master and the other to synchronous slave.</li>
+  </ul>
+
+  <h3>When to prefer synchronous UART</h3>
+  <ul>
+    <li>High-reliability links where clock alignment makes data sampling robust.</li>
+    <li>When you want slightly better efficiency because start/stop bits are not required.</li>
+    <li>When both endpoints are dedicated digital devices (MCUs, FPGAs), not PCs.</li>
+  </ul>
+
+  <h3>Example (STM32)</h3>
+  <p>
+    In CubeMX select the USART peripheral and set <code>Mode → Synchronous</code> (you'll see a CK pin allocated). Configure the CK master/slave role and clock polarity/phase if exposed.
+    Connect CK to peer CK, and TX/RX cross-connected as usual. Test with a simple loopback or echo program between the two MCUs.
+  </p>
+
+  <div class="note">
+    <strong>Quick checklist to test sync UART:</strong>
+    <ol>
+      <li>Both devices use same IO voltage (3.3 V recommended).</li>
+      <li>One device configured as clock master; the other as slave.</li>
+      <li>TX ↔ RX, RX ↔ TX, CK ↔ CK connections made.</li>
+      <li>Observe clock and data with logic analyzer or scope; verify data is sampled on expected edges.</li>
+    </ol>
+  </div>
+</section>
+<!-- END: Synchronous UART Section -->
+
+
       <h2 id="mcu-block">4) What’s inside a typical MCU UART block</h2>
       <ul>
         <li><strong>TX / RX shift registers</strong> — shift bits out/in.</li>
