@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>UART Pin Layout Schematics</title>
+<style>
+  body { font-family: "Times New Roman", Times, serif; color:#111; background:#fff; padding:20px; }
+  h1,h2 { color:#004a57; }
+  .diagram { border:1px solid #ddd; padding:12px; margin-bottom:18px; border-radius:8px; background:#f8f8f8; }
+  .note { background:#fffbe6; padding:10px; border-left:6px solid #ffc107; margin-bottom:20px; border-radius:6px; }
+  code{background:rgba(0,0,0,0.04);padding:2px 6px;border-radius:4px;}
+  svg { width:100%; height:auto; }
+  table { border-collapse:collapse; margin:8px 0 18px 0; width:100%; }
+  th,td{padding:8px;border:1px solid #ddd;text-align:left;}
+</style>
+</head>
+<body>
+
+<h1>UART Pin Layout Schematics</h1>
+<p class="note">Ensure both sides share common <strong>GND</strong> and match IO voltage (3.3V vs 5V). Add series resistors (22–100Ω) if desired, and decoupling caps on VCC.</p>
+
+<h2>1) MCU ↔ USB-TTL Adapter (FT232 / CP2102) — Async</h2>
+<div class="diagram">
+<!-- MCU <-> USB-TTL -->
+<svg viewBox="0 0 1000 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MCU to USB-TTL">
+  <style>
+    .box{fill:#0b2430;stroke:#00a7c4;stroke-width:2;rx:6}
+    .pin{fill:#fff;font-family:Times,serif;font-size:13px}
+    .line{stroke:#00a7c4;stroke-width:2;marker-end:url(#arr)}
+    .gnd{stroke:#666;stroke-width:1.2}
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#00a7c4"/>
+    </marker>
+  </defs>
+
+  <!-- MCU -->
+  <rect x="30" y="30" width="240" height="200" rx="8" fill="#08202a" stroke="#00a7c4"/>
+  <text x="150" y="56" fill="#fff" font-size="14" text-anchor="middle">MCU (3.3V)</text>
+
+  <!-- MCU pin labels -->
+  <text x="60" y="90" class="pin">Pin: PA2  TXD</text>
+  <text x="60" y="120" class="pin">Pin: PA3  RXD</text>
+  <text x="60" y="150" class="pin">GND</text>
+  <text x="60" y="180" class="pin">VCC (3.3V)</text>
+
+  <!-- Adapter -->
+  <rect x="700" y="30" width="240" height="200" rx="8" fill="#08202a" stroke="#00a7c4"/>
+  <text x="820" y="56" fill="#fff" font-size="14" text-anchor="middle">USB-TTL Adapter</text>
+
+  <text x="720" y="90" class="pin">Pin: RXD (input)</text>
+  <text x="720" y="120" class="pin">Pin: TXD (output)</text>
+  <text x="720" y="150" class="pin">GND</text>
+  <text x="720" y="180" class="pin">VCC (select 3.3V/5V)</text>
+
+  <!-- Connections -->
+  <line x1="270" y1="90" x2="700" y2="90" class="line"/>
+  <text x="485" y="80" fill="#004a57">MCU TXD → Adapter RXD</text>
+
+  <line x1="700" y1="120" x2="270" y2="120" stroke="#00a7c4" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="485" y="130" fill="#004a57">Adapter TXD → MCU RXD</text>
+
+  <line x1="150" y1="150" x2="720" y2="150" class="gnd"/>
+  <text x="435" y="160" fill="#666">GND (connect)</text>
+
+  <line x1="150" y1="180" x2="720" y2="180" class="gnd"/>
+  <text x="435" y="190" fill="#666">VCC (only if adapter VCC jumper set)</text>
+</svg>
+
+<p><strong>Wiring summary:</strong> MCU TX → Adapter RX, MCU RX ← Adapter TX, common GND. Set adapter VCC to match MCU (3.3V recommended).</p>
+<p><strong>Minimal BOM:</strong> USB-TTL adapter, optional 22–100Ω series resistors, 0.1µF decoupling cap.</p>
+</div>
+
+<hr/>
+
+<h2>2) MCU ↔ MAX232 ↔ DB9 (RS-232)</h2>
+<div class="diagram">
+<!-- MCU -> MAX232 -> DB9 -->
+<svg viewBox="0 0 1100 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MCU to MAX232 to DB9">
+  <style>
+    .box{fill:#08202a;stroke:#00a7c4;stroke-width:2}
+    .chip{fill:#03363f;stroke:#00a7c4;stroke-width:2}
+    .pin{fill:#fff;font-family:Times,serif;font-size:13px}
+    .line{stroke:#00a7c4;stroke-width:2;marker-end:url(#arr)}
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#00a7c4"/>
+    </marker>
+  </defs>
+
+  <!-- MCU -->
+  <rect x="30" y="40" width="240" height="200" rx="8" class="box"/>
+  <text x="150" y="70" fill="#fff" font-size="14" text-anchor="middle">MCU (3.3V)</text>
+  <text x="65" y="110" class="pin">PA2 TXD</text>
+  <text x="65" y="140" class="pin">PA3 RXD</text>
+  <text x="65" y="170" class="pin">GND</text>
+
+  <!-- MAX232 -->
+  <rect x="380" y="50" width="220" height="160" rx="6" class="chip"/>
+  <text x="490" y="80" fill="#fff" font-size="14" text-anchor="middle">MAX232</text>
+  <text x="490" y="100" fill="#fff" font-size="12" text-anchor="middle">TTL↔RS232 level shifter</text>
+  <text x="490" y="122" fill="#fff" font-size="12" text-anchor="middle">C1..C4 caps required</text>
+
+  <!-- DB9 -->
+  <rect x="800" y="50" width="250" height="160" rx="8" class="box"/>
+  <text x="925" y="75" fill="#fff" font-size="14" text-anchor="middle">RS-232 Device (DB9)</text>
+  <text x="925" y="100" class="pin">±V RS-232 levels</text>
+
+  <!-- Connections MCU -> MAX232 -->
+  <line x1="270" y1="110" x2="380" y2="110" class="line"/>
+  <text x="330" y="100" fill="#004a57">MCU TXD → MAX232 TTL IN</text>
+
+  <line x1="380" y1="140" x2="270" y2="140" stroke="#00a7c4" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="330" y="150" fill="#004a57">MAX232 TTL OUT → MCU RXD</text>
+
+  <!-- MAX232 -> DB9 -->
+  <line x1="600" y1="110" x2="800" y2="110" class="line"/>
+  <text x="700" y="100" fill="#004a57">MAX232 RS232 OUT → DB9 RX</text>
+
+  <line x1="800" y1="140" x2="600" y2="140" stroke="#00a7c4" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="700" y="150" fill="#004a57">DB9 TX → MAX232 RS232 IN</text>
+
+  <text x="490" y="200" class="pin" fill="#fff" text-anchor="middle">C1..C4: per datasheet (e.g., 1µF)</text>
+</svg>
+
+<p><strong>Wiring summary:</strong> MCU TX↔MAX232 TTL pin ↔ MAX232 RS232 pin ↔ DB9. MAX232 performs voltage inversion and level shifting. Add recommended caps.</p>
+<p><strong>Minimal BOM:</strong> MAX232 (or equivalent), 4 × 1µF caps (or per datasheet), DB9 connector, decoupling cap.</p>
+</div>
+
+<hr/>
+
+<h2>3) MCU ↔ RS-485 Transceiver (Half-Duplex)</h2>
+<div class="diagram">
+<!-- MCU -> RS485 transceiver -> Bus -->
+<svg viewBox="0 0 1100 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="MCU to RS485 transceiver">
+  <style>
+    .box{fill:#08202a;stroke:#00a7c4;stroke-width:2}
+    .chip{fill:#04373f;stroke:#00a7c4;stroke-width:2}
+    .pin{fill:#fff;font-family:Times,serif;font-size:13px}
+    .line{stroke:#00a7c4;stroke-width:2;marker-end:url(#arr)}
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#00a7c4"/>
+    </marker>
+  </defs>
+
+  <rect x="20" y="40" width="260" height="220" rx="8" class="box"/>
+  <text x="150" y="75" fill="#fff" text-anchor="middle">MCU (3.3V)</text>
+  <text x="100" y="110" class="pin">TXD (PA2)</text>
+  <text x="100" y="140" class="pin">RXD (PA3)</text>
+  <text x="100" y="170" class="pin">GPIO (DE/RE)</text>
+  <text x="100" y="200" class="pin">GND</text>
+
+  <rect x="380" y="80" width="260" height="140" rx="6" class="chip"/>
+  <text x="510" y="100" fill="#fff" text-anchor="middle">RS-485 Transceiver</text>
+  <text x="510" y="120" fill="#fff" text-anchor="middle">(MAX3485 / SN65HVD..)</text>
+
+  <rect x="820" y="40" width="240" height="220" rx="8" class="box"/>
+  <text x="940" y="70" fill="#fff" text-anchor="middle">RS-485 Differential Bus</text>
+  <text x="940" y="100" fill="#fff" text-anchor="middle">A / B pair (multi-drop)</text>
+
+  <!-- Wiring -->
+  <line x1="280" y1="110" x2="380" y2="110" class="line"/><text x="330" y="100" fill="#004a57">TXD → DI (driver input)</text>
+  <line x1="380" y1="140" x2="280" y2="140" stroke="#00a7c4" stroke-width="2" marker-end="url(#arr)"/><text x="330" y="150" fill="#004a57">RO (receiver out) → RXD</text>
+  <line x1="280" y1="170" x2="380" y2="170" class="line"/><text x="330" y="180" fill="#004a57">DE/RE (GPIO control)</text>
+
+  <line x1="640" y1="115" x2="820" y2="115" class="line"/><text x="730" y="105" fill="#004a57">A</text>
+  <line x1="640" y1="145" x2="820" y2="145" stroke="#00a7c4" stroke-width="2" marker-end="url(#arr)"/><text x="730" y="155" fill="#004a57">B</text>
+
+  <text x="930" y="210" fill="#666" font-size="12" text-anchor="middle">Add 120Ω termination at bus ends and bias resistors</text>
+</svg>
+
+<p><strong>Wiring summary:</strong> DI/RO pins map to MCU TX/RX; control DE to enable transmitter (assert DE before sending). Tie RE appropriately for receive mode. Add termination and biasing resistors on bus.</p>
+<p><strong>Minimal BOM:</strong> RS485 transceiver IC, 120Ω terminator(s), pull resistors for bias, decoupling cap, TVS optional.</p>
+</div>
+
+<hr/>
+
+<h2>4) Synchronous UART — MCU (Master) ↔ MCU (Slave) with CK</h2>
+<div class="diagram">
+<!-- Sync MCU to MCU -->
+<svg viewBox="0 0 1000 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sync MCU to MCU">
+  <style>
+    .box{fill:#08202a;stroke:#00a7c4;stroke-width:2}
+    .pin{fill:#fff;font-family:Times,serif;font-size:13px}
+    .line{stroke:#00a7c4;stroke-width:2;marker-end:url(#arr)}
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#00a7c4"/></marker>
+  </defs>
+
+  <rect x="30" y="40" width="240" height="180" rx="8" class="box"/>
+  <text x="150" y="70" fill="#fff" text-anchor="middle">MCU1 (Master)</text>
+  <text x="70" y="110" class="pin">PA2 TX</text>
+  <text x="70" y="135" class="pin">PA3 RX</text>
+  <text x="70" y="160" class="pin">PA4 CK (SCLK)</text>
+
+  <rect x="730" y="40" width="240" height="180" rx="8" class="box"/>
+  <text x="850" y="70" fill="#fff" text-anchor="middle">MCU2 (Slave)</text>
+  <text x="760" y="110" class="pin">PA2 TX</text>
+  <text x="760" y="135" class="pin">PA3 RX</text>
+  <text x="760" y="160" class="pin">PA4 CK (SCLK)</text>
+
+  <!-- Connections -->
+  <line x1="270" y1="110" x2="730" y2="110" class="line"/><text x="500" y="100" fill="#004a57">MCU1 TX → MCU2 RX</text>
+  <line x1="730" y1="135" x2="270" y2="135" stroke="#00a7c4" stroke-width="2" marker-end="url(#arr)"/><text x="500" y="145" fill="#004a57">MCU2 TX → MCU1 RX</text>
+  <line x1="270" y1="160" x2="730" y2="160" class="line"/><text x="500" y="150" fill="#004a57">MCU1 CK → MCU2 CK (clock)</text>
+</svg>
+
+<p><strong>Wiring summary:</strong> Cross TX/RX as usual and connect CK from master to slave. Ensure both use same IO voltage and configure master/slave roles in USART peripheral settings.</p>
+<p><strong>Minimal BOM:</strong> Two dev boards or MCUs, optional series resistors, decoupling caps. Use scope or logic analyzer to verify clock & data timing.</p>
+</div>
+
+<hr/>
+<h2>Additional Notes & Quick Checklist</h2>
+<ul>
+  <li>Always tie grounds between devices.</li>
+  <li>Match VCC levels or use proper level translators.</li>
+  <li>Use series resistors (22–100Ω) to protect against contention and reduce ringing.</li>
+  <li>Place 0.1µF close to each IC VCC pin for decoupling.</li>
+  <li>Use a logic analyzer when debugging: it shows TTL levels and (for sync) the CK alignment.</li>
+</ul>
+
+</body>
+</html>
