@@ -418,6 +418,160 @@
     </defs>
   </svg>
 
+
+
+
+  <!-- TTL UART: MCU <-> USB-TTL adapter -->
+<svg viewBox="0 0 900 220" xmlns="http://www.w3.org/2000/svg" width="900">
+  <style>
+    .box{fill:#122;stroke:#00eaff;stroke-width:2;rx:8}
+    .txt{fill:#fff;font-family:Times,serif;font-size:13px}
+    .line{stroke:#98f3f8;stroke-width:2;marker-end:url(#arr)}
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#98f3f8"/>
+    </marker>
+  </defs>
+
+  <rect x="30" y="40" width="220" height="140" class="box"/>
+  <text x="140" y="65" text-anchor="middle" class="txt">MCU (3.3V)</text>
+  <text x="140" y="90" text-anchor="middle" class="txt">UART Pins: TX, RX, RTS, CTS</text>
+
+  <rect x="650" y="40" width="220" height="140" class="box"/>
+  <text x="760" y="65" text-anchor="middle" class="txt">USB-TTL Adapter</text>
+  <text x="760" y="90" text-anchor="middle" class="txt">FT232 / CP2102 (3.3V/5V)</text>
+
+  <!-- TX->RX -->
+  <line x1="250" y1="80" x2="650" y2="80" class="line"/>
+  <text x="450" y="70" class="txt" text-anchor="middle">MCU TXD ──▶ Adapter RXD</text>
+
+  <!-- RX<-TX -->
+  <line x1="650" y1="110" x2="250" y2="110" stroke="#98f3f8" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="450" y="120" class="txt" text-anchor="middle">Adapter TXD ──▶ MCU RXD</text>
+
+  <!-- GND -->
+  <line x1="150" y1="180" x2="750" y2="180" stroke="#fff" stroke-width="1" />
+  <text x="450" y="195" class="txt" text-anchor="middle">GND (COMMON)</text>
+
+  <!-- VCC jumper note -->
+  <text x="760" y="125" class="txt" text-anchor="middle" font-size="12">VCC (select 3.3V/5V)</text>
+</svg>
+
+
+
+<!-- MAX232 RS232 level shifter -->
+<svg viewBox="0 0 1000 260" xmlns="http://www.w3.org/2000/svg" width="1000">
+  <style>
+    .box{fill:#122;stroke:#00eaff;stroke-width:2}
+    .chip{fill:#050;stroke:#00eaff;stroke-width:2}
+    .txt{fill:#fff;font-family:Times,serif;font-size:13px}
+    .line{stroke:#98f3f8;stroke-width:2;marker-end:url(#arr)}
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L6,3 z" fill="#98f3f8"/>
+    </marker>
+  </defs>
+
+  <rect x="30" y="50" width="220" height="140" class="box"/>
+  <text x="140" y="75" class="txt" text-anchor="middle">MCU (3.3V)</text>
+  <text x="140" y="100" class="txt" text-anchor="middle">TXD / RXD</text>
+
+  <rect x="370" y="60" width="180" height="140" class="chip"/>
+  <text x="460" y="85" class="txt" text-anchor="middle">MAX232</text>
+  <text x="460" y="105" class="txt" text-anchor="middle">(+ charge pump caps)</text>
+
+  <rect x="760" y="50" width="220" height="140" class="box"/>
+  <text x="870" y="75" class="txt" text-anchor="middle">RS-232 Device</text>
+  <text x="870" y="100" class="txt" text-anchor="middle">DB9 / ±V RS-232</text>
+
+  <!-- Connections MCU -> MAX232 -->
+  <line x1="250" y1="90" x2="370" y2="90" class="line"/><text x="310" y="80" class="txt">MCU TXD</text>
+  <line x1="370" y1="120" x2="250" y2="120" stroke="#98f3f8" stroke-width="2" marker-end="url(#arr)"/><text x="310" y="130" class="txt">MCU RXD</text>
+
+  <!-- MAX232 -> RS232 -->
+  <line x1="550" y1="90" x2="760" y2="90" class="line"/><text x="640" y="80" class="txt">Txd_out (RS232)</text>
+  <line x1="760" y1="120" x2="550" y2="120" stroke="#98f3f8" stroke-width="2" marker-end="url(#arr)"/><text x="640" y="130" class="txt">Rxd_in (RS232)</text>
+
+  <!-- caps -->
+  <text x="460" y="160" class="txt" text-anchor="middle">C1..C4: 1µF (charge pump)</text>
+</svg>
+
+
+
+<!-- RS485 half-duplex -->
+<svg viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg" width="1000">
+  <style>
+    .box{fill:#122;stroke:#00eaff;stroke-width:2}
+    .chip{fill:#051;stroke:#00eaff;stroke-width:2}
+    .txt{fill:#fff;font-family:Times,serif;font-size:13px}
+    .line{stroke:#98f3f8;stroke-width:2;marker-end:url(#arr)}
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#98f3f8"/></marker>
+  </defs>
+
+  <rect x="30" y="40" width="240" height="160" class="box"/>
+  <text x="150" y="70" class="txt" text-anchor="middle">MCU (3.3V)</text>
+  <text x="150" y="95" class="txt" text-anchor="middle">UART TX/RX + GPIO (DE/RE)</text>
+
+  <rect x="380" y="80" width="220" height="100" class="chip"/>
+  <text x="490" y="105" class="txt" text-anchor="middle">RS-485 Transceiver</text>
+  <text x="490" y="125" class="txt" text-anchor="middle">(e.g., MAX3485 / SN65HVD)</text>
+
+  <rect x="750" y="40" width="180" height="160" class="box"/>
+  <text x="840" y="70" class="txt" text-anchor="middle">RS-485 Bus</text>
+  <text x="840" y="95" class="txt" text-anchor="middle">A / B Differential Pair</text>
+
+  <!-- MCU -> transceiver -->
+  <line x1="270" y1="90" x2="380" y2="90" class="line"/><text x="325" y="80" class="txt">TXD</text>
+  <line x1="380" y1="120" x2="270" y2="120" stroke="#98f3f8" stroke-width="2" marker-end="url(#arr)"/><text x="325" y="130" class="txt">RXD</text>
+
+  <!-- DE/RE lines -->
+  <line x1="270" y1="150" x2="380" y2="150" class="line"/><text x="320" y="160" class="txt">DE / RE (GPIO)</text>
+
+  <!-- transceiver -> bus -->
+  <line x1="600" y1="100" x2="750" y2="100" class="line"/><text x="675" y="90" class="txt">A</text>
+  <line x1="600" y1="120" x2="750" y2="120" stroke="#98f3f8" stroke-width="2" marker-end="url(#arr)"/><text x="675" y="130" class="txt">B</text>
+
+  <!-- bus terminator note -->
+  <text x="840" y="160" class="txt" text-anchor="middle">120Ω termination + bias resistors (Rpull-up, Rpull-down)</text>
+</svg>
+
+
+
+<!-- Sync UART wiring: MCU <-> MCU with CK -->
+<svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg" width="900">
+  <style>
+    .box{fill:#122;stroke:#00eaff;stroke-width:2}
+    .txt{fill:#fff;font-family:Times,serif;font-size:13px}
+    .line{stroke:#98f3f8;stroke-width:2;marker-end:url(#arr)}
+  </style>
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#98f3f8"/></marker>
+  </defs>
+
+  <rect x="30" y="40" width="240" height="160" class="box"/>
+  <text x="150" y="75" class="txt" text-anchor="middle">MCU1 (Master)</text>
+  <text x="150" y="95" class="txt" text-anchor="middle">TX / RX / CK</text>
+
+  <rect x="630" y="40" width="240" height="160" class="box"/>
+  <text x="750" y="75" class="txt" text-anchor="middle">MCU2 (Slave)</text>
+  <text x="750" y="95" class="txt" text-anchor="middle">TX / RX / CK</text>
+
+  <!-- TX->RX -->
+  <line x1="270" y1="80" x2="630" y2="80" class="line"/><text x="450" y="70" class="txt">MCU1 TX ──▶ MCU2 RX</text>
+  <!-- RX<-TX -->
+  <line x1="630" y1="110" x2="270" y2="110" stroke="#98f3f8" stroke-width="2" marker-end="url(#arr)"/><text x="450" y="120" class="txt">MCU2 TX ──▶ MCU1 RX</text>
+  <!-- CK -->
+  <line x1="270" y1="140" x2="630" y2="140" class="line"/><text x="450" y="130" class="txt">MCU1 CK (clock) ──▶ MCU2 CK</text>
+
+  <text x="450" y="190" class="txt" text-anchor="middle">All signals are TTL level (3.3V typical). Tie grounds.</text>
+</svg>
+
+
+
   <!-- START: Synchronous UART Section -->
 <section id="sync-uart" style="text-align:left; margin-top:30px;">
   <h2>Synchronous UART (USART) — Practical Notes</h2>
