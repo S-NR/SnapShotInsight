@@ -14,6 +14,7 @@
       <div class="quote">Try a hex value (32-bit) like <code>0x12345678</code> or a 16-bit like <code>0xABCD</code>.</div>
     </div>
 
+  <div class="section">
       <div class="note">
         <label for="hexin">Hex value (prefix optional):</label><br>
         <input id="hexin" type="text" value="0x12345678" placeholder="0x12345678 or 1234ABCD">
@@ -56,6 +57,7 @@
         <p><strong>Little Endian</strong>: store least-significant byte at lowest address. Example 0x12345678 → [78][56][34][12]</p>
         <p><strong>Modbus RTU</strong>: registers are transmitted as <em>High byte, Low byte</em> per 16-bit register. For 32-bit values split across two registers, vendor/device manuals decide whether the high 16-bit word comes first or second — so test and swap accordingly.</p>
       </div>
+  </div>
   </div>
 
 <script>
