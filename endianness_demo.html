@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Introduction to Endianness — Interactive Demo</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="overlay">
+    <div class="header">
+      <h1>Introduction to Endianness — Interactive Demo</h1>
+      <p>Endianness is the byte order used to represent multi-byte values in memory. This demo shows <strong>Big Endian</strong> (MSB first) and <strong>Little Endian</strong> (LSB first), plus common "swapped" layouts used in protocols like Modbus.</p>
+      <div class="quote">Try a hex value (32-bit) like <code>0x12345678</code> or a 16-bit like <code>0xABCD</code>.</div>
+    </div>
+
+      <div class="note">
+        <label for="hexin">Hex value (prefix optional):</label><br>
+        <input id="hexin" type="text" value="0x12345678" placeholder="0x12345678 or 1234ABCD">
+        <br><br>
+        <label for="bits">Bit-width:</label><br>
+        <select id="bits">
+          <option value="16">16-bit (1 reg)</option>
+          <option value="32" selected>32-bit (2 regs)</option>
+          <option value="64">64-bit (4 regs)</option>
+        </select>
+        <br><br>
+        <button class="explore-button" id="update">Show bytes</button>
+      </div>
+
+      <h2>Big vs Little Endian</h2>
+      <table>
+        <tr>
+          <th>Big Endian (Memory low→high)</th>
+          <th>Little Endian (Memory low→high)</th>
+        </tr>
+        <tr>
+          <td><div class="bytes" id="beBytes"></div><div class="small">Address 0 = <span id="beAddr0">0x00</span></div></td>
+          <td><div class="bytes" id="leBytes"></div><div class="small">Address 0 = <span id="leAddr0">0x00</span></div></td>
+        </tr>
+      </table>
+
+      <h2>Common 32-bit Register Orders (Protocols)</h2>
+      <p>Given two 16-bit registers [Reg1, Reg2] as they appear on the wire, here are popular interpretations:</p>
+      <pre class="waveform" id="orders">Loading...</pre>
+
+      <div class="button-container">
+        <button id="copyBe">Copy BE bytes</button>
+        <button id="copyLe">Copy LE bytes</button>
+        <button id="download">Download HTML</button>
+      </div>
+
+      <h3>Quick Reference</h3>
+      <div class="note">
+        <p><strong>Big Endian</strong>: store most-significant byte at lowest address. Example 0x12345678 → [12][34][56][78]</p>
+        <p><strong>Little Endian</strong>: store least-significant byte at lowest address. Example 0x12345678 → [78][56][34][12]</p>
+        <p><strong>Modbus RTU</strong>: registers are transmitted as <em>High byte, Low byte</em> per 16-bit register. For 32-bit values split across two registers, vendor/device manuals decide whether the high 16-bit word comes first or second — so test and swap accordingly.</p>
+      </div>
+  </div>
+
+<script>
+function cleanHex(s){s = s.trim(); if(s.startsWith('0x')||s.startsWith('0X')) s = s.slice(2); s = s.replace(/[^0-9a-fA-F]/g,''); return s}
+function show(){
+  let raw = cleanHex(document.getElementById('hexin').value) || '0';
+  let bits = parseInt(document.getElementById('bits').value);
+  let bytesCount = bits/8;
+  raw = raw.padStart(bytesCount*2,'0').slice(-bytesCount*2);
+  let bytes = [];
+  for(let i=0;i<raw.length;i+=2) bytes.push(raw.slice(i,i+2).toUpperCase());
+  let be = bytes.slice();
+  let le = bytes.slice().reverse();
+  let beCont = document.getElementById('beBytes'); beCont.innerHTML='';
+  let leCont = document.getElementById('leBytes'); leCont.innerHTML='';
+  be.forEach(b=>{let d=document.createElement('div'); d.className='byte'; d.textContent=b; beCont.appendChild(d)});
+  le.forEach(b=>{let d=document.createElement('div'); d.className='byte'; d.textContent=b; leCont.appendChild(d)});
+
+  let orders = '';
+  if(bytesCount>=4){
+    let B0=be[0], B1=be[1], B2=be[2], B3=be[3];
+    orders += 'Raw bytes (BE order): '+[B0,B1,B2,B3].join(' ')+"\n\n";
+    orders += 'Interpretations:\n';
+    orders += '1) Big-Endian (AB CD): Reg1=('+B0+B1+') Reg2=('+B2+B3+')  -> '+B0+B1+B2+B3+'\n';
+    orders += '2) Little-Endian word swapped (CD AB): Reg1=('+B2+B3+') Reg2=('+B0+B1+') -> '+B2+B3+B0+B1+'\n';
+    orders += '3) Byte-swapped within words (BA DC): Reg1=('+B1+B0+') Reg2=('+B3+B2+') -> '+B1+B0+B3+B2+'\n';
+    orders += '4) Word & Byte swapped (DC BA): Reg1=('+B3+B2+') Reg2=('+B1+B0+') -> '+B3+B2+B1+B0+'\n';
+  } else if(bytesCount===2){
+    orders = '16-bit value bytes: '+bytes.join(' ')+"\nBig Endian: [MSB][LSB]\nLittle Endian: [LSB][MSB]";
+  } else {
+    orders = 'Adjust bit-width to 16/32/64 to see register orders.';
+  }
+  document.getElementById('orders').innerText = orders;
+}
+
+function copyText(txt){navigator.clipboard.writeText(txt).then(()=>alert('Copied: '+txt))}
+
+document.getElementById('update').addEventListener('click', show);
+document.getElementById('hexin').addEventListener('keydown', e=>{if(e.key==='Enter') show();});
+document.getElementById('copyBe').addEventListener('click', ()=>{
+  let arr=Array.from(document.querySelectorAll('#beBytes .byte')).map(x=>x.textContent); copyText(arr.join(' '));});
+document.getElementById('copyLe').addEventListener('click', ()=>{
+  let arr=Array.from(document.querySelectorAll('#leBytes .byte')).map(x=>x.textContent); copyText(arr.join(' '));});
+document.getElementById('download').addEventListener('click', ()=>{
+  const content=document.documentElement.outerHTML;
+  const blob=new Blob([content],{type:'text/html'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download='endianness-demo.html';a.click();URL.revokeObjectURL(url);
+});
+
+show();
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Endianness Overview</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="overlay_startUp">
+    <div class="header">
+      <h1>Introduction to Endianness</h1>
+    </div>
+
+      <p>Endianness defines the order in which bytes are stored or transmitted for multi-byte values in memory. It is important when transferring data between devices or working with binary file formats.</p>
+
+      <h2>1. Big Endian</h2>
+      <p>In <strong>Big Endian</strong> format, the <em>most significant byte (MSB)</em> is stored at the lowest memory address, and the <em>least significant byte (LSB)</em> at the highest address.</p>
+      <p><strong>Example:</strong> 32-bit value <code>0x12345678</code> in memory:</p>
+      <pre class="waveform">Address 0x00: 12
+Address 0x01: 34
+Address 0x02: 56
+Address 0x03: 78</pre>
+
+      <h2>2. Little Endian</h2>
+      <p>In <strong>Little Endian</strong> format, the <em>least significant byte (LSB)</em> is stored at the lowest memory address, and the <em>most significant byte (MSB)</em> at the highest address.</p>
+      <p><strong>Example:</strong> 32-bit value <code>0x12345678</code> in memory:</p>
+      <pre class="waveform">Address 0x00: 78
+Address 0x01: 56
+Address 0x02: 34
+Address 0x03: 12</pre>
+
+      <h2>3. Why Endianness Matters</h2>
+      <ul>
+        <li>Networking protocols (e.g., TCP/IP) expect data in a specific byte order.</li>
+        <li>MODBUS RTU registers require high-byte first.</li>
+        <li>Reading binary files between systems with different endianness can cause incorrect values.</li>
+      </ul>
+
+      <div class="button-container">
+        <button onclick="window.location.href='endianness_demo.html'">Go to Interactive Demo</button>
+      </div>
+  </div>
+</body>
+</html>
