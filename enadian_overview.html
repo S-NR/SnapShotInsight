@@ -13,35 +13,102 @@
     </div>
 
   <div class="section">
-      <p>Endianness defines the order in which bytes are stored or transmitted for multi-byte values in memory. It is important when transferring data between devices or working with binary file formats.</p>
+    <h2>1. What is Endianness?</h2>
+    <p>Endianness refers to the byte order used to store multi-byte data (like 16-bit, 32-bit, or 64-bit values) in memory.</p>
 
-      <h2>1. Big Endian</h2>
-      <p>In <strong>Big Endian</strong> format, the <em>most significant byte (MSB)</em> is stored at the lowest memory address, and the <em>least significant byte (LSB)</em> at the highest address.</p>
-      <p><strong>Example:</strong> 32-bit value <code>0x12345678</code> in memory:</p>
-      <pre class="waveform">Address 0x00: 12
-Address 0x01: 34
-Address 0x02: 56
-Address 0x03: 78</pre>
 
-      <h2>2. Little Endian</h2>
-      <p>In <strong>Little Endian</strong> format, the <em>least significant byte (LSB)</em> is stored at the lowest memory address, and the <em>most significant byte (MSB)</em> at the highest address.</p>
-      <p><strong>Example:</strong> 32-bit value <code>0x12345678</code> in memory:</p>
-      <pre class="waveform">Address 0x00: 78
-Address 0x01: 56
-Address 0x02: 34
-Address 0x03: 12</pre>
+    <h3>Big Endian (BE)</h3>
+    <p>The most significant byte (MSB) is stored at the lowest memory address.<br>Think of it like how we normally write numbers (left to right).</p>
+    <p><strong>Example:</strong> 0x12345678 stored as:</p>
+    <pre class="waveform">Address: 0x00 0x01 0x02 0x03
+    Data: 12 34 56 78</pre>
 
-      <h2>3. Why Endianness Matters</h2>
-      <ul>
-        <li>Networking protocols (e.g., TCP/IP) expect data in a specific byte order.</li>
-        <li>MODBUS RTU registers require high-byte first.</li>
-        <li>Reading binary files between systems with different endianness can cause incorrect values.</li>
-      </ul>
 
-      <div class="button-container">
-        <button onclick="window.location.href='endianness_demo.html'">Go to Interactive Demo</button>
-      </div>
-  </div>
-  </div>
+    <h3>Little Endian (LE)</h3>
+    <p>The least significant byte (LSB) is stored at the lowest memory address. Reverse of Big Endian.</p>
+    <p><strong>Example:</strong> 0x12345678 stored as:</p>
+    <pre class="waveform">Address: 0x00 0x01 0x02 0x03
+    Data: 78 56 34 12</pre>
+
+
+    <h2>2. Swapped Logics</h2>
+    <p>Terms like “byte-swapped” or “half-word swapped” appear in protocols and processors. These exist because different systems may use different endianness, requiring swaps during data transfer.</p>
+
+
+    <p><strong>16-bit swap (word swap):</strong><br>0x1234 (BE) → 0x3412 (LE)</p>
+    <p><strong>32-bit swap (dword swap):</strong><br>0x12345678 (BE) → 0x78563412 (LE)</p>
+    <p><strong>64-bit swap (qword swap):</strong><br>0x1122334455667788 (BE) → 0x8877665544332211 (LE)</p>
+
+
+    <p>Protocols like Modbus, CAN, Ethernet may use network byte order (Big Endian), but your MCU/PC may be Little Endian. Swaps are necessary when reading/writing across systems.</p>
+
+
+    <h2>3. Converting Between Endianness</h2>
+    <p>Two main approaches: manual shifting or built-in functions.</p>
+
+
+    <h3>A. Manual Conversion (C example)</h3>
+    <pre class="waveform">#include &lt;stdint.h&gt;
+
+
+    // Swap 16-bit
+    uint16_t swap16(uint16_t val) {
+    return (val &lt;&lt; 8) | (val &gt;&gt; 8);
+    }
+
+
+    // Swap 32-bit
+    uint32_t swap32(uint32_t val) {
+    return ((val &gt;&gt; 24) & 0x000000FF) |
+    ((val &gt;&gt; 8) & 0x0000FF00) |
+    ((val &lt;&lt; 8) & 0x00FF0000) |
+    ((val &lt;&lt; 24) & 0xFF000000);
+    }
+
+
+    // Swap 64-bit
+    uint64_t swap64(uint64_t val) {
+    return ((val &gt;&gt; 56) & 0x00000000000000FFULL) |
+    ((val &gt;&gt; 40) & 0x000000000000FF00ULL) |
+    ((val &gt;&gt; 24) & 0x0000000000FF0000ULL) |
+    ((val &gt;&gt; 8) & 0x00000000FF000000ULL) |
+    ((val &lt;&lt; 8) & 0x000000FF00000000ULL) |
+    ((val &lt;&lt; 24) & 0x0000FF0000000000ULL) |
+    ((val &lt;&lt; 40) & 0x00FF000000000000ULL) |
+    ((val &lt;&lt; 56) & 0xFF00000000000000ULL);
+    }</pre>
+
+
+    <h3>B. Built-in Functions (GCC / Linux / Networking)</h3>
+    <p>Most systems provide helpers:</p>
+    <ul>
+        <li>htons() / htonl() → Host-to-Network (Big Endian)</li>
+        <li>ntohs() / ntohl() → Network-to-Host</li>
+        <li>GCC/Clang: __builtin_bswap16(x), __builtin_bswap32(x), __builtin_bswap64(x)</li>
+    </ul>
+
+
+    <h2>4. Where You’ll See Endianness Issues</h2>
+    <ul>
+        <li>Networking: TCP/IP always uses Big Endian (network byte order)</li>
+        <li>File formats: Some image/audio formats specify an endian type</li>
+        <li>MCUs: ARM Cortex-M → Little Endian, PowerPC → Big Endian</li>
+        <li>Protocols (like Modbus): sometimes swap word order inside registers</li>
+    </ul>
+
+
+    <div class="note">
+        ✅ <strong>Summary:</strong><br>
+        Big Endian → MSB first, Little Endian → LSB first.<br>
+        Swapped formats occur when exchanging data across different systems.<br>
+        Conversions are done using byte swaps (manual shifts or built-ins).
+    </div>
+
+
+<div class="button-container">
+<button onclick="window.location.href='endianness_demo.html'">Go to Interactive Demo</button>
+</div>
+</div>
+</div>
 </body>
 </html>
