@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>C Variable Types — Memory & Behavior Chart</title>
   <!-- Link to your existing CSS file (update filename if different) -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="styles.css">
   <!-- <style>
     /* Lightweight defaults in case your CSS doesn't cover these elements */
     :root{--card-padding:16px;--muted:#666}
@@ -31,8 +31,9 @@
     <div class="overlay">
     
     <div class="header">
-  <div class="wrap">
-    <h1>C Variable Types — Memory &amp; Behavior Chart</h1>
+  <!-- <div class="wrap"> -->
+    <h1>C Variable Types — Memory &amp; Behavior Chart</h1>    
+    </div>
     <p class="lead">Table shows common C variable/storage types, their scope, lifetime, typical memory location and behavior. This HTML links to <code class="mono">style.css</code> — update the href in the head if your file is named differently.</p>
 
     <div class="card" id="chart-card">
@@ -175,26 +176,32 @@
 
     <div class="card">
       <h2>Quick memory map (visual)</h2>
-      <div class="map">+-----------------------------+
-|        STACK                | ← grows downwards
-|  - Local variables           |
-|  - Function call frames      |
-+-----------------------------+
-|        HEAP                 | ← grows upwards
-|  - malloc/calloc/realloc     |
-+-----------------------------+
-|        BSS Segment          |
-|  - Uninitialized globals     |
-|  - Uninitialized static vars |
-+-----------------------------+
-|        DATA Segment         |
-|  - Initialized globals       |
-|  - Initialized static vars   |
-+-----------------------------+
-|        TEXT / CODE          |
-|  - Function code, constants |
-+-----------------------------+</div>
-    </div>
+      <!-- <div class="waveform" style="align-items: right;"> -->
+        <pre class="waveform">
+--------------------------------------------------------------------------
+|                    +-----------------------------+                     |
+|                    |    STACK                    | ← grows downwards   |
+|                    |  - Local variables          |                     |
+|                    |  - Function call frames     |                     |
+|                    +-----------------------------+                     |
+|                    |    HEAP                     | ← grows upwards     |
+|                    |  - malloc/calloc/realloc    |                     |
+|                    +-----------------------------+                     |
+|                    |        BSS Segment          |                     |
+|                    |  - Uninitialized globals    |                     |
+|                    |  - Uninitialized static vars|                     |
+|                    +-----------------------------+                     |
+|                    |        DATA Segment         |                     |
+|                    |  - Initialized globals      |                     |
+|                    |  - Initialized static vars  |                     |
+|                    +-----------------------------+                     |
+|                    |        TEXT / CODE          |                     |
+|                    |  - Function code, constants |                     |
+|                    +-----------------------------+                     |
+--------------------------------------------------------------------------
+    <!-- </div> -->
+     </pre>
+     </div>
 
     <div class="card">
       <h2>Summary of key differences</h2>
@@ -217,8 +224,8 @@
       <p class="hint">The buttons above let you copy or download the same table as CSV. This is client-side JS only (no server required).</p>
     </div>
 
-    <footer style="margin-top:18px;color:var(--muted)">Want a version that includes a printable PDF export or inline CSS instead of linking <code class="mono">style.css</code>? Tell me and I'll add it.</footer>
-
+        <!-- </div> -->
+    
   </div>
 
   <script>
@@ -253,11 +260,9 @@
     // Row hover highlight
     const rows = document.querySelectorAll('#vars-table tbody tr');
     rows.forEach(r=>{
-      r.addEventListener('mouseenter', ()=>{ r.style.background = '#f8fafc' });
+      r.addEventListener('mouseenter', ()=>{ r.style.background = '#3d2699' });
       r.addEventListener('mouseleave', ()=>{ r.style.background = '' });
     });
   </script>
-        </div>
-    </div>
 </body>
 </html>

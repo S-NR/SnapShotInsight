@@ -259,6 +259,16 @@ caliblabel, calibinput {
 /* .formula {  border-left: 4px solid #336699; margin-bottom: 15px; } */
     .example {  border-left: 4px solid #4CAF50; margin-bottom: 15px; }
 
+    .map {
+      font-family: "Courier New", monospace;
+      background: #0f172a;
+      color: #e6edf3;
+      padding: 12px;
+      border-radius: 8px;
+      white-space: pre;
+      overflow-x: auto;
+    }
+
 
 @media screen and (max-width: 786px) {
   .overlay {
