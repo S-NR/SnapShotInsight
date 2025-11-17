@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SD Card Heating — Troubleshoot Guide</title>
+  <!-- User stylesheet -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="overlay_startUp">
+    <div class="header">
+      <h1>SD Card Heating — Quick Troubleshoot</h1>
+      <p class="quote">If an SD card heats immediately on connecting — treat it as a fault. Follow the checks below.</p>
+      <div class="button-container" style="margin-top:10px;">
+        <button class="explore-button" id="btnQuickCheck">Run Quick Checklist</button>
+        <button class="explore-button" id="btnDetailed">Show Detailed Steps</button>
+      </div>
+    </div>
+
+    <div class="overlay content-wrapper" id="mainContent">
+      <section id="summary">
+        <h2>Summary</h2>
+        <p>SD cards should feel <strong>warm</strong> during activity, but not hot within seconds. Immediate heating usually signals an electrical fault — stop using the card and follow safe debugging steps below.</p>
+      </section>
+
+      <section id="causes" class="example">
+        <h2>Common Causes</h2>
+        <ul>
+          <li><strong>Internal short or controller failure</strong> — card draws excessive current and heats fast.</li>
+          <li><strong>Damaged/bent contacts</strong> — bridged pins can short VCC to other lines.</li>
+          <li><strong>Faulty reader/adapter</strong> — reader supplies wrong voltage or shorts pins.</li>
+          <li><strong>Wrong board power (embedded)</strong> — 5V supplied instead of 3.3V or regulator issue.</li>
+          <li><strong>Counterfeit / poor-quality card</strong> — internal defects lead to overheating.</li>
+        </ul>
+      </section>
+
+      <section id="what-to-do">
+        <h2>Immediate Actions (do this first)</h2>
+        <ol>
+          <li>Unplug the card immediately if it becomes hot in 3–5 seconds.</li>
+          <li>Do <em>not</em> insert into expensive devices (phone/laptop) again.</li>
+          <li>Try a different reader/PC — if it only heats in one reader, the reader is faulty.</li>
+          <li>If it heats everywhere, assume the card is dead and replace it.</li>
+        </ol>
+      </section>
+
+      <section id="diagnostics">
+        <h2>Diagnostic Checklist</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>How to</th>
+              <th>Expected / Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Visual inspect</td>
+              <td>Check contacts for burns, debris, or bending.</td>
+              <td>If damaged → do not reuse; replace.</td>
+            </tr>
+            <tr>
+              <td>Swap reader</td>
+              <td>Test with another USB reader or different PC.</td>
+              <td>Heats only in one reader → replace reader.</td>
+            </tr>
+            <tr>
+              <td>Check board voltage (embedded)</td>
+              <td>Measure VDD at SD slot: should be ~3.3V.</td>
+              <td>Wrong voltage → fix regulator; do not use card.</td>
+            </tr>
+            <tr>
+              <td>Current draw</td>
+              <td>Use an ammeter in series; normal idle <100 mA.</td>
+              <td>High draw → shorted card or reader.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="notes">
+        <h3>What NOT to do</h3>
+        <div class="note">
+          <p><strong>Don't keep reinserting</strong> — repeated attempts can damage the host slot. Don't attempt reformat/repair while it still overheats.</p>
+        </div>
+      </section>
+
+      <section id="extras">
+        <h2>Extras</h2>
+
+        <h4>Quick search / suggestions</h4>
+        <div id="search-box">
+          <input id="searchInput" placeholder="Search checklist or keywords (example: 'voltage', 'reader')" />
+          <div id="suggestions" role="listbox" aria-hidden="true"></div>
+        </div>
+
+        <h4>ASCII waveform (example)</h4>
+        <pre class="waveform">
+  ____    ____    ____    ____
+ /    \__/    \__/    \__/    \__
+| SD |  |CLK |  |CMD |  |DATA|  |
+        </pre>
+
+        <h4>Quick formula / reminder</h4>
+        <div class="formula">P = V × I  &nbsp; → &nbsp; If V = 3.3 V and I spikes, power (heat) increases quickly.</div>
+
+        <img src="sd-card-sample.png" alt="Sample SD card" class="opt-img" />
+      </section>
+
+      <div class="button-container" style="margin-top: 30px;">
+        <button class="explore-button" id="btnCopyTips">Copy Quick Tips</button>
+        <button class="explore-button" id="btnDownloadLog">Download Checklist (txt)</button>
+      </div>
+
+      <div id="result" class="result" aria-live="polite" style="display:none"></div>
+    </div>
+  </div>
+
+  <script>
+    // --- Simple suggestions/search logic ---
+    const suggestions = document.getElementById('suggestions');
+    const input = document.getElementById('searchInput');
+
+    const terms = [
+      'voltage 3.3V',
+      'measure current',
+      'use different reader',
+      'visual inspect contacts',
+      'replace card',
+      'embedded 5V issue',
+      'short circuit',
+      'counterfeit card',
+      'use ammeter'
+    ];
+
+    input.addEventListener('input', () => {
+      const q = input.value.trim().toLowerCase();
+      if (!q) { suggestions.style.display = 'none'; suggestions.innerHTML = ''; return; }
+      const hits = terms.filter(t => t.includes(q)).slice(0,6);
+      if (!hits.length) { suggestions.style.display = 'none'; suggestions.innerHTML = ''; return; }
+      suggestions.style.display = 'block';
+      suggestions.innerHTML = hits.map(h => `<div tabindex="0">${h}</div>`).join('');
+      Array.from(suggestions.children).forEach(div => {
+        div.addEventListener('click', () => {
+          input.value = div.textContent;
+          suggestions.style.display = 'none';
+        });
+        div.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') { input.value = div.textContent; suggestions.style.display = 'none'; }
+        });
+      });
+    });
+
+    // --- Quick buttons ---
+    document.getElementById('btnQuickCheck').addEventListener('click', () => {
+      showResult('Quick checklist: 1) Unplug immediately. 2) Try another reader. 3) Inspect contacts. 4) Check voltage (3.3V). 5) Replace if heating persists.');
+    });
+
+    document.getElementById('btnDetailed').addEventListener('click', () => {
+      showResult('Detailed steps shown in the page. Start with visual inspect → swap reader → measure voltage → measure current → stop using if heating persists.');
+    });
+
+    function showResult(msg){
+      const el = document.getElementById('result');
+      el.style.display = 'block';
+      el.textContent = msg;
+      setTimeout(()=> el.style.display='none', 8000);
+    }
+
+    // --- Copy quick tips ---
+    document.getElementById('btnCopyTips').addEventListener('click', async () => {
+      const text = `Quick SD heating tips:
+- Unplug immediately if hot in seconds
+- Do not reuse in expensive devices
+- Try another reader/PC
+- Check VDD at slot = 3.3V
+- Measure current; >100mA is suspicious
+- Replace counterfeit/defective cards`;
+      try {
+        await navigator.clipboard.writeText(text);
+        showResult('Quick tips copied to clipboard.');
+      } catch (e) {
+        showResult('Unable to copy. Select and copy manually.');
+      }
+    });
+
+    // --- Download a simple checklist file ---
+    document.getElementById('btnDownloadLog').addEventListener('click', () => {
+      const content = [
+        'SD Card Heating Checklist',
+        '1) Unplug immediately if heating in <5s',
+        '2) Inspect contacts for burns or bending',
+        '3) Test with another reader or PC',
+        '4) If using embedded board: measure VDD (3.3V)',
+        '5) Measure current draw (normal idle <100mA)',
+        '6) If heating persists everywhere → replace card'
+      ].join('\n');
+      const blob = new Blob([content], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'sd-card-checklist.txt';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', (ev) => {
+      if (!document.getElementById('search-box').contains(ev.target)) {
+        suggestions.style.display = 'none';
+      }
+    });
+  </script>
+</body>
+</html>
