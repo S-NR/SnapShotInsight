@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>USB Eye Diagram & I/J/K Test Explained</title>
+
+<style>
+body{
+  font-family: Arial, Helvetica, sans-serif;
+  margin:0;background:#0e1625;color:#e9eef5;line-height:1.55
+}
+.container{max-width:1200px;margin:auto;padding:20px}
+.section{background:#151d2c;padding:22px;border-radius:10px;margin-bottom:24px}
+h1,h2,h3{margin-top:0;font-weight:600}
+h1{font-size:28px}
+h2{font-size:22px;margin-bottom:10px}
+p{font-size:16px}
+
+/* waveform side-by-side grid */
+.wave-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:12px;
+}
+.wave{
+  background:#0b1220;border-radius:8px;padding:10px;text-align:center
+}
+.wave img, .wave svg{max-width:100%;height:auto;border-radius:6px}
+.caption{font-size:14px;color:#9cb3c9;margin-top:4px}
+
+.note{
+  background:rgba(255,255,255,0.06);
+  padding:14px;border-radius:8px;font-size:15px;
+  margin-top:10px;color:#c2d5e8;
+}
+
+@media(max-width:800px){
+  .wave-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<section class="section">
+<h1>USB Eye Diagram & I/J/K Compliance Test — Complete Beginner Guide</h1>
+<p>This document explains the <strong>Eye Diagram</strong> and <strong>USB Compliance Mask Testing (I/J/K)</strong> in a simple and visual way. Even if you have zero prior knowledge of signal integrity or high-speed USB, you will understand:</p>
+
+<ul>
+  <li>What is an Eye Diagram?</li>
+  <li>What are I/J/K mask tests?</li>
+  <li>How to interpret pass and fail results</li>
+  <li>How the waveform should look in a correct USB device</li>
+</ul>
+
+<div class="note">USB compliance testing ensures signal quality so devices can communicate reliably with any host or hub without bit errors.</div>
+</section>
+
+<!-- EYE DIAGRAM SECTION -->
+<section class="section">
+<h2>1. What is an Eye Diagram?</h2>
+<p>An <strong>Eye Diagram</strong> is created by repeatedly overlaying thousands of digital signal transitions over time. The result visually resembles a human eye — hence the name.</p>
+
+<p>It shows:</p>
+<ul>
+  <li><strong>Signal amplitude</strong></li>
+  <li><strong>Noise margin</strong> (vertical opening)</li>
+  <li><strong>Timing margin (jitter)</strong> (horizontal opening)</li>
+  <li><strong>Rise & fall time</strong></li>
+</ul>
+
+<div class="note">The bigger the opening of the eye, the healthier the high-speed signal. A closed eye indicates distortion, noise, reflections, and jitter.</div>
+</section>
+
+
+<!-- WAVEFORMS SIDE BY SIDE -->
+<section class="section">
+<h2>2. Pass vs Fail Eye Diagram Example</h2>
+<p>Below images show a comparison between a <strong>passing waveform</strong> and a <strong>failing waveform</strong>. These help you visually identify issues.</p>
+
+<div class="wave-grid">
+
+  <!-- PASS IMAGE -->
+  <div class="wave">
+    <img src="pass_eye.png" alt="Pass Eye Diagram placeholder">
+    <div class="caption"><strong>PASS Eye Diagram</strong><br>Large open area — clean signal, minimal jitter, meets mask.</div>
+  </div>
+
+  <!-- FAIL IMAGE -->
+  <div class="wave">
+    <img src="fail_eye.png" alt="Fail Eye Diagram placeholder">
+    <div class="caption"><strong>FAIL Eye Diagram</strong><br>Eye collapses and touches/enters mask boundary → not compliant.</div>
+  </div>
+
+</div>
+
+<h3>Understanding the Two Waveforms</h3>
+<ul>
+  <li><strong>Vertical Opening</strong> = voltage margin (noise immunity)</li>
+  <li><strong>Horizontal Opening</strong> = timing margin (jitter tolerance)</li>
+  <li><strong>Crossing Point</strong> should be centered and balanced</li>
+  <li><strong>If mask boundary is touched → FAIL</strong></li>
+</ul>
+
+<div class="note">If the eye collapses at the intersection, it means excessive jitter, reflections, bandwidth limitation, or cable quality issues.</div>
+</section>
+
+
+<!-- IJK MASK SECTION -->
+<section class="section">
+<h2>3. What is USB I / J / K Compliance Mask Test?</h2>
+<p>USB compliance uses three mask patterns — <strong>I, J, K</strong> — applied to the center of the Eye Diagram. If the signal ever enters the mask region, it fails.</p>
+
+<ul>
+<li><strong>I mask</strong>: checks Inter-packet idle/sync region</li>
+<li><strong>J mask</strong>: checks steady-state logic high</li>
+<li><strong>K mask</strong>: checks steady-state logic low</li>
+</ul>
+
+<div class="note">Mask testing determines whether the actual signal waveform stays outside the forbidden zone.</div>
+</section>
+
+
+<section class="section">
+<h2>4. Pass / Fail Criteria</h2>
+<ul>
+  <li><strong>PASS</strong>: waveform stays completely outside mask region</li>
+  <li><strong>FAIL</strong>: waveform touches or crosses mask</li>
+</ul>
+</section>
+
+
+<section class="section">
+<h2>5. Common Reasons for Failures</h2>
+<ul>
+  <li>Poor cable or connector quality</li>
+  <li>Reflections due to impedance mismatch</li>
+  <li>Power noise or ground instability</li>
+  <li>PCB routing issues (length mismatch / via stubs)</li>
+  <li>Slow rise or fall time</li>
+</ul>
+</section>
+
+</div>
+</body>
+</html>

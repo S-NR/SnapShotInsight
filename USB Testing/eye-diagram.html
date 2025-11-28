@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PASS vs FAIL Eye Diagram Explanation</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        h2, h3 {
+            text-align: center;
+        }
+
+        .wave-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .wave-box {
+            text-align: center;
+            width: 45%;
+            min-width: 320px;
+        }
+        .wave-image {
+            display: block;
+            margin: 10px auto;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .content-section {
+            max-width: 1000px;
+            margin: 60px auto;
+            line-height: 1.6;
+            font-size: 18px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #0ea5e9;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        .back-btn:hover {
+            background-color: #0284c7;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Illustration — PASS vs FAIL Eye Diagram</h2>
+
+        <!-- <h2 style="text-align: left;">Understanding USB Eye Diagrams</h2> -->
+         <h2>Understanding USB Eye Diagrams</h2>
+    <div class="content-section">
+        <ul>
+            <li>An eye diagram shows the quality of a high-speed digital signal by overlapping many bits of data.</li>
+            <li>The waveform creates a shape that looks like an “eye”.</li>
+            <li>The central opening is the <strong>Sampling Window</strong>, where the data receiver decides 1 or 0.</li>
+        </ul>
+        <div class="wave-container">
+        <div class="wave-box">
+            <h3 style="color:#00d49f;">PASS eye</h3>
+
+            <!-- OPTIONAL IMAGE PLACEHOLDER -->
+            <!-- <img src="pass-eye.png" alt="PASS Eye Waveform" class="wave-image"> -->
+
+            <!-- APPENDED PASS SVG -->
+            <svg width="360" height="160" viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100%" height="100%" fill="#031426" rx="6"/>
+              <g transform="translate(12,12)">
+                <line x1="0" y1="70" x2="336" y2="70" stroke="#123" stroke-width="2"/>
+                <g stroke="#26e0c2" stroke-width="2" fill="none">
+                  <path d="M0 80 Q40 30 80 80 T160 80 T240 80 T320 80" opacity="0.9"/>
+                  <path d="M10 80 Q50 40 90 80 T170 80 T250 80" opacity="0.6"/>
+                  <path d="M5 80 Q45 50 85 80 T165 80 T245 80" opacity="0.4"/>
+                  <path d="M0 80 Q40 130 80 80 T160 80 T240 80 T320 80" opacity="0.9"/>
+                  <path d="M10 80 Q50 120 90 80 T170 80 T250 80" opacity="0.6"/>
+                  <path d="M5 80 Q45 110 85 80 T165 80 T245 80" opacity="0.4"/>
+                </g>
+                <rect x="140" y="30" width="80" height="80" rx="6"
+                      stroke="#24c29b" stroke-dasharray="6"
+                      fill="rgba(30,190,140,0.05)"/>
+                <text x="150" y="25" fill="#6affd9" font-size="12">Sample Window</text>
+              </g>
+            </svg>
+
+
+<div style="text-align: center;">
+        <h3 style="color:#00d49f;">PASS Eye Characteristics</h3>
+        </div>
+
+<div style="text-align: left;">
+        <ul>
+            <li>Large vertical opening → strong signal amplitude.</li>
+            <li>Large horizontal opening → stable timing & low jitter.</li>
+            <li>Waveform does not enter the compliance <strong>mask region</strong>.</li>
+            <li>Receiver easily distinguishes 1s and 0s → low bit error rate (BER).</li>
+        </ul>
+</div>
+        </div>
+
+        <div class="wave-box">
+            <h3 style="color:#ff6f6f;">FAIL eye</h3>
+
+            <!-- OPTIONAL IMAGE PLACEHOLDER -->
+            <!-- <img src="fail-eye.png" alt="FAIL Eye Waveform" class="wave-image"> -->
+
+            <!-- APPENDED FAIL SVG -->
+            <svg width="360" height="160" viewBox="0 0 360 160" xmlns="http://www.w3.org/2000/svg">
+              <rect width="100%" height="100%" fill="#031426" rx="6"/>
+              <g transform="translate(12,12)">
+                <line x1="0" y1="70" x2="336" y2="70" stroke="#123" stroke-width="2"/>
+                <g stroke="#ff7575" stroke-width="2" fill="none">
+                  <path d="M0 80 Q40 60 80 80 T160 80 T240 80 T320 80" opacity="0.9"/>
+                  <path d="M10 80 Q55 70 90 80 T170 80 T250 80" opacity="0.8"/>
+                  <path d="M5 80 Q45 75 85 80 T165 80 T245 80" opacity="0.6"/>
+                  <path d="M0 82 Q40 90 80 82 T160 82 T240 82 T320 82" opacity="0.9"/>
+                  <path d="M10 82 Q55 95 90 82 T170 82 T250 82" opacity="0.8"/>
+                  <path d="M5 82 Q45 100 85 82 T165 82 T245 82" opacity="0.6"/>
+                </g>
+                <rect x="140" y="30" width="80" height="80" rx="6"
+                      stroke="#b82828" stroke-dasharray="6"
+                      fill="rgba(184,40,40,0.03)"/>
+                <text x="140" y="25" fill="#ffaaaa" font-size="12">Sample Window (closed)</text>
+              </g>
+            </svg>
+
+
+<!-- FAIL Eye Characteristics Section -->
+<div style="text-align: center;">
+    <h3 style="color:#ff6f6f; margin-bottom: 10px;">FAIL Eye Characteristics</h3>
+</div>
+
+<div style="text-align: left;">
+    <ul>
+        <li>Reduced vertical & horizontal opening → collapsed eye.</li>
+        <li>Waveforms overlap and touch the mask boundary.</li>
+        <li>Hard to determine 1s vs 0s → high bit error rate.</li>
+        <li>Indicates poor signal integrity or design issues.</li>
+    </ul>
+</div>
+
+        </div>
+    </div>
+
+        <h3>Typical Causes for Eye Collapse</h3>
+        <ul>
+            <li>Impedance mismatch / reflections on PCB traces.</li>
+            <li>Weak driver amplitude or unstable power.</li>
+            <li>Clock jitter or noisy environment.</li>
+            <li>Crosstalk from nearby high-speed signals.</li>
+        </ul>
+
+        <h3>Summary</h3>
+        <ul>
+            <li><strong>PASS = open eye = clean signal = reliable USB link.</strong></li>
+            <li><strong>FAIL = closed eye = distorted signal = communication failure.</strong></li>
+        </ul>
+
+        <div style="text-align:center;">
+            <a href="../USB_Complience_testinghtml - Copy.html#osc" class="back-btn">⬅ Back to Main Page</a>
+        </div>
+    </div>
+
+</body>
+</html>

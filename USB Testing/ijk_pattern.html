@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USB Eye Diagram — I / J / K Test Results</title>
+
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        h2, h3 {
+            text-align: center;
+        }
+
+        .wave-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .wave-box {
+            text-align: center;
+            width: 15%;
+            min-width: 320px;
+        }
+        .wave-image {
+            display: block;
+            margin: 10px auto;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .content-section {
+            max-width: 1000px;
+            margin: 60px auto;
+            line-height: 1.6;
+            font-size: 18px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 12px 20px;
+            background-color: #0ea5e9;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            margin-top: 40px;
+            text-align: center;
+        }
+        .back-btn:hover {
+            background-color: #0284c7;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>USB 2.0 Eye Diagram — I, J & K Compliance Test Results</h1>
+
+<div class="section">
+    <p>The I, J, K tests are standard <strong>USB 2.0 High-Speed electrical compliance tests</strong>. 
+        They verify that the PHY output signal meets required timing, jitter and amplitude specifications under controlled conditions.</p>
+
+    <p>When thousands of bits are overlaid on the oscilloscope, a shape resembling an “eye” is formed.
+        A valid USB signal produces a large open eye window, allowing the receiver to sample correctly.</p>
+
+    <p>The highlighted dashed box in each waveform is the <strong>Sampling Window</strong> where the receiver makes its decision between
+        logic <strong>1 or 0</strong>. If waveforms intrude into this window or collapse, the test <strong>fails</strong>.</p>
+</div>
+
+<hr style="margin: 40px 0; border-color:#334155;">
+
+<h2>USB Eye Diagram Test Results — I / J / K Test</h2>
+
+<!-- PASS -->
+<div class="wave-container">
+    <div class="wave-box">
+        <!-- <h3 style="color:#00d49f;">PASS — Good Eye (I Test)</h3>
+        <img src="I_test_pass.png" alt="PASS I Test Eye diagram" class="wave-image">
+        <div class="details-box"> -->
+              <!-- PASS (reference) -->
+  <div style="width:320px;text-align:center;">
+    <h4 style="margin:6px 0;color:#26e0c2">PASS — Healthy Eye</h4>
+    <svg width="320" height="160" viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#031426" rx="6"/>
+      <g transform="translate(12,12)">
+        <line x1="0" y1="70" x2="296" y2="70" stroke="#123" stroke-width="2"/>
+        <g stroke="#26e0c2" stroke-width="2" fill="none">
+          <!-- <path d="M0 80 C30 30 60 30 90 80 S150 30 180 80 S240 30 270 80" opacity="0.95"/>
+          <path d="M8 80 C38 36 68 36 98 80 S158 36 188 80 S248 36 278 80" opacity="0.6"/>
+          <path d="M4 80 C34 44 64 44 94 80 S154 44 184 80 S244 44 274 80" opacity="0.4"/> -->
+          <!-- inverted pair to form differential eye -->
+          <!-- <path d="M0 80 C30 130 60 130 90 80 S150 130 180 80 S240 130 270 80" opacity="0.95"/>
+          <path d="M8 80 C38 125 68 125 98 80 S158 125 188 80 S248 125 278 80" opacity="0.6"/> -->
+<!-- upper traces (shifted upward) -->
+<path d="M0 80 Q40 20 80 80 T160 80 T240 80" opacity="0.9"/>
+<path d="M5 80 Q45 25 85 80 T165 80 T245 80" opacity="0.6"/>
+<path d="M10 80 Q50 30 90 80 T170 80 T250 80" opacity="0.4"/>
+
+<!-- lower traces (also shifted upward to balance eye) -->
+<path d="M0 80 Q40 140 80 80 T160 80 T240 80" opacity="0.9"/>
+<path d="M5 80 Q45 135 85 80 T165 80 T245 80" opacity="0.6"/>
+<path d="M10 80 Q50 130 90 80 T170 80 T250 80" opacity="0.4"/>
+
+             </g>
+
+        <!-- sample window -->
+        <rect x="160" y="30" width="72" height="80" rx="6" stroke="#24c29b" stroke-dasharray="6" fill="rgba(36,194,155,0.04)"/>
+        <text x="168" y="26" fill="#6affd9" font-size="11">Sample Window</text>
+
+        
+        <path d="M175 82 L190 70 L220 70 L235 82 L220 94 L190 94 Z"
+              fill="rgba(255,68,68,0.18)" stroke="#ff7a66" stroke-width="1"/>
+      </g>
+    </svg>
+    <p style="font-size:13px;margin-top:6px;color:#bfeee0">Clear vertical & horizontal opening — no mask hits.</p>
+  </div>
+            
+<div style="text-align: left;">
+        <ul>
+            <li>Eye opening is <strong>wide</strong> and clearly visible.</li>
+            <li>No waveform touches the mask region.</li>
+            <li>Receiver easily distinguishes 1s and 0s.</li>
+            <li>Amplitude and jitter are within specification.</li>
+            <li>Represents a <strong>healthy USB link</strong> with low BER.</li>
+        </ul>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+<div class="wave-container">
+<!-- FAIL I -->
+<div class="wave-box">
+  <div style="width:320px;text-align:center;">
+    <h4 style="margin:6px 0;color:#ff4da6">FAIL I — Overall Eye Collapse</h4>
+
+    <svg width="320" height="160" viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#031426" rx="6"/>
+      <g transform="translate(12,12)">
+        <line x1="0" y1="70" x2="296" y2="70" stroke="#123" stroke-width="2"/>
+
+        <g stroke="#ffb3d6" stroke-width="2" fill="none">
+          <!-- combined horizontal + vertical collapse -->
+          <!-- <path d="M0 80 C26 56 52 56 78 80 S130 56 156 80 S208 56 234 80 S286 56 296 80" opacity="0.95"/>
+          <path d="M0 80 C26 104 52 104 78 80 S130 104 156 80 S208 104 234 80 S286 104 296 80" opacity="0.95"/>
+          <path d="M4 80 C30 64 56 64 82 80 S134 64 160 80 S212 64 238 80 S290 64 296 80" opacity="0.7"/>
+          <path d="M4 80 C30 96 56 96 82 80 S134 96 160 80 S212 96 238 80 S290 96 296 80" opacity="0.7"/> -->
+                <path d="M0 80 Q40 60 80 80 T160 80 T240 80 T320 80" opacity="0.95"/>
+      <path d="M10 80 Q50 65 90 80 T170 80 T250 80" opacity="0.6"/>
+      <path d="M0 80 Q40 100 80 80 T160 80 T240 80 T320 80" opacity="0.95"/>
+      <path d="M10 80 Q50 95 90 80 T170 80 T250 80" opacity="0.6"/>
+        </g>
+
+        <!-- sample window -->
+        <rect x="150" y="36" width="96" height="70" rx="6"
+              stroke="#c7467e" stroke-dasharray="6"
+              fill="rgba(199,70,126,0.05)"/>
+        <text x="158" y="28" fill="#ff9ac6" font-size="11">Sample Window (collapsed)</text>
+
+        <!-- mask polygon -->
+        <path d="M175 82 L190 70 L220 70 L235 82 L220 94 L190 94 Z"
+              fill="rgba(255,68,68,0.18)" stroke="#ff7a66" stroke-width="1"/>
+      </g>
+    </svg>
+
+    <p style="font-size:13px;margin-top:6px;color:#ffe7f4">
+      Both vertical & horizontal margins collapse — waveform enters mask from all sides.
+    </p>
+  </div>
+
+  <div style="text-align: left;">
+    <ul>
+      <li>Eye height and width both reduced.</li>
+      <li>Signal overlaps mask on multiple boundaries.</li>
+      <li>Caused by severe signal integrity problems.</li>
+      <li>Receivers fail to distinguish levels and timing → link unstable or dropouts.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- FAIL J -->
+    <div class="wave-box">
+        <!-- FAIL J: jitter / horizontal compression -->
+  <div style="width:320px;text-align:center;">
+    <h4 style="margin:6px 0;color:#ffb84a">FAIL J — Timing / Jitter</h4>
+    <svg width="320" height="160" viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#031426" rx="6"/>
+      <g transform="translate(12,12)">
+        <line x1="0" y1="70" x2="296" y2="70" stroke="#123" stroke-width="2"/>
+
+        <g stroke="#ffd86b" stroke-width="2" fill="none">
+          <!-- horizontally compressed, jittery edges -->
+          <!-- <path d="M0 80 C18 48 36 48 54 80 S110 48 128 80 S184 48 202 80 S258 48 276 80" opacity="0.95"/>
+          <path d="M6 80 C24 52 42 52 60 80 S116 52 134 80 S190 52 208 80 S264 52 282 80" opacity="0.7"/>
+          <path d="M3 80 C21 60 39 60 57 80 S113 60 131 80 S187 60 205 80 S261 60 279 80" opacity="0.6"/> -->      
+          <path d="M0 80 Q40 30 80 80 T130 80 T170 80 T210 80 T260 80" opacity="0.9"/>
+        <path d="M0 80 Q40 120 80 80 T130 80 T170 80 T210 80 T260 80" opacity="0.9"/>
+          <!-- inverted set -->
+          <!-- <path d="M0 80 C18 112 36 112 54 80 S110 112 128 80 S184 112 202 80 S258 112 276 80" opacity="0.9"/> -->
+        </g>
+
+        <!-- sample window -->
+        <rect x="160" y="30" width="72" height="80" rx="6" stroke="#c08a2b" stroke-dasharray="6" fill="rgba(192,138,43,0.03)"/>
+        <text x="168" y="26" fill="#ffdf9b" font-size="11">Sample Window (narrow)</text>
+
+        <!-- mask polygon -->
+        <path d="M175 82 L190 70 L220 70 L235 82 L220 94 L190 94 Z"
+              fill="rgba(255,68,68,0.18)" stroke="#ff7a66" stroke-width="1"/>
+      </g>
+    </svg>
+    <p style="font-size:13px;margin-top:6px;color:#fff0d9">Horizontal eye width reduced — edges jitter into mask timing area.</p>
+  </div>
+
+<div style="text-align: left;">
+        <ul>
+            <li>Eye is horizontally compressed.</li>
+            <li>Waveforms overlap sampling window boundary.</li>
+            <li>Indicates <strong>timing jitter</strong> or clock instability.</li>
+            <li>High probability of sampling errors → incorrect bits captured.</li>
+        </ul>
+    </div>
+    </div>
+<!-- </div> -->
+
+<!-- FAIL K -->
+<!-- <div class="wave-container"> -->
+    <div class="wave-box">
+          <!-- FAIL K: amplitude collapse (vertical) -->
+  <div style="width:320px;text-align:center;">
+    <h4 style="margin:6px 0;color:#ff6b6b">FAIL K — Amplitude Collapse</h4>
+    <svg width="320" height="160" viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="#031426" rx="6"/>
+      <g transform="translate(12,12)">
+        <line x1="0" y1="70" x2="296" y2="70" stroke="#123" stroke-width="2"/>
+        <g stroke="#ffbf7a" stroke-width="2" fill="none">
+          <!-- low amplitude traces (compressed vertically) -->
+          <!-- <path d="M0 78 C30 70 60 70 90 78 S150 70 180 78 S240 70 270 78" opacity="0.95"/>
+          <path d="M8 78 C38 72 68 72 98 78 S158 72 188 78 S248 72 278 78" opacity="0.8"/>
+          <path d="M4 78 C34 74 64 74 94 78 S154 74 184 78 S244 74 274 78" opacity="0.6"/> -->
+          <!-- inverted bottom, also shallow -->
+          <!-- <path d="M0 78 C30 86 60 86 90 78 S150 86 180 78 S240 86 270 78" opacity="0.9"/> -->
+                 <path d="M0 80 Q40 62 80 80 T160 80 T240 80 T320 80" opacity="0.9"/>
+      <path d="M0 80 Q40 98 80 80 T160 80 T240 80 T320 80" opacity="0.9"/>
+        </g>
+
+        <!-- sample window -->
+        <rect x="160" y="30" width="72" height="80" rx="6" stroke="#b85a3a" stroke-dasharray="6" fill="rgba(184,90,58,0.02)"/>
+        <text x="162" y="26" fill="#ffc9b9" font-size="11">Sample Window (shallow)</text>
+
+        <!-- mask polygon -->
+        <path d="M175 82 L190 70 L220 70 L235 82 L220 94 L190 94 Z"
+              fill="rgba(255,68,68,0.22)" stroke="#ff4444" stroke-width="1.2"/>
+      </g>
+    </svg>
+    <p style="font-size:13px;margin-top:6px;color:#ffe7df">Vertical eye height reduced — voltage margin insufficient (touches mask).</p>
+  </div>
+        
+<div style="text-align: left;">
+        <ul>
+            <li>Eye height is reduced → weak amplitude.</li>
+            <li>Signal crosses into forbidden mask region.</li>
+            <li>Can be caused by reflections, impedance mismatch, bad cable or connector.</li>
+            <li>Receiver cannot reliably separate 1s and 0s.</li>
+        </ul>
+    </div>
+    </div>
+</div>
+
+
+<hr style="margin: 40px 0; border-color:#334155;">
+
+<h2>Summary</h2>
+<ul style="text-align:center; list-style:none;">
+    <li><strong style="color:#00d49f;">PASS</strong> → Clear open eye → Signal integrity OK</li>
+    <li><strong style="color:#00d49f;">FAIL-I</strong> → Inter-Symbol Interference (ISI) → Both horizontal & vertical closure,</li>
+    <li><strong style="color:#ffae00;">FAIL-J</strong> → Timing jitter → Horizontal closure</li>
+    <li><strong style="color:#ff6f6f;">FAIL-K</strong> → Amplitude issue / noise → Vertical collapse</li>
+</ul>
+
+<div style="text-align:center;">
+    <a href="../USB_Complience_testinghtml - Copy.html#ijk" class="back-btn">⬅ Back to Main Page</a>
+</div>
+
+</body>
+</html>

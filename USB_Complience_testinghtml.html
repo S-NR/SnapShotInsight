@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Eye Diagram & I/J/K Compliance — User Guide</title>
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--muted:#94a3b8;--accent:#10b981;--glass:rgba(255,255,255,0.03)}
+    body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; color:#e6eef6; background:linear-gradient(180deg,#071025 0%, #081426 100%);}
+    .wrap{max-width:980px;margin:28px auto;padding:28px}
+    header{display:flex;align-items:center;gap:18px}
+    header h1{margin:0;font-size:20px}
+    .lead{color:var(--muted);margin-top:6px}
+    .card{background:var(--card);padding:18px;border-radius:12px;box-shadow:0 6px 30px rgba(2,6,23,0.6);margin-top:18px}
+    h2{margin:8px 0 12px}
+    p{line-height:1.5;color:#d7e6f2}
+    .grid{display:grid;grid-template-columns:1fr 360px;gap:18px}
+    .note{background:var(--glass);padding:10px;border-radius:8px;color:var(--muted);font-size:13px}
+    pre{background:#051221;padding:12px;border-radius:8px;overflow:auto;color:#a6e3c6}
+    table{width:100%;border-collapse:collapse;margin-top:12px}
+    th,td{padding:8px;text-align:left;border-bottom:1px solid rgba(255,255,255,0.04)}
+    .svgwrap{display:flex;gap:12px;flex-wrap:wrap}
+    .figure{background:#061224;padding:10px;border-radius:8px}
+    .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:var(--accent);color:#042018;text-decoration:none;font-weight:600}
+    footer{color:var(--muted);font-size:13px;margin-top:18px}
+    ol{margin-left:18px}
+    .eye-pair {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.eye-box {
+  width: 48%;
+  min-width: 320px;
+}
+
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <svg width="44" height="44" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 12h18M12 3v18" stroke="#10b981" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div>
+        <h1>Eye Diagram &amp; I/J/K Compliance — User Guide</h1>
+        <div class="lead">A friendly, step-by-step manual explaining oscilloscope eye diagrams, I/J/K mask testing, and pass/fail conditions — with illustrative waveforms.</div>
+      </div>
+    </header>
+
+    <div class="card">
+      <h2>Quick navigation</h2>
+      <p class="note">Click a section to jump: <a class="btn" href="#osc">1. Oscilloscope Eye Diagram</a> <a class="btn" href="#ijk">2. I/J/K Mask Test</a> <a class="btn" href="#diff">3. Differences</a> <a class="btn" href="#adv">4. Advantages</a> <a class="btn" href="#passfail">5. Pass/Fail</a></p>
+    </div>
+
+    <div class="grid">
+      <div>
+        <section id="osc" class="card">
+          <h2>1. What is an oscilloscope eye diagram?</h2>
+          <p>An <strong>eye diagram</strong> is produced when an oscilloscope overlays thousands of consecutive digital bit periods on a single time axis. The resulting shape looks like an eye — the open area in the middle is where a receiver samples the signal. A wide, clean eye means good signal integrity; a closed, smeared eye indicates problems (jitter, noise, reflections).</p>
+
+          <h3>How it's captured (simple)</h3>
+          <ol>
+            <li>Connect a differential probe to the transmitter pair (e.g., USB D+/D−).</li>
+            <li>Set oscilloscope to high sample rate and enable persistence/accumulate mode.</li>
+            <li>Turn on eye-diagram or equivalent long-persistence overlay mode.</li>
+            <li>Capture thousands of bits (either live traffic or Test_PACKET pattern).</li>
+            <li>Inspect the eye opening, measure voltage swing, rise/fall times, and jitter.</li>
+          </ol>
+
+          <h3>Illustration — Basic Eye (SVG)</h3>
+          <div class="svgwrap">
+            <div class="figure">
+              <!-- Simple SVG of a clean eye -->
+              <svg width="320" height="160" viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100%" height="100%" fill="#031426" rx="6"/>
+                <g transform="translate(12,12)">
+                  <line x1="0" y1="70" x2="296" y2="70" stroke="#123" stroke-width="2"/>
+                  <g stroke="#56d0a6" stroke-width="2" fill="none">
+                    <!-- overlayed traces simplified -->
+                    <path d="M0 80 Q20 30 40 80 T80 80 T120 80 T160 80 T200 80 T240 80 T280 80" opacity="0.9"/>
+                    <path d="M10 80 Q30 35 50 80 T90 80 T130 80 T170 80 T210 80 T250 80" opacity="0.6"/>
+                    <path d="M5 80 Q25 40 45 80 T85 80 T125 80 T165 80 T205 80 T245 80" opacity="0.4"/>
+                    <path d="M0 80 Q20 130 40 80 T80 80 T120 80 T160 80 T200 80 T240 80 T280 80" opacity="0.9"/>
+                    <path d="M10 80 Q30 125 50 80 T90 80 T130 80 T170 80 T210 80 T250 80" opacity="0.6"/>
+                    <path d="M5 80 Q25 120 45 80 T85 80 T125 80 T165 80 T205 80 T245 80" opacity="0.4"/>
+
+
+
+                  </g>
+                  <rect x="120" y="30" width="72" height="80" rx="6" stroke="#2b6b4a" stroke-dasharray="6" fill="rgba(43,107,74,0.02)"/>
+                  <text x="132" y="26" fill="#83f3c9" font-size="12">Sample Window</text>
+                </g>
+              </svg>
+            </div>
+
+            <div class="figure">
+              <!-- Bad eye -->
+              <svg width="320" height="160" viewBox="0 0 320 160" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100%" height="100%" fill="#031426" rx="6"/>
+                <g transform="translate(12,12)">
+                  <line x1="0" y1="70" x2="296" y2="70" stroke="#123" stroke-width="2"/>
+                  <g stroke="#f87171" stroke-width="2" fill="none">
+                    <path d="M0 80 Q20 40 40 80 T80 80 T120 80 T160 80 T200 80 T240 80 T280 80" opacity="0.95"/>
+                    <path d="M2 80 Q22 45 42 80 T82 80 T122 80 T162 80 T202 80 T242 80" opacity="0.9"/>
+                    <path d="M6 80 Q26 55 46 80 T86 80 T126 80 T166 80 T206 80 T246 80" opacity="0.8"/>
+                    <path d="M10 80 Q30 65 50 80 T90 80 T130 80 T170 80 T210 80 T250 80" opacity="0.6"/>
+                    <!-- FAIL (Closed Eye) -->
+                    <path d="M3 82 Q23 58 43 82 T83 84 T123 78 T163 82 T203 80 T243 84" opacity="0.8"/>
+                    <path d="M6 78 Q26 64 46 78 T86 82 T126 76 T166 81 T206 78 T246 83" opacity="0.75"/>
+                    <path d="M1 84 Q21 70 41 84 T81 86 T121 74 T161 83 T201 82 T241 80" opacity="0.7"/>
+                    <path d="M8 76 Q28 68 48 76 T88 80 T128 72 T168 77 T208 79 T248 81" opacity="0.65"/>
+
+
+                  </g>
+                  <rect x="120" y="30" width="72" height="80" rx="6" stroke="#7f1d1d" stroke-dasharray="6" fill="rgba(127,29,29,0.02)"/>
+                  <text x="132" y="26" fill="#fca5a5" font-size="12">Sample Window (closed)</text>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section id="ijk" class="card">
+          <h2>2. What is I, J, K mask testing?</h2>
+          <p>The <strong>I/J/K mask test</strong> is a formal compliance test used by standards (like USB‑IF) to determine whether a transmitter has sufficient voltage and timing margin. Instead of a human visually judging the eye, the oscilloscope places a standardized <em>forbidden mask</em> on the eye. Any waveform that touches the mask is a fail — the masked areas correspond to critical sampling/timing zones (I, J, and K points).</p>
+
+          <h3>How it is performed (brief)</h3>
+          <ol>
+            <li>Place device into a stable Test Pattern mode (e.g., <code>Test_PACKET</code> for USB).</li>
+            <li>Configure the oscilloscope with the standard mask file for the interface (USB, PCIe, etc.).</li>
+            <li>Acquire a large number of transitions so the scope can statistically examine worst-case excursions.</li>
+            <li>Run the mask test: scope reports mask hits and margin (ps or %).</li>
+          </ol>
+
+          <h3>Illustration — Mask overlay (SVG)</h3>
+          <div class="svgwrap">
+            <div class="figure" style="width:100%">
+              <!-- <svg width="680" height="160" viewBox="0 0 680 160" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100%" height="100%" fill="#021424" rx="6"/>
+                <g transform="translate(16,16)">
+                  <rect x="0" y="0" width="648" height="128" fill="none" stroke="#083046"/> -->
+                  <!-- mask zones roughly sketched -->
+                  <!-- <g fill="#ff6b6b" opacity="0.14">
+                    <rect x="120" y="8" width="56" height="40"/>
+                    <rect x="120" y="80" width="56" height="40"/>
+                    <rect x="200" y="8" width="72" height="20"/>
+                    <rect x="200" y="110" width="72" height="20"/>
+                    <rect x="280" y="28" width="84" height="84"/>
+                  </g>
+                  <text x="12" y="14" fill="#79e7c0" font-size="12">I / J / K mask zones (for illustration only)</text>
+                  <g stroke="#9ae6c9" stroke-width="2" fill="none">
+                    <path d="M0 84 Q40 12 80 84 T160 84 T240 84 T320 84 T400 84 T480 84 T560 84" opacity="0.9"/>
+                    <path d="M12 84 Q52 18 92 84 T172 84 T252 84 T332 84 T412 84 T492 84 T572 84" opacity="0.6"/>
+                  </g>
+                </g>
+              </svg> -->
+
+              <svg width="340" height="180" viewBox="0 0 340 180" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Eye Waveforms (2 stretched cycles) -->
+  <g stroke="#ff8888" fill="none" stroke-width="2">
+    <path d="M0 80 Q40 30 80 80 T160 80 T240 80" opacity="0.9"/>
+    <path d="M5 80 Q45 35 85 80 T165 80 T245 80" opacity="0.6"/>
+    <path d="M10 80 Q50 40 90 80 T170 80 T250 80" opacity="0.4"/>
+
+    <path d="M0 80 Q40 130 80 80 T160 80 T240 80" opacity="0.9"/>
+    <path d="M5 80 Q45 125 85 80 T165 80 T245 80" opacity="0.6"/>
+    <path d="M10 80 Q50 120 90 80 T170 80 T250 80" opacity="0.4"/>
+  </g>
+
+  <!-- Sample Window Box -->
+  <rect x="110" y="25" width="120" height="110"
+        stroke="#ffffff" stroke-dasharray="6 6" fill="none"/>
+
+  <!-- I, J, K Small internal window -->
+  <rect x="150" y="65" width="40" height="40"
+        stroke="#ffffff" fill="none" stroke-width="1.5"/>
+
+  <!-- J and K vertical dashed reference lines -->
+  <line x1="150" y1="135" x2="150" y2="150" stroke="#ff66cc" stroke-width="2"/>
+  <line x1="190" y1="135" x2="190" y2="150" stroke="#ffcc44" stroke-width="2"/>
+
+  <!-- Labels -->
+  <text x="170" y="90" fill="#ffcc44" font-size="14" font-weight="bold">I</text>
+  <text x="145" y="160" fill="#ff66cc" font-size="14">J</text>
+  <text x="187" y="160" fill="#ffcc44" font-size="14">K</text>
+
+  <!-- Axis Labels -->
+  <text x="10" y="20" fill="#ff66cc" font-size="12">Voltage</text>
+  <text x="160" y="15" fill="#ffcc44" font-size="12">Timing →</text>
+
+</svg>
+
+
+
+<svg width="360" height="200" viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#031426" rx="6"/>
+
+  <!-- Eye Waveforms (2 stretched cycles) -->
+  <g transform="translate(10,20)" stroke="#00ffaa" fill="none" stroke-width="2">
+    <!-- upper traces -->
+    <path d="M0 90 Q40 30 80 90 T160 90 T240 90" opacity="0.9"/>
+    <path d="M5 90 Q45 35 85 90 T165 90 T245 90" opacity="0.6"/>
+    <path d="M10 90 Q50 40 90 90 T170 90 T250 90" opacity="0.4"/>
+    <!-- lower traces (inverted) -->
+    <path d="M0 90 Q40 150 80 90 T160 90 T240 90" opacity="0.9"/>
+    <path d="M5 90 Q45 145 85 90 T165 90 T245 90" opacity="0.6"/>
+    <path d="M10 90 Q50 140 90 90 T170 90 T250 90" opacity="0.4"/>
+  </g>
+
+  <!-- Sample Window Box (centered) -->
+  <!-- Window width 140, height 120, centered at x=110..250 in the inner group -> global x = 10 + 110 = 120 -->
+  <rect x="150" y="45" width="140" height="120"
+        stroke="#ffffff" stroke-dasharray="6 6" fill="none" stroke-width="1.2"/>
+
+  <!-- Centered Eye Mask (diamond-ish) inside the sample window -->
+  <!-- Coordinates chosen so the mask is centered within the sample window -->
+  <g transform="translate(5,5)">
+    <!-- <path d="M170 80 L190 60 L230 60 L250 80 L250 120 L230 140 L190 140 L170 120 Z" -->
+     <!-- <path d="M185 90 L200 75 L220 75 L235 90 L235 110 L220 125 L200 125 L185 110 Z"
+      fill="rgba(255,68,68,0.30)" stroke="#ff4444" stroke-width="1.6"/> -->
+<!-- <path d="M200 100 L208 92 L217 92 L225 100 L225 110 L217 118 L208 118 L200 110 Z"
+      fill="rgba(255,68,68,0.25)" stroke="#ff4444" stroke-width="1.2"/> -->
+<path d="M185 100 L195 92 L225 92 L235 100 L235 110 L225 118 L195 118 L185 110 Z"
+      fill="rgba(255,68,68,0.25)" stroke="#ff4444" stroke-width="1.2"/>
+
+  </g>
+
+  <!-- I / J / K markers aligned with center of mask -->
+  <!-- I at center of mask -->
+  <circle cx="210" cy="110" r="4" fill="#ffcc44"/>
+  <text x="216" y="102" fill="#ffcc44" font-size="12" font-weight="600">I</text>
+
+  <!-- J and K shown as voltage markers below the sample window (aligned left/right) -->
+  <text x="188" y="170" fill="#ff66cc" font-size="12">J</text>
+  <text x="232" y="170" fill="#ffcc44" font-size="12">K</text>
+  <line x1="188" y1="140" x2="188" y2="160" stroke="#ff66cc" stroke-dasharray="3 3"/>
+  <line x1="232" y1="140" x2="232" y2="160" stroke="#ffcc44" stroke-dasharray="3 3"/>
+
+  <!-- Axis Labels -->
+  <text x="20" y="30" fill="#ff66cc" font-size="12">Voltage</text>
+  <text x="170" y="35" fill="#ffcc44" font-size="12">Timing →</text>
+</svg>
+
+
+
+<svg width="360" height="200" viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#031426" rx="6"/>
+
+  <!-- FAILED Eye Waveforms (collapsed & noisy) -->
+  <g transform="translate(10,10)" stroke="#ffd54f" fill="none" stroke-width="2">
+    <path d="M0 95 Q40 70 80 95 T160 95 T240 95" opacity="0.9"/>
+    <path d="M5 95 Q45 60 85 95 T165 95 T245 95" opacity="0.8"/>
+    <path d="M10 95 Q50 80 90 95 T170 95 T250 95" opacity="0.6"/>
+    <path d="M0 95 Q40 120 80 95 T160 95 T240 95" opacity="0.9"/>
+    <path d="M5 95 Q45 130 85 95 T165 95 T245 95" opacity="0.8"/>
+    <path d="M10 95 Q50 110 90 95 T170 95 T250 95" opacity="0.6"/>
+    <path d="M80 95 Q120 50 160 95 T240 95" opacity="0.8"/>
+    <path d="M80 95 Q120 140 160 95 T240 95" opacity="0.8"/>
+  </g>
+
+  <rect x="150" y="45" width="140" height="120"
+        stroke="#ffffff" stroke-dasharray="6 6" fill="none" stroke-width="1.2"/>
+
+  <path d="M185 100 L195 92 L225 92 L235 100 L235 110 L225 118 L195 118 L185 110 Z"
+        fill="rgba(255,68,68,0.25)" stroke="#ff4444" stroke-width="1.2"/>
+
+  <circle cx="210" cy="105" r="4" fill="#ffcc44"/>
+  <text x="214" y="96" fill="#ffcc44" font-size="12" font-weight="600">I</text>
+
+  <text x="188" y="170" fill="#ff66cc" font-size="12">J</text>
+  <text x="232" y="170" fill="#ffcc44" font-size="12">K</text>
+  <line x1="188" y1="140" x2="188" y2="160" stroke="#ff66cc" stroke-dasharray="3 3"/>
+  <line x1="232" y1="140" x2="232" y2="160" stroke="#ffcc44" stroke-dasharray="3 3"/>
+
+  <text x="20" y="30" fill="#ff66cc" font-size="12">Voltage</text>
+  <text x="170" y="35" fill="#ffcc44" font-size="12">Timing →</text>
+
+  <text x="250" y="65" fill="#ff4444" font-size="16" font-weight="bold">FAIL</text>
+</svg>
+
+
+
+
+<svg width="380" height="360" viewBox="0 0 380 360" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#031426" rx="6"/>
+
+  <!-- ================= FAIL WAVEFORM (collapsed center) ================= -->
+  <g transform="translate(10,10)" stroke="#ffd86b" fill="none" stroke-width="2">
+    <!-- collapse into center -->
+    <path d="M0 95 Q80 20 180 95 Q280 170 350 95" opacity="0.9"/>
+    <path d="M0 95 Q100 160 180 95 Q260 30 350 95" opacity="0.9"/>
+    <path d="M10 95 Q90 40 180 95 Q260 150 350 95" opacity="0.6"/>
+    <path d="M10 95 Q90 150 180 95 Q260 40 350 95" opacity="0.6"/>
+  </g>
+
+  <!-- Same mask area -->
+  <rect x="150" y="45" width="140" height="120"
+        stroke="#ffffff" stroke-dasharray="6 6" fill="none" stroke-width="1.2"/>
+
+  <!-- mask -->
+  <!-- <path d="M185 290 L195 282 L225 282 L235 290 L235 300 L225 308 L195 308 L185 300 Z"
+        fill="rgba(255,68,68,0.25)" stroke="#ff4444" stroke-width="1.2"/> -->
+<path d="M185 100 L195 92 L225 92 L235 100 L235 110 L225 118 L195 118 L185 110 Z"
+        fill="rgba(255,68,68,0.25)" stroke="#ff4444" stroke-width="1.2"/>
+
+  <circle cx="210" cy="105" r="4" fill="#ffcc44"/>
+  <text x="248" y="65" fill="#ff4444" font-size="18" font-weight="bold">FAIL</text>
+
+  <text x="20" y="30" fill="#ff66cc" font-size="12">Voltage</text>
+  <text x="170" y="35" fill="#ffcc44" font-size="12">Timing →</text>
+</svg>
+
+
+            </div>
+          </div>
+
+          <p class="note">Note: the precise shape and placement of I/J/K mask areas are standardized by the interface spec and will vary by data rate. Use the official mask file shipped with your oscilloscope compliance package.</p>
+        </section>
+
+        <section id="diff" class="card">
+          <h2>3. Difference: oscilloscope eye capture vs I/J/K mask test</h2>
+          <table>
+            <thead>
+              <tr><th>Aspect</th><th>Waveform Only (oscilloscope)</th><th>I/J/K Mask Test</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Purpose</td><td>Visual check — does it *look* healthy?</td><td>Formal compliance — pass/fail vs spec</td></tr>
+              <tr><td>Pattern</td><td>Live traffic or any pattern</td><td>Requires stable Test_PATTERN (e.g., Test_PACKET)</td></tr>
+              <tr><td>Results</td><td>Human judgement + simple measurements</td><td>Objective mask hits, margin reported</td></tr>
+              <tr><td>Use case</td><td>Debug, quick checks</td><td>Certification, release signoff</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section id="adv" class="card">
+          <h2>4. Advantages of I/J/K mask testing</h2>
+          <ul>
+            <li><strong>Objective pass/fail:</strong> Removes subjectivity of "looks OK".</li>
+            <li><strong>Repeatable:</strong> Runs the same way across labs and engineers.</li>
+            <li><strong>Quantitative margin:</strong> Scope reports margin (ps) and hits.</li>
+            <li><strong>Predicts real-world reliability:</strong> Ensures operation across cables, connectors, and environmental variation.</li>
+            <li><strong>Required for certification:</strong> Many standards require mask-based compliance test results for product release.</li>
+          </ul>
+
+          <p class="note">Practical tip: Use Test_PACKET mode (USB) or recommended PRBS pattern for other interfaces to obtain stable, repeatable eye captures suitable for mask testing.</p>
+        </section>
+
+        <section id="passfail" class="card">
+          <h2>5. I, J, K — Pass &amp; Fail conditions (general)</h2>
+          <p>The exact numeric pass/fail thresholds depend on the standard &amp; data rate. Below is a general, user-friendly summary.</p>
+
+          <h3>General pass conditions</h3>
+          <ul>
+            <li>No waveform trace touches any forbidden region of the I/J/K mask during the acquisition window.</li>
+            <li>Measured vertical amplitude (VOD) is within specified limits.</li>
+            <li>Rise and fall times are within specified ranges (not too fast or slow).</li>
+            <li>Jitter and wander result in margin >= specified minimum (scope will report margin in ps or %).</li>
+          </ul>
+
+          <h3>General fail conditions</h3>
+          <ul>
+            <li>Any mask hit (even a single one during the acquisition) is a fail.</li>
+            <li>VOD out of range (too small = insufficient voltage margin).</li>
+            <li>Rise/fall times violate allowed window (excessive slow edges or too-brief)</li>
+            <li>Excessive jitter or inter-symbol interference that closes the eye.</li>
+          </ul>
+
+          <h3>Quick pass/fail table (example)</h3>
+          <table>
+            <thead>
+              <tr><th>Parameter</th><th>Example Spec</th><th>Pass</th><th>Fail</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>VOD (differential amplitude)</td><td>140 mV – 270 mV</td><td>Within range</td><td>&lt;140 mV or &gt;270 mV</td></tr>
+              <tr><td>Rise time (20–80%)</td><td>150 ps – 0.3 * UI</td><td>Within range</td><td>Out of range</td></tr>
+              <tr><td>Mask hits</td><td>No hits</td><td>0 hits</td><td>&gt;=1 hit</td></tr>
+            </tbody>
+          </table>
+
+          <p class="note">UI = Unit Interval = the bit period. Exact limits come from the protocol spec (USB‑IF, MIPI, PCIe, etc.).</p>
+
+          <h3>SVG examples — I/J/K pass vs fail</h3>
+          <div class="svgwrap">
+            <div class="figure">
+              <svg width="320" height="180" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100%" height="100%" fill="#031426" rx="6"/>
+                <g transform="translate(12,12)">
+                  <text x="0" y="0" fill="#88f3c6" font-size="12">Mask PASS (no hits)</text>
+                  <g stroke="#8ef0c7" stroke-width="1.6" fill="none">
+                    <path d="M0 90 Q30 26 60 90 T120 90 T180 90 T240 90 T300 90" opacity="0.9"/>
+                    <path d="M6 90 Q36 40 66 90 T126 90 T186 90 T246 90 T306 90" opacity="0.6"/>
+                  </g>
+                  <g fill="#ff6b6b" opacity="0.12">
+                    <rect x="120" y="20" width="64" height="40"/>
+                    <rect x="120" y="90" width="64" height="40"/>
+                  </g>
+                </g>
+              </svg>
+            </div>
+
+            <div class="figure">
+              <svg width="320" height="180" viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg">
+                <rect width="100%" height="100%" fill="#031426" rx="6"/>
+                <g transform="translate(12,12)">
+                  <text x="0" y="0" fill="#fca5a5" font-size="12">Mask FAIL (hits in K region)</text>
+                  <g stroke="#fca5a5" stroke-width="1.6" fill="none">
+                    <path d="M0 90 Q30 26 60 90 T120 90 T180 90 T240 90 T300 90" opacity="0.9"/>
+                    <path d="M24 90 Q54 80 84 90 T144 90 T204 90 T264 90 T324 90" opacity="0.85"/>
+                  </g>
+                  <g fill="#ff6b6b" opacity="0.22">
+                    <rect x="120" y="20" width="64" height="40"/>
+                    <rect x="120" y="90" width="64" height="40"/>
+                  </g>
+                  <circle cx="170" cy="90" r="6" fill="#ff6b6b"/>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <h2>Practical step-by-step checklist (for engineers and non-engineers)</h2>
+          <ol>
+            <li><strong>Decide objective:</strong> Quick health check (waveform) or compliance (I/J/K)?</li>
+            <li><strong>Prepare hardware:</strong> Differential probe, oscilloscope with sufficient bandwidth, good ground connection.</li>
+            <li><strong>Pattern:</strong> For compliance, enter Test_PACKET or PRBS pattern per spec; for quick checks, normal streaming traffic is fine.</li>
+            <li><strong>Capture:</strong> Use long acquisition/persistence and accumulate many transitions.</li>
+            <li><strong>Run mask test:</strong> Load standard mask file and run automated test; record hits and margin.</li>
+            <li><strong>Interpret:</strong> 0 hits = pass; ≥1 hit = fail. Check amplitude/timing limits if fail.</li>
+            <li><strong>Fix common issues:</strong> impedance mismatch, poor termination, trace length mismatch, driver strength, excessive crosstalk.</li>
+          </ol>
+
+          <p class="note">If you want, we can adapt this page to your company’s template or add downloadable oscilloscope setting files (scope-specific) and the official mask files for your instruments.</p>
+        </section>
+
+      </div>
+
+      <aside class="card">
+        <h3>Quick glossary</h3>
+        <p><strong>Eye diagram:</strong> Stack of many bit periods overlaid to show timing and amplitude margins.</p>
+        <p><strong>Mask:</strong> Forbidden region drawn on the eye; touching it = fail.</p>
+        <p><strong>UI (Unit Interval):</strong> Bit period; 1/UI = data rate (e.g., 480 Mbps → UI ≈ 2.083 ns).</p>
+        <p><strong>Test_PACKET:</strong> USB test mode that generates a stable repetitive pattern for compliance testing.</p>
+
+        <h3>Recommended oscilloscope settings (starter)</h3>
+        <pre>
+Bandwidth: >= 4x data rate
+Sample rate: highest available (>= 10 GS/s recommended for 480 Mbps)
+Probe: high-quality differential probe
+Acquisition: averaged/persistent, long record
+Trigger: stable pattern or packet
+        </pre>
+
+        <h3>Common causes for mask failure</h3>
+        <ul>
+          <li>Impedance mismatch / reflections</li>
+          <li>Insufficient driver amplitude (low VOD)</li>
+          <li>Excessive jitter (clocking issues)</li>
+          <li>Poor routing or stubs on differential pair</li>
+          <li>Crosstalk from nearby signals</li>
+        </ul>
+
+        <p class="note">Need a printable PDF or branded version? I can generate a downloadable PDF from this HTML on request.</p>
+      </aside>
+    </div>
+
+    <footer>
+      Created for engineers and non-engineers — concise, practical, and visual. Use the SVG illustrations and notes when explaining results to clients.
+    </footer>
+  </div>
+  <h2>Sample Eye Diagram Visual Explanation</h2>
+  <p>An eye diagram is formed by overlaying many digital signal transitions on an oscilloscope. The resulting shape visually resembles an "eye" where the center opening indicates the time window where the receiver samples data.</p>
+
+  <h3>How to Interpret the Eye Diagram</h3>
+  <ul>
+    <li><strong>Vertical Opening</strong>: Indicates voltage margin (noise tolerance)</li>
+    <li><strong>Horizontal Opening</strong>: Indicates timing margin (jitter tolerance)</li>
+    <li><strong>Edges Thickness</strong>: Shows jitter — thicker edges represent more variation</li>
+    <li><strong>Common Fail Indicators</strong>: Closed eye, fuzzy crossing points, overshoot/undershoot</li>
+  </ul>
+
+  <h3>Example Representation (Concept Diagram)</h3>
+<pre style="background:#111;color:#0f0;padding:16px;border-radius:12px;">
+          Timing →
+   ┌────────────────────────┐
+ V │        (Eye Open)      │
+ o │     \             /    │
+ l │      \           /     │
+ t │       \         /      │
+ a │        \_______/       │
+ g │        /       \       │
+ e │       /         \      │
+   │      /           \     │
+   └────────────────────────┘
+           Horizontal Margin
+</pre>
+
+  <p>(A real oscilloscope diagram will show thousands of overlapped waveforms producing a colored density plot.)</p>
+
+</body>
+</html>
