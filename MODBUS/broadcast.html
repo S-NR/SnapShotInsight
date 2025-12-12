@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MODBUS Broadcast Details</title>
+  <style>
+  :root{
+    --bg:#0b1220;
+    --card:#111a2e;
+    --accent:#18e0a8;
+    --muted:#8fa2c0;
+  }
+  html,body{
+    margin:0;padding:0;font-family:Inter,Segoe UI,Arial;background:var(--bg);color:white;
+  }
+  .wrap{max-width:960px;margin:40px auto;padding:24px;background:transparent;}
+  h1,h2{color:white;margin-top:0;}
+  p,li{color:var(--muted);line-height:1.6;}
+  nav{background:var(--card);padding:16px;border-radius:12px;margin:20px 0;display:flex;gap:10px;flex-wrap:wrap;}
+  .chip{background:#0c2138;padding:8px 14px;border-radius:6px;color:var(--accent);font-size:14px;border:1px solid #0f2b48;cursor:pointer;}
+  section{background:var(--card);padding:20px;border-radius:12px;margin-bottom:20px;}
+  pre{background:#081526;padding:16px;border-radius:10px;color:#9be5ff;overflow-x:auto;}
+  footer{text-align:center;color:var(--muted);margin-top:20px;}
+  button{background:#0c2138;border:1px solid var(--accent);color:var(--accent);padding:8px 14px;border-radius:8px;cursor:pointer;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#08304a,#0b5d78);display:flex;align-items:center;justify-content:center;font-weight:700;color:white">M</div>
+      <div>
+        <h1>MODBUS — Broadcast Mode (ID = 0)</h1>
+        <p class="lead">Complete and beginner‑friendly explanation of how broadcast messaging works in MODBUS RTU/ASCII.</p>
+      </div>
+    </header>
+
+    <nav>
+      <div class="chip" onclick="location.href='modbus-overview.html'">Overview</div>
+      <div class="chip">Broadcast Basics</div>
+      <div class="chip">Rules</div>
+      <div class="chip">Examples</div>
+      <div class="chip">Use Cases</div>
+    </nav>
+
+    <section id="intro">
+      <h2>What is Broadcast in MODBUS?</h2>
+      <p>Broadcast is a special MODBUS feature where the master sends a message using slave ID <strong>0</strong>. Every slave on the network accepts and executes it. No slave sends a response back. This allows one‑to‑many control without flooding the bus.</p>
+    </section>
+    <!-- RS-485 Bus Diagram SVG -->
+<!-- RS-485 Bus Diagram SVG (Aligned Version) -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220" width="900" height="220" role="img">
+  <style>
+    .bg{fill:#071426}
+    .card{fill:#0f1724;stroke:#073444;stroke-width:1}
+    .label{fill:#bfeefc;font-family:Inter,Arial;font-size:14px}
+    .device{fill:#071a2a;stroke:#123046;stroke-width:2;rx:8;ry:8}
+    .master{fill:#0b5d78}
+    .line{stroke:#1ea8a1;stroke-width:4}
+    .arrow{fill:#1ea8a1}
+    .muted{fill:#8fa2c0}
+  </style>
+
+  <rect width="100%" height="100%" class="bg"/>
+  <rect x="18" y="16" width="864" height="188" class="card" rx="10"/>
+
+  <!-- Bus line -->
+  <line x1="60" y1="150" x2="840" y2="150" class="line" stroke-linecap="round"/>
+
+  <!-- Master -->
+  <g transform="translate(60,40)">
+    <rect width="120" height="70" class="device master"/>
+    <text x="60" y="38" class="label" text-anchor="middle">Master</text>
+    <text x="60" y="56" class="muted" text-anchor="middle" font-size="12">TX: frame (ID=0)</text>
+  </g>
+
+  <!-- Slaves (all height = 70) -->
+  <g transform="translate(220,40)">
+    <rect width="120" height="70" class="device"/>
+    <text x="60" y="38" class="label" text-anchor="middle">Slave 1</text>
+  </g>
+  <g transform="translate(380,40)">
+    <rect width="120" height="70" class="device"/>
+    <text x="60" y="38" class="label" text-anchor="middle">Slave 2</text>
+  </g>
+  <g transform="translate(540,40)">
+    <rect width="120" height="70" class="device"/>
+    <text x="60" y="38" class="label" text-anchor="middle">Slave 3</text>
+  </g>
+  <g transform="translate(700,40)">
+    <rect width="120" height="70" class="device"/>
+    <text x="60" y="38" class="label" text-anchor="middle">Slave N</text>
+  </g>
+
+  <!-- Vertical drops -->
+  <line x1="120" y1="120" x2="120" y2="150" stroke="#1ea8a1" stroke-width="2"/>
+  <line x1="280" y1="120" x2="280" y2="150" stroke="#1ea8a1" stroke-width="2"/>
+  <line x1="440" y1="120" x2="440" y2="150" stroke="#1ea8a1" stroke-width="2"/>
+  <line x1="600" y1="120" x2="600" y2="150" stroke="#1ea8a1" stroke-width="2"/>
+  <line x1="760" y1="120" x2="760" y2="150" stroke="#1ea8a1" stroke-width="2"/>
+
+  <!-- Broadcast arrow (CENTER aligned) -->
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="5" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6 z" class="arrow"/>
+    </marker>
+  </defs>
+
+  <path d="M180 75 L220 75" stroke="#7be7c9" stroke-width="3" marker-end="url(#arrowhead)"/>
+
+  <text x="200" y="175" class="muted">Broadcast (ID = 0) → all slaves execute; no replies</text>
+</svg>
+
+    <section id="why">
+      <h2>Why Broadcast Exists</h2>
+      <ul>
+        <li>To configure many MODBUS devices at once.</li>
+        <li>To trigger synchronized actions (reset, start, stop, sample).</li>
+        <li>To reduce traffic when updating several slaves.</li>
+        <li>To ensure no reply collisions occur on RS‑485.</li>
+      </ul>
+    </section>
+
+    <section id="rules">
+      <h2>Important Broadcast Rules</h2>
+      <ul>
+        <li>Address used must be <strong>0</strong>.</li>
+        <li><strong>No slave replies</strong> — prevents two devices from sending responses at the same time.</li>
+        <li>Only <strong>write</strong> type function codes are allowed (05, 06, 0F, 10).</li>
+        <li>Not available in MODBUS TCP — only RTU/ASCII.</li>
+        <li>Master does not wait for confirmation.</li>
+      </ul>
+    </section>
+
+    <section id="how">
+      <h2>How Broadcast Works Internally</h2>
+      <p>Every slave device listens to the bus. When a frame with ID <strong>00</strong> appears:</p>
+      <ul>
+        <li>The frame is validated (timings + CRC).</li>
+        <li>If valid, it is executed by <strong>all</strong> slaves.</li>
+        <li>No device sends back a reply frame.</li>
+      </ul>
+      <p>This prevents response collisions on RS‑485 lines.</p>
+    </section>
+    <!-- Timing Waveform SVG -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 200" width="900" height="200" role="img" aria-label="Timing: master transmit then silence">
+  <style>
+    .bg{fill:#071426}
+    .axis{stroke:#123046;stroke-width:1}
+    .tx{stroke:#18e0a8;stroke-width:6;stroke-linecap:round}
+    .sil{stroke:#4b6478;stroke-width:6;stroke-linecap:round;stroke-dasharray:8 6}
+    text{fill:#bfeefc;font-family:Inter,Arial;font-size:13px}
+  </style>
+  <rect width="100%" height="100%" class="bg"/>
+
+  <!-- labels -->
+  <text x="40" y="30">Master (TX)</text>
+  <text x="40" y="95">Bus line</text>
+  <text x="40" y="160">Slaves (acting)</text>
+
+  <!-- master TX waveform -->
+  <path d="M120 45 L170 45 L200 15 L260 15 L300 45 L340 45" class="tx"/>
+
+  <!-- bus line timeline (same as master area) -->
+  <line x1="120" y1="95" x2="340" y2="95" class="tx"/>
+
+  <!-- silence after TX -->
+  <line x1="360" y1="95" x2="760" y2="95" class="sil"/>
+
+  <!-- slaves action bar during silence -->
+  <rect x="360" y="148" width="380" height="12" rx="6" fill="#0b5d78" />
+  <text x="370" y="175" fill="#cfeffd" font-size="12">Slaves execute command locally — no reply on bus</text>
+
+  <!-- annotations -->
+  <text x="150" y="75" fill="#8fa2c0">Master transmits frame (ID=0)</text>
+  <text x="460" y="115" fill="#8fa2c0">Bus silence — prevents collisions</text>
+</svg>
+
+      <button onclick="location.href='broadcast_silence.html'"> Silence Time Calculations -></button>
+
+    <section id="frames">
+      <h2>Broadcast Frame Example</h2>
+      <pre><code>// Write Single Register (Function 06)
+00 06 00 10 00 64 88 32
+
+00 → Broadcast (all slaves)
+06 → Write Single Register
+0010 → Register Address
+0064 → Value (100)
+8832 → CRC16
+</code></pre>
+    </section>
+
+    <section id="usecases">
+      <h2>Common Use Cases</h2>
+      <ul>
+        <li>Resetting all connected devices.</li>
+        <li>Starting measurement on all sensors simultaneously.</li>
+        <li>Setting default configuration on power‑up.</li>
+        <li>Writing calibration data to many units at once.</li>
+      </ul>
+    </section>
+
+    <!-- RS-485 Transceiver Diagram SVG -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="900" height="320" role="img" aria-label="RS-485 transceiver and MCU direction control">
+  <style>
+    .bg{fill:#071426}
+    .card{fill:#0f1724;stroke:#082634;stroke-width:1}
+    .box{fill:#071a2a;stroke:#123046;stroke-width:2;rx:8;ry:8}
+    .label{fill:#bfeefc;font-family:Inter,Arial;font-size:14px}
+    .line{stroke:#18e0a8;stroke-width:3;stroke-linecap:round}
+    .muted{fill:#8fa2c0}
+    .pin{fill:#9be5ff}
+  </style>
+  <rect width="100%" height="100%" class="bg"/>
+  <rect x="20" y="20" width="860" height="280" class="card" rx="12"/>
+
+  <!-- MCU -->
+  <g transform="translate(60,60)">
+    <rect width="180" height="140" class="box"/>
+    <text x="90" y="35" class="label" text-anchor="middle">MCU / UART</text>
+    <text x="90" y="60" class="muted" text-anchor="middle" font-size="12">TXD / RXD</text>
+    <!-- pins -->
+    <circle cx="30" cy="100" r="4" class="pin"/><text x="40" y="104" class="muted" font-size="12">TXD</text>
+    <circle cx="30" cy="115" r="4" class="pin"/><text x="40" y="119" class="muted" font-size="12">RXD</text>
+    <circle cx="150" cy="100" r="4" class="pin"/><text x="120" y="104" class="muted" font-size="12">DE</text>
+    <circle cx="150" cy="115" r="4" class="pin"/><text x="120" y="119" class="muted" font-size="12">RE</text>
+  </g>
+
+  <!-- transceiver -->
+  <g transform="translate(320,60)">
+    <rect width="240" height="140" class="box"/>
+    <text x="120" y="35" class="label" text-anchor="middle">RS-485 Transceiver</text>
+    <text x="120" y="60" class="muted" text-anchor="middle" font-size="12">Driver A/B and Receiver</text>
+    <text x="40" y="100" class="muted" font-size="12">A</text>
+    <text x="40" y="120" class="muted" font-size="12">B</text>
+  </g>
+
+  <!-- bus A/B -->
+  <line x1="580" y1="115" x2="820" y2="115" class="line"/>
+  <text x="840" y="115" class="muted" font-size="12">A</text>
+  <line x1="580" y1="135" x2="820" y2="135" class="line"/>
+  <text x="840" y="135" class="muted" font-size="12">B</text>
+
+  <!-- connections -->
+  <line x1="240" y1="110" x2="320" y2="110" stroke="#9be5ff" stroke-width="2"/>
+  <line x1="240" y1="125" x2="320" y2="125" stroke="#9be5ff" stroke-width="2"/>
+  <line x1="210" y1="100" x2="320" y2="92" stroke="#9be5ff" stroke-width="2" stroke-dasharray="4 4"/>
+  <line x1="210" y1="115" x2="320" y2="148" stroke="#9be5ff" stroke-width="2" stroke-dasharray="4 4"/>
+
+  <text x="140" y="230" class="muted">DE (Driver Enable): MCU sets HIGH to transmit</text>
+  <text x="140" y="250" class="muted">RE (Receiver Enable): MCU sets LOW to allow receiving</text>
+
+  <text x="360" y="280" class="muted">A/B → RS-485 differential bus (multi-drop)</text>
+</svg>
+
+
+    <section id="back">
+      <button onclick="location.href='modbus-overview.html'">⬅ Back to Overview</button>
+    </section>
+
+    <footer>MODBUS Broadcast — Easy Industrial Learning</footer>
+  </div>
+</body>
+</html>

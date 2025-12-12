@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>MODBUS — Bus Silence Timing (Calculator)</title>
+<style>
+:root{--bg:#0b1220;--card:#111a2e;--accent:#18e0a8;--muted:#8fa2c0}
+html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Arial;background:var(--bg);color:#e6eef8}
+.wrap{max-width:960px;margin:36px auto;padding:26px}
+.header{display:flex;gap:14px;align-items:center}
+.logo{width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#08304a,#0b5d78);display:flex;align-items:center;justify-content:center;font-weight:700}
+h1{margin:0;font-size:20px}
+.lead{color:var(--muted);margin-top:6px}
+.card{background:var(--card);padding:18px;border-radius:12px;margin-top:18px}
+.row{display:flex;gap:12px;align-items:center}
+.label{width:160px;color:var(--muted)}
+.input{background:#071826;border:1px solid #0f2b48;padding:8px 10px;border-radius:8px;color:var(--muted);width:180px}
+.small{font-size:13px;color:var(--muted)}
+.table{width:100%;border-collapse:collapse;margin-top:12px}
+.table td{padding:10px;border-top:1px solid #0f2b48;color:var(--muted)}
+.btn{background:#0c2138;border:1px solid var(--accent);color:var(--accent);padding:8px 12px;border-radius:8px;cursor:pointer}
+.footer{color:var(--muted);margin-top:14px;text-align:center}
+@media (max-width:760px){.row{flex-direction:column;align-items:flex-start}.label{width:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <div class="logo">M</div>
+    <div>
+      <h1>MODBUS Bus Silence — Timing Calculator</h1>
+      <div class="lead">Compute characteristic silence (idle) time after a frame (typical: 3.5 character times). Works for RTU / RS‑485 systems.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <div class="label">Baud rate</div>
+      <input id="baud" class="input" type="number" value="9600" min="300" step="1"> <div class="small">bits/sec</div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <div class="label">Bits per character</div>
+      <select id="bits" class="input">
+        <option value="10">10 (8N1: 1 start + 8 data + 1 stop)</option>
+        <option value="11">11 (8E1 parity + stop)</option>
+        <option value="9">9 (7E1/7N1)</option>
+        <option value="8">8 (custom)</option>
+      </select>
+      <div class="small">Choose UART framing used by your devices</div>
+    </div>
+
+    <div class="row" style="margin-top:12px">
+      <div class="label">Multiplier (character times)</div>
+      <input id="mult" class="input" type="number" value="3.5" step="0.1" min="0.5"> <div class="small">Typical Modbus RTU uses 3.5 char-times</div>
+    </div>
+
+    <div style="height:1px"></div>
+    <div style="display:flex;gap:12px;margin-top:14px;flex-wrap:wrap">
+      <button class="btn" onclick="compute()">Compute</button>
+      <button class="btn" onclick="preset(9600)">Preset 9600</button>
+      <button class="btn" onclick="preset(19200)">Preset 19200</button>
+      <button class="btn" onclick="preset(115200)">Preset 115200</button>
+    </div>
+
+    <table class="table">
+      <tr><td>Character time (ms)</td><td id="charMs">—</td></tr>
+      <tr><td>Character time (µs)</td><td id="charUs">—</td></tr>
+      <tr><td>Silence time = multiplier × char-time (ms)</td><td id="silenceMs">—</td></tr>
+      <tr><td>Silence time (µs)</td><td id="silenceUs">—</td></tr>
+      <tr><td>Suggested engineering margin</td><td id="margin">Use 5–10 char times for safety</td></tr>
+    </table>
+
+    <div style="margin-top:12px;color:var(--muted)">
+      <strong>Notes:</strong>
+      <ul>
+        <li>Modbus RTU convention uses <em>3.5 character times</em> as the frame separator. Character time = bits-per-character / baud.</li>
+        <li>The calculator uses your chosen bits-per-character (commonly 10 for 8N1).</li>
+        <li>For broadcast (ID=0), masters typically wait this silence to ensure no slave responds or to let slaves finish local actions.</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3 style="margin-top:0">Examples</h3>
+    <table class="table">
+      <tr><td>Baud 9600, 8N1 (10 bits): 1 char = 10/9600 = 1.0417 ms → 3.5 char ≈ 3.65 ms</td></tr>
+      <tr><td>Baud 19200, 8N1: 1 char = 0.5208 ms → 3.5 char ≈ 1.82 ms</td></tr>
+      <tr><td>Baud 115200, 8N1: 1 char ≈ 0.0868 ms → 3.5 char ≈ 0.304 ms</td></tr>
+    </table>
+  </div>    
+  
+  <section id="back">
+      <button onclick="location.href='broadcast.html'">⬅ Back to broadcast</button>
+    </section>
+
+ </div>
+
+<script>
+function compute(){
+  const baud = Number(document.getElementById('baud').value) || 9600;
+  const bits = Number(document.getElementById('bits').value) || 10;
+  const mult = Number(document.getElementById('mult').value) || 3.5;
+
+  // character time in seconds = bits / baud
+  const charSec = bits / baud;
+  const charMs = charSec * 1000;
+  const charUs = charSec * 1e6;
+  const silenceSec = charSec * mult;
+  const silenceMs = silenceSec * 1000;
+  const silenceUs = silenceSec * 1e6;
+
+  document.getElementById('charMs').textContent = charMs.toFixed(4) + ' ms';
+  document.getElementById('charUs').textContent = Math.round(charUs) + ' µs';
+  document.getElementById('silenceMs').textContent = silenceMs.toFixed(4) + ' ms';
+  document.getElementById('silenceUs').textContent = Math.round(silenceUs) + ' µs';
+}
+function preset(b){document.getElementById('baud').value = b; compute();}
+// initial compute
+compute();
+</script>
+</body>
+</html>

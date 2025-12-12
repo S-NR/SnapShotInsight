@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Modbus ID Range Explanation</title>
+<style>
+body {
+    background-color: #0e1a2b;
+    color: #e5e7eb;
+    font-family: Arial, sans-serif;
+    padding: 40px;
+}
+.container {
+    max-width: 900px;
+    margin: auto;
+}
+a.back {
+    display: inline-block;
+    padding: 8px 16px;
+    background: #00c896;
+    color: #000;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+a.back:hover {
+    background: #00a67a;
+}
+h1 {
+    color: #00c896;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <a href="modbus-overview.html" class="back">← Back</a>
+
+    <h1>Why Modbus Uses ID Range 1–247</h1>
+
+    <p><strong>Address 0</strong> is used for broadcast (no reply).</p>
+    <a href="broadcast.html" class="info-button">Why this range?</a>
+    <p><strong>Addresses 248–255</strong> are reserved for diagnostics or future features.</p>
+
+    <h3>Valid device ID range:</h3>
+    <p><strong>1 to 247</strong> — guaranteed compatible for all Modbus RTU/ASCII networks.</p>
+
+    <h3>Reasons:</h3>
+    <ul>
+        <li>Reserved addresses for special operations</li>
+        <li>Original Modbus RTU spec restricts devices to 1–247</li>
+        <li>Ensures interoperability across PLCs, meters, HMIs</li>
+        <li>Many masters reject IDs >247</li>
+    </ul>
+
+</div>
+
+</body>
+</html>

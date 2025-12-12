@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MODBUS — Beginner Overview</title>
+  <style>
+  :root{
+    --bg:#0b1220;
+    --card:#111a2e;
+    --accent:#18e0a8;
+    --muted:#8fa2c0;
+  }
+  html,body{
+    margin:0;padding:0;font-family:Inter,Segoe UI,Arial;background:var(--bg);color:white;
+  }
+  .wrap{max-width:960px;margin:40px auto;padding:24px;background:transparent;}
+  h1,h2{color:white;margin-top:0;}
+  p,li{color:var(--muted);line-height:1.6;}
+  nav{background:var(--card);padding:16px;border-radius:12px;margin:20px 0;display:flex;gap:10px;flex-wrap:wrap;}
+  .chip{background:#0c2138;padding:8px 14px;border-radius:6px;color:var(--accent);font-size:14px;border:1px solid #0f2b48;cursor:pointer;}
+  section{background:var(--card);padding:20px;border-radius:12px;margin-bottom:20px;}
+  table{width:100%;border-collapse:collapse;margin-top:12px;}
+  td,th{padding:10px;border-bottom:1px solid #1e2b44;color:var(--muted);}
+  pre{background:#081526;padding:16px;border-radius:10px;color:#9be5ff;overflow-x:auto;}
+  footer{text-align:center;color:var(--muted);margin-top:20px;}
+  button{background:#0c2138;border:1px solid var(--accent);color:var(--accent);padding:8px 14px;border-radius:8px;cursor:pointer;}
+.info-button {
+    display: inline-block;
+    padding: 6px 14px;
+    margin-left: 10px;
+    background-color: #00c896;
+    color: #000;
+    border-radius: 6px;
+    font-size: 14px;
+    text-decoration: none;
+    font-weight: 600;
+}
+.info-button:hover {
+    background-color: #00a67a;
+}
+
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div style="width:56px;height:56px;border-radius:10px;background:linear-gradient(135deg,#08304a,#0b5d78);display:flex;align-items:center;justify-content:center;font-weight:700;color:white">M</div>
+      <div>
+        <h1>MODBUS — Beginner Overview</h1>
+        <p class="lead">A friendly, from‑zero guide to the MODBUS protocol (RTU & TCP) — memory map, frames, and quick examples.</p>
+      </div>
+    </header>
+
+    <nav>
+      <div class="chip">Master / Slave</div>
+      <div class="chip">RTU / TCP</div>
+      <div class="chip">Coils & Registers</div>
+      <div class="chip">Function Codes</div>
+      <div class="chip">Frame Examples</div>
+    </nav>
+
+    <section id="what-is">
+      <h2>What is MODBUS?</h2>
+      <p>MODBUS is a simple, open industrial communication protocol introduced by Modicon (Schneider Electric) in 1979. It provides a standard way devices (PLCs, sensors, HMIs, SCADA) talk to each other.</p>
+    </section>
+
+    <section id="why-use">
+      <h2>Why use MODBUS?</h2>
+      <ul>
+        <li>Simple, lightweight, widely supported across vendors.</li>
+        <li>Standard data model and function codes — easy integration.</li>
+        <li>Works over serial (RS‑485 / RS‑232) as RTU/ASCII and over Ethernet as TCP.</li>
+      </ul>
+    </section>
+
+    <section id="master-slave">
+          <h2>Master / Slave model</h2>
+
+            <p><strong>Master (Client)</strong> — initiates requests (example: SCADA/HMI).</p>
+            <p><strong>Slave (Server)</strong> — replies to requests (example: sensor, PLC). Slaves never start communication.</p>
+
+            <p>Typical ID range: 1–247.  
+                <a href="id-details.html" class="info-button">Why this range?</a>
+            </p>
+    </section>
+
+    <section id="types">
+      <h2>MODBUS types (layers)</h2>
+      <p>Common variants:</p>
+      <ul>
+        <li><strong>RTU</strong> — binary frames over RS‑485/RS‑232 (most common).</li>
+        <li><strong>ASCII</strong> — ASCII text frames, slower, easier to debug (rarely used today).</li>
+        <li><strong>TCP</strong> — runs over Ethernet (TCP port 502), MBAP header replaces CRC &. device addressing.</li>
+      </ul>
+    </section>
+
+    <section id="data-model">
+      <h2>MODBUS data model — the 4 memory areas</h2>
+      <table>
+        <thead>
+          <tr><th>Reference</th><th>Name</th><th>Access</th><th>Typical use</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0xxxx</td><td>Coils</td><td>Read/Write</td><td>Digital outputs</td></tr>
+          <tr><td>1xxxx</td><td>Discrete Inputs</td><td>Read‑only</td><td>Digital inputs</td></tr>
+          <tr><td>3xxxx</td><td>Input Registers</td><td>Read‑only</td><td>Analog inputs (sensors)</td></tr>
+          <tr><td>4xxxx</td><td>Holding Registers</td><td>Read/Write</td><td>Analog outputs, configuration</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="function-codes">
+      <h2>Important function codes</h2>
+      <p>Remember these common ones:</p>
+      <ul>
+        <li><strong>01</strong> — Read Coils</li>
+        <li><strong>02</strong> — Read Discrete Inputs</li>
+        <li><strong>03</strong> — Read Holding Registers</li>
+        <li><strong>04</strong> — Read Input Registers</li>
+        <li><strong>05</strong> — Write Single Coil</li>
+        <li><strong>06</strong> — Write Single Register</li>
+        <li><strong>15 (0F)</strong> — Write Multiple Coils</li>
+        <li><strong>16 (10)</strong> — Write Multiple Registers</li>
+      </ul>
+    </section>
+
+    <section id="rtu-frame">
+      <h2>MODBUS RTU frame (byte layout)</h2>
+      <p>Typical RTU frame structure:</p>
+      <pre><code>// Slave ID | Function | Data | CRC (2 bytes)
+01 03 00 10 00 02 C5 CD
+
+// Meaning:
+// 01 -> Slave 1
+// 03 -> Read holding registers
+// 00 10 -> Start address 0x0010
+// 00 02 -> Read 2 registers
+// C5 CD -> CRC16
+</code></pre>
+    </section>
+
+    <section id="tcp-frame">
+      <h2>MODBUS TCP frame (MBAP + PDU)</h2>
+      <p>TCP removes CRC and adds MBAP header (7 bytes):</p>
+      <pre><code>00 01 00 00 00 06 01 03 00 10 00 02
+
+// MBAP header: transaction id, protocol id, length, unit id
+// PDU: function + data
+</code></pre>
+    </section>
+
+    <section id="example">
+      <h2>Quick real-world example</h2>
+      <p>A temperature sensor might expose:</p>
+      <ul>
+        <li><strong>30001</strong> — Temperature (Input Register)</li>
+        <li><strong>40010</strong> — Calibration value (Holding Register)</li>
+        <li><strong>00005</strong> — Heater ON/OFF (Coil)</li>
+      </ul>
+      <p>SCADA polls the input register to read temperature periodically.</p>
+    </section>
+
+    <section id="implementation">
+      <h2>Implementation notes (embedded / C)</h2>
+      <ul>
+        <li>Understand UART and RS‑485 transceiver control (DE/RE lines).</li>
+        <li>Implement CRC‑16 (Modbus polynomial), a receive state machine, and timeout handling.</li>
+        <li>Map registers to application variables and implement handler for function codes 03/06/16 etc.</li>
+      </ul>
+    </section>
+
+    <section id="summary">
+      <h2>Summary — TL;DR</h2>
+      <p>MODBUS is a simple, reliable industrial protocol used to read/write memory areas (coils/registers) between a master and one or more slaves. RTU (serial) and TCP (Ethernet) are the most common flavors.</p>
+
+      <div class="actions">
+        <button onclick="copyHtml()">Copy HTML to clipboard</button>
+        <button onclick="downloadHtml()">Download .html file</button>
+      </div>
+
+    </section>
+
+    <footer>Made for learners — edit freely. If you'd like the same as a printable PDF or a React component, tell me!</footer>
+  </div>
+
+  <script>
+    function copyHtml(){
+      const blob = new Blob([document.documentElement.outerHTML], {type:'text/html'});
+      const reader = new FileReader();
+      reader.onload = () => navigator.clipboard.writeText(reader.result).then(()=>alert('Document HTML copied to clipboard'));
+      reader.readAsText(blob);
+    }
+    function downloadHtml(){
+      const html = document.documentElement.outerHTML;
+      const blob = new Blob([html], {type:'text/html'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'modbus-overview.html'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
