@@ -6,7 +6,8 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
+  /* background-attachment: fixed; */
+  background-attachment: scroll;
   color: #ffffff;
   line-height: 1.8;
 }
@@ -33,6 +34,13 @@ body {
   margin-bottom: 20px;
   color: #00eaff;
 } */
+
+header {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
 
 .header {
   text-align: center;
@@ -268,13 +276,37 @@ caliblabel, calibinput {
       white-space: pre;
       overflow-x: auto;
     }
+.wrap {
+  max-width: 960px;
+  margin: 24px auto;
+  padding: 16px;
+}
+.svg-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.svg-wrap svg {
+  width: 100%;
+  height: auto;
+  min-width: 720px;   /* better readability */
+  display: block;
+}
 
 
 @media screen and (max-width: 786px) {
+    body {
+    background-attachment: scroll;
+  }
+
   .overlay {
     padding: 30px 6vw;
   }
-
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
   .header h1 {
     font-size: 1.8em;
   }
@@ -332,6 +364,11 @@ caliblabel, calibinput {
   
   th, td {
     font-size: 14px;
+  }
+    
+  .wrap {
+    margin: 0;
+    padding: 12px;
   }
 }
 

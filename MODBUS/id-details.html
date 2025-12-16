@@ -30,18 +30,22 @@ a.back:hover {
 h1 {
     color: #00c896;
 }
+
+  .wrap{max-width:960px;margin:40px auto;padding:24px;background:transparent;}
 </style>
 </head>
 <body>
 
-<div class="container">
+<!-- <div class="container"> -->
+    
+  <div class="wrap">
 
     <a href="modbus-overview.html" class="back">← Back</a>
 
     <h1>Why Modbus Uses ID Range 1–247</h1>
 
     <p><strong>Address 0</strong> is used for broadcast (no reply).</p>
-    <a href="broadcast.html" class="info-button">Why this range?</a>
+    <a href="broadcast.html" class="back">Why this range?</a>
     <p><strong>Addresses 248–255</strong> are reserved for diagnostics or future features.</p>
 
     <h3>Valid device ID range:</h3>

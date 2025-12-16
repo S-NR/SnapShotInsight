@@ -4,7 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MODBUS Broadcast Details</title>
+  <link rel="stylesheet" href="styles.css" />
   <style>
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;   /* prevents sideways scrolling */
+  }
   :root{
     --bg:#0b1220;
     --card:#111a2e;
@@ -49,7 +61,10 @@
     </section>
     <!-- RS-485 Bus Diagram SVG -->
 <!-- RS-485 Bus Diagram SVG (Aligned Version) -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220" width="900" height="220" role="img">
+    <section>      
+  <div class="svg-wrap">
+<!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220" width="900" height="220" role="img"> -->
+  <svg viewBox="0 0 900 220" preserveAspectRatio="xMidYMid meet">
   <style>
     .bg{fill:#071426}
     .card{fill:#0f1724;stroke:#073444;stroke-width:1}
@@ -110,7 +125,9 @@
 
   <text x="200" y="175" class="muted">Broadcast (ID = 0) → all slaves execute; no replies</text>
 </svg>
-
+  </div>
+    </section>
+    
     <section id="why">
       <h2>Why Broadcast Exists</h2>
       <ul>
@@ -143,8 +160,11 @@
       <p>This prevents response collisions on RS‑485 lines.</p>
     </section>
     <!-- Timing Waveform SVG -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 200" width="900" height="200" role="img" aria-label="Timing: master transmit then silence">
-  <style>
+         <section>      
+  <div class="svg-wrap">
+<!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 200" width="900" height="200" role="img" aria-label="Timing: master transmit then silence"> -->
+    <svg viewBox="0 0 900 220" preserveAspectRatio="xMidYMid meet">
+      <style>
     .bg{fill:#071426}
     .axis{stroke:#123046;stroke-width:1}
     .tx{stroke:#18e0a8;stroke-width:6;stroke-linecap:round}
@@ -175,6 +195,8 @@
   <text x="150" y="75" fill="#8fa2c0">Master transmits frame (ID=0)</text>
   <text x="460" y="115" fill="#8fa2c0">Bus silence — prevents collisions</text>
 </svg>
+  </div>
+    </section>
 
       <button onclick="location.href='broadcast_silence.html'"> Silence Time Calculations -></button>
 
@@ -202,7 +224,10 @@
     </section>
 
     <!-- RS-485 Transceiver Diagram SVG -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="900" height="320" role="img" aria-label="RS-485 transceiver and MCU direction control">
+         <section>      
+  <div class="svg-wrap">
+<!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320" width="900" height="320" role="img" aria-label="RS-485 transceiver and MCU direction control"> -->
+  <svg viewBox="0 0 900 220" preserveAspectRatio="xMidYMid meet">
   <style>
     .bg{fill:#071426}
     .card{fill:#0f1724;stroke:#082634;stroke-width:1}
@@ -253,7 +278,8 @@
 
   <text x="360" y="280" class="muted">A/B → RS-485 differential bus (multi-drop)</text>
 </svg>
-
+  </div>
+  </section>
 
     <section id="back">
       <button onclick="location.href='modbus-overview.html'">⬅ Back to Overview</button>
