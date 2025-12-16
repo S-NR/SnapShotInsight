@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Modbus RTU CRC Calculator</title>
+
+<style>
+:root {
+    --bg-main: #060f1f;
+    --bg-card: #0b1c2f;
+    --accent: #2dd4bf;
+    --text-main: #e6eef8;
+    --text-soft: #9fb4cc;
+    --border: #123652;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, Arial, sans-serif;
+    background: radial-gradient(circle at top, #0a1730, var(--bg-main));
+    color: var(--text-main);
+}
+
+.container {
+    max-width: 700px;
+    margin: auto;
+    padding: 24px;
+}
+
+h1, h2 {
+    color: white;
+}
+
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-soft);
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: #07182c;
+    color: white;
+    font-size: 16px;
+}
+
+button {
+    margin-top: 14px;
+    padding: 12px 18px;
+    font-size: 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(45,212,191,0.4);
+    background: rgba(45,212,191,0.15);
+    color: var(--accent);
+    cursor: pointer;
+}
+
+button:hover {
+    background: rgba(45,212,191,0.25);
+}
+
+.result {
+    margin-top: 16px;
+    font-size: 18px;
+}
+
+pre {
+    background: #07182c;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    color: #b9f3ff;
+    overflow-x: auto;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>Modbus RTU CRC-16 Calculator</h1>
+
+<div class="card">
+<h2>Input Data</h2>
+
+<label>Enter Modbus frame bytes (hex, space separated):</label>
+<input id="dataInput" placeholder="Example: 01 03 00 10 00 02">
+
+<button onclick="calculateCRC()">Calculate CRC</button>
+
+<div class="result" id="output"></div>
+</div>
+
+<div class="card">
+<h2>CRC Rules Used</h2>
+<pre>
+Initial CRC : 0xFFFF
+Polynomial : 0xA001
+Bit order  : LSB first
+Shift      : Right
+Final XOR  : None
+CRC order  : Low byte first
+</pre>
+</div>
+
+</div>
+
+<script>
+function calculateCRC() {
+    const input = document.getElementById("dataInput").value.trim();
+    if (!input) {
+        document.getElementById("output").innerHTML = "⚠ Please enter hex bytes.";
+        return;
+    }
+
+    const bytes = input.split(/\s+/).map(b => parseInt(b, 16));
+    let crc = 0xFFFF;
+
+    for (let byte of bytes) {
+        crc ^= byte;
+        for (let i = 0; i < 8; i++) {
+            if (crc & 0x0001) {
+                crc = (crc >> 1) ^ 0xA001;
+            } else {
+                crc = crc >> 1;
+            }
+        }
+    }
+
+    crc &= 0xFFFF;
+
+    const low = crc & 0xFF;
+    const high = (crc >> 8) & 0xFF;
+
+    document.getElementById("output").innerHTML = `
+        <b>Final CRC:</b> 0x${crc.toString(16).toUpperCase().padStart(4, '0')}<br>
+        <b>CRC Low Byte:</b> 0x${low.toString(16).toUpperCase().padStart(2, '0')}<br>
+        <b>CRC High Byte:</b> 0x${high.toString(16).toUpperCase().padStart(2, '0')}
+    `;
+}
+</script>
+
+</body>
+</html>
