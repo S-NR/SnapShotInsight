@@ -129,7 +129,8 @@
     <section id="rtu-frame">
       <h2>MODBUS RTU frame (byte layout)</h2>
       <p>Typical RTU frame structure:</p>
-      <pre><code>// Slave ID | Function | Data | CRC (2 bytes)
+      <pre><code>// Slave ID | Function | Data | CRC (2 bytes)        
+
 01 03 00 10 00 02 C5 CD
 
 // Meaning:
@@ -137,7 +138,8 @@
 // 03 -> Read holding registers
 // 00 10 -> Start address 0x0010
 // 00 02 -> Read 2 registers
-// C5 CD -> CRC16
+
+// C5 CD -> CRC16 <a href="CRC_computation.html" class="info-button">CRC calculation?</a>
 </code></pre>
     </section>
 

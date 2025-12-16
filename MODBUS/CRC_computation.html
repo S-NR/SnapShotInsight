@@ -1,169 +1,203 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Modbus RTU CRC-16 Calculation</title>
-    <style>
-        :root {
-        /* Backgrounds */
-        --bg-main: #060f1f;
-        --bg-card: #0b1c2f;
-        --bg-card-soft: #0f243b;
+<meta charset="UTF-8">
+<title>CRC Fundamentals – Modbus RTU</title>
 
-        /* Primary accent (teal) */
-        --accent: #2dd4bf;
-        --accent-soft: #1fb6aa;
+<style>
+:root {
+    --bg-main: #060f1f;
+    --bg-card: #0b1c2f;
+    --accent: #2dd4bf;
+    --text-main: #e6eef8;
+    --text-soft: #9fb4cc;
+    --border: #123652;
+}
 
-        /* Text colors */
-        --text-title: #ffffff;
-        --text-body: #9fb4cc;
-        --text-muted: #7b90a8;
+body {
+    margin: 0;
+    font-family: system-ui, Arial, sans-serif;
+    background: radial-gradient(circle at top, #0a1730, var(--bg-main));
+    color: var(--text-main);
+}
 
-        /* Borders / shadows */
-        --border-soft: #123652;
-        --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.4);
-        }
-        /* Page base */
-        body {
-        margin: 0;
-        font-family: Inter, system-ui, Arial, sans-serif;
-        background: radial-gradient(circle at top, #0a1730, var(--bg-main));
-        color: var(--text-body);
-        }
+.container {
+    max-width: 900px;
+    margin: auto;
+    padding: 24px;
+}
 
-        /* Page container */
-        .container {
-        max-width: 900px;
-        margin: auto;
-        padding: 24px;
-        }
+h1, h2, h3 {
+    color: white;
+}
 
-        /* Headings */
-        h1, h2, h3 {
-        color: var(--text-title);
-        letter-spacing: 0.3px;
-        }
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
 
-        h1 {
-        font-size: 2.2rem;
-        margin-bottom: 12px;
-        }
+pre {
+    background: #07182c;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    color: #b9f3ff;
+    overflow-x: auto;
+}
 
-        h2 {
-        margin-top: 32px;
-        font-size: 1.5rem;
-        }
+.highlight {
+    color: var(--accent);
+    font-weight: 600;
+}
 
-        /* Cards */
-        .card {
-        background: linear-gradient(180deg, var(--bg-card), var(--bg-card-soft));
-        border: 1px solid var(--border-soft);
-        border-radius: 16px;
-        padding: 22px;
-        margin-bottom: 22px;
-        box-shadow: var(--shadow-soft);
-        }
+ul {
+    line-height: 1.7;
+}
 
-        /* Accent badge / icon */
-        .badge {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 44px;
-        height: 44px;
-        border-radius: 12px;
-        background: linear-gradient(135deg, #0d5c73, #0b3c4f);
-        color: var(--text-title);
-        font-weight: bold;
-        margin-bottom: 12px;
-        }
-
-        /* Navigation buttons */
-        .nav-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 12px;
-        }
-
-        .nav-buttons a {
-        text-decoration: none;
-        padding: 10px 16px;
-        border-radius: 12px;
-        background: rgba(45, 212, 191, 0.08);
-        color: var(--accent);
-        border: 1px solid rgba(45, 212, 191, 0.25);
-        font-weight: 500;
-        transition: all 0.25s ease;
-        }
-
-        .nav-buttons a:hover {
-        background: rgba(45, 212, 191, 0.18);
-        box-shadow: 0 0 0 1px rgba(45, 212, 191, 0.35);
-        }
-
-        /* Paragraphs */
-        p {
-        line-height: 1.6;
-        color: var(--text-body);
-        }
-
-        /* Code blocks */
-        pre {
-        background: #07182c;
-        border: 1px solid #123b5a;
-        border-radius: 12px;
-        padding: 16px;
-        overflow-x: auto;
-        color: #b9f3ff;
-        }
-
-        /* Inline highlights */
-        .highlight {
-        color: var(--accent);
-        font-weight: 600;
-        }
-    </style>
+</style>
 </head>
+
 <body>
+<div class="container">
 
-<h1>CRC Calculation in Modbus RTU</h1>
+<h1>CRC – Ground Level Explanation (Modbus RTU)</h1>
 
-<h2>1. What is CRC in Modbus RTU?</h2>
-<div class="box">
-    <p><b>CRC (Cyclic Redundancy Check)</b> is an error-detection mechanism used in Modbus RTU communication.</p>
-    <p>Each Modbus RTU frame ends with a <b>16-bit CRC</b> that allows the receiver to detect transmission errors.</p>
-</div>
+<!-- WHY CRC -->
+<div class="card">
+<h2>1. Why CRC Exists</h2>
 
-<p>A typical Modbus RTU frame:</p>
+<p>
+In real communication systems (like <b>Modbus RTU</b>), data travels through
+<strong>noisy environments</strong>:
+</p>
+
+<ul>
+<li>Electrical interference</li>
+<li>Long cables</li>
+<li>Loose connections</li>
+<li>Timing distortions</li>
+</ul>
+
+<p>
+Because of this, <b>bits can flip</b>:
+</p>
+
 <pre>
-[ Slave ID ] [ Function Code ] [ Data ... ] [ CRC Low ] [ CRC High ]
+Sent : 0100 0011
+Received : 0100 1011   ← error
 </pre>
 
-<p>The CRC is calculated over <b>all bytes except the CRC itself</b>.</p>
+<p>
+CRC (<span class="highlight">Cyclic Redundancy Check</span>) allows the receiver to:
+</p>
 
-<hr>
+<ul>
+<li>Detect corrupted data</li>
+<li>Reject invalid frames</li>
+<li>Request retransmission</li>
+</ul>
 
-<h2>2. CRC Basics (Modbus RTU Specific)</h2>
-
-<table>
-    <tr><th>Parameter</th><th>Value</th></tr>
-    <tr><td>CRC Width</td><td>16 bits</td></tr>
-    <tr><td>Initial Value</td><td><code>0xFFFF</code></td></tr>
-    <tr><td>Polynomial</td><td><code>0xA001</code></td></tr>
-    <tr><td>Bit Order</td><td>LSB first</td></tr>
-    <tr><td>Shift Direction</td><td>Right Shift</td></tr>
-    <tr><td>Final XOR</td><td>None</td></tr>
-</table>
-
-<div class="box">
-    <p><b>Important:</b> Modbus uses a <b>reflected polynomial</b>. That is why <code>0xA001</code> is used instead of <code>0x8005</code>.</p>
+<p>
+CRC does <b>not fix</b> errors — it <b>detects</b> them reliably.
+</p>
 </div>
 
-<hr>
+<!-- WHAT CRC REALLY IS -->
+<div class="card">
+<h2>2. What CRC Really Is (Intuition)</h2>
 
-<h2>3. CRC Calculation – Step by Step</h2>
+<p>
+CRC is best understood as:
+</p>
 
-<h3>Example Data</h3>
+<p class="highlight">
+A mathematical fingerprint of the data
+</p>
+
+<p>
+Before transmission:
+</p>
+
+<ul>
+<li>Sender calculates CRC from the data</li>
+<li>Appends CRC to the message</li>
+</ul>
+
+<p>
+After reception:
+</p>
+
+<ul>
+<li>Receiver recalculates CRC</li>
+<li>Compares with received CRC</li>
+</ul>
+
+<p>
+If they differ → <b>data is invalid</b>.
+</p>
+</div>
+
+<!-- WHY BINARY AND POLYNOMIAL -->
+<div class="card">
+<h2>3. Why CRC Uses Binary & Polynomials</h2>
+
+<p>
+Digital systems operate in <b>binary</b> (0 and 1).
+CRC uses:
+</p>
+
+<ul>
+<li>XOR instead of addition</li>
+<li>Bit shifting instead of multiplication</li>
+</ul>
+
+<p>
+CRC math is based on <b>polynomial division</b>, but implemented using:
+</p>
+
+<ul>
+<li>Shift registers</li>
+<li>XOR gates</li>
+</ul>
+
+<p>
+This makes CRC:
+</p>
+
+<ul>
+<li>Fast</li>
+<li>Hardware-friendly</li>
+<li>Very reliable</li>
+</ul>
+</div>
+
+<!-- MODBUS CRC PARAMETERS -->
+<div class="card">
+<h2>4. CRC Parameters Used by Modbus RTU</h2>
+
+<pre>
+CRC Width      : 16 bits
+Initial Value  : 0xFFFF
+Polynomial     : 0xA001
+Bit Order      : LSB first
+Shift Direction: Right
+Final XOR      : None
+</pre>
+
+<p>
+<span class="highlight">Important:</span>  
+0xA001 is the <b>reflected form</b> of polynomial 0x8005.
+</p>
+</div>
+
+<!-- HOW CRC IS CALCULATED -->
+<div class="card">
+<h2>5. How CRC is Calculated (Step-by-Step)</h2>
+
+<h3>Example Modbus Frame (without CRC)</h3>
 <pre>
 01 03 00 10 00 02
 </pre>
@@ -174,84 +208,111 @@ CRC = 0xFFFF
 </pre>
 
 <h3>Step 2: Process Each Byte</h3>
-<p>For each byte in the message:</p>
-<ol>
-    <li>XOR the byte with the <b>low byte</b> of CRC</li>
-    <li>Process <b>8 bits</b>:</li>
-</ol>
+
+<p>For each byte:</p>
+
+<ul>
+<li>XOR byte with <b>low byte of CRC</b></li>
+<li>Process 8 bits</li>
+</ul>
 
 <pre>
 Repeat 8 times:
-    If (CRC & 0x0001) == 1
-        CRC = (CRC >> 1) ^ 0xA001
+    If (CRC LSB == 1)
+        CRC = (CRC >> 1) XOR 0xA001
     Else
         CRC = CRC >> 1
 </pre>
 
-<h3>Intermediate CRC Values</h3>
-
-<table>
-    <tr><th>After Byte</th><th>CRC Value</th></tr>
-    <tr><td>Initial</td><td>FFFF</td></tr>
-    <tr><td>01</td><td>807E</td></tr>
-    <tr><td>03</td><td>2140</td></tr>
-    <tr><td>00</td><td>F020</td></tr>
-    <tr><td>10</td><td>14F0</td></tr>
-    <tr><td>00</td><td>4414</td></tr>
-    <tr><td>02</td><td>CEC5</td></tr>
-</table>
-
-<hr>
-
-<h2>4. Final CRC Result</h2>
-
-<div class="box">
-    <p><b>Final CRC Register:</b> <code>0xCEC5</code></p>
-    <p><b>Transmission Order (Modbus RTU):</b></p>
-    <pre>
-CRC Low Byte  = C5
-CRC High Byte = CE
-    </pre>
+<p>
+This mimics a <b>hardware shift register</b>.
+</p>
 </div>
 
-<hr>
+<!-- WHY LSB FIRST -->
+<div class="card">
+<h2>6. Why Modbus Uses LSB First</h2>
 
-<h2>5. Key Points to Remember</h2>
+<p>
+Modbus RTU was designed for:
+</p>
+
 <ul>
-    <li>CRC is calculated LSB-first</li>
-    <li>Polynomial used is <code>0xA001</code></li>
-    <li>Right shift is mandatory</li>
-    <li>CRC bytes are transmitted <b>low byte first</b></li>
-    <li>No final inversion is applied</li>
+<li>Simple UARTs</li>
+<li>Low-end microcontrollers</li>
+<li>Shift-register based hardware</li>
 </ul>
 
-<hr>
+<p>
+Processing LSB first:
+</p>
 
-<h2>6. Reference Pseudocode</h2>
+<ul>
+<li>Simplifies hardware</li>
+<li>Matches UART bit order</li>
+<li>Reduces logic gates</li>
+</ul>
+</div>
+
+<!-- CRC TRANSMISSION -->
+<div class="card">
+<h2>7. CRC Transmission Order</h2>
+
+<p>
+After calculation:
+</p>
+
 <pre>
-uint16_t modbus_crc(uint8_t *data, uint16_t length)
-{
-    uint16_t crc = 0xFFFF;
-
-    for (uint16_t i = 0; i < length; i++)
-    {
-        crc ^= data[i];
-        for (uint8_t j = 0; j < 8; j++)
-        {
-            if (crc & 0x0001)
-                crc = (crc >> 1) ^ 0xA001;
-            else
-                crc >>= 1;
-        }
-    }
-    return crc;
-}
+CRC = 0x02C4
 </pre>
 
-<hr>
+<p>
+Modbus sends:
+</p>
 
-<h3>✔ Conclusion</h3>
-<p>This document explains how CRC-16 is calculated in Modbus RTU, both conceptually and mathematically. The example provided demonstrates a complete and correct CRC derivation.</p>
+<pre>
+CRC Low Byte  → C4
+CRC High Byte → 02
+</pre>
 
+<p class="highlight">
+Low byte is always transmitted first.
+</p>
+</div>
+
+<!-- COMMON MISTAKES -->
+<div class="card">
+<h2>8. Common CRC Mistakes</h2>
+
+<ul>
+<li>Using left shift instead of right</li>
+<li>Using polynomial 0x8005 directly</li>
+<li>Processing MSB first</li>
+<li>Swapping CRC bytes</li>
+<li>XOR with high byte instead of low byte</li>
+</ul>
+</div>
+
+<!-- CONCLUSION -->
+<div class="card">
+<h2>9. Final Takeaway</h2>
+
+<p>
+CRC in Modbus RTU is:
+</p>
+
+<ul>
+<li>Simple in logic</li>
+<li>Powerful in error detection</li>
+<li>Designed for hardware efficiency</li>
+</ul>
+
+<p class="highlight">
+Once you understand the bit shifts and XOR,
+CRC stops being magic and becomes predictable.
+</p>
+</div>
+
+</div>
 </body>
 </html>
