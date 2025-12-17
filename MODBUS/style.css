@@ -34,6 +34,7 @@
   }
   p,li{
     color:var(--muted);
+    color:rgb(192, 192, 192);
     line-height:1.6;
   }
   nav{
