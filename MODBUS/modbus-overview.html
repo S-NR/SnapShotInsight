@@ -4,44 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>MODBUS — Beginner Overview</title>
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-  :root{
-    --bg:#0b1220;
-    --card:#111a2e;
-    --accent:#18e0a8;
-    --muted:#8fa2c0;
-  }
-  html,body{
-    margin:0;padding:0;font-family:Inter,Segoe UI,Arial;background:var(--bg);color:white;
-  }
-  .wrap{max-width:960px;margin:40px auto;padding:24px;background:transparent;}
-  h1,h2{color:white;margin-top:0;}
-  p,li{color:var(--muted);line-height:1.6;}
-  nav{background:var(--card);padding:16px;border-radius:12px;margin:20px 0;display:flex;gap:10px;flex-wrap:wrap;}
-  .chip{background:#0c2138;padding:8px 14px;border-radius:6px;color:var(--accent);font-size:14px;border:1px solid #0f2b48;cursor:pointer;}
-  section{background:var(--card);padding:20px;border-radius:12px;margin-bottom:20px;}
-  table{width:100%;border-collapse:collapse;margin-top:12px;}
-  td,th{padding:10px;border-bottom:1px solid #1e2b44;color:var(--muted);}
-  pre{background:#081526;padding:16px;border-radius:10px;color:#9be5ff;overflow-x:auto;}
-  footer{text-align:center;color:var(--muted);margin-top:20px;}
-  button{background:#0c2138;border:1px solid var(--accent);color:var(--accent);padding:8px 14px;border-radius:8px;cursor:pointer;}
-.info-button {
-    display: inline-block;
-    padding: 6px 14px;
-    margin-left: 10px;
-    background-color: #00c896;
-    color: #000;
-    border-radius: 6px;
-    font-size: 14px;
-    text-decoration: none;
-    font-weight: 600;
-}
-.info-button:hover {
-    background-color: #00a67a;
-}
-
-</style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="wrap">
@@ -82,7 +45,7 @@
             <p><strong>Slave (Server)</strong> — replies to requests (example: sensor, PLC). Slaves never start communication.</p>
 
             <p>Typical ID range: 1–247.  
-                <a href="id-details.html" class="info-button">Why this range?</a>
+                <a href="id-details.html" class="back">Why this range?</a>
             </p>
     </section>
 
@@ -139,7 +102,7 @@
 // 00 10 -> Start address 0x0010
 // 00 02 -> Read 2 registers
 
-// C5 CD -> CRC16 <a href="CRC_computation.html" class="info-button">CRC calculation?</a>
+// C5 CD -> CRC16 <a href="CRC_computation.html" class="back">CRC calculation?</a>
 </code></pre>
     </section>
 

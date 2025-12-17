@@ -3,87 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>Modbus RTU CRC Calculator</title>
-
-<style>
-:root {
-    --bg-main: #060f1f;
-    --bg-card: #0b1c2f;
-    --accent: #2dd4bf;
-    --text-main: #e6eef8;
-    --text-soft: #9fb4cc;
-    --border: #123652;
-}
-
-body {
-    margin: 0;
-    font-family: system-ui, Arial, sans-serif;
-    background: radial-gradient(circle at top, #0a1730, var(--bg-main));
-    color: var(--text-main);
-}
-
-.container {
-    max-width: 700px;
-    margin: auto;
-    padding: 24px;
-}
-
-h1, h2 {
-    color: white;
-}
-
-.card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 20px;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    color: var(--text-soft);
-}
-
-input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: #07182c;
-    color: white;
-    font-size: 16px;
-}
-
-button {
-    margin-top: 14px;
-    padding: 12px 18px;
-    font-size: 16px;
-    border-radius: 12px;
-    border: 1px solid rgba(45,212,191,0.4);
-    background: rgba(45,212,191,0.15);
-    color: var(--accent);
-    cursor: pointer;
-}
-
-button:hover {
-    background: rgba(45,212,191,0.25);
-}
-
-.result {
-    margin-top: 16px;
-    font-size: 18px;
-}
-
-pre {
-    background: #07182c;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px;
-    color: #b9f3ff;
-    overflow-x: auto;
-}
-</style>
+<link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
@@ -96,6 +16,7 @@ pre {
 
 <label>Enter Modbus frame bytes (hex, space separated):</label>
 <input id="dataInput" placeholder="Example: 01 03 00 10 00 02">
+<!-- <input id="dataInput" class="input" placeholder="Example: 01 03 00 10 00 02"> -->
 
 <button onclick="calculateCRC()">Calculate CRC</button>
 
