@@ -259,12 +259,19 @@ ul {
   background: #0f2b48;
 }
 
-.lane {
+.bus-timeline .lane {
   position: absolute;
   top: -26px;
   font-weight: 600;
   color: var(--muted);
 }
+
+/* .lane {
+  position: absolute;
+  top: -26px;
+  font-weight: 600;
+  color: var(--muted);
+} */
 
 .master-lane {
   left: 20%;
@@ -394,6 +401,102 @@ ul {
   margin-bottom: 10px;
 }
 
+/* ===== 3-LANE TIMELINE ===== */
+
+.triple-timeline {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 18px;
+  margin-top: 30px;
+  position: relative;
+  grid-auto-rows: minmax(80px, auto);
+}
+
+/* Titles */
+.lane-title {
+  text-align: center;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.lane-title.left { grid-column: 1; }
+.lane-title.center { grid-column: 2; }
+.lane-title.right { grid-column: 3; }
+
+/* Lanes */
+/* .lane {
+  min-height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
+
+/* Message blocks (reuse your theme) */
+.triple-timeline .msg {
+  background: #0c2138;
+  border: 1px solid #0f2b48;
+  padding: 12px 16px;
+  border-radius: 10px;
+  color: var(--accent);
+  max-width: 240px;
+  text-align: center;
+}
+
+.triple-timeline .msg small {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted);
+}
+
+.triple-timeline {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 18px;
+  margin-top: 30px;
+  position: relative;
+  grid-auto-rows: minmax(80px, auto);
+}
+
+.triple-timeline .lane {
+  min-height: 80px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.triple-timeline .master-lane {
+  left: 20%;
+}
+
+.triple-timeline .slave-lane {
+  left: 20%;
+}
+.triple-timeline .slave_data-lane {
+  right: 20%;
+}
+
+.triple-timeline::before,
+.triple-timeline::after {
+  content: "";
+  position: absolute;
+  top: 40px;           /* below titles */
+  bottom: 10px;
+  width: 1px;
+  background: #0f2b48;
+}
+
+/* Separator between Master | Slave Logic */
+.triple-timeline::before {
+  left: 33.33%;
+}
+
+/* Separator between Slave Logic | Slave Data */
+.triple-timeline::after {
+  left: 66.66%;
+}
+
+
 /* Mobile responsive */
 @media (max-width: 768px) {
   .side-by-side {
@@ -404,6 +507,23 @@ ul {
   .side-image img {
     width: 140px;
   }
+
+  .event.master,
+  .event.slave {
+    padding-left: 0;
+    padding-right: 0;
+    justify-content: center;
+  }
+
+  .bus-timeline::before {
+    display: none;
+  }
+
+  .triple-timeline {
+    grid-template-columns: 1fr;
+  }
+
+  .lane-title {
+    margin-top: 20px;
+  }
 }
-
-

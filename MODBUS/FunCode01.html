@@ -53,6 +53,151 @@ MODBUS strictly separates <b>control</b> and <b>monitoring</b> for safety and pr
 </p>
 </div>
 
+<!-- ================= ADDRESSING ================= -->
+<section>
+<h2>Coil Addressing</h2>
+
+<p>
+Coils are often documented using the <b>0xxxx notation</b>.
+</p>
+
+<pre><code>
+Coil 00001 → Address 0x0000
+Coil 00008 → Address 0x0007
+</code></pre>
+
+<p>
+Note: MODBUS protocol uses <b>zero-based addressing</b>.
+The 0xxxx format is only for documentation.
+</p>
+
+<h3 style="text-align:left; padding-left:40px">Coil Memory View</h3>
+
+<div class="register-map">
+  <div class="reg">
+    <span>00001</span>
+    <small>Motor Start</small>
+  </div>
+  <div class="reg">
+    <span>00002</span>
+    <small>Valve Open</small>
+  </div>
+  <div class="reg">
+    <span>00003</span>
+    <small>Alarm Reset</small>
+  </div>
+  <div class="reg">
+    <span>00004</span>
+    <small>Relay Output</small>
+  </div>
+</div>
+</section>
+
+<!-- ================= LOGICAL FLOW ================= -->
+<section>
+<h2>FC01 — Logical Operation Flow</h2>
+
+<div class="block-flow">
+  <div class="block master">MODBUS Master</div>
+  <div class="arrow right"></div>
+  <div class="block request">FC01 Request<br><small>Start Addr + Quantity</small></div>
+  <div class="arrow right"></div>
+  <div class="block slave">MODBUS Slave</div>
+  <div class="arrow right"></div>
+  <div class="block registers">Coil Memory<br><small>1-bit states</small></div>
+  <div class="arrow right"></div>
+  <div class="block response">FC01 Response<br><small>Bit-Packed Data</small></div>
+</div>
+</section>
+
+<!-- ================= TIMELINE ================= -->
+<section>
+<h2>FC01 Request / Response Timeline</h2>
+
+<div class="bus-timeline">
+  <div class="lane master-lane">Master</div>
+  <div class="lane slave-lane">Slave</div>
+
+  <div class="event master">
+    <div class="msg">
+      Master → FC01 Request
+      <small>Addr: 0x0000, Qty: 8</small>
+    </div>
+    <div class="arrow right"></div>
+  </div>
+
+  <div class="event slave">
+    <div class="arrow left"></div>
+    <div class="msg">
+      Slave → Validates CRC
+    </div>
+  </div>
+
+  <div class="event slave">
+    <div class="arrow left"></div>
+    <div class="msg">
+      Slave → FC01 Response
+      <small>8 Coil States</small>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ================= TIMELINE ================= -->
+ <section>
+<div class="triple-timeline">
+<!-- 
+  <div class="lane master-lane">Master</div>
+  <div class="lane slave-lane">Slave</div>
+  <div class="lane slave_data-lane">Slave Data</div> -->
+  
+
+  <div class="lane-title left">Master</div>
+  <div class="lane-title center">Slave Logic</div>
+  <div class="lane-title right">Slave Data</div>
+
+  <div class="lane left">
+    <div class="msg">Master → FC01 Request<br><small>Addr: 0x0000, Qty: 8</small></div>    
+    <div class="arrow right"></div>
+  </div>  
+  <div class="lane center"></div>
+  <div class="lane right"></div>
+
+  <div class="lane left"></div>
+  <div class="lane center">
+    <div class="msg">Slave → Validates CRC</div>
+    <div class="arrow right"></div>
+  </div>
+  <div class="lane right">
+    <div class="arrow right" style="animation: pulse 1s infinite;"></div>
+  </div>
+
+  <div class="lane left"></div>
+  <div class="lane center"></div>
+  <div class="lane right">
+    <div class="msg">Slave → Reads Coil States</div><br>
+  </div>
+
+  <div class="lane left"></div>
+  <div class="lane center">
+    <div class="arrow left"></div>
+    <div class="msg">Slave → Builds Response</div>
+  </div>
+  <div class="lane right">
+    <div class="arrow left"></div>
+  </div>
+
+  <div class="lane left">
+    <div class="msg">Master ← FC01 Response<br><small>8 Coil States</small></div>    
+    <div class="arrow left"></div>
+  </div>
+  <div class="lane center"></div>
+  <div class="lane right"></div>
+
+</div>
+</section>
+
+
 <div class="card">
 <h2>4. How It Works (High-Level)</h2>
 <pre><code>Master → Sends Read Coils request
@@ -101,6 +246,9 @@ Hex value  :  0x2D
 <p>
 MODBUS packs multiple coils into bytes to minimize bandwidth usage.
 </p>
+<p>
+The <b>least significant bit (LSB)</b> corresponds to the first requested coil.
+</p>
 </div>
 
 <div class="card">
@@ -137,6 +285,36 @@ for each coil:
   <li><b>Relay energized?</b> → Confirm control logic</li>
 </ul>
 </div>
+
+<!-- ================= COMMON MISTAKES ================= -->
+<section>
+<h2>Common Implementation Mistakes</h2>
+
+<div class="side-by-side">
+  <div class="side-image">
+    <img src="no.gif" alt="Common mistakes">
+  </div>
+
+  <div class="side-text">
+    <ul>
+      <li>Using FC01 to read <b>discrete inputs</b> (should use FC02)</li>
+      <li>Wrong coil offset (00001 vs 0x0000)</li>
+      <li>Incorrect bit order interpretation</li>
+      <li>Ignoring maximum coil limits</li>
+    </ul>
+  </div>
+</div>
+</section>
+
+<!-- ================= KEY RULE ================= -->
+<section>
+<h2>Key Design Rule</h2>
+
+<p>
+<b>FC01 reads output coils only.</b><br>
+For input-only digital signals, always use <b>Function Code 02</b>.
+</p>
+</section>
 
 <div class="card">
 <h2>11. Key Takeaways</h2>
