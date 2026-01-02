@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modbus Discrete Inputs — Firmware Implementation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Shared project stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div class="wrap">
+<header>
+    <h1>Discrete Inputs in Modbus</h1>
+    <p>
+        A deep dive into how Modbus Discrete Inputs are implemented in firmware,
+        how they relate to hardware signals, and how they differ from coils and registers.
+    </p>
+</header>
+
+<main>
+
+    <!-- ========================= -->
+    <!-- WHAT IS A DISCRETE INPUT -->
+    <!-- ========================= -->
+    <section>
+        <h2>What Is a Discrete Input?</h2>
+
+        <p>
+            A <strong>Discrete Input</strong> is a <strong>read-only, 1-bit data point</strong>
+            that represents the state of a physical digital signal.
+        </p>
+
+        <div class="info-box">
+            Discrete Inputs reflect <strong>hardware reality</strong>, not software commands.
+        </div>
+
+        <p>
+            In Modbus, Discrete Inputs are accessed using
+            <strong>Function Code 02 (Read Discrete Inputs)</strong>.
+        </p>
+    </section>
+
+    <!-- ========================= -->
+    <!-- WHY DISCRETE INPUTS EXIST -->
+    <!-- ========================= -->
+    <section>
+        <h2>Why Discrete Inputs Exist Separately</h2>
+
+        <p>
+            Although Discrete Inputs and Coils are both 1-bit values, they serve
+            <strong>fundamentally different roles</strong>.
+        </p>
+
+        <ul>
+            <li>Discrete Inputs are controlled by hardware</li>
+            <li>They cannot be written by software</li>
+            <li>They provide feedback and verification</li>
+            <li>They improve safety and fault detection</li>
+        </ul>
+
+        <div class="info-box">
+            Separating inputs from outputs prevents software from
+            accidentally or intentionally hiding real-world faults.
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- HARDWARE LEVEL -->
+    <!-- ========================= -->
+    <section>
+        <h2>Discrete Inputs at the Hardware Level</h2>
+
+        <p>
+            Discrete Inputs originate from physical electrical signals connected
+            to the device:
+        </p>
+
+        <ul>
+            <li>Push buttons</li>
+            <li>Limit switches</li>
+            <li>Proximity sensors</li>
+            <li>Relay feedback contacts</li>
+        </ul>
+
+        <p>
+            These signals are wired to <strong>digital input pins</strong> of a
+            microcontroller or PLC.
+        </p>
+    </section>
+
+    <!-- ========================= -->
+    <!-- FIRMWARE IMPLEMENTATION -->
+    <!-- ========================= -->
+    <section>
+        <h2>How Discrete Inputs Are Implemented in Firmware</h2>
+
+        <p>
+            Inside firmware, a Discrete Input is implemented as a
+            <strong>boolean variable</strong> that is updated by reading a GPIO pin.
+        </p>
+
+        <pre><code>
+// Firmware variables
+bool di_start_button;
+bool di_limit_switch;
+bool di_motor_feedback;
+        </code></pre>
+
+        <p>
+            These variables are refreshed periodically in the main loop or an ISR.
+        </p>
+
+        <pre><code>
+// Read hardware pins
+di_start_button   = READ_GPIO(PIN_START_BTN);
+di_limit_switch   = READ_GPIO(PIN_LIMIT_SW);
+di_motor_feedback = READ_GPIO(PIN_MOTOR_FB);
+        </code></pre>
+    </section>
+
+    <!-- ========================= -->
+    <!-- MODBUS MAPPING -->
+    <!-- ========================= -->
+    <section>
+        <h2>Mapping Discrete Inputs to Modbus</h2>
+
+        <p>
+            Modbus does not expose firmware variables directly.
+            Instead, discrete inputs are mapped into a
+            <strong>logical Modbus address space</strong>.
+        </p>
+
+        <pre><code>
+// Modbus discrete input map
+bool modbus_discrete_inputs[32];
+
+// Mapping
+modbus_discrete_inputs[0] = di_start_button;
+modbus_discrete_inputs[1] = di_limit_switch;
+modbus_discrete_inputs[2] = di_motor_feedback;
+        </code></pre>
+
+        <div class="info-box">
+            Addressing like <code>10001</code> is a documentation convention —
+            firmware only uses array indices.
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- READ FLOW -->
+    <!-- ========================= -->
+    <section>
+        <h2>Read Flow (Function Code 02)</h2>
+
+        <ol>
+            <li>Master sends Read Discrete Inputs request (FC02)</li>
+            <li>Firmware reads GPIO-backed variables</li>
+            <li>Bits are packed into bytes</li>
+            <li>Response frame is transmitted</li>
+            <li>Master decodes individual input states</li>
+        </ol>
+    </section>
+
+    <!-- ========================= -->
+    <!-- PSEUDOCODE -->
+    <!-- ========================= -->
+    <section>
+        <h2>Firmware Pseudocode</h2>
+
+        <pre><code>
+function handle_fc02(start_addr, quantity):
+    for i = 0 to quantity-1:
+        bit[i] = discrete_inputs[start_addr + i]
+    pack_bits_into_bytes(bit[])
+    send_response()
+        </code></pre>
+    </section>
+
+    <!-- ========================= -->
+    <!-- RELATION TO REGISTERS -->
+    <!-- ========================= -->
+    <section>
+        <h2>Relation to Registers</h2>
+
+        <p>
+            Discrete Inputs are <strong>not registers</strong> and are not stored
+            as 16-bit values.
+        </p>
+
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Firmware Form</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td>Discrete Input</td>
+                <td>bool</td>
+                <td>Hardware feedback</td>
+            </tr>
+            <tr>
+                <td>Coil</td>
+                <td>bool</td>
+                <td>Software command</td>
+            </tr>
+            <tr>
+                <td>Holding Register</td>
+                <td>uint16_t</td>
+                <td>Configuration</td>
+            </tr>
+            <tr>
+                <td>Input Register</td>
+                <td>uint16_t</td>
+                <td>Measurement</td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- ========================= -->
+    <!-- WHY THIS DESIGN -->
+    <!-- ========================= -->
+    <section>
+        <h2>Why This Design Matters</h2>
+
+        <ul>
+            <li>Prevents software from falsifying hardware state</li>
+            <li>Improves diagnostics and safety</li>
+            <li>Matches real electrical wiring</li>
+            <li>Makes SCADA systems reliable</li>
+        </ul>
+
+        <div class="info-box">
+            Discrete Inputs tell you what the system <strong>is</strong>,
+            not what it was <strong>told to do</strong>.
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- REAL-WORLD EXAMPLES -->
+    <!-- ========================= -->
+    <section>
+        <h2>Real-World Examples</h2>
+
+        <ul>
+            <li>Push button pressed or released</li>
+            <li>Limit switch activated</li>
+            <li>Motor contactor feedback</li>
+            <li>Door open / closed indication</li>
+            <li>Emergency stop feedback</li>
+        </ul>
+    </section>
+
+</main>
+
+<footer>
+    MODBUS Discrete Inputs — Firmware & Protocol Reference
+</footer>
+  </div>
+
+</body>
+</html>

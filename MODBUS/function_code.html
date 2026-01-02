@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Important Modbus Function Codes – Detailed Explanation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="style.css" />
+    <style>
+        /* :root {
+            --bg-main: #0b1220;
+            --bg-card: #121a2f;
+            --text-main: #e6e9f0;
+            --text-muted: #aab0c0;
+            --accent: #4da3ff;
+            --accent-soft: #1e3a5f;
+            --border: #24304d;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Segoe UI", Roboto, Arial, sans-serif;
+            background: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0d1b2a, #102a43);
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        header p {
+            margin-top: 0.5rem;
+            color: var(--text-muted);
+            max-width: 900px;
+        }
+
+        main {
+            max-width: 1100px;
+            margin: auto;
+            padding: 1.5rem;
+        }
+
+        section {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+
+        section h2 {
+            margin-top: 0;
+            color: var(--accent);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        section h3 {
+            color: #8cc4ff;
+            margin-top: 1.2rem;
+        }
+
+        ul {
+            padding-left: 1.2rem;
+        }
+
+        li {
+            margin-bottom: 0.4rem;
+        } */
+/* 
+        .info-box {
+            background: var(--accent-soft);
+            border-left: 4px solid var(--accent);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-top: 1rem;
+        } */
+
+        /* table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            text-align: left;
+        }
+
+        th {
+            background: #162447;
+            color: #cfe4ff;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+        } */
+    </style>
+</head>
+
+<body>
+
+  <div class="wrap">
+<header>
+    <h1>Important Modbus Function Codes</h1>
+    <p>
+        This document explains the most commonly used Modbus function codes —
+        what they are, what they do, why they exist, and how they are used in real industrial systems.
+    </p>
+</header>
+
+<main>
+
+    <section>
+        <h2>What Are Modbus Function Codes?</h2>
+        <p>
+            In Modbus communication, every request sent by a <strong>Master (Client)</strong>
+            to a <strong>Slave (Server)</strong> contains a <strong>Function Code</strong>.
+        </p>
+
+        <div class="card">
+            A function code is an <strong>instruction</strong> that tells the slave
+            what operation to perform on its internal data.
+        </div>
+
+        <p>
+            Without function codes, Modbus frames would be just raw bytes with no meaning.
+            Function codes define the <strong>purpose</strong> of the message.
+        </p>
+    </section>
+
+    <section>
+        <h2>Why Function Codes Are Needed</h2>
+        <ul>
+            <li>Different types of data exist inside a device</li>
+            <li>Some data is read-only, some is writable</li>
+            <li>Some data is 1-bit, some is 16-bit</li>
+            <li>Safety and reliability require strict access control</li>
+        </ul>
+
+        <div class="card">
+            Function codes ensure that the correct type of operation is performed
+            on the correct type of data.
+        </div>
+    </section>
+
+    <section>
+        <h2>Modbus Data Model</h2>
+
+        <table>
+            <tr>
+                <th>Data Area</th>
+                <th>Size</th>
+                <th>Access</th>
+                <th>Typical Usage</th>
+            </tr>
+            <tr>
+                <td>Coils</td>
+                <td>1 bit</td>
+                <td>Read / Write</td>
+                <td>Relays, Digital Outputs</td>
+            </tr>
+            <tr>
+                <td>Discrete Inputs</td>
+                <td>1 bit</td>
+                <td>Read-only</td>
+                <td>Switches, Digital Inputs</td>
+            </tr>
+            <tr>
+                <td>Holding Registers</td>
+                <td>16 bit</td>
+                <td>Read / Write</td>
+                <td>Setpoints, Parameters</td>
+            </tr>
+            <tr>
+                <td>Input Registers</td>
+                <td>16 bit</td>
+                <td>Read-only</td>
+                <td>Sensor Measurements</td>
+            </tr>
+        </table>
+    </section>
+
+    <section>
+        <h2 id="fc01">Function Code 01 — Read Coils</h2>
+        <p><strong>Purpose:</strong> Reads the ON/OFF status of digital outputs.</p>
+
+        <h3>What it does</h3>
+        <p>
+            Returns the current state of one or more coils as individual bits.
+        </p>
+
+        <h3>Why it is used</h3>
+        <p>
+            Allows monitoring of output states without changing them.
+        </p>
+
+        <h3>Real-world examples</h3>
+        <ul>
+            <li>Is a motor running?</li>
+            <li>Is a valve open?</li>
+            <li>Is a relay energized?</li>
+        </ul>
+        <a href="FunCode01.html">
+        <button>Function Code 01 – Read Coils</button>
+        </a>
+    </section>
+
+    <section>
+        <h2 id="fc02">Function Code 02 — Read Discrete Inputs</h2>
+        <p><strong>Purpose:</strong> Reads digital input signals.</p>
+
+        <h3>What it does</h3>
+        <p>
+            Retrieves the state of read-only digital inputs.
+        </p>
+
+        <h3>Why it is used</h3>
+        <p>
+            Prevents accidental modification of hardware input signals.
+        </p>
+
+        <h3>Real-world examples</h3>
+        <ul>
+            <li>Push button status</li>
+            <li>Limit switch state</li>
+            <li>Proximity sensor output</li>
+        </ul>
+        <a href="FunCode02.html">
+        <button>Function Code 02 – Read Discrete Inputs</button>
+        </a>
+        
+        <a href="FunCode02_why.html">
+        <button>Discrete Inputs – Firmware Mapping</button>
+        </a>
+    </section>
+
+    <section>
+        <a href="FunCode02_01_diff.html">
+        <button>Coil Vs Discrete Input</button>
+        </a>
+    </section>
+
+    <section>
+        <h2 id="fc03">Function Code 03 — Read Holding Registers</h2>
+        <p><strong>Purpose:</strong> Reads read/write registers.</p>
+
+        <h3>What it does</h3>
+        <p>
+            Returns values stored in holding registers.
+        </p>
+
+        <h3>Why it is used</h3>
+        <p>
+            Holding registers store configuration data and calculated values.
+        </p>
+
+        <h3>Real-world examples</h3>
+        <ul>
+            <li>Flow totalizer values</li>
+            <li>Speed or pressure setpoints</li>
+            <li>Alarm thresholds</li>
+        </ul>
+        <a href="FunCode03.html">
+        <button>Function Code 03 – Read Holding Registers</button>
+        </a>
+    </section>
+
+    <section>
+        <h2>Function Code 04 — Read Input Registers</h2>
+        <p><strong>Purpose:</strong> Reads measurement data.</p>
+
+        <h3>What it does</h3>
+        <p>
+            Returns read-only 16-bit measurement values.
+        </p>
+
+        <h3>Why it is used</h3>
+        <p>
+            Keeps sensor values protected from modification.
+        </p>
+
+        <h3>Real-world examples</h3>
+        <ul>
+            <li>Temperature</li>
+            <li>Pressure</li>
+            <li>Voltage and current</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Function Code 05 — Write Single Coil</h2>
+        <p><strong>Purpose:</strong> Controls one digital output.</p>
+
+        <h3>What it does</h3>
+        <p>
+            Sets a single coil ON or OFF.
+        </p>
+
+        <h3>Why it is used</h3>
+        <p>
+            Simple and reliable control of individual outputs.
+        </p>
+
+        <h3>Real-world examples</h3>
+        <ul>
+            <li>Start or stop a motor</li>
+            <li>Open or close a valve</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Function Code 06 — Write Single Register</h2>
+        <p><strong>Purpose:</strong> Writes one configuration value.</p>
+
+        <h3>What it does</h3>
+        <p>
+            Updates a single holding register.
+        </p>
+
+        <h3>Why it is used</h3>
+        <p>
+            Safe modification of individual parameters.
+        </p>
+
+        <h3>Real-world examples</h3>
+        <ul>
+            <li>Change speed setpoint</li>
+            <li>Update operating mode</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Function Code 15 (0F) — Write Multiple Coils</h2>
+        <p><strong>Purpose:</strong> Controls multiple outputs in one command.</p>
+
+        <h3>Why it is used</h3>
+        <p>
+            Reduces communication overhead and allows synchronized updates.
+        </p>
+
+        <h3>Real-world examples</h3>
+        <ul>
+            <li>Control multiple relays</li>
+            <li>Reset alarms</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Function Code 16 (10) — Write Multiple Registers</h2>
+        <p><strong>Purpose:</strong> Writes blocks of configuration data.</p>
+
+        <h3>Why it is used</h3>
+        <p>
+            Efficient transfer of structured or multi-register data.
+        </p>
+
+        <h3>Real-world examples</h3>
+        <ul>
+            <li>Recipe download</li>
+            <li>Bulk configuration</li>
+            <li>32-bit and 64-bit values</li>
+        </ul>
+    </section>
+
+    <section>
+        <h2>Summary</h2>
+
+        <table>
+            <tr>
+                <th>Function Code</th>
+                <th>Name</th>
+                <th>Data Type</th>
+                <th>Purpose</th>
+            </tr>
+            <tr><td>01</td><td>Read Coils</td><td>Coils</td><td>Monitor outputs</td></tr>
+            <tr><td>02</td><td>Read Discrete Inputs</td><td>Discrete Inputs</td><td>Read digital inputs</td></tr>
+            <tr><td>03</td><td>Read Holding Registers</td><td>Holding Registers</td><td>Read parameters</td></tr>
+            <tr><td>04</td><td>Read Input Registers</td><td>Input Registers</td><td>Read sensor data</td></tr>
+            <tr><td>05</td><td>Write Single Coil</td><td>Coil</td><td>Control output</td></tr>
+            <tr><td>06</td><td>Write Single Register</td><td>Holding Register</td><td>Change parameter</td></tr>
+            <tr><td>15</td><td>Write Multiple Coils</td><td>Coils</td><td>Batch output control</td></tr>
+            <tr><td>16</td><td>Write Multiple Registers</td><td>Holding Registers</td><td>Bulk data transfer</td></tr>
+        </table>
+    </section>
+
+</main>
+
+<footer>
+    MODBUS Function Codes — Educational Reference
+</footer>
+  </div>
+</body>
+</html>

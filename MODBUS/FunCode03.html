@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Function Code 03 – Read Holding Registers</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Use your existing CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <h1>Function Code 03 — Read Holding Registers</h1>
+
+
+<a href="function_code.html#fc03" class="back">← Back</a>
+  <!-- ================= PURPOSE ================= -->
+  <section>
+    <h2>Purpose</h2>
+    <p>
+      Function Code <b>03</b> is used to read values from
+      <b>holding registers</b>, which are read/write registers
+      intended for configuration parameters, setpoints,
+      and internally calculated values.
+    </p>
+  </section>
+
+  <!-- ================= WHAT IT IS ================= -->
+  <section>
+    <h2>What is a Holding Register?</h2>
+    <p>
+      A holding register is a <b>16-bit memory location</b> inside a MODBUS
+      slave device. Unlike inputs, holding registers can be
+      <b>both read and written</b> by a MODBUS master.
+    </p>
+
+    <ul>
+      <li>Size: 16-bit (2 bytes)</li>
+      <li>Access: Read / Write</li>
+      <li>MODBUS range: 40001 – 49999 (logical)</li>
+      <li>Used for: Parameters, setpoints, totals</li>
+    </ul>
+  </section>
+
+  <!-- ================= WHAT IT DOES ================= -->
+  <section>
+    <h2>What Function Code 03 Does</h2>
+    <p>
+      FC03 allows the MODBUS master to request one or more
+      consecutive holding registers from a slave device.
+    </p>
+
+    <p>
+      The slave responds by returning the values stored in those
+      registers without modifying them.
+    </p>
+  </section>
+
+  <!-- ================= FRAME FORMAT ================= -->
+    <section>
+    <h2>FC03 Request and Response Frame Format</h2>
+
+    <h3>Request Frame (Master → Slave)</h3>
+    <pre><code style = "color: #00c896;">
+    | Slave ID | Function | Start Addr Hi | Start Addr Lo | Qty Hi | Qty Lo | CRC Lo | CRC Hi |
+    |   1 B    |   1 B    |      1 B      |      1 B      |  1 B   |  1 B   |  1 B   |  1 B   |
+    </code></pre>
+
+    <h3>Response Frame (Slave → Master)</h3>
+    <pre><code style = "color: #00c896;">
+    | Slave ID | Function | Byte Count | Data Hi | Data Lo | ... | CRC Lo | CRC Hi |
+    |   1 B    |   1 B    |    1 B     |  1 B    |  1 B    |     |  1 B   |  1 B   |
+    </code></pre>
+
+    <p>
+        The <b>Byte Count</b> field equals <code>Quantity × 2</code>, since each
+        holding register is 16 bits (2 bytes).
+    </p>
+    </section>
+
+  <!-- ================= WHY IT IS USED ================= -->
+  <section>
+    <h2>Why Function Code 03 Is Used</h2>
+
+    <ul>
+      <li>To read configuration parameters</li>
+      <li>To verify setpoints written earlier</li>
+      <li>To monitor calculated internal values</li>
+      <li>To fetch totals, counters, and limits</li>
+    </ul>
+
+    <p>
+      Any value that can be written using FC06 or FC16
+      should be read back using FC03.
+    </p>
+  </section>
+
+  <!-- ================= REAL WORLD EXAMPLES ================= -->
+  <section>
+    <h2>Real-World Examples</h2>
+
+    <ul>
+      <li><b>Flow totalizer values</b> (often 32-bit or 64-bit)</li>
+      <li><b>Speed or pressure setpoints</b></li>
+      <li><b>Alarm thresholds</b></li>
+      <li><b>Calibration constants</b></li>
+    </ul>
+  </section>
+
+  <!-- ================= ADDRESSING ================= -->
+  <section>
+    <h2>Addressing of Holding Registers</h2>
+
+    <p>
+      Holding registers are commonly documented using
+      the <b>40001-based notation</b>.
+    </p>
+
+    <pre><code>
+Register 40001 → Address 0x0000
+Register 40010 → Address 0x0009
+    </code></pre>
+
+      <section>
+  <h3 style="text-align: left; padding-left: 40px"> Holding Register Memory View</h3>
+  <div class="register-map">
+    <div class="reg">
+      <span>40001</span>
+      <small>Speed Setpoint</small>
+    </div>
+    <div class="reg">
+      <span>40002</span>
+      <small>Pressure Limit</small>
+    </div>
+    <div class="reg">
+      <span>40003</span>
+      <small>Flow Total (High)</small>
+    </div>
+    <div class="reg">
+      <span>40004</span>
+      <small>Flow Total (Low)</small>
+    </div>
+  </div>
+
+  <p>
+    FC03 reads one or more of these registers sequentially,
+    starting from a given address.
+  </p>
+</section>
+
+    <p>
+      Note: The MODBUS protocol itself uses
+      <b>zero-based addressing</b>.
+      The 4xxxx format is only for documentation clarity.
+    </p>
+  </section>
+
+  <!-- ================= LIMITS ================= -->
+<section>
+  <h2>Protocol Limits and Rules</h2>
+
+  <ul>
+    <li>Maximum registers per FC03 request: <b>125</b></li>
+    <li>Maximum response data bytes: <b>250</b></li>
+    <li>Quantity must be greater than zero</li>
+    <li>Requested address range must exist in the slave</li>
+  </ul>
+
+  <p>
+    Requests violating these limits result in an
+    <b>Illegal Data Address</b> or <b>Illegal Data Value</b> exception.
+  </p>
+</section>
+
+  <!-- ================= FIRMWARE IMPLEMENTATION ================= -->
+  <section>
+    <h2>Firmware Implementation</h2>
+
+    <p>
+      Internally, holding registers are typically implemented
+      as an array of 16-bit variables mapped to firmware data.
+    </p>
+
+    <pre><code>
+uint16_t holding_registers[HOLDING_REG_COUNT];
+    </code></pre>
+
+    <p>
+      Each register index corresponds to a specific variable.
+    </p>
+  </section>
+
+  <!-- ================= WORKFLOW ================= -->
+  <section>
+    <h2>FC03 Request Handling Workflow</h2>
+
+    <pre><code>
+MODBUS Master
+     ↓
+FC03 Request
+     ↓
+CRC Validation
+     ↓
+Address Range Check
+     ↓
+Read holding_registers[]
+     ↓
+Pack 16-bit values
+     ↓
+Send Response
+    </code></pre>
+
+      <section>
+        <h3 style="text-align: left; padding-left: 40px">FC03 — Logical Operation Flow</h3>
+
+        <div class="block-flow">
+            <div class="block master">MODBUS Master</div>
+            <div class="arrow right"></div>
+            <div class="block request">FC03 Request<br><small>Start Addr + Quantity</small></div>
+            <div class="arrow right"></div>
+            <div class="block slave">MODBUS Slave</div>
+            <div class="arrow right"></div>
+            <div class="block registers">Holding Registers<br><small>16-bit values</small></div>
+            <div class="arrow right"></div>
+            <div class="block response">FC03 Response<br><small>Register Data</small></div>
+        </div>
+        </section>
+
+          <section>
+            <h3 style="text-align: left; padding-left: 40px">FC03 Request / Response Timeline</h3>
+
+            <div class="bus-timeline">
+                <div class="lane master-lane">Master</div>
+                <div class="lane slave-lane">Slave</div>
+                <div class="event master">
+                <div class="msg">
+                    Master → FC03 Request
+                    <small>Addr: 0x0001, Qty: 4</small>
+                    
+                    <p class="note">
+                    Note: Address 0x0001 corresponds to register 40002 (zero-based).
+                    </p>
+                </div>
+                <div class="arrow right"></div>
+                </div>
+
+                <div class="event slave">
+                <div class="arrow left"></div>
+                <div class="msg">
+                    Slave → Validates CRC
+                </div>
+                </div>
+
+                <div class="event slave">
+                <div class="arrow left"></div>
+                <div class="msg">
+                    Slave → FC03 Response
+                    <small>40001 – 40004 Data</small>
+                </div>
+                </div>
+            </div>
+        </section>
+  </section>
+
+  <!-- ================= EXCEPTION HANDLING ================= -->
+<section>
+  <h2>FC03 Exception Handling</h2>
+
+  <p>
+    If the slave cannot process the request, it returns an
+    <b>exception response</b> instead of normal register data.
+  </p>
+
+  <h3>Exception Response Format</h3>
+  <pre><code>
+| Slave ID | Function (0x83) | Exception Code | CRC Lo | CRC Hi |
+  </code></pre>
+
+  <h3>Common Exception Codes</h3>
+  <ul>
+    <li><b>0x01</b> — Illegal Function</li>
+    <li><b>0x02</b> — Illegal Data Address</li>
+    <li><b>0x03</b> — Illegal Data Value</li>
+  </ul>
+
+  <p>
+    The function code in an exception response is the original
+    function code with its MSB set (<code>0x03 → 0x83</code>).
+  </p>
+</section>
+
+  <!-- ================= PSEUDOCODE ================= -->
+  <section>
+    <h2>Pseudocode Example</h2>
+
+    <pre><code>
+void handle_fc03(uint16_t start, uint16_t quantity)
+{
+    if(start + quantity > HOLDING_REG_COUNT)
+    {
+        send_exception(ILLEGAL_ADDRESS);
+        return;
+    }
+
+    send_byte(SLAVE_ID);
+    send_byte(0x03);
+    send_byte(quantity * 2);
+
+    for(int i = 0; i < quantity; i++)
+    {
+        uint16_t value = holding_registers[start + i];
+        send_byte(value >> 8);   // High byte
+        send_byte(value & 0xFF); // Low byte
+    }
+
+    append_crc();
+}
+    </code></pre>
+  </section>
+
+  <!-- ================= MULTI REGISTER ================= -->
+  <section>
+    <h2>Multi-Register Values</h2>
+
+    <p>
+      Since holding registers are only 16-bit wide,
+      larger values use multiple registers.
+    </p>
+
+    <pre><code>
+40003 → High word
+40004 → Low word
+    </code></pre>
+
+    <p>
+      Firmware must clearly define word order and endianness.
+    </p>
+  </section>
+
+  <!-- ================= ENDIANNESS ================= -->
+<section>
+  <h2>Word Order and Endianness</h2>
+
+  <p>
+    MODBUS defines register order but does not strictly define
+    multi-register word order. Firmware must clearly document this.
+  </p>
+
+  <pre><code>
+32-bit Value Example:
+
+Register 40003 → High Word
+Register 40004 → Low Word
+
+Value = (40003 << 16) | 40004
+  </code></pre>
+
+  <p>
+    Always confirm word order when reading multi-register values
+    such as totals or floating-point numbers.
+  </p>
+</section>
+
+<!-- ================= TIMING ================= -->
+<section>
+  <h2>RTU Timing Considerations</h2>
+
+  <ul>
+    <li>Minimum 3.5 character silent interval before each frame</li>
+    <li>Slave response timeout must be handled by the master</li>
+    <li>Only one master may transmit at a time</li>
+  </ul>
+
+  <p>
+    These timing rules ensure reliable frame detection
+    in MODBUS RTU networks.
+  </p>
+</section>
+
+  <!-- ================= KEY RULE ================= -->
+  <section>
+    <h2>Key Design Rule</h2>
+
+  <div class="side-by-side">
+    <!-- RIGHT: Text -->
+    <div class="side-text">
+
+    <p>
+        <b>If a value can be written by a MODBUS master,
+        it must be implemented as a holding register.</b>
+    </p>
+    <p>
+        <b>Holding registers represent the internal state and configuration
+        of a MODBUS device.</b>
+    </p>
+    </div>
+        
+    <!-- LEFT: Image -->
+    <div class="side-image">
+      <img src="key1.png" alt="Key">
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Common Implementation Mistakes</h2>
+
+  <div class="side-by-side">
+    <!-- LEFT: Image -->
+    <div class="side-image">
+      <img src="NO.gif" alt="Common MODBUS mistakes illustration">
+    </div>
+
+    <!-- RIGHT: Text -->
+    <div class="side-text">
+      <ul>
+        <li>Using <b>FC03</b> to read input registers (should use <b>FC04</b>)</li>
+        <li>Incorrect register offset (<b>40001 vs 0</b>)</li>
+        <li>Wrong word order for <b>32-bit values</b></li>
+        <li>Ignoring maximum register limits</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+
+    <!-- ================= FOOTER ================= -->
+
+  <footer>
+    MODBUS Protocol Documentation — Function Code 03
+  </footer>
+
+</div>
+
+</body>
+</html>

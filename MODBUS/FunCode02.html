@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modbus Function Code 02 — Read Discrete Inputs</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Shared stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<div class="container">
+<header>
+    <h1>Function Code 02 — Read Discrete Inputs</h1>
+    <p>
+        A detailed explanation of how Modbus Function Code 02 works,
+        why it exists, and how it is used in real industrial systems.
+    </p>
+</header>
+
+<a href="function_code.html#fc02" class="back">← Back</a>
+
+<main>
+
+    <!-- ========================= -->
+    <!-- OVERVIEW -->
+    <!-- ========================= -->
+    <section>
+        <h2>Overview</h2>
+
+        <p>
+            <strong>Function Code 02 (0x02)</strong> is used by a Modbus
+            <strong>Master (Client)</strong> to read the state of
+            <strong>Discrete Inputs</strong> from a Modbus
+            <strong>Slave (Server)</strong>.
+        </p>
+
+        <div class="info-box">
+            Discrete Inputs represent <strong>read-only digital signals</strong>
+            coming from the physical world.
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- PURPOSE -->
+    <!-- ========================= -->
+    <section>
+        <h2>Purpose</h2>
+
+        <p>
+            The purpose of Function Code 02 is to
+            <strong>monitor external digital input signals</strong>
+            without allowing them to be modified by software.
+        </p>
+
+        <ul>
+            <li>Inputs are controlled by hardware, not software</li>
+            <li>Only reading is allowed</li>
+            <li>Improves safety and system reliability</li>
+        </ul>
+    </section>
+
+    <!-- ========================= -->
+    <!-- WHAT IT DOES -->
+    <!-- ========================= -->
+    <section>
+        <h2>What It Does</h2>
+
+        <p>
+            When a master sends a request using Function Code 02,
+            the slave responds with the current state of one or more
+            discrete inputs.
+        </p>
+
+        <p>
+            Each input is returned as a single bit:
+        </p>
+
+        <ul>
+            <li><strong>0</strong> → Input OFF / Inactive</li>
+            <li><strong>1</strong> → Input ON / Active</li>
+        </ul>
+
+        <div class="info-box">
+            Multiple discrete inputs are packed into bytes to reduce
+            communication bandwidth.
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- MODBUS DATA MODEL -->
+    <!-- ========================= -->
+    <section>
+        <h2>Discrete Inputs in the Modbus Data Model</h2>
+
+        <table>
+            <tr>
+                <th>Property</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>Data Type</td>
+                <td>1 bit per input</td>
+            </tr>
+            <tr>
+                <td>Access</td>
+                <td>Read-only</td>
+            </tr>
+            <tr>
+                <td>Typical Address Range</td>
+                <td>1xxxx (logical reference)</td>
+            </tr>
+            <tr>
+                <td>Controlled By</td>
+                <td>Physical hardware signals</td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- ========================= -->
+    <!-- REQUEST FRAME -->
+    <!-- ========================= -->
+    <section>
+        <h2>Modbus RTU Request Frame</h2>
+
+        <p>
+            A typical request to read discrete inputs looks like this:
+        </p>
+
+        <pre><code>
+| Slave ID | Function | Start Address | Quantity | CRC |
+|  0x01    |  0x02    |    0x0000     |  0x0008  | CRC |
+        </code></pre>
+
+        <ul>
+            <li><strong>Start Address</strong> → First discrete input to read</li>
+            <li><strong>Quantity</strong> → Number of inputs to read</li>
+        </ul>
+    </section>
+
+    <!-- ========================= -->
+    <!-- RESPONSE FRAME -->
+    <!-- ========================= -->
+    <section>
+        <h2>Modbus RTU Response Frame</h2>
+
+        <pre><code>
+| Slave ID | Function | Byte Count | Input Status | CRC |
+|  0x01    |  0x02    |   0x01     |   0b01011001 | CRC |
+        </code></pre>
+
+        <p>
+            Each bit in the response represents one discrete input.
+            The <strong>least significant bit (LSB)</strong> corresponds
+            to the lowest input address.
+        </p>
+    </section>
+
+    <!-- ========================= -->
+    <!-- WORKFLOW -->
+    <!-- ========================= -->
+    <section>
+        <h2>Operational Workflow</h2>
+
+        <ol>
+            <li>Master sends a Read Discrete Inputs request</li>
+            <li>Slave reads physical input hardware</li>
+            <li>Slave packs input states into bytes</li>
+            <li>Slave sends the response frame</li>
+            <li>Master decodes individual input bits</li>
+        </ol>
+    </section>
+
+    <!-- ========================= -->
+    <!-- PSEUDOCODE -->
+    <!-- ========================= -->
+    <section>
+        <h2>Pseudocode Example</h2>
+
+        <pre><code>
+send_request(slave_id, function_code=0x02, start_addr, quantity)
+
+response = receive_response()
+
+for i from 0 to quantity-1:
+    input_state[i] = (response.data >> i) & 0x01
+        </code></pre>
+    </section>
+
+    <!-- ========================= -->
+    <!-- WHY IT IS USED -->
+    <!-- ========================= -->
+    <section>
+        <h2>Why It Is Used</h2>
+
+        <ul>
+            <li>Protects input signals from software modification</li>
+            <li>Clearly separates inputs from outputs</li>
+            <li>Improves fault detection and diagnostics</li>
+            <li>Matches real-world electrical behavior</li>
+        </ul>
+
+        <div class="info-box">
+            If software could write to inputs, it could hide real faults.
+            Read-only access prevents this.
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- REAL-WORLD EXAMPLES -->
+    <!-- ========================= -->
+    <section>
+        <h2>Real-World Examples</h2>
+
+        <ul>
+            <li>Push button pressed or released</li>
+            <li>Limit switch reached</li>
+            <li>Proximity sensor detection</li>
+            <li>Door open / closed indication</li>
+            <li>Emergency stop feedback</li>
+        </ul>
+    </section>
+
+</main>
+
+<footer>
+    MODBUS Function Code 02 — Educational Reference
+</footer>
+</div>
+</body>
+</html>

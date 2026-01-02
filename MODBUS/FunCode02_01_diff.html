@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Modbus Coil vs Discrete Input — Addressing Clarified</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Shared project stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div class="wrap">
+<header>
+    <h1>Coils vs Discrete Inputs</h1>
+    <p>
+        Clarifying Modbus addressing, data types, and firmware responsibilities —
+        what you can choose freely, and what you must not.
+    </p>
+</header>
+
+<main>
+
+    <!-- ========================= -->
+    <!-- KEY TRUTH -->
+    <!-- ========================= -->
+    <section>
+        <h2>The Core Truth</h2>
+
+        <div class="info-box">
+            <strong>You can choose any address number.</strong><br>
+            <strong>You cannot freely choose the data type.</strong>
+        </div>
+
+        <p>
+            In Modbus, the <strong>address</strong> is just an index.
+            The <strong>meaning</strong> of the data comes from
+            how it is mapped in firmware.
+        </p>
+    </section>
+
+    <!-- ========================= -->
+    <!-- ADDRESS EXPLANATION -->
+    <!-- ========================= -->
+    <section>
+        <h2>Are Addresses Your Choice?</h2>
+
+        <p>
+            Yes. Address numbers in Modbus are simply offsets.
+            Modbus does not enforce meaning based on address values.
+        </p>
+
+        <pre><code>
+// All of these are valid
+coils[0]  = motor_start;
+coils[15] = valve_open;
+
+discrete_inputs[0]  = limit_switch;
+discrete_inputs[27] = door_sensor;
+        </code></pre>
+
+        <div class="info-box">
+            Logical addresses like <code>00001</code> or <code>10001</code>
+            exist only in documentation — not in Modbus frames.
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- WHAT YOU CANNOT CHOOSE -->
+    <!-- ========================= -->
+    <section>
+        <h2>What You Cannot Choose Freely</h2>
+
+        <p>
+            While addresses are flexible, the <strong>type of data</strong>
+            (coil vs discrete input) is determined by
+            <strong>signal origin</strong>.
+        </p>
+
+        <table>
+            <tr>
+                <th>Signal Origin</th>
+                <th>Correct Modbus Type</th>
+            </tr>
+            <tr>
+                <td>Software-controlled output</td>
+                <td>Coil</td>
+            </tr>
+            <tr>
+                <td>Hardware-driven input</td>
+                <td>Discrete Input</td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- ========================= -->
+    <!-- WRONG MAPPING: INPUT AS COIL -->
+    <!-- ========================= -->
+    <section>
+        <h2>Wrong Design: Hardware Input as a Coil</h2>
+
+        <p>
+            Mapping a physical input as a coil allows software
+            to overwrite real-world state.
+        </p>
+
+        <pre><code>
+// ❌ Wrong
+coils[0] = READ_GPIO(LIMIT_SWITCH_PIN);
+        </code></pre>
+
+        <p>
+            This allows a Modbus master to write to the input:
+        </p>
+
+        <pre><code>
+// SCADA can now do this (dangerous)
+FC05 → Write Coil 0 = ON
+        </code></pre>
+
+        <div class="info-box">
+            This design hides faults and breaks safety guarantees.
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- WRONG MAPPING: OUTPUT AS DISCRETE -->
+    <!-- ========================= -->
+    <section>
+        <h2>Wrong Design: Hardware Output as a Discrete Input</h2>
+
+        <p>
+            Mapping a controllable output as a discrete input
+            removes software control.
+        </p>
+
+        <pre><code>
+// ❌ Wrong
+discrete_inputs[0] = motor_start_command;
+        </code></pre>
+
+        <p>
+            Result:
+        </p>
+
+        <ul>
+            <li>SCADA cannot control the output</li>
+            <li>Only reads are possible</li>
+            <li>The system becomes unusable remotely</li>
+        </ul>
+    </section>
+
+    <!-- ========================= -->
+    <!-- CORRECT DESIGN -->
+    <!-- ========================= -->
+    <section>
+        <h2>Correct Design Pattern</h2>
+
+        <p>
+            Commands and feedback must be separated.
+        </p>
+
+        <pre><code>
+// Command (software → hardware)
+coils[0] = motor_start_command;
+
+// Feedback (hardware → software)
+discrete_inputs[0] = READ_GPIO(MOTOR_FEEDBACK_PIN);
+        </code></pre>
+
+        <table>
+            <tr>
+                <th>Aspect</th>
+                <th>Result</th>
+            </tr>
+            <tr>
+                <td>Control</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>Feedback</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>Fault detection</td>
+                <td>Reliable</td>
+            </tr>
+            <tr>
+                <td>Safety</td>
+                <td>Preserved</td>
+            </tr>
+        </table>
+    </section>
+
+    <!-- ========================= -->
+    <!-- WHY MODBUS ALLOWS THIS -->
+    <!-- ========================= -->
+    <section>
+        <h2>Why Modbus Allows Incorrect Mapping</h2>
+
+        <p>
+            Modbus is a transport protocol. It does not understand
+            hardware semantics or safety requirements.
+        </p>
+
+        <ul>
+            <li>No data-type enforcement</li>
+            <li>No hardware awareness</li>
+            <li>Responsibility lies with firmware design</li>
+        </ul>
+
+        <div class="info-box">
+            Modbus assumes the firmware engineer understands the system.
+        </div>
+    </section>
+
+    <!-- ========================= -->
+    <!-- FINAL RULE -->
+    <!-- ========================= -->
+    <section>
+        <h2>The Rule to Remember</h2>
+
+        <pre><code>
+Address numbers are free.
+Meanings are not.
+        </code></pre>
+
+        <p>
+            Choose addresses based on organization.
+            Choose data types based on physical reality.
+        </p>
+    </section>
+
+</main>
+
+<footer>
+    MODBUS Coils vs Discrete Inputs — Addressing & Firmware Design
+</footer>
+  </div>
+</body>
+</html>

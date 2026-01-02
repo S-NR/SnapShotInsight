@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MODBUS Protocol Overview</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Shared stylesheet -->
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+<header>
+    <h1>MODBUS Protocol — Concept Guide</h1>
+    <p>
+        Structured explanation of MODBUS data types, function codes,
+        and firmware-level implementation.
+    </p>
+</header>
+
+<main>
+
+    <!-- ========================= -->
+    <!-- FUNCTION CODES -->
+    <!-- ========================= -->
+    <section>
+        <h2>Function Codes</h2>
+
+        <ul class="nav-list">
+            <li>
+                <a href="function_code_01.html">
+                    FC01 — Read Coils
+                </a>
+                <span>Read/write digital outputs</span>
+            </li>
+
+            <li>
+                <a href="function_code_02.html">
+                    FC02 — Read Discrete Inputs
+                </a>
+                <span>Read-only hardware inputs</span>
+            </li>
+
+            <li>
+                <a href="function_code_03.html">
+                    FC03 — Read Holding Registers
+                </a>
+                <span>Read/write 16-bit registers</span>
+            </li>
+
+            <li>
+                <a href="function_code_04.html">
+                    FC04 — Read Input Registers
+                </a>
+                <span>Read-only measured values</span>
+            </li>
+        </ul>
+    </section>
+
+    <!-- ========================= -->
+    <!-- DESIGN & IMPLEMENTATION -->
+    <!-- ========================= -->
+    <section>
+        <h2>Design & Firmware Mapping</h2>
+
+        <ul class="nav-list">
+            <li>
+                <a href="coil_vs_discrete_addressing.html">
+                    Coil vs Discrete Mapping
+                </a>
+                <span>
+                    Address freedom vs data-type rules explained
+                </span>
+            </li>
+
+            <li>
+                <a href="register_mapping.html">
+                    Register Mapping Strategy
+                </a>
+                <span>
+                    Variables, scaling, and register organization
+                </span>
+            </li>
+        </ul>
+    </section>
+
+    <!-- ========================= -->
+    <!-- CRC & FRAME -->
+    <!-- ========================= -->
+    <section>
+        <h2>Protocol Mechanics</h2>
+
+        <ul class="nav-list">
+            <li>
+                <a href="crc_computation.html">
+                    CRC-16 Computation
+                </a>
+                <span>
+                    Why CRC exists and how MODBUS calculates it
+                </span>
+            </li>
+
+            <li>
+                <a href="frame_format.html">
+                    MODBUS RTU Frame Format
+                </a>
+                <span>
+                    Address, function, data, CRC
+                </span>
+            </li>
+        </ul>
+    </section>
+
+</main>
+
+<footer>
+    MODBUS Documentation — Firmware-Oriented Explanation
+</footer>
+
+</body>
+</html>

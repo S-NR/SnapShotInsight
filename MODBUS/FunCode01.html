@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MODBUS Function Code 01 – Read Coils</title>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+<div class="container">
+
+<h1>MODBUS Function Code 01 — Read Coils</h1>
+
+<a href="function_code.html#fc01" class="back">← Back</a>
+
+<div class="card">
+<h2>1. What is a Coil?</h2>
+<p>
+In MODBUS, a <span class="highlight">coil</span> represents a <b>single digital output bit</b>.
+It is typically mapped to physical outputs such as relays, solenoids, motors, or valves.
+</p>
+<ul>
+  <li>Size: <b>1 bit</b></li>
+  <li>0 → OFF</li>
+  <li>1 → ON</li>
+</ul>
+<p>
+Although coils are writable, they are also readable so that the master can verify the
+actual output state.
+</p>
+</div>
+
+<div class="card">
+<h2>2. Purpose of Function Code 01</h2>
+<p>
+<span class="highlight">Function Code 01</span> is used to <b>read the ON/OFF status of one or more coils</b>.
+It does not change any output state.
+</p>
+</div>
+
+<div class="card">
+<h2>3. Why Read Coils is Used</h2>
+<ul>
+  <li>Verify that a write command was executed</li>
+  <li>Monitor output status in real time</li>
+  <li>Fault detection (stuck ON / OFF)</li>
+  <li>HMI display and diagnostics</li>
+</ul>
+<p>
+MODBUS strictly separates <b>control</b> and <b>monitoring</b> for safety and predictability.
+</p>
+</div>
+
+<div class="card">
+<h2>4. How It Works (High-Level)</h2>
+<pre><code>Master → Sends Read Coils request
+Slave → Validates request & CRC
+Slave → Reads internal coil memory
+Slave → Packs bits into response
+Master → Decodes ON/OFF states
+</code></pre>
+</div>
+
+<div class="card">
+<h2>5. MODBUS RTU Request Frame</h2>
+<pre><code>Slave ID      : 0x01
+Function Code : 0x01 (Read Coils)
+Start Address : 0x0000
+Quantity      : 0x0008 (8 coils)
+CRC           : Calculated
+</code></pre>
+<p>
+This request asks the slave to return the status of <b>8 coils starting from address 0</b>.
+</p>
+</div>
+
+<div class="card">
+<h2>6. MODBUS RTU Response Frame</h2>
+<pre><code>Slave ID      : 0x01
+Function Code : 0x01
+Byte Count    : 0x01
+Coil Data     : 0b01011001
+CRC           : Calculated
+</code></pre>
+
+<p>
+Each bit represents one coil.  
+The <b>least significant bit (LSB)</b> corresponds to the first requested coil.
+</p>
+</div>
+
+<div class="card">
+<h2>7. Coil Bit Packing</h2>
+<pre><code>Bit position: 7 6 5 4 3 2 1 0
+Coil state :  0 0 1 0 1 1 0 1
+Hex value  :  0x2D
+</code></pre>
+
+<p>
+MODBUS packs multiple coils into bytes to minimize bandwidth usage.
+</p>
+</div>
+
+<div class="card">
+<h2>8. Master-Side Pseudocode</h2>
+<pre><code>build_read_coils_request(slave, start, quantity)
+send_request()
+
+response = receive_response()
+if crc_invalid(response):
+    error
+
+for each coil:
+    state = (data_byte >> bit_index) & 1
+</code></pre>
+
+</div>
+
+<div class="card">
+<h2>9. Slave-Side Pseudocode</h2>
+<pre><code>if function_code == READ_COILS:
+    validate_address()
+    read_coil_states()
+    pack_bits()
+    send_response()
+</code></pre>
+
+</div>
+
+<div class="card">
+<h2>10. Real-World Examples</h2>
+<ul>
+  <li><b>Motor running?</b> → Read motor control coil</li>
+  <li><b>Valve open?</b> → Read solenoid output</li>
+  <li><b>Relay energized?</b> → Confirm control logic</li>
+</ul>
+</div>
+
+<div class="card">
+<h2>11. Key Takeaways</h2>
+<ul>
+  <li>Reads digital output states</li>
+  <li>Non-destructive operation</li>
+  <li>Bit-packed response</li>
+  <li>Essential for monitoring & diagnostics</li>
+</ul>
+</div>
+
+</div>
+</body>
+</html>
