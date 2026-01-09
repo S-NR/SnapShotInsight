@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MCU Programming: SRAM vs Flash</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="wrap">
+
+  <h1>MCU Programming: SRAM vs Flash</h1>
+  <p>
+    Microcontrollers support two common ways to load and run firmware during
+    development and production. 
+  </p>
+
+  <section>
+    <h2>1️⃣ On-Chip SRAM Programming (Debug Mode)</h2>
+    <ul>
+      <li>Code is loaded directly into <span class="highlight">SRAM</span> using a debugger (JTAG / SWD).</li>
+      <li>Used for <span class="highlight">functional testing and debugging</span>.</li>
+      <li>Program is <span class="highlight">lost after reset or power-off</span>.</li>
+      <li>Fast load time → ideal during development.</li>
+      <li><b>Not</b> used for final delivery.</li>
+    </ul>
+
+    <div class="note">
+      Example: Running code from IDE using "Run / Debug" button.
+    </div>
+  </section>
+
+  <section>
+    <h2>2️⃣ Flash Programming (Production Mode)</h2>
+    <ul>
+      <li>Code is programmed into <span class="highlight">internal Flash memory</span>.</li>
+      <li>Firmware <span class="highlight">persists after power-off or reset</span>.</li>
+      <li>Used for <span class="highlight">client delivery, field testing, and production</span>.</li>
+      <li>Can be programmed via <span class="highlight">USB / Bootloader / External programmer</span>.</li>
+    </ul>
+
+    <div class="note">
+      Example: Programming firmware before handing the board to QA or customer.
+    </div>
+  </section>
+
+  <section>
+    <h2>Quick Comparison</h2>
+    <table>
+      <tr>
+        <th>Aspect</th>
+        <th>SRAM Programming</th>
+        <th>Flash Programming</th>
+      </tr>
+      <tr>
+        <td>Purpose</td>
+        <td>Debug & Development</td>
+        <td>Production & Release</td>
+      </tr>
+      <tr>
+        <td>Power Cycle</td>
+        <td>Code Lost</td>
+        <td>Code Retained</td>
+      </tr>
+      <tr>
+        <td>Programming Method</td>
+        <td>Debugger (SWD/JTAG)</td>
+        <td>USB / Bootloader / Programmer</td>
+      </tr>
+      <tr>
+        <td>Client Delivery</td>
+        <td>❌ No</td>
+        <td>✅ Yes</td>
+      </tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Simple Flow</h2>
+    <div class="block-flow">
+      <div class="block">
+        Development
+        <small>SRAM Programming</small>
+      </div>
+      <div class="arrow right"></div>
+      <div class="block">
+        Testing / Client
+        <small>Flash Programming</small>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    Embedded Firmware – Programming Basics
+  </footer>
+
+</div>
+</body>
+</html>

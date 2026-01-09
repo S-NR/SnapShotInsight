@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cypress FX3 – Programming Overview</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="wrap">
+
+  <h1>Cypress FX3 – Programming Overview</h1>
+  <p>
+    Cypress FX3 is a high-performance USB 3.0 peripheral controller widely used
+    in imaging, data acquisition, and high-speed streaming applications.
+    This page explains the <span class="highlight">overall programming concept</span>
+    before diving into low-level details.
+  </p>
+
+  <nav>
+    <div class="chip">Architecture</div>
+    <div class="chip">Boot Flow</div>
+    <div class="chip">Firmware Model</div>
+    <div class="chip">Interfaces</div>
+    <div class="chip">Development vs Production</div>
+  </nav>
+
+  <section>
+    <h2>1️⃣ FX3 Architecture (At a Glance)</h2>
+    <ul>
+      <li>32-bit <span class="highlight">ARM9 CPU</span> running FX3 firmware.</li>
+      <li>High-speed <span class="highlight">USB 3.0 / USB 2.0</span> device controller.</li>
+      <li>On-chip <span class="highlight">SRAM</span> for firmware execution.</li>
+      <li>Interfaces: GPIF-II, I2C, SPI, UART, GPIO.</li>
+    </ul>
+
+    <div class="note">
+      FX3 executes firmware only from SRAM (Flash is used for storage, not execution).
+    </div>
+  </section>
+
+  <section>
+    <h2>2️⃣ FX3 Boot Flow</h2>
+    <ul>
+      <li>On reset, FX3 BootROM starts execution.</li>
+      <li>BootROM looks for firmware in a predefined order:</li>
+    </ul>
+
+    <div class="register-map">
+      <div class="reg">
+        <span>USB Boot</span>
+        <small>Development / Debug</small>
+      </div>
+      <div class="reg">
+        <span>I2C / SPI Flash</span>
+        <small>Production Mode</small>
+      </div>
+      <div class="reg">
+        <span>UART</span>
+        <small>Recovery / Factory</small>
+      </div>
+    </div>
+
+    <div class="note">
+      Firmware is always copied into SRAM before execution.
+    </div>
+  </section>
+
+  <section>
+    <h2>3️⃣ FX3 Firmware Programming Model</h2>
+    <ul>
+      <li>Firmware is written in <span class="highlight">C</span> using FX3 SDK.</li>
+      <li>Uses Cypress-provided <span class="highlight">RTOS</span>.</li>
+      <li>Application is event-driven (threads, callbacks, interrupts).</li>
+      <li>USB, GPIF, DMA configured using APIs.</li>
+    </ul>
+
+    <pre>
+main()
+ ├─ CyU3PDeviceInit()
+ ├─ CyU3PKernelEntry()
+     ├─ AppThread
+     │   ├─ USB Init
+     │   ├─ GPIF Init
+     │   └─ Data Streaming
+     └─ RTOS Scheduler
+    </pre>
+  </section>
+
+  <section>
+    <h2>4️⃣ Interface Usage in FX3</h2>
+    <ul>
+      <li><span class="highlight">USB</span> – Host communication (PC / FPGA).</li>
+      <li><span class="highlight">GPIF-II</span> – High-speed parallel data interface.</li>
+      <li><span class="highlight">I2C / SPI</span> – Sensor, EEPROM, Flash access.</li>
+      <li><span class="highlight">UART</span> – Debug logs.</li>
+    </ul>
+
+    <div class="note">
+      FX3 acts as a bridge between USB and external data sources.
+    </div>
+  </section>
+
+  <section>
+    <h2>5️⃣ Development vs Production Programming</h2>
+
+    <table>
+      <tr>
+        <th>Phase</th>
+        <th>Method</th>
+        <th>Purpose</th>
+      </tr>
+      <tr>
+        <td>Development</td>
+        <td>USB Boot</td>
+        <td>Debug & Functional Testing</td>
+      </tr>
+      <tr>
+        <td>Production</td>
+        <td>I2C / SPI Flash</td>
+        <td>Standalone Operation</td>
+      </tr>
+    </table>
+
+    <div class="block-flow">
+      <div class="block">
+        PC + SDK
+        <small>USB Download</small>
+      </div>
+      <div class="arrow right"></div>
+      <div class="block">
+        FX3 SRAM
+        <small>Execute Firmware</small>
+      </div>
+      <div class="arrow right"></div>
+      <div class="block">
+        Flash
+        <small>Persistent Storage</small>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>6️⃣ Deep Dive: SRAM vs Flash Programming</h2>
+    <p>
+      To understand how firmware behaves during debug and client delivery,
+      refer to the detailed SRAM vs Flash programming explanation.
+    </p>
+
+    <a href="SRAMvsFLASH.html" class="back">
+      View SRAM vs Flash Programming
+    </a>
+  </section>
+
+  <footer>
+    Cypress FX3 – Firmware Architecture & Programming Concept
+  </footer>
+
+</div>
+</body>
+</html>
