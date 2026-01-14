@@ -18,15 +18,16 @@
   </p>
 
   <nav>
-    <div class="chip">Architecture</div>
-    <div class="chip">Boot Flow</div>
-    <div class="chip">Firmware Model</div>
-    <div class="chip">Interfaces</div>
-    <div class="chip">Development vs Production</div>
+    <a class="chip" href="#Architecture">Architecture</a>
+    <a class="chip" href="#BootFlow">Boot Flow</a>
+    <a class="chip" href="#FirmwareModel">Firmware Model</a>
+    <a class="chip" href="#Interfaces">Interfaces</a>
+    <a class="chip" href="#DevelopmentVsProduction">Development vs Production</a>
+    <a class="chip" href="#SRAMvsFlash">SRAM vs Flash Programming</a>
   </nav>
 
   <section>
-    <h2>1️⃣ FX3 Architecture (At a Glance)</h2>
+    <h2 id="Architecture">1️⃣ FX3 Architecture (At a Glance)</h2>
     <ul>
       <li>32-bit <span class="highlight">ARM9 CPU</span> running FX3 firmware.</li>
       <li>High-speed <span class="highlight">USB 3.0 / USB 2.0</span> device controller.</li>
@@ -40,7 +41,7 @@
   </section>
 
   <section>
-    <h2>2️⃣ FX3 Boot Flow</h2>
+    <h2 id="BootFlow">2️⃣ FX3 Boot Flow</h2>
     <ul>
       <li>On reset, FX3 BootROM starts execution.</li>
       <li>BootROM looks for firmware in a predefined order:</li>
@@ -67,7 +68,7 @@
   </section>
 
   <section>
-    <h2>3️⃣ FX3 Firmware Programming Model</h2>
+    <h2 id="FirmwareModel">3️⃣ FX3 Firmware Programming Model</h2>
     <ul>
       <li>Firmware is written in <span class="highlight">C</span> using FX3 SDK.</li>
       <li>Uses Cypress-provided <span class="highlight">RTOS</span>.</li>
@@ -88,7 +89,7 @@ main()
   </section>
 
   <section>
-    <h2>4️⃣ Interface Usage in FX3</h2>
+    <h2 id="Interfaces">4️⃣ Interface Usage in FX3</h2>
     <ul>
       <li><span class="highlight">USB</span> – Host communication (PC / FPGA).</li>
       <li><span class="highlight">GPIF-II</span> – High-speed parallel data interface.</li>
@@ -102,7 +103,7 @@ main()
   </section>
 
   <section>
-    <h2>5️⃣ Development vs Production Programming</h2>
+    <h2 id="DevelopmentVsProduction">5️⃣ Development vs Production Programming</h2>
 
     <table>
       <tr>
@@ -141,7 +142,7 @@ main()
   </section>
 
   <section>
-    <h2>6️⃣ Deep Dive: SRAM vs Flash Programming</h2>
+    <h2 id="SRAMvsFlash">6️⃣ Deep Dive: SRAM vs Flash Programming</h2>
     <p>
       To understand how firmware behaves during debug and client delivery,
       refer to the detailed SRAM vs Flash programming explanation.
