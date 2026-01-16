@@ -73,6 +73,61 @@ while (value &lt; 4) {
     <p class="note">
       ⚠️ Takeaway: Never combine assignment and post-increment on the same variable.
     </p>
+
+
+    <hr style="border:1px solid #0f2b48; margin:30px 0;">
+
+<h2>What if the compiler optimization level is <span class="highlight">-O2</span>?</h2>
+
+<p>
+This is where things get even more interesting.
+</p>
+
+<p>
+The expression <code>value = value++;</code> causes the variable
+<code>value</code> to be <span class="highlight">modified and read without a sequence point</span>.
+</p>
+
+<p>
+According to the C standard, this results in
+<span class="highlight">undefined behavior</span>.
+</p>
+
+<ul>
+  <li>The compiler is free to assume <code>value</code> does not change</li>
+  <li>Or remove the loop entirely</li>
+  <li>Or produce behavior that differs between builds</li>
+</ul>
+
+<p>
+With optimization level <code>-O2</code> enabled, the compiler may:
+</p>
+
+<ul>
+  <li>Optimize away the increment</li>
+  <li>Reorder operations aggressively</li>
+  <li>Generate output that differs from <code>-O0</code></li>
+</ul>
+
+<p>
+This means the program:
+</p>
+
+<ul>
+  <li>May loop infinitely</li>
+  <li>May terminate unexpectedly</li>
+  <li>May behave differently across compilers or targets</li>
+</ul>
+
+<p class="note">
+⚠️ This is why relying on such expressions is dangerous —
+especially in embedded and safety-critical systems.
+</p>
+
+<p>
+<strong>Rule of thumb:</strong>  
+Never write code whose correctness depends on evaluation order.
+</p>
   </section>
 
 </div>
