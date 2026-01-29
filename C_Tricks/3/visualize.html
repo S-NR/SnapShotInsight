@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>sizeof Array vs Pointer</title>
+
+  <!-- Link your existing CSS file -->
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <h1>🧠 sizeof: Array vs Pointer</h1>
+  <p class="highlight">Visual explanation · Same code · Different behavior</p>
+
+  <!-- CODE SECTION -->
+  <section>
+    <h2>The Code</h2>
+    <pre>
+void print_elements_inside_function(int *buffer)
+{
+    int length = sizeof(buffer) / sizeof(buffer[0]);
+
+    for (int i = 0; i < length; i++)
+        printf("%d ", buffer[i]);
+}
+
+int main(void)
+{
+    int data_array[10];
+
+    for (int i = 0; i < 10; i++)
+        data_array[i] = i + 1;
+
+    print_elements_inside_function(data_array);
+
+    int length = sizeof(data_array) / sizeof(data_array[0]);
+    for (int i = 0; i < length; i++)
+        printf("%d ", data_array[i]);
+}
+    </pre>
+  </section>
+
+  <!-- VISUAL: MAIN -->
+  <section>
+    <h2>Inside <code>main()</code> — Real Array</h2>
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+      <div class="card">1</div>
+      <div class="card">2</div>
+      <div class="card">3</div>
+      <div class="card">4</div>
+      <div class="card">5</div>
+      <div class="card">6</div>
+      <div class="card">7</div>
+      <div class="card">8</div>
+      <div class="card">9</div>
+      <div class="card">10</div>
+    </div>
+
+    <p class="correct">
+      ✔ <code>sizeof(data_array) / sizeof(data_array[0]) = 10</code>
+    </p>
+
+    <p>
+      The loop in <code>main()</code> prints
+      <span class="highlight">all 10 elements</span>.
+    </p>
+  </section>
+
+  <!-- VISUAL: FUNCTION -->
+  <section>
+    <h2>Inside Function — Pointer Only</h2>
+
+    <p>
+      When the array is passed to the function, it
+      <span class="highlight">decays into a pointer</span>.
+    </p>
+
+    <div style="display:flex; align-items:center; gap:16px; flex-wrap:wrap;">
+      <div class="card">
+        <p class="highlight">int *</p>
+        <p>buffer</p>
+      </div>
+
+      <div class="highlight">→</div>
+
+      <div class="card">
+        <p class="highlight">sizeof(buffer)</p>
+        <p>8 bytes (64-bit)</p>
+      </div>
+
+      <div class="highlight">÷</div>
+
+      <div class="card">
+        <p class="highlight">sizeof(int)</p>
+        <p>4 bytes</p>
+      </div>
+
+      <div class="highlight">=</div>
+
+      <div class="card wrong">
+        <p class="highlight">2</p>
+        <p>Wrong length</p>
+      </div>
+    </div>
+
+    <p class="wrong">
+      ❌ Only 2 elements are processed inside the function
+    </p>
+  </section>
+
+  <!-- VISUAL: PARTIAL LOOP -->
+  <section>
+    <h2>What the Loop Actually Sees</h2>
+
+    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+      <div class="card correct">1</div>
+      <div class="card correct">2</div>
+      <div class="card" style="opacity:0.3;">3</div>
+      <div class="card" style="opacity:0.3;">4</div>
+      <div class="card" style="opacity:0.3;">5</div>
+      <div class="card" style="opacity:0.3;">6</div>
+      <div class="card" style="opacity:0.3;">7</div>
+      <div class="card" style="opacity:0.3;">8</div>
+      <div class="card" style="opacity:0.3;">9</div>
+      <div class="card" style="opacity:0.3;">10</div>
+    </div>
+
+    <p>
+      The loop stops early because
+      <span class="highlight">length is wrong</span>.
+    </p>
+  </section>
+
+  <!-- FIX -->
+  <section>
+    <h2>✔ The Correct Fix</h2>
+
+    <pre>
+void print_elements_inside_function(int *buffer, size_t length)
+{
+    for (size_t i = 0; i < length; i++)
+        printf("%d ", buffer[i]);
+}
+
+print_elements_inside_function(
+    data_array,
+    sizeof(data_array) / sizeof(data_array[0])
+);
+    </pre>
+
+    <p class="correct">
+      ✔ Full array processed safely
+    </p>
+  </section>
+
+  <!-- TAKEAWAY -->
+  <section>
+    <h2>Final Takeaway</h2>
+
+    <p class="highlight">
+      sizeof(array) works only where the array is declared.<br>
+      Inside a function, it is already a pointer.
+    </p>
+  </section>
+
+</div>
+
+</body>
+</html>

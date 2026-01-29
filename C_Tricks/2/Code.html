@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>C Puzzle – Argument Evaluation Trap</title> 
+<link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <h1>🧠 C Programming Puzzle</h1>
+  <p class="note">Snapshot Insight · Think before you compile</p>
+
+  <!-- QUESTION -->
+  <section>
+    <h2>The Question</h2>
+    <p>What does the following C program do when executed?</p>
+
+    <pre>
+#include &lt;stdio.h&gt;
+
+int main(void)
+{
+    int i = 0;
+    printf("%d %d %d\n", i++, i++, i++);
+    return 0;
+}
+    </pre>
+
+    <p><strong>Your Answer:</strong></p>
+    <textarea id="answer" placeholder="Explain what happens when this code runs..."></textarea>
+
+    <button onclick="checkAnswer()">Submit Answer</button>
+
+    <div id="result" class="result"></div>
+  </section>
+
+  <!-- EXPLANATION -->
+  <section id="explanation" class="explanation">
+    <h2>Explanation</h2>
+
+    <a class="btn" href="visualize.html">visualize the concept</a>
+
+    <p>The problem lies in this statement:</p>
+    <pre>printf("%d %d %d\n", i++, i++, i++);</pre>
+
+    <ul>
+      <li><code>i++</code> modifies <code>i</code></li>
+      <li>The order of evaluation of function arguments is <span class="highlight">not defined</span></li>
+      <li><code>i</code> is modified multiple times without a sequence point</li>
+    </ul>
+
+    <p>
+      <strong>Result:</strong> This program has
+      <span class="highlight">undefined behavior</span>.
+    </p>
+
+    <p>
+      On many systems, it may appear to print:
+    </p>
+
+    <pre>
+2 1 0
+    </pre>
+
+    <p>
+      But this output is <strong>not guaranteed</strong>.
+      Different compilers, architectures, or optimization levels
+      may produce different results.
+    </p>
+
+    <p class="note">
+      ⚠️ Takeaway: Never modify the same variable multiple times
+      in a single expression.
+    </p>
+
+    <hr style="border:1px solid #0f2b48; margin:30px 0;">
+
+    <h2>What if the compiler optimization level is <span class="highlight">-O2</span>?</h2>
+
+    <p>
+      With optimization enabled, the compiler may:
+    </p>
+
+    <ul>
+      <li>Reorder argument evaluation</li>
+      <li>Assume impossible states never occur</li>
+      <li>Generate completely different output</li>
+    </ul>
+
+    <p>
+      This means the program may:
+    </p>
+
+    <ul>
+      <li>Print different values</li>
+      <li>Print nothing meaningful</li>
+      <li>Behave differently across builds</li>
+    </ul>
+
+    <p class="note">
+      ⚠️ This is especially dangerous in embedded and safety-critical systems.
+    </p>
+
+    <p>
+      <strong>Rule of thumb:</strong><br>
+      Never write code that depends on argument evaluation order.
+    </p>
+  </section>
+
+</div>
+
+<script>
+function checkAnswer() {
+  const ans = document.getElementById("answer").value.toLowerCase();
+  const result = document.getElementById("result");
+  const explanation = document.getElementById("explanation");
+
+  const correct =
+    ans.includes("undefined") ||
+    ans.includes("ub") ||
+    ans.includes("order") ||
+    ans.includes("2 1 0");
+
+  if (correct) {
+    result.innerHTML = "✅ Correct! The key issue is undefined behavior due to argument evaluation order.";
+    result.className = "result correct";
+  } else {
+    result.innerHTML = "❌ Not quite. Focus on how function arguments are evaluated.";
+    result.className = "result wrong";
+  }
+
+  explanation.style.display = "block";
+}
+</script>
+
+</body>
+</html>

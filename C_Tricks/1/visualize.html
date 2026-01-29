@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Understanding path = path++ (With Diagrams)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --bg:#0b1220;
+  --card:#111a2e;
+  --accent:#18e0a8;
+  --muted:#9aa7c7;
+  --border:#0f2b48;
+}
+
+body{
+  margin:0;
+  font-family:Inter,Segoe UI,Arial;
+  background:var(--bg);
+  color:white;
+}
+
+.wrap{
+  max-width:960px;
+  margin:40px auto;
+  padding:24px;
+}
+
+section{
+  background:var(--card);
+  padding:20px;
+  border-radius:14px;
+  margin-bottom:24px;
+}
+
+h1,h2,h3{
+  margin-top:0;
+}
+
+p{
+  color:#cfcfcf;
+  line-height:1.6;
+}
+
+pre{
+  background:#081526;
+  padding:16px;
+  border-radius:10px;
+  color:#9be5ff;
+  overflow-x:auto;
+}
+
+/* Diagram blocks */
+.flow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-top:20px;
+  align-items:center;
+}
+
+.block{
+  background:#0c2138;
+  border:1px solid var(--border);
+  padding:14px 18px;
+  border-radius:10px;
+  text-align:center;
+  min-width:160px;
+  color:var(--accent);
+  font-weight:600;
+}
+
+.block small{
+  display:block;
+  margin-top:6px;
+  color:var(--muted);
+  font-weight:400;
+}
+
+.arrow{
+  font-size:26px;
+  color:var(--accent);
+}
+
+.note{
+  color:#00ffb3;
+  font-size:13px;
+  margin-top:10px;
+}
+.warning{
+  color:#ff6b6b;
+  font-weight:600;
+}
+
+/* Memory diagram */
+.memory{
+  display:flex;
+  gap:20px;
+  margin-top:16px;
+}
+
+.mem-box{
+  background:#071826;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:16px;
+  min-width:180px;
+}
+
+.mem-box h4{
+  margin:0 0 8px 0;
+  color:var(--accent);
+}
+
+.mem-value{
+  font-size:28px;
+  font-weight:700;
+  color:white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<h1>🧠 Understanding <code>path = path++</code></h1>
+<p class="note">Visual explanation · No assumptions · No shortcuts</p>
+
+<!-- SECTION 1 -->
+<section>
+<h2>Case 1: Normal increment (works as expected)</h2>
+
+<pre>path++;</pre>
+
+<div class="flow">
+  <div class="block">
+    path = 0
+    <small>Initial value</small>
+  </div>
+  <div class="arrow">➜</div>
+  <div class="block">
+    path = 1
+    <small>Increment applied</small>
+  </div>
+</div>
+
+<p>
+Here, <code>path++</code> is a <strong>statement by itself</strong>.
+The increment happens and nothing overwrites it.
+</p>
+
+<p class="note">✔ This is safe and correct</p>
+</section>
+
+<!-- SECTION 2 -->
+<section>
+<h2>Case 2: Using post-increment in an expression</h2>
+
+<pre>x = path++;</pre>
+
+<div class="flow">
+  <div class="block">
+    path = 0
+    <small>Before evaluation</small>
+  </div>
+  <div class="arrow">➜</div>
+  <div class="block">
+    x = 0
+    <small>Old value returned</small>
+  </div>
+  <div class="arrow">➜</div>
+  <div class="block">
+    path = 1
+    <small>Increment applied</small>
+  </div>
+</div>
+
+<p>
+Post-increment has <strong>two actions</strong>:
+</p>
+<ul>
+  <li>Return old value</li>
+  <li>Increment variable</li>
+</ul>
+
+<p class="note">✔ Still well-defined</p>
+</section>
+
+<!-- SECTION 3 -->
+<section>
+<h2>Case 3: The trap — <code>path = path++</code></h2>
+
+<pre>path = path++;</pre>
+
+<h3>Step-by-step execution</h3>
+
+<div class="flow">
+  <div class="block">
+    path = 0
+    <small>Initial value</small>
+  </div>
+
+  <div class="arrow">➜</div>
+
+  <div class="block">
+    path++
+    <small>Returns 0, increments to 1</small>
+  </div>
+
+  <div class="arrow">➜</div>
+
+  <div class="block">
+    path = 0
+    <small>Assignment overwrites increment</small>
+  </div>
+</div>
+
+<h3>Memory view</h3>
+
+<div class="memory">
+  <div class="mem-box">
+    <h4>Before</h4>
+    <div class="mem-value">path = 0</div>
+  </div>
+
+  <div class="mem-box">
+    <h4>During</h4>
+    <div class="mem-value">path = 1</div>
+  </div>
+
+  <div class="mem-box">
+    <h4>After</h4>
+    <div class="mem-value">path = 0</div>
+  </div>
+</div>
+
+<p>
+Even though the increment happens, the assignment
+<strong>writes the old value back</strong>.
+</p>
+
+<p class="warning">⚠ Increment is lost</p>
+</section>
+
+<!-- SECTION 4 -->
+<section>
+<h2>Why this is dangerous (C language rule)</h2>
+
+<p>
+In C, this expression:
+</p>
+
+<pre>path = path++;</pre>
+
+<p>
+<strong>modifies <code>path</code> more than once without a sequence point</strong>.
+</p>
+
+<ul>
+  <li>Modified by <code>path++</code></li>
+  <li>Modified again by assignment</li>
+</ul>
+
+<p class="warning">
+This results in <strong>undefined behavior</strong>.
+</p>
+
+<p>
+At higher optimization levels (<code>-O2</code>):
+</p>
+
+<ul>
+  <li>The loop may become infinite</li>
+  <li>The compiler may remove code</li>
+  <li>Behavior may change across targets</li>
+</ul>
+</section>
+
+<!-- SECTION 5 -->
+<section>
+<h2>Correct mental rule</h2>
+
+<div class="flow">
+  <div class="block">path++<small>✔ Safe</small></div>
+  <div class="block">path += 1<small>✔ Safe</small></div>
+  <div class="block">path = path++<small>❌ Never</small></div>
+  <div class="block">path = ++path<small>❌ Never</small></div>
+</div>
+
+<p class="note">
+Rule of thumb:  
+Never modify and read the same variable in one expression.
+</p>
+</section>
+
+<footer style="text-align:center;color:#7c8db5;margin-top:30px;">
+Snapshot Insight · C Tricks · Visual Learning
+</footer>
+
+</div>
+
+</body>
+</html>

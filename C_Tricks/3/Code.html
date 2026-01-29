@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>C Programming Puzzle – sizeof Trap</title>
+  <link rel="stylesheet" href="../style.css">
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <h1>🧠 C Programming Puzzle</h1>
+  <p class="note">Snapshot Insight · Looks right, breaks silently</p>
+
+  <!-- QUESTION -->
+  <section>
+    <h2>The Question</h2>
+    <p>What is the value of <span class="highlight">len</span> inside the function?</p>
+
+    <pre>
+#include &lt;stdio.h&gt;
+
+void send(int *buf)
+{
+    int len = sizeof(buf) / sizeof(buf[0]);
+    printf("Length = %d\n", len);
+}
+
+int main(void)
+{
+    int data[10] = {0};
+    send(data);
+    return 0;
+}
+    </pre>
+
+    <p><strong>Your Answer:</strong></p>
+    <textarea id="answer"
+      placeholder="What will be printed and why?"></textarea>
+
+    <button onclick="checkAnswer()">Submit Answer</button>
+
+    <div id="result" class="result"></div>
+  </section>
+
+  <!-- EXPLANATION -->
+  <section id="explanation" class="explanation">
+    <h2>Explanation</h2>
+
+    <a class="btn" href="visualize.html">visualize the concept</a>
+
+    <p>
+      This code contains a <span class="highlight">classic sizeof trap</span> in C.
+    </p>
+
+    <ul>
+      <li>
+        In <code>main()</code>, <code>data</code> is a real array:
+        <code>int data[10]</code>
+      </li>
+      <li>
+        When passed to <code>send()</code>, the array
+        <span class="highlight">decays to a pointer</span>
+      </li>
+      <li>
+        Inside <code>send()</code>, <code>buf</code> is only
+        <span class="highlight">int *</span>
+      </li>
+    </ul>
+
+    <pre>
+sizeof(buf)      → size of pointer (4 or 8 bytes)
+sizeof(buf[0])   → size of int (usually 4 bytes)
+    </pre>
+
+    <p>So the result becomes:</p>
+
+    <pre>
+64-bit system → len = 8 / 4 = 2
+32-bit system → len = 4 / 4 = 1
+    </pre>
+
+    <p class="note">
+      🚨 No compiler warning. No crash. Just silent data loss.
+    </p>
+
+    <h3>✔ Correct Fix</h3>
+
+    <pre>
+void send(int *buf, size_t len)
+{
+    // use len safely
+}
+
+int data[10];
+send(data, 10);
+    </pre>
+
+    <p class="note">
+      <strong>Golden Rule:</strong><br>
+      sizeof(array) works only in the scope where the array is declared.
+    </p>
+  </section>
+
+</div>
+
+<script>
+function checkAnswer() {
+  const ans = document.getElementById("answer").value.toLowerCase();
+  const result = document.getElementById("result");
+  const explanation = document.getElementById("explanation");
+
+  const numberMatch = ans.match(/\b\d+\b/);
+  const numericAnswer = numberMatch ? Number(numberMatch[0]) : null;
+
+  const numericCorrect =
+    numericAnswer === 1 || numericAnswer === 2;
+
+  const conceptCorrect =
+    ans.includes("pointer") ||
+    ans.includes("decay") ||
+    ans.includes("int *") ||
+    ans.includes("array to pointer");
+
+  if (numericCorrect || conceptCorrect) {
+    result.innerHTML =
+      "✅ Correct! sizeof is applied to a pointer due to array-to-pointer decay.";
+    result.className = "result correct";
+  } else {
+    result.innerHTML =
+      "❌ Not quite. Hint: What does the array become when passed to a function?";
+    result.className = "result wrong";
+  }
+
+  explanation.style.display = "block";
+}
+</script>
+
+</body>
+</html>
