@@ -130,26 +130,42 @@
 </section>
 
 <section>
-  <h2>Simple Numeric Example</h2>
+  <h2>Numeric Example (Very Important)</h2>
 
-  <p><span class="highlight">Reference Value:</span> 100.00 units</p>
-  <p><span class="highlight">Firmware Output:</span> 98.50 units</p>
+  <p>
+    <span class="highlight">Reference (Golden Standard)</span><br>
+    A calibrated lab instrument shows:
+    <span class="highlight">100.00 units</span>
+  </p>
+
+  <p>
+    <span class="highlight">Firmware Output</span><br>
+    The device reports:
+    <span class="highlight">98.50 units</span>
+  </p>
 
   <pre>
-Error = Firmware Output − Reference Value
+Accuracy Error Calculation
+
+Error = Measured − Actual
 Error = 98.50 − 100.00
 Error = −1.50 units
 
+
+Accuracy Error (%)
+
 Accuracy Error (%) =
-(|1.50| / 100.00) × 100
+(|Error| / Actual) × 100
+= (1.5 / 100) × 100
 = 1.5%
   </pre>
 
   <p>
-    ✔ If allowed accuracy is ±2% → <span class="highlight">PASS</span><br>
-    ✖ If allowed accuracy is ±1% → <span class="highlight">FAIL</span>
+    ✅ If the specification allows <span class="highlight">±2%</span> accuracy → PASS<br>
+    ❌ If the specification allows <span class="highlight">±1%</span> accuracy → FAIL
   </p>
 </section>
+
 
 <section>
   <h2>Accuracy vs Precision (Very Common Confusion)</h2>
