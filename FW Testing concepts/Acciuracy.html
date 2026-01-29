@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Accuracy – Firmware Testing</title>
+  <!-- <style>
+    *,
+    *::before,
+    *::after { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    :root{
+      --bg:#0b1220;
+      --card:#111a2e;
+      --accent:#18e0a8;
+      --muted:#8fa2c0;
+      --border:#0f2b48;
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      font-family:Inter,Segoe UI,Arial;
+      background:var(--bg);
+      color:white;
+    }
+
+    .wrap{
+      max-width:960px;
+      margin:40px auto;
+      padding:24px;
+    }
+
+    h1,h2{
+      color:white;
+      margin-top:0;
+    }
+
+    p,li{
+      color:rgb(192, 192, 192);
+      line-height:1.6;
+    }
+
+    section{
+      background:var(--card);
+      padding:20px;
+      border-radius:12px;
+      margin-bottom:20px;
+    }
+
+    pre{
+      background:#081526;
+      padding:16px;
+      border-radius:10px;
+      color:#9be5ff;
+      overflow-x:auto;
+    }
+
+    .highlight{
+      color:var(--accent);
+      font-weight:600;
+    }
+  </style> -->
+  
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="wrap">
+
+<section>
+  <h2>Accuracy (Easy Explanation)</h2>
+
+  <p>
+    <span class="highlight">Accuracy</span> means how close the value reported by
+    the firmware is to the <span class="highlight">actual (true) value</span>.
+  </p>
+
+  <p>
+    👉 If the actual value is <b>100</b> and the firmware shows <b>99.8</b>,
+    the system is <span class="highlight">accurate</span>.<br>
+    👉 If it shows <b>95</b>, it is <span class="highlight">not accurate</span>,
+    even if it always shows 95.
+  </p>
+</section>
+
+<section>
+  <h2>How a Real Device Measures a Value</h2>
+
+  <p>
+    A firmware never measures a physical value directly.
+    It goes through multiple stages before producing the final output.
+  </p>
+
+  <pre>
+                 Physical Quantity
+              (Temp / Pressure / Flow)
+                         |
+                         v
+                      Sensor
+              (Physical → Electrical)
+                         |
+                         v
+               Signal Conditioning
+                (Amplify / Filter)
+                         |
+                         v
+                        ADC
+                (Analog → Digital)
+                         |
+                         v
+                     Firmware
+              (Scaling, calibration,
+               compensation)
+                         |
+                         v
+                   Output Value
+              (Display / MODBUS / UART)
+  </pre>
+
+  <p>
+    ✅ <span class="highlight">Accuracy is checked at the final output</span>,
+    not just at the sensor or ADC.
+  </p>
+</section>
+
+<section>
+  <h2>Simple Numeric Example</h2>
+
+  <p><span class="highlight">Reference Value:</span> 100.00 units</p>
+  <p><span class="highlight">Firmware Output:</span> 98.50 units</p>
+
+  <pre>
+Error = Firmware Output − Reference Value
+Error = 98.50 − 100.00
+Error = −1.50 units
+
+Accuracy Error (%) =
+(|1.50| / 100.00) × 100
+= 1.5%
+  </pre>
+
+  <p>
+    ✔ If allowed accuracy is ±2% → <span class="highlight">PASS</span><br>
+    ✖ If allowed accuracy is ±1% → <span class="highlight">FAIL</span>
+  </p>
+</section>
+
+<section>
+  <h2>Accuracy vs Precision (Very Common Confusion)</h2>
+
+  <p>
+    Many beginners confuse accuracy with precision.
+    They are <span class="highlight">not the same</span>.
+  </p>
+
+<pre>
+🎯 True Value (Target)
+        |
+        |
+        X = 100   ← Actual correct value
+
+
+Case 1: Precise but NOT Accurate
+
+Readings:
+  95
+  95
+  95
+  95
+
+(All readings are close together,
+but far away from the true value)
+
+
+
+Case 2: Neither Accurate nor Precise
+
+Readings:
+  92
+  105
+  88
+
+(Readings are scattered
+and also far from the true value)
+
+
+
+Case 3: Accurate AND Precise
+
+Readings:
+  99.9
+  100.1
+  100.0
+
+(Readings are close together
+and close to the true value)
+</pre>
+
+
+  <p>
+    <span class="highlight">Precision</span> = same result every time<br>
+    <span class="highlight">Accuracy</span> = correct result
+  </p>
+</section>
+
+<section>
+  <h2>Waveform Example (Signal Accuracy)</h2>
+
+  <p><span class="highlight">Ideal / Reference Signal</span></p>
+  <pre>
+Amplitude
+  ^
+  |      ┌───────┐      ┌───────┐
+  |      │       │      │       │
+  |──────┘       └──────┘       └───> Time
+  </pre>
+
+  <p><span class="highlight">Firmware-Measured Signal</span></p>
+  <pre>
+Amplitude
+  ^
+  |      ┌─────┐        ┌─────┐
+  |      │     │        │     │
+  |──────┘     └────────┘     └───> Time
+  </pre>
+
+  <p>
+    Differences in height or timing indicate
+    <span class="highlight">accuracy error</span>.
+  </p>
+</section>
+
+<section>
+  <h2>Common Firmware Mistakes That Reduce Accuracy</h2>
+
+  <ul>
+    <li>Wrong calibration constants</li>
+    <li>Incorrect scaling formula</li>
+    <li>Using <code>int</code> instead of <code>float</code></li>
+    <li>ADC reference voltage mismatch</li>
+    <li>Overflow or clipping</li>
+    <li>Missing temperature compensation</li>
+  </ul>
+</section>
+
+<section>
+  <h2>How Accuracy is Tested (In Simple Steps)</h2>
+
+  <pre>
+Apply Known Reference Input
+           ↓
+Read Firmware Output
+           ↓
+Calculate Error
+           ↓
+Compare with Spec
+           ↓
+PASS / FAIL
+  </pre>
+</section>
+
+
+</div>
+
+</body>
+</html>

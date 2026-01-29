@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Firmware Testing Concepts</title>
+  <!-- <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    :root{
+      --bg:#0b1220;
+      --card:#111a2e;
+      --accent:#18e0a8;
+      --muted:#8fa2c0;
+      --border:#0f2b48;
+    }
+
+    html,body{
+      margin:0;
+      padding:0;
+      font-family:Inter,Segoe UI,Arial;
+      background:var(--bg);
+      color:white;
+    }
+
+    .wrap{
+      max-width:960px;
+      margin:40px auto;
+      padding:24px;
+    }
+
+    h1,h2{
+      color:white;
+      margin-top:0;
+    }
+
+    p,li{
+      color:rgb(192, 192, 192);
+      line-height:1.6;
+    }
+
+    section{
+      background:var(--card);
+      padding:20px;
+      border-radius:12px;
+      margin-bottom:20px;
+    }
+
+    .highlight{
+      color:var(--accent);
+      font-weight:600;
+    }
+  </style> -->
+  
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="wrap">
+  <h1>Firmware Testing Concepts</h1>
+  <p>Common <span class="highlight">FW concepts</span> used while validating and testing embedded products.</p>
+
+  <section>
+    <h2>Functional Correctness</h2>
+    <ul>
+      <li><span class="highlight">Accuracy</span> – Closeness of FW output to the actual/reference value.</li>
+      <li><span class="highlight">Precision / Repeatability</span> – Same input gives same output every time.</li>
+      <li><span class="highlight">Resolution</span> – Smallest detectable change reported by FW.</li>
+      <li><span class="highlight">Range Handling</span> – Correct operation across min/max limits.</li>
+      <li><span class="highlight">Boundary Conditions</span> – Proper handling at limits and edges.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Timing & Performance</h2>
+    <ul>
+      <li><span class="highlight">Response Time / Latency</span> – Time taken to react to an input/event.</li>
+      <li><span class="highlight">Execution Time</span> – Time taken by tasks or ISRs.</li>
+      <li><span class="highlight">Throughput</span> – Data processed per unit time.</li>
+      <li><span class="highlight">Real-Time Constraints</span> – Tasks meet deadlines.</li>
+      <li><span class="highlight">Jitter</span> – Variation in execution or signal timing.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Stability & Reliability</h2>
+    <ul>
+      <li><span class="highlight">Soak / Long-Run Test</span> – Continuous operation without crash.</li>
+      <li><span class="highlight">Memory Leaks</span> – No gradual RAM/heap exhaustion.</li>
+      <li><span class="highlight">Watchdog Handling</span> – Recovery from hangs.</li>
+      <li><span class="highlight">Fault Tolerance</span> – Graceful handling of faults.</li>
+      <li><span class="highlight">Reset Recovery</span> – Clean startup after reset/power loss.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Error Handling & Robustness</h2>
+    <ul>
+      <li><span class="highlight">Error Detection</span> – Detect invalid states or data.</li>
+      <li><span class="highlight">Error Reporting</span> – Correct error codes/logs.</li>
+      <li><span class="highlight">Fail-Safe Behavior</span> – Safe state on failure.</li>
+      <li><span class="highlight">Exception Handling</span> – No undefined behavior.</li>
+      <li><span class="highlight">Input Validation</span> – Reject invalid inputs.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Communication Interfaces</h2>
+    <ul>
+      <li><span class="highlight">Protocol Compliance</span> – MODBUS, UART, SPI, I²C, CAN.</li>
+      <li><span class="highlight">Timeout Handling</span> – No hang on missing data.</li>
+      <li><span class="highlight">Data Integrity</span> – CRC/checksum verification.</li>
+      <li><span class="highlight">Retry Mechanism</span> – Controlled retries.</li>
+      <li><span class="highlight">Synchronization</span> – Proper master/slave timing.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Resource Management</h2>
+    <ul>
+      <li><span class="highlight">CPU Utilization</span> – No task starvation.</li>
+      <li><span class="highlight">Memory Usage</span> – Stack/heap within limits.</li>
+      <li><span class="highlight">Flash Usage</span> – Correct read/write.</li>
+      <li><span class="highlight">Power Consumption</span> – Sleep/wakeup correctness.</li>
+      <li><span class="highlight">Peripheral Sharing</span> – No resource conflicts.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Configuration & Calibration</h2>
+    <ul>
+      <li><span class="highlight">Calibration Accuracy</span> – Correct application of constants.</li>
+      <li><span class="highlight">Parameter Persistence</span> – Retained after power cycle.</li>
+      <li><span class="highlight">Default Configuration</span> – Safe factory defaults.</li>
+      <li><span class="highlight">Invalid Config Handling</span> – Reject or correct bad values.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Maintainability & Diagnostics</h2>
+    <ul>
+      <li><span class="highlight">Logging</span> – Useful debug information.</li>
+      <li><span class="highlight">Version Tracking</span> – FW version readable.</li>
+      <li><span class="highlight">Self-Test</span> – Power-on diagnostics.</li>
+      <li><span class="highlight">Code Coverage</span> – Tested paths.</li>
+    </ul>
+  </section>
+
+</div>
+
+</body>
+</html>
