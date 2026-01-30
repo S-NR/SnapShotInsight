@@ -161,14 +161,17 @@ function checkAnswer() {
   }
 
   explanation.style.display = "block";
-  explanation.getBoundingClientRect();
 
-  setTimeout(() => {
-    explanation.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-  }, 200);
+/* Force layout recalculation */
+explanation.getBoundingClientRect();
+
+/* Scroll AFTER layout is ready */
+setTimeout(() => {
+  explanation.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}, 100);
 }
 </script>
 
