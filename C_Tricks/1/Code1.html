@@ -5,6 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>C Puzzle – Post Increment Trap</title> 
 <link rel="stylesheet" href="../style.css">
+<style>
+
+ .explanation{
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+} 
+
+
+ .explanation:target{
+  max-height: 5000px; 
+  opacity: 1;
+  pointer-events: auto;
+} 
+</style>
 </head>
 
 <body>
@@ -37,8 +54,8 @@ int main() {
     <p><strong>Your Answer:</strong></p>
     <textarea id="answer" placeholder="Explain what happens when this code runs..."></textarea>
 
-    <button onclick="checkAnswer()">Submit Answer</button>
-     <!-- <a class="btn" href="#explanation" onclick="checkAnswer()">Submit Answer</a> -->
+    <!-- <button onclick="checkAnswer()">Submit Answer</button> -->
+     <a class="btn" href="#explanation" onclick="checkAnswer()">Submit Answer</a>
 
     <div id="result" class="result"></div>
   </section>
