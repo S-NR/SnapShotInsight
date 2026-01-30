@@ -136,9 +136,13 @@ Never write code whose correctness depends on evaluation order.
 
 <script>
 function checkAnswer() {
-  const ans = document.getElementById("answer").value.toLowerCase();
+  const answerBox = document.getElementById("answer");
+  const ans = answerBox.value.toLowerCase();
   const result = document.getElementById("result");
   const explanation = document.getElementById("explanation");
+
+  // 🔥 CRITICAL FOR MOBILE
+  answerBox.blur();
 
   const correct =
     ans.includes("infinite") ||
