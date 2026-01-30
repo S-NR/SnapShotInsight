@@ -106,7 +106,7 @@ send(data, 10);
 
 </div>
 
-<script>
+<!-- <script>
 function checkAnswer() {
   const ans = document.getElementById("answer").value.toLowerCase();
   const result = document.getElementById("result");
@@ -136,7 +136,46 @@ function checkAnswer() {
 
   explanation.style.display = "block";
 }
+</script> -->
+
+<script>
+function checkAnswer() {
+  const ans = document.getElementById("answer").value.toLowerCase();
+  const result = document.getElementById("result");
+  const explanation = document.getElementById("explanation");
+
+  const numberMatch = ans.match(/\b\d+\b/);
+  const numericAnswer = numberMatch ? Number(numberMatch[0]) : null;
+
+  const numericCorrect =
+    numericAnswer === 1 || numericAnswer === 2;
+
+  const conceptCorrect =
+    ans.includes("pointer") ||
+    ans.includes("decay") ||
+    ans.includes("int *") ||
+    ans.includes("array to pointer");
+
+  if (numericCorrect || conceptCorrect) {
+    result.innerHTML =
+      "✅ Correct! sizeof is applied to a pointer due to array-to-pointer decay.";
+    result.className = "result correct";
+  } else {
+    result.innerHTML =
+      "❌ Not quite. Hint: What does the array become when passed to a function?";
+    result.className = "result wrong";
+  }
+
+  explanation.style.display = "block";
+
+  // 👇 THIS IS THE IMPORTANT PART
+  explanation.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
 </script>
+
 
 </body>
 </html>
