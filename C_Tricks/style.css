@@ -100,3 +100,53 @@ textarea{
 }
 
 .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:var(--accent);color:#042018;text-decoration:none;font-weight:600}
+
+
+/* 📱 Mobile adjustments */
+@media (max-width: 768px) {
+
+  .wrap {
+    max-width: 100%;
+    margin: 16px auto;
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  h2 {
+    font-size: 1.15rem;
+  }
+
+  p, li {
+    font-size: 0.95rem;
+  }
+
+  section {
+    padding: 14px;
+    border-radius: 10px;
+  }
+
+  pre {
+    font-size: 0.85rem;
+    padding: 12px;
+  }
+
+  textarea {
+    min-height: 100px;
+    font-size: 0.95rem;
+  }
+
+  button,
+  .btn {
+    width: 100%;
+    text-align: center;
+    padding: 10px;
+    margin-top: 12px;
+  }
+}
+
+pre {
+  -webkit-overflow-scrolling: touch;
+}
