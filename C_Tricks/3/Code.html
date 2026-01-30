@@ -42,7 +42,9 @@ int main(void)
 
     <button onclick="checkAnswer()">Submit Answer</button>
 
-    <div id="result" class="result"></div>
+    <!-- <div id="result" class="result"></div> -->
+     <a class="btn" href="#explanation" onclick="checkAnswer()">Submit Answer</a>
+
   </section>
 
   <!-- EXPLANATION -->
@@ -107,20 +109,59 @@ send(data, 10);
 </div>
 
 <script>
-function checkAnswer() {
-  const answerBox = document.getElementById("answer");
-  const ans = answerBox.value.toLowerCase();
-  const result = document.getElementById("result");
-  const explanation = document.getElementById("explanation");
+// function checkAnswer() {
+//   const answerBox = document.getElementById("answer");
+//   const ans = answerBox.value.toLowerCase();
+//   const result = document.getElementById("result");
+//   const explanation = document.getElementById("explanation");
 
-  // 🔥 CRITICAL FOR MOBILE
-  answerBox.blur();
+//   // 🔥 CRITICAL FOR MOBILE
+//   answerBox.blur();
+
+//   const numberMatch = ans.match(/\b\d+\b/);
+//   const numericAnswer = numberMatch ? Number(numberMatch[0]) : null;
+
+//   const numericCorrect =
+//     numericAnswer === 1 || numericAnswer === 2;
+
+//   const conceptCorrect =
+//     ans.includes("pointer") ||
+//     ans.includes("decay") ||
+//     ans.includes("int *") ||
+//     ans.includes("array to pointer");
+
+//   if (numericCorrect || conceptCorrect) {
+//     result.innerHTML =
+//       "✅ Correct! sizeof is applied to a pointer due to array-to-pointer decay.";
+//     result.className = "result correct";
+//   } else {
+//     result.innerHTML =
+//       "❌ Not quite. Hint: What does the array become when passed to a function?";
+//     result.className = "result wrong";
+//   }
+
+//   explanation.style.display = "block";
+
+// /* Force layout recalculation */
+// explanation.getBoundingClientRect();
+
+// /* Scroll AFTER layout is ready */
+// setTimeout(() => {
+//   explanation.scrollIntoView({
+//     behavior: "smooth",
+//     block: "start"
+//   });
+// }, 100);
+
+// }
+function checkAnswer() {
+  const ans = document.getElementById("answer").value.toLowerCase();
+  const result = document.getElementById("result");
 
   const numberMatch = ans.match(/\b\d+\b/);
   const numericAnswer = numberMatch ? Number(numberMatch[0]) : null;
 
-  const numericCorrect =
-    numericAnswer === 1 || numericAnswer === 2;
+  const numericCorrect = numericAnswer === 1 || numericAnswer === 2;
 
   const conceptCorrect =
     ans.includes("pointer") ||
@@ -129,28 +170,14 @@ function checkAnswer() {
     ans.includes("array to pointer");
 
   if (numericCorrect || conceptCorrect) {
-    result.innerHTML =
+    result.textContent =
       "✅ Correct! sizeof is applied to a pointer due to array-to-pointer decay.";
     result.className = "result correct";
   } else {
-    result.innerHTML =
+    result.textContent =
       "❌ Not quite. Hint: What does the array become when passed to a function?";
     result.className = "result wrong";
   }
-
-  explanation.style.display = "block";
-
-/* Force layout recalculation */
-explanation.getBoundingClientRect();
-
-/* Scroll AFTER layout is ready */
-setTimeout(() => {
-  explanation.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-}, 100);
-
 }
 </script>
 
