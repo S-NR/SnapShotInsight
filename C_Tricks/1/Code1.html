@@ -162,16 +162,17 @@ function checkAnswer() {
 
   explanation.style.display = "block";
 
-  /* Force layout recalculation */
-  explanation.getBoundingClientRect();
+/* Force layout recalculation */
+explanation.getBoundingClientRect();
 
-  /* Scroll AFTER layout is ready */
-  setTimeout(() => {
-    explanation.scrollIntoView({
-      behavior: "smooth",
-      block: "start"
-    });
-  }, 100);
+/* Scroll AFTER layout is ready */
+setTimeout(() => {
+  explanation.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}, 100);
+
 }
 </script>
 
