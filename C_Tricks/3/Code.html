@@ -166,13 +166,26 @@ function checkAnswer() {
     result.className = "result wrong";
   }
 
+  // explanation.style.display = "block";
+
+  // // 👇 THIS IS THE IMPORTANT PART
+  // explanation.scrollIntoView({
+  //   behavior: "smooth",
+  //   block: "start"
+  // });
   explanation.style.display = "block";
 
-  // 👇 THIS IS THE IMPORTANT PART
+/* Force layout recalculation */
+explanation.getBoundingClientRect();
+
+/* Scroll AFTER layout is ready */
+setTimeout(() => {
   explanation.scrollIntoView({
     behavior: "smooth",
     block: "start"
   });
+}, 100);
+
 }
 </script>
 
