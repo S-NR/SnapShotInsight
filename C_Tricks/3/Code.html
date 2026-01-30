@@ -178,6 +178,19 @@ function checkAnswer() {
       "❌ Not quite. Hint: What does the array become when passed to a function?";
     result.className = "result wrong";
   }
+
+    explanation.style.display = "block";
+
+/* Force layout recalculation */
+explanation.getBoundingClientRect();
+
+/* Scroll AFTER layout is ready */
+setTimeout(() => {
+  explanation.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}, 100);
 }
 </script>
 
