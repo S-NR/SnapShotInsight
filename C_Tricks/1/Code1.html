@@ -160,7 +160,9 @@ function checkAnswer() {
     result.className = "result wrong";
   }
 
-  explanation.style.display = "block";
+  // explanation.style.display = "block";
+    // ✅ SAFE reveal (no display:none)
+  explanation.classList.add("show");
   explanation.getBoundingClientRect();
 
   setTimeout(() => {
