@@ -153,25 +153,22 @@ function checkAnswer() {
     ans.includes("loop never");
 
   if (correct) {
-    result.innerHTML = "✅ Correct! You identified the increment trap. congrats";
+    result.textContent = "✅ Correct! You identified the increment trap.";
     result.className = "result correct";
   } else {
-    result.innerHTML = "❌ Not quite. Please look closely at value = value++.";
+    result.textContent = "❌ Not quite. Look closely at value = value++.";
     result.className = "result wrong";
   }
 
   explanation.style.display = "block";
+  explanation.getBoundingClientRect();
 
-/* Force layout recalculation */
-explanation.getBoundingClientRect();
-
-/* Scroll AFTER layout is ready */
-setTimeout(() => {
-  explanation.scrollIntoView({
-    behavior: "smooth",
-    block: "start"
-  });
-}, 200);
+  setTimeout(() => {
+    explanation.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }, 200);
 }
 </script>
 
