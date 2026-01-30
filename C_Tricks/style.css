@@ -95,8 +95,24 @@ textarea{
   color:#ff6b6b;
 }
 
-.explanation{
+/* .explanation{
   display:none;
+} */
+
+/* Explanation hidden but still in layout */
+.explanation{
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: max-height 0.4s ease, opacity 0.3s ease;
+}
+
+/* Reveal when targeted */
+.explanation:target{
+  max-height: 5000px; /* large safe value */
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .btn{display:inline-block;padding:8px 12px;border-radius:8px;background:var(--accent);color:#042018;text-decoration:none;font-weight:600}
