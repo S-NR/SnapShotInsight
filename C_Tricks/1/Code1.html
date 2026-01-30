@@ -154,18 +154,18 @@ function checkAnswer() {
     result.className = "result wrong";
   }
 
-explanation.style.display = "block";
+  explanation.style.display = "block";
 
 /* Force layout recalculation */
 explanation.getBoundingClientRect();
 
-/* Scroll to stable, visible element (mobile-safe) */
+/* Scroll AFTER layout is ready */
 setTimeout(() => {
-  document.getElementById("result").scrollIntoView({
+  explanation.scrollIntoView({
     behavior: "smooth",
-    block: "center"
+    block: "start"
   });
-}, 120);
+}, 100);
 }
 </script>
 
