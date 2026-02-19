@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>STM32H7 Clock Crash Recovery</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <h1>STM32H735 — Clock Misconfiguration Recovery</h1>
+        <p class="lead">Snapshot guide for recovering an STM32H7 after PLL / high-frequency crash using BOOT0 method.</p>
+      </div>
+    </header>
+
+    <nav>
+      <div class="chip">Problem Pattern</div>
+      <div class="chip">Root Cause</div>
+      <div class="chip">Recovery Steps</div>
+      <div class="chip">Why It Works</div>
+      <div class="chip">Prevention</div>
+    </nav>
+
+    <section id="problem">
+      <h2>Typical Failure Pattern</h2>
+      <ul>
+        <li>Increased system clock (e.g., 400–480 MHz).</li>
+        <li>Board powers normally.</li>
+        <li>ST-LINK detected.</li>
+        <li>Target voltage shown (~3.3V).</li>
+        <li>❌ Cannot read Core ID.</li>
+        <li>❌ "No STM32 target found".</li>
+      </ul>
+      <p>This usually happens on <strong>STM32H735 (Cortex-M7)</strong> after wrong PLL configuration.</p>
+    </section>
+
+    <section id="cause">
+      <h2>Root Cause</h2>
+      <p>When increasing frequency incorrectly, the MCU crashes immediately after reset.</p>
+      <ul>
+        <li>Wrong HSE value (DK uses 25 MHz).</li>
+        <li>Flash latency too low.</li>
+        <li>Voltage scaling not configured.</li>
+        <li>Switching to PLL before ready.</li>
+        <li>PLL multipliers outside limits.</li>
+      </ul>
+      <p>The firmware enters HardFault before debugger attaches — making the MCU appear “dead”.</p>
+    </section>
+
+    <section>
+      <div class="svg-wrap">
+        <svg viewBox="0 0 900 220" preserveAspectRatio="xMidYMid meet">
+          <style>
+            .bg{fill:#071426}
+            .box{fill:#0f1724;stroke:#073444;stroke-width:1;rx:10}
+            .label{fill:#bfeefc;font-family:Inter,Arial;font-size:14px}
+            .arrow{stroke:#18e0a8;stroke-width:3;marker-end:url(#a)}
+            .muted{fill:#8fa2c0}
+          </style>
+          <defs>
+            <marker id="a" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L8,3 L0,6 z" fill="#18e0a8"/>
+            </marker>
+          </defs>
+          <rect width="100%" height="100%" class="bg"/>
+          <rect x="80" y="60" width="200" height="80" class="box"/>
+          <rect x="360" y="60" width="200" height="80" class="box"/>
+          <rect x="640" y="60" width="200" height="80" class="box"/>
+
+          <text x="180" y="105" class="label" text-anchor="middle">Reset</text>
+          <text x="460" y="105" class="label" text-anchor="middle">Bad PLL Config</text>
+          <text x="740" y="105" class="label" text-anchor="middle">HardFault</text>
+
+          <line x1="280" y1="100" x2="360" y2="100" class="arrow"/>
+          <line x1="560" y1="100" x2="640" y2="100" class="arrow"/>
+
+          <text x="350" y="170" class="muted">Debugger cannot attach — crash happens instantly</text>
+        </svg>
+      </div>
+    </section>
+
+    <section id="recovery">
+      <h2>Guaranteed Recovery Method (BOOT0)</h2>
+
+      <ol>
+        <li>Power OFF board (unplug USB).</li>
+        <li>Set <strong>BOOT0 = HIGH</strong> (place jumper).</li>
+        <li>Power ON board.</li>
+        <li>Open STM32CubeProgrammer.</li>
+        <li>Mode → <strong>Under Reset</strong></li>
+        <li>Reset Mode → <strong>Hardware Reset</strong></li>
+        <li>Frequency → <strong>5 kHz</strong></li>
+        <li>Click <strong>Connect</strong>.</li>
+        <li>Perform <strong>Full Chip Erase</strong>.</li>
+        <li>Power OFF → Set BOOT0 LOW → Restart.</li>
+      </ol>
+    </section>
+
+    <section id="why">
+      <h2>Why BOOT0 Recovery Works</h2>
+      <p>When BOOT0 is HIGH, the MCU boots from internal ROM bootloader instead of user Flash.</p>
+      <ul>
+        <li>Faulty firmware is completely bypassed.</li>
+        <li>No PLL misconfiguration executes.</li>
+        <li>Debugger can safely connect.</li>
+      </ul>
+      <p>This method always works unless Option Bytes are locked.</p>
+    </section>
+
+    <section id="prevention">
+      <h2>How to Prevent This Next Time</h2>
+      <ul>
+        <li>Set correct HSE value (25 MHz for DK).</li>
+        <li>Configure voltage scaling first.</li>
+        <li>Set correct Flash latency before switching clock.</li>
+        <li>Increase frequency gradually.</li>
+        <li>Test intermediate frequencies.</li>
+      </ul>
+    </section>
+
+    <section id="summary">
+      <h2>Golden Rule</h2>
+      <pre><code>If:
+  ST-LINK detected
+  Target voltage OK
+  Cannot read Core ID
+  After clock change
+
+Then:
+  It is almost always PLL / Flash latency crash.
+  Use BOOT0 recovery.
+</code></pre>
+    </section>
+
+    <footer>STM32H7 Debug Snapshot — Industrial Embedded Learning</footer>
+  </div>
+</body>
+</html>
