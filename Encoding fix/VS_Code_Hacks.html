@@ -30,24 +30,33 @@ function showCorruption() {
 <script>
 function showCorruption() {
 
-  const corrupted = `// Temperature: 25Â°C
+  let corrupted = `// Temperature: 25Â°C
 // User: MÃ¼ller
 // Status: DÃ©jÃ  vu
 // Unit: ÂµA`;
 
-  // Show corrupted code
-  document.getElementById("corruptedCode").textContent = corrupted;
+  // Only wrap actual corrupted byte sequences
+  const junkPatterns = [
+    "Ã¼",
+    "Ã©",
+    "Ã",
+    "Âµ",
+    "Â°",
+    "Â"
+  ];
+
+  junkPatterns.forEach(pattern => {
+    const regex = new RegExp(pattern, "g");
+    corrupted = corrupted.replace(regex, `<span class="blink">${pattern}</span>`);
+  });
+
+  document.getElementById("corruptedCode").innerHTML = corrupted;
   document.getElementById("corruptedSection").style.display = "block";
+  document.getElementById("ohNoLabel").style.opacity = "1";
 
-  // Show OH NO label
-  const label = document.getElementById("ohNoLabel");
-  label.style.opacity = "1";
-
-  // Reveal explanation section (NO SCROLL)
   const deep = document.getElementById("deepContent");
   deep.style.display = "block";
   deep.classList.add("show");
-
 }
 </script>
 

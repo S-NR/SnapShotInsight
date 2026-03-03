@@ -533,6 +533,22 @@ ul {
   opacity: 1;
 }
 
+#corruptedSection {
+  margin-left: 40px;
+}
+
+.blink {
+  color: #ff3b3b;
+  font-weight: bold;
+  animation: blinkAnim 0.8s infinite;
+}
+
+@keyframes blinkAnim {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.2; }
+  100% { opacity: 1; }
+}
+
 /* Mobile responsive */
 @media (max-width: 768px) {
   .side-by-side {
