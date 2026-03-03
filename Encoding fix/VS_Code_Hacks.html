@@ -151,7 +151,63 @@ Will changing encoding remove already updated junk?
 
 <section>
 <h2>⚠ Why This Happens</h2>
+<p>
+This occurs when a file is:
+</p>
 
+<ul>
+  <li>Saved in one encoding (e.g., UTF-8)</li>
+  <li>Opened using a different encoding (e.g., Windows-1252)</li>
+</ul>
+
+<p>
+When VS Code interprets bytes using the wrong encoding,
+it converts characters incorrectly.
+</p>
+
+<div class="block-flow">
+  <div class="block">
+    Original File
+    <small>UTF-8</small>
+  </div>
+
+  <div class="arrow right"></div>
+
+  <div class="block">
+    Opened As
+    <small>Windows-1252</small>
+  </div>
+
+  <div class="arrow right"></div>
+
+  <div class="block">
+    Result
+    <small>Corrupted Characters</small>
+  </div>
+</div>
+
+<p>OR</p>
+
+<div class="block-flow">
+  <div class="block">
+    Original File
+    <small>Windows-1252</small>
+  </div>
+
+  <div class="arrow right"></div>
+
+  <div class="block">
+    Opened As
+    <small>UTF-8</small>
+  </div>
+
+  <div class="arrow right"></div>
+
+  <div class="block">
+    Result
+    <small>Corrupted Characters</small>
+  </div>
+</div>
 <p>
 When a file saved as <span class="highlight">UTF-8</span> is opened
 as <span class="highlight">ISO-8859-1</span> (or vice versa),
@@ -228,64 +284,6 @@ Will changing encoding remove already updated junk?
 
 <section>
 <h2>⚠ Why This Happens</h2>
-
-<p>
-This occurs when a file is:
-</p>
-
-<ul>
-  <li>Saved in one encoding (e.g., UTF-8)</li>
-  <li>Opened using a different encoding (e.g., Windows-1252)</li>
-</ul>
-
-<p>
-When VS Code interprets bytes using the wrong encoding,
-it converts characters incorrectly.
-</p>
-
-<div class="block-flow">
-  <div class="block">
-    Original File
-    <small>UTF-8</small>
-  </div>
-
-  <div class="arrow right"></div>
-
-  <div class="block">
-    Opened As
-    <small>Windows-1252</small>
-  </div>
-
-  <div class="arrow right"></div>
-
-  <div class="block">
-    Result
-    <small>Corrupted Characters</small>
-  </div>
-</div>
-
-<p>OR</p>
-
-<div class="block-flow">
-  <div class="block">
-    Original File
-    <small>Windows-1252</small>
-  </div>
-
-  <div class="arrow right"></div>
-
-  <div class="block">
-    Opened As
-    <small>UTF-8</small>
-  </div>
-
-  <div class="arrow right"></div>
-
-  <div class="block">
-    Result
-    <small>Corrupted Characters</small>
-  </div>
-</div>
 
 </section>
 
