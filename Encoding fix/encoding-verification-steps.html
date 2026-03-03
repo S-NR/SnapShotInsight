@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Encoding Verification Steps</title>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="wrap">
+
+<a href="vs-encoding-fix.html" class="back">← Back</a>
+
+<h1>Encoding Alignment & Verification Process</h1>
+
+<section>
+<h2>1️⃣ VS Code Project Structure</h2>
+
+<p>This is how your project folder typically looks:</p>
+
+<pre>
+ProjectRoot/
+│
+├── .vscode/
+│   └── settings.json
+│
+├── src/
+│   ├── main.c
+│   ├── app.c
+│   └── app.h
+│
+├── include/
+│   └── config.h
+│
+└── README.md
+</pre>
+
+<p>
+Encoding settings can be defined:
+</p>
+
+<ul>
+  <li>Globally (User Settings)</li>
+  <li>Per Project inside <span class="highlight">.vscode/settings.json</span></li>
+</ul>
+
+</section>
+
+
+<section>
+<h2>2️⃣ Check IDE Encoding</h2>
+<ul>
+  <li>Open MPLAB / STM</li>
+  <li>Check default charset</li>
+  <li>Confirm if it is UTF-8 or ISO-8859-1</li>
+</ul>
+</section>
+
+
+<section>
+<h2>3️⃣ Update VS Code To Match</h2>
+
+<p>Open Command Palette:</p>
+
+<pre>
+Ctrl + Shift + P
+</pre>
+
+<p>Type:</p>
+
+<pre>
+Preferences: Open Settings (JSON)
+</pre>
+
+<p>Add or update:</p>
+
+<pre>
+"files.encoding": "utf8",
+"files.autoGuessEncoding": false
+</pre>
+
+<p>
+If your IDE uses ISO-8859-1 instead:
+</p>
+
+<pre>
+"files.encoding": "iso88591"
+</pre>
+
+</section>
+
+
+<section>
+<h2>4️⃣ Restart & Verify</h2>
+
+<ul>
+  <li>Close the project in VS Code completely</li>
+  <li>Close VS Code completely</li>
+  <li>Reopen project</li>
+  <li>Open a .c or .h file</li>
+  <li>Check bottom-right encoding indicator</li>
+</ul>
+
+</section>
+
+
+<section>
+<h2>5️⃣ Test & Confirm</h2>
+
+<p>Add a test comment:</p>
+
+<pre>
+// Test: ü é ñ © µ
+</pre>
+
+<ul>
+  <li>Save the file</li>
+  <li>Open the same file in IDE</li>
+  <li>Verify no junk characters appear</li>
+</ul>
+
+<p class="highlight">
+If no corrupted characters appear → Encoding alignment is correct.
+</p>
+
+</section>
+
+
+<section>
+<h2>6️⃣ Adding Encoding at Project Level (.vscode)</h2>
+
+<p>Create or open:</p>
+
+<pre>
+ProjectRoot/.vscode/settings.json
+</pre>
+
+<p>Add:</p>
+
+<pre>
+{
+  "files.encoding": "utf8",
+  "files.autoGuessEncoding": false
+}
+</pre>
+
+<p>
+This ensures everyone opening the project uses the same encoding.
+</p>
+
+</section>
+
+
+<section>
+<h2>7️⃣ Final Safety Checklist</h2>
+
+<ul>
+  <li>IDE encoding checked ✔</li>
+  <li>VS Code encoding updated ✔</li>
+  <li>VS Code restarted ✔</li>
+  <li>Bottom-right encoding verified ✔</li>
+  <li>Test special characters validated ✔</li>
+</ul>
+
+</section>
+
+
+<footer>
+Encoding Alignment Workflow – Embedded Safe Development
+</footer>
+
+</div>
+
+</body>
+</html>

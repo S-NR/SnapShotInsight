@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>VS Code Encoding Issue – Root Cause & Fix</title>
+
+<!-- Link to your provided CSS -->
+<link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+
+<div class="wrap">
+
+<h1>VS Code Encoding Issue – Root Cause & Final Fix</h1>
+
+<nav>
+  <div class="chip">Problem</div>
+  <div class="chip">Why It Happens</div>
+  <div class="chip">Will It Remove Junk?</div>
+  <div class="chip">Correct Fix</div>
+  <div class="chip">Prevention</div>
+</nav>
+
+<section>
+<h2>🔎 Problem Overview</h2>
+
+<p>
+After opening a file in VS Code, strange characters appeared like:
+</p>
+
+<pre>
+Ã© Ã¼ â€“ â€œ â€
+</pre>
+
+<p>
+Even after re-saving the file, the content sometimes remained corrupted.
+The main question was:
+</p>
+
+<p class="highlight">
+Will changing encoding remove already updated junk?
+</p>
+
+</section>
+
+
+<section>
+<h2>⚠ Why This Happens</h2>
+
+<p>
+This occurs when a file is:
+</p>
+
+<ul>
+  <li>Saved in one encoding (e.g., UTF-8)</li>
+  <li>Opened using a different encoding (e.g., Windows-1252)</li>
+</ul>
+
+<p>
+When VS Code interprets bytes using the wrong encoding,
+it converts characters incorrectly.
+</p>
+
+<div class="block-flow">
+  <div class="block">
+    Original File
+    <small>UTF-8</small>
+  </div>
+
+  <div class="arrow right"></div>
+
+  <div class="block">
+    Opened As
+    <small>Windows-1252</small>
+  </div>
+
+  <div class="arrow right"></div>
+
+  <div class="block">
+    Result
+    <small>Corrupted Characters</small>
+  </div>
+</div>
+
+<p>OR</p>
+
+<div class="block-flow">
+  <div class="block">
+    Original File
+    <small>Windows-1252</small>
+  </div>
+
+  <div class="arrow right"></div>
+
+  <div class="block">
+    Opened As
+    <small>UTF-8</small>
+  </div>
+
+  <div class="arrow right"></div>
+
+  <div class="block">
+    Result
+    <small>Corrupted Characters</small>
+  </div>
+</div>
+
+</section>
+
+
+<section>
+<h2>❓ Will Changing Encoding Remove Already Corrupted Text?</h2>
+
+<p>
+It depends.
+</p>
+
+<table>
+<tr>
+  <th>Situation</th>
+  <th>Result</th>
+</tr>
+<tr>
+  <td>File opened wrong but NOT saved</td>
+  <td>✅ Reopen with correct encoding fixes it</td>
+</tr>
+<tr>
+  <td>File opened wrong AND saved</td>
+  <td>❌ Junk is permanently written</td>
+</tr>
+</table>
+
+<p>
+Once corrupted text is saved, the original byte sequence is lost.
+Changing encoding afterward <span class="highlight">cannot magically restore it</span>.
+</p>
+
+</section>
+
+
+<section>
+<h2>🛠 Correct Fix (Before Saving)</h2>
+
+<div class="timeline">
+
+  <div class="time-block master-tx">
+    Step 1: Click Encoding in VS Code Status Bar
+    <small>Bottom right corner</small>
+  </div>
+
+  <div class="time-block slave-rx">
+    Step 2: Select "Reopen with Encoding"
+    <small>Do NOT choose Save yet</small>
+  </div>
+
+  <div class="time-block slave-tx">
+    Step 3: Choose UTF-8 (or correct encoding)
+    <small>File reloads properly</small>
+  </div>
+
+</div>
+
+</section>
+
+
+<section>
+<h2>💾 If You Already Saved Corrupted File</h2>
+
+<p>
+You must recover from:
+</p>
+
+<ul>
+  <li>Version control (Git)</li>
+  <li>File history / backup</li>
+  <li>Previous local copy</li>
+</ul>
+
+<pre>
+git checkout HEAD -- filename.ext
+</pre>
+
+<p>
+If no backup exists, recovery is usually not possible.
+</p>
+
+</section>
+
+
+<section>
+<h2>🔒 Prevent Future Issues</h2>
+
+<ul>
+  <li>Set default encoding to UTF-8 in VS Code settings</li>
+  <li>Avoid mixing editors with different encoding defaults</li>
+  <li>Use Git to track file changes</li>
+  <li>Enable autosave only after verifying file content</li>
+</ul>
+
+<pre>
+"files.encoding": "utf8"
+</pre>
+
+<br>
+
+<a href="encoding-verification-steps.html">
+  <button>Verify Encoding Alignment Step-by-Step →</button>
+</a>
+
+</section>
+
+
+<section>
+<h2>📌 Final Insight</h2>
+
+<p>
+Changing encoding fixes display issues only if the corrupted version
+was not saved.
+</p>
+
+<p class="highlight">
+Once junk text is saved, encoding change will NOT remove it.
+You must restore the original file.
+</p>
+
+</section>
+
+
+<footer>
+VS Code Encoding Insight – Clean & Safe Workflow
+</footer>
+
+</div>
+
+</body>
+</html>
