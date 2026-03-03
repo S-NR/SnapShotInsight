@@ -10,6 +10,7 @@
             font-family: Arial, sans-serif;
             background-color: #121212;
             color: #e0e0e0;
+            line-height: 1.6;
         }
         header {
             background: #1f1f1f;
@@ -17,18 +18,27 @@
             text-align: center;
             font-size: 24px;
             font-weight: bold;
+            border-bottom: 1px solid #2a2a2a;
         }
         .container {
             padding: 40px;
-            max-width: 1000px;
+            max-width: 1100px;
             margin: auto;
         }
-        .card {
+        .section {
             background: #1e1e1e;
-            padding: 25px;
+            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            box-shadow: 0 0 15px rgba(0,0,0,0.4);
             margin-bottom: 30px;
+            border: 1px solid #2c2c2c;
+        }
+        h2 {
+            color: #64b5f6;
+            margin-top: 0;
+        }
+        ul {
+            padding-left: 20px;
         }
         button {
             padding: 12px 20px;
@@ -37,10 +47,15 @@
             border: none;
             border-radius: 6px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 15px;
+            margin-top: 15px;
         }
         button:hover {
             background-color: #0039cb;
+        }
+        .highlight {
+            color: #58a6ff;
+            font-weight: bold;
         }
         footer {
             text-align: center;
@@ -49,34 +64,82 @@
             margin-top: 40px;
             font-size: 14px;
             color: #aaa;
+            border-top: 1px solid #2a2a2a;
         }
     </style>
 </head>
 <body>
 
 <header>
-    Embedded Firmware Development Insights
+    Embedded Firmware Development Insights – Knowledge Base
 </header>
 
 <div class="container">
 
-    <div class="card">
-        <h2>VS Code Encoding Protection Guide</h2>
+    <!-- Overview Section -->
+    <div class="section">
+        <h2>?? Issue Overview</h2>
         <p>
-            Prevent VS Code from silently modifying firmware source files
-            used in STM32, PIC, or other embedded toolchains.
+            When using <span class="highlight">VS Code</span> alongside embedded IDEs
+            (MPLAB X, STM32CubeIDE, Keil, etc.), source files may be silently modified.
+            This typically happens due to automatic encoding detection and file formatting behavior.
         </p>
-        <button onclick="openGuide()">Open Full Engineering Guide</button>
+    </div>
+
+    <!-- Why Section -->
+    <div class="section">
+        <h2>? Why Does This Happen?</h2>
+        <ul>
+            <li>VS Code defaults to UTF-8 encoding</li>
+            <li>Embedded IDEs often use Windows-1252 (ANSI)</li>
+            <li>Auto-guess encoding rewrites special characters</li>
+            <li>Line ending normalization changes file structure</li>
+        </ul>
+    </div>
+
+    <!-- What Section -->
+    <div class="section">
+        <h2>? What Problems Can It Cause?</h2>
+        <ul>
+            <li>Symbol corruption (°C, µA, m², etc.)</li>
+            <li>Unexpected Git diffs</li>
+            <li>Build inconsistencies</li>
+            <li>UI display glitches in embedded systems</li>
+        </ul>
+    </div>
+
+    <!-- How Section -->
+    <div class="section">
+        <h2>?? How Do We Prevent It?</h2>
+        <p>
+            The solution is to lock encoding at the workspace level and
+            standardize behavior across the entire project.
+        </p>
+        <button onclick="openEncodingGuide()">
+            Open Detailed Encoding Protection Guide
+        </button>
+    </div>
+
+    <!-- Best Practice Section -->
+    <div class="section">
+        <h2>? Best Practice Recommendation</h2>
+        <ul>
+            <li>Define encoding at project level (.vscode/settings.json)</li>
+            <li>Convert legacy files once</li>
+            <li>Reload VS Code after changes</li>
+            <li>Use .gitattributes for team safety</li>
+            <li>Avoid mixing UTF-8 and ANSI in embedded firmware</li>
+        </ul>
     </div>
 
 </div>
 
 <footer>
-    Internal Engineering Documentation
+    Internal Engineering Documentation | Encoding Control & Embedded Safety
 </footer>
 
 <script>
-    function openGuide() {
+    function openEncodingGuide() {
         window.location.href = "encoding_guide.html";
     }
 </script>
