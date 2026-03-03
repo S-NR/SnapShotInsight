@@ -501,6 +501,7 @@ ul {
 .ohno {
   position: absolute;
   right: -40px;
+  left: 105%;
   top: 20px;
   font-size: 48px;
   font-weight: 900;
