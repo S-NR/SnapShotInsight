@@ -10,6 +10,47 @@
 <link rel="stylesheet" href="style.css">
 
 </head>
+
+<!-- <script>
+function showCorruption() {
+
+  const corrupted = `// Temperature: 25Â°C
+// User: MÃ¼ller
+// Status: DÃ©jÃ  vu
+// Unit: ÂµA`;
+
+  document.getElementById("corruptedCode").textContent = corrupted;
+  document.getElementById("corruptedSection").style.display = "block";
+
+  const label = document.getElementById("ohNoLabel");
+  label.style.opacity = "1";
+}
+</script> -->
+
+<script>
+function showCorruption() {
+
+  const corrupted = `// Temperature: 25Â°C
+// User: MÃ¼ller
+// Status: DÃ©jÃ  vu
+// Unit: ÂµA`;
+
+  // Show corrupted code
+  document.getElementById("corruptedCode").textContent = corrupted;
+  document.getElementById("corruptedSection").style.display = "block";
+
+  // Show OH NO label
+  const label = document.getElementById("ohNoLabel");
+  label.style.opacity = "1";
+
+  // Reveal explanation section (NO SCROLL)
+  const deep = document.getElementById("deepContent");
+  deep.style.display = "block";
+  deep.classList.add("show");
+
+}
+</script>
+
 <body>
 
 <div class="wrap">
@@ -23,6 +64,156 @@
   <div class="chip">Correct Fix</div>
   <div class="chip">Prevention</div>
 </nav>
+
+<section>
+<h2>🤯 Hey… What’s This?</h2>
+
+<!-- <p>
+Your code looks perfectly fine inside your Embedded IDE.
+Now click the button below and see what happens when the same file
+is opened with the wrong encoding.
+</p> -->
+
+<p>Your code looks perfectly fine inside your Embedded IDE (such as MPLAB X, STM32CubeIDE, etc.).</p>
+
+<div class="side-by-side">
+
+  <div class="side-text">
+    <h3>Inside Embedded IDE</h3>
+    <pre id="originalCode">
+// Temperature: 25°C
+// User: Müller
+// Status: Déjà vu
+// Unit: µA</pre>
+    <p class="highlight">Encoding: ISO-8859-1</p>
+  </div>
+
+  <!-- <div class="side-text" id="corruptedSection" style="display:none;">
+    <h3>Opened in VS Code</h3>
+    <pre id="corruptedCode"></pre>
+    <p class="highlight">Encoding: UTF-8 (misinterpreted)</p>
+  </div> -->
+
+  <div class="side-text" id="corruptedSection" style="display:none; position:relative;">
+    <h3>Opened in VS Code</h3>
+    <pre id="corruptedCode"></pre>
+    <p class="highlight">Encoding: UTF-8 (misinterpreted)</p>
+    <div id="ohNoLabel" class="ohno">OH NO!</div>
+  </div>
+
+</div>
+<p>Now click the button below and see what happens when the same file is opened using the wrong encoding in another editor.</p>
+
+<br>
+
+<button onclick="showCorruption()">Open with VS Code</button>
+
+<p class="note">
+This simulates an encoding mismatch between IDE and editor.
+</p>
+
+</section>
+
+<div id="deepContent" style="display:none;">
+
+<section>
+<h2>🔎 Problem Overview</h2>
+
+<p>
+After opening a file in VS Code, strange characters appeared like:
+</p>
+
+<pre>
+Ã© Ã¼ â€“ â€œ â€
+</pre>
+
+<p>
+Even after re-saving the file, the content sometimes remained corrupted.
+The main question was:
+</p>
+
+<p class="highlight">
+Will changing encoding remove already updated junk?
+</p>
+
+</section>
+
+<section>
+<h2>⚠ Why This Happens</h2>
+
+<p>
+When a file saved as <span class="highlight">UTF-8</span> is opened
+as <span class="highlight">ISO-8859-1</span> (or vice versa),
+the same byte sequence is interpreted differently.
+</p>
+
+<ul>
+  <li>° becomes Â°</li>
+  <li>ü becomes Ã¼</li>
+  <li>é becomes Ã©</li>
+  <li>µ becomes Âµ</li>
+</ul>
+
+<p>
+This is not visible at the compiler level — it is a text interpretation issue.
+</p>
+
+</section>
+
+<section>
+<h2>🌍 Special Warning for UI / Multilingual Projects</h2>
+
+<p>
+If you are working with:
+</p>
+
+<ul>
+  <li>Multilingual UI (Chinese, Russian, German, etc.)</li>
+  <li>Units (°C, µA, Ω)</li>
+  <li>Special symbols</li>
+  <li>Customer-facing text</li>
+</ul>
+
+<p>
+Encoding mismatch can:
+</p>
+
+<ul>
+  <li>Change string byte length</li>
+  <li>Break protocol payload format</li>
+  <li>Increase Flash usage</li>
+  <li>Change CRC / checksum</li>
+  <li>Cause production firmware mismatch</li>
+</ul>
+
+<p class="highlight">
+Always align IDE and VS Code encoding before editing multilingual firmware.
+</p>
+
+</section>
+
+<section>
+<h2>🌍 Why This Is Critical for UI Projects</h2>
+
+<p>
+If your firmware contains multilingual UI strings,
+measurement units (°C, µA, Ω),
+or customer-facing text,
+an encoding mismatch can silently:
+</p>
+
+<ul>
+  <li>Change string length</li>
+  <li>Increase Flash usage</li>
+  <li>Break protocol packets</li>
+  <li>Modify CRC/checksum</li>
+  <li>Cause firmware validation failure</li>
+</ul>
+
+<p class="highlight">
+Encoding issues are not cosmetic — they can affect production firmware.
+</p>
+</section>
 
 <section>
 <h2>🔎 Problem Overview</h2>
@@ -227,6 +418,8 @@ You must restore the original file.
 </p>
 
 </section>
+
+</div>
 
 
 <footer>

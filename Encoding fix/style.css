@@ -496,6 +496,42 @@ ul {
   left: 66.66%;
 }
 
+/* Dramatic corruption indicator */
+
+.ohno {
+  position: absolute;
+  right: -40px;
+  top: 20px;
+  font-size: 48px;
+  font-weight: 900;
+  color: #ff2e2e;
+  text-shadow: 
+    0 0 10px rgba(255,0,0,0.8),
+    0 0 20px rgba(255,0,0,0.6),
+    0 0 30px rgba(255,0,0,0.4);
+  animation: popIn 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.6) rotate(-10deg);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+#deepContent {
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+#deepContent.show {
+  opacity: 1;
+}
 
 /* Mobile responsive */
 @media (max-width: 768px) {
