@@ -579,4 +579,36 @@ ul {
   .lane-title {
     margin-top: 20px;
   }
+
+  #corruptedSection {
+    margin-left: 0;   /* Remove desktop shift */
+    width: 100%;
+  }
+    
+  .ohno {
+    position: relative;
+    left: 0;
+    right: 0;
+    top: 10px;
+
+    font-size: 32px;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .side-by-side {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
+  }
+
+  .side-text {
+    width: 100%;
+  }
+
+  button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+  }
 }
