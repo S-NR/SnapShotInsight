@@ -117,7 +117,7 @@ is opened with the wrong encoding.
 
 <br>
 
-<button onclick="showCorruption()">Open with VS Code</button>
+<button onclick="showCorruption()"> Open with VS Code</button>
 
 <p class="note">
 This simulates an encoding mismatch between IDE and editor.
@@ -143,9 +143,7 @@ Even after re-saving the file, the content sometimes remained corrupted.
 The main question was:
 </p>
 
-<p class="highlight">
-Will changing encoding remove already updated junk?
-</p>
+<h2> Why?</h2>
 
 </section>
 
@@ -306,7 +304,7 @@ Changing encoding afterward <span class="highlight">cannot magically restore it<
   </div>
 
   <div class="time-block slave-tx">
-    Step 3: Choose UTF-8 (or correct encoding)
+    Step 3: Choose UTF-8 (or correct encoding based on original file)
     <small>File reloads properly</small>
   </div>
 
@@ -355,9 +353,11 @@ If no backup exists, recovery is usually not possible.
 
 <br>
 
-<a href="encoding-verification-steps.html">
+<!-- <a href="encoding-verification-steps.html">
   <button>Verify Encoding Alignment Step-by-Step →</button>
-</a>
+</a> -->
+
+<a href="encoding-verification-steps.html" class="back">Encoding Guide -></a>
 
 </section>
 
