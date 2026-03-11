@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Firmware Code Review Guidelines</title>
+
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<div class="wrap">
+
+<h1>Firmware Code Review Guidelines</h1>
+
+<p>
+A structured checklist for reviewing <span class="highlight">embedded firmware source code</span>.
+These rules help detect bugs, unsafe memory usage, race conditions, and hardware misuse.
+</p>
+
+<a href="fw_code_review_rules.md" download>
+  <button>Download Markdown Guidelines</button>
+</a>
+
+<nav>
+
+<a class="chip" href="#copilot">Copilot Review</a>
+<a class="chip" href="#memory">Memory Safety</a>
+<a class="chip" href="#isr">ISR Safety</a>
+<a class="chip" href="#concurrency">Concurrency</a>
+<a class="chip" href="#registers">Registers</a>
+<a class="chip" href="#dma">DMA</a>
+<a class="chip" href="#realtime">Real-Time</a>
+<a class="chip" href="#watchdog">Watchdog</a>
+<a class="chip" href="#peripherals">Peripherals</a>
+<a class="chip" href="#state">State Machine</a>
+<a class="chip" href="#errors">Error Handling</a>
+
+</nav>
+
+<section id="copilot">
+
+<h2>Copilot Review Instructions</h2>
+
+<ul>
+<li>Scan the entire file or module first</li>
+<li>Identify issues using the checklist sections</li>
+<li>Prioritize issues by severity</li>
+<li>Provide recommended fixes</li>
+</ul>
+
+<p>When reporting issues include:</p>
+
+<ul>
+<li>File name</li>
+<li>Function name</li>
+<li>Problematic code snippet</li>
+<li>Risk explanation</li>
+<li>Recommended fix</li>
+</ul>
+
+</section>
+
+<section id="memory">
+
+<h2>Memory Safety</h2>
+
+<ul>
+<li>Buffer overflow risks</li>
+<li>Array index out-of-bounds</li>
+<li>NULL pointer dereference</li>
+<li>Uninitialized pointers</li>
+<li>Integer overflow</li>
+<li>Stack overflow risks</li>
+</ul>
+
+<h3>Example Risk</h3>
+
+<pre>
+char buf[8];
+strcpy(buf, input);
+</pre>
+
+<h3>Safer Implementation</h3>
+
+<pre>
+char buf[8];
+strncpy(buf, input, sizeof(buf)-1);
+buf[sizeof(buf)-1] = '\0';
+</pre>
+
+</section>
+
+<section id="isr">
+
+<h2>Interrupt Handling (ISR)</h2>
+
+<ul>
+<li>Long execution time inside ISR</li>
+<li>Blocking functions inside ISR</li>
+<li>Shared variables without <span class="highlight">volatile</span></li>
+<li>Race conditions with main loop</li>
+</ul>
+
+<h3>Incorrect ISR</h3>
+
+<pre>
+void UART_ISR()
+{
+    printf("RX");
+}
+</pre>
+
+<p>ISR should capture the event quickly and exit.</p>
+
+</section>
+
+<section id="concurrency">
+
+<h2>Concurrency and Race Conditions</h2>
+
+<ul>
+<li>Shared variables between ISR and main protected</li>
+<li>Atomic access for shared data</li>
+<li>Critical sections implemented</li>
+</ul>
+
+<pre>
+__disable_irq();
+sharedValue++;
+__enable_irq();
+</pre>
+
+</section>
+
+<section id="registers">
+
+<h2>Hardware Register Access</h2>
+
+<ul>
+<li>Registers accessed using bit masks</li>
+<li>No direct overwrite of configuration registers</li>
+<li>Reserved bits preserved</li>
+</ul>
+
+<h3>Bad Example</h3>
+
+<pre>
+REG = 0x01;
+</pre>
+
+<h3>Better</h3>
+
+<pre>
+REG |= (1U << 0);
+</pre>
+
+</section>
+
+<section id="dma">
+
+<h2>DMA Safety</h2>
+
+<ul>
+<li>DMA buffers not modified during transfer</li>
+<li>Transfer completion checked</li>
+<li>Buffer alignment correct</li>
+<li>Cache coherence handled</li>
+</ul>
+
+</section>
+
+<section id="realtime">
+
+<h2>Real-Time Behavior</h2>
+
+<ul>
+<li>No blocking delays in critical paths</li>
+<li>Watchdog serviced in long loops</li>
+<li>No heavy computation in ISR</li>
+</ul>
+
+</section>
+
+<section id="watchdog">
+
+<h2>Watchdog Handling</h2>
+
+<ul>
+<li>Watchdog enabled when required</li>
+<li>Watchdog periodically refreshed</li>
+<li>No infinite loops without watchdog reset</li>
+<li>System recovery strategy implemented</li>
+</ul>
+
+</section>
+
+<section id="peripherals">
+
+<h2>Peripheral Usage</h2>
+
+<ul>
+<li>UART buffers validated</li>
+<li>SPI transfers protected</li>
+<li>I2C error conditions handled</li>
+<li>Timeout mechanisms implemented</li>
+</ul>
+
+</section>
+
+<section id="state">
+
+<h2>State Machine Logic</h2>
+
+<ul>
+<li>All states handled in switch statements</li>
+<li>Default case implemented</li>
+<li>No illegal state transitions</li>
+<li>Timeout recovery implemented</li>
+</ul>
+
+</section>
+
+<section id="errors">
+
+<h2>Error Handling</h2>
+
+<ul>
+<li>Return values always checked</li>
+<li>Timeout handling implemented</li>
+<li>Retry mechanisms defined</li>
+<li>Error states logged</li>
+</ul>
+
+<pre>
+if(UART_Send(data) != UART_OK)
+{
+    handleError();
+}
+</pre>
+
+</section>
+
+<section>
+
+<h2>Review Severity Levels</h2>
+
+<ul>
+<li><span class="highlight">Critical</span> – crash risk, memory corruption</li>
+<li><span class="highlight">High</span> – functional failures</li>
+<li><span class="highlight">Medium</span> – reliability issues</li>
+<li><span class="highlight">Low</span> – style or maintainability improvements</li>
+</ul>
+
+</section>
+
+<footer>
+
+Firmware Code Review Checklist • Embedded Systems Quality Guide
+
+</footer>
+
+</div>
+
+</body>
+</html>
