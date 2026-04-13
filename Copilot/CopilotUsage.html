@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Model Usage Guide - Firmware & Code Review</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        background: #f4f6f8;
+        color: #333;
+    }
+    h1, h2 {
+        color: #2c3e50;
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-bottom: 20px;
+        background: white;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: left;
+    }
+    th {
+        background-color: #2c3e50;
+        color: white;
+    }
+    .highlight {
+        background-color: #dff0d8;
+    }
+    .section {
+        background: white;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+</style>
+</head>
+
+<body>
+
+<h1>?? AI Model Usage Guide for Firmware Development</h1>
+
+<div class="section">
+<h2>?? Model Comparison</h2>
+<table>
+<tr>
+<th>Model</th>
+<th>Strength</th>
+<th>Weakness</th>
+<th>Best Use</th>
+</tr>
+
+<tr class="highlight">
+<td>GPT-5.2 Codex</td>
+<td>Precise coding, embedded systems</td>
+<td>Less descriptive output</td>
+<td>Code fixes, optimization, STM32</td>
+</tr>
+
+<tr>
+<td>GPT-5.3</td>
+<td>Documentation, structured output</td>
+<td>Not best for low-level code</td>
+<td>Reports, summaries, MD files</td>
+</tr>
+
+<tr class="highlight">
+<td>Claude 3.5 Sonnet</td>
+<td>Deep reasoning, large code understanding</td>
+<td>Slightly verbose</td>
+<td>Code review, architecture analysis</td>
+</tr>
+
+<tr>
+<td>Gemini 1.5 Pro</td>
+<td>Huge context window</td>
+<td>Weaker embedded precision</td>
+<td>Full repo analysis</td>
+</tr>
+
+</table>
+</div>
+
+<div class="section">
+<h2>?? Best Model by Task</h2>
+<table>
+<tr>
+<th>Task</th>
+<th>Best Model</th>
+<th>Why</th>
+</tr>
+
+<tr>
+<td>Code Review</td>
+<td>Claude 3.5 Sonnet</td>
+<td>Finds deep issues and inefficiencies</td>
+</tr>
+
+<tr>
+<td>Flash Optimization</td>
+<td>GPT-5.2 Codex</td>
+<td>Understands low-level memory constraints</td>
+</tr>
+
+<tr>
+<td>Code Implementation</td>
+<td>GPT-5.2 Codex</td>
+<td>Accurate and reliable code generation</td>
+</tr>
+
+<tr>
+<td>Documentation</td>
+<td>GPT-5.3</td>
+<td>Clean formatting and readability</td>
+</tr>
+
+<tr>
+<td>Architecture Analysis</td>
+<td>Claude</td>
+<td>Strong reasoning and trade-off analysis</td>
+</tr>
+
+<tr>
+<td>Large Codebase Scan</td>
+<td>Gemini</td>
+<td>Handles massive context efficiently</td>
+</tr>
+
+</table>
+</div>
+
+<div class="section">
+<h2>?? Recommended Workflow</h2>
+
+<ol>
+<li><b>Step 1:</b> Use Claude ? Deep code review</li>
+<li><b>Step 2:</b> Use GPT-5.2 Codex ? Optimize code</li>
+<li><b>Step 3:</b> Use GPT-5.3 ? Generate documentation</li>
+</ol>
+
+</div>
+
+<div class="section">
+<h2>?? Additional Tools & Options</h2>
+
+<table>
+<tr>
+<th>Tool</th>
+<th>Use Case</th>
+</tr>
+
+<tr>
+<td>GitHub Copilot</td>
+<td>Inline coding assistance</td>
+</tr>
+
+<tr>
+<td>Cursor IDE</td>
+<td>AI-powered code editing + refactoring</td>
+</tr>
+
+<tr>
+<td>SonarQube</td>
+<td>Static code analysis (bugs, smells)</td>
+</tr>
+
+<tr>
+<td>Cppcheck</td>
+<td>Embedded C static analysis</td>
+</tr>
+
+<tr>
+<td>STM32CubeIDE Analyzer</td>
+<td>Memory and performance analysis</td>
+</tr>
+
+</table>
+
+</div>
+
+<div class="section">
+<h2>?? Key Recommendations</h2>
+<ul>
+<li>Use Codex for firmware-level changes</li>
+<li>Use Claude for identifying hidden issues</li>
+<li>Use GPT-5.3 for final documentation</li>
+<li>Avoid using a single model for all tasks</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>?? Final Insight</h2>
+<p>
+Best results come from combining models:
+<br><br>
+<b>Claude ? Think</b><br>
+<b>Codex ? Build</b><br>
+<b>GPT-5.3 ? Explain</b>
+</p>
+</div>
+
+</body>
+</html>
