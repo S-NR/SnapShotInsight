@@ -45,110 +45,93 @@
 
 <body>
 
-<h1>?? AI Model Usage Guide for Firmware Development</h1>
+<div class="wrap">
 
-<div class="section">
+<h1>?? AI Model Usage Guide (Firmware + Code Review)</h1>
+
+<nav>
+  <div class="chip">Code Review</div>
+  <div class="chip">Flash Optimization</div>
+  <div class="chip">Documentation</div>
+  <div class="chip">Architecture</div>
+</nav>
+
+<section>
 <h2>?? Model Comparison</h2>
+
 <table>
 <tr>
 <th>Model</th>
 <th>Strength</th>
-<th>Weakness</th>
 <th>Best Use</th>
 </tr>
 
-<tr class="highlight">
-<td>GPT-5.2 Codex</td>
-<td>Precise coding, embedded systems</td>
-<td>Less descriptive output</td>
-<td>Code fixes, optimization, STM32</td>
-</tr>
-
 <tr>
-<td>GPT-5.3</td>
-<td>Documentation, structured output</td>
-<td>Not best for low-level code</td>
-<td>Reports, summaries, MD files</td>
-</tr>
-
-<tr class="highlight">
-<td>Claude 3.5 Sonnet</td>
+<td class="highlight">Claude 3.5 Sonnet</td>
 <td>Deep reasoning, large code understanding</td>
-<td>Slightly verbose</td>
 <td>Code review, architecture analysis</td>
 </tr>
 
 <tr>
-<td>Gemini 1.5 Pro</td>
-<td>Huge context window</td>
-<td>Weaker embedded precision</td>
-<td>Full repo analysis</td>
-</tr>
-
-</table>
-</div>
-
-<div class="section">
-<h2>?? Best Model by Task</h2>
-<table>
-<tr>
-<th>Task</th>
-<th>Best Model</th>
-<th>Why</th>
+<td class="highlight">GPT-5.2 Codex</td>
+<td>Low-level coding, embedded precision</td>
+<td>Flash optimization, STM32 coding</td>
 </tr>
 
 <tr>
-<td>Code Review</td>
-<td>Claude 3.5 Sonnet</td>
-<td>Finds deep issues and inefficiencies</td>
-</tr>
-
-<tr>
-<td>Flash Optimization</td>
-<td>GPT-5.2 Codex</td>
-<td>Understands low-level memory constraints</td>
-</tr>
-
-<tr>
-<td>Code Implementation</td>
-<td>GPT-5.2 Codex</td>
-<td>Accurate and reliable code generation</td>
-</tr>
-
-<tr>
-<td>Documentation</td>
 <td>GPT-5.3</td>
-<td>Clean formatting and readability</td>
+<td>Structured output, documentation</td>
+<td>Reports, markdown generation</td>
 </tr>
 
 <tr>
-<td>Architecture Analysis</td>
-<td>Claude</td>
-<td>Strong reasoning and trade-off analysis</td>
-</tr>
-
-<tr>
-<td>Large Codebase Scan</td>
-<td>Gemini</td>
-<td>Handles massive context efficiently</td>
+<td>Gemini 1.5 Pro</td>
+<td>Huge context handling</td>
+<td>Full repository scan</td>
 </tr>
 
 </table>
+</section>
+
+<section>
+<h2>?? Best Model by Task</h2>
+
+<div class="block-flow">
+  <div class="block">Code Review <small>Claude</small></div>
+  <div class="arrow right"></div>
+  <div class="block">Optimize Code <small>Codex</small></div>
+  <div class="arrow right"></div>
+  <div class="block">Documentation <small>GPT-5.3</small></div>
 </div>
 
-<div class="section">
+</section>
+
+<section>
 <h2>?? Recommended Workflow</h2>
 
-<ol>
-<li><b>Step 1:</b> Use Claude ? Deep code review</li>
-<li><b>Step 2:</b> Use GPT-5.2 Codex ? Optimize code</li>
-<li><b>Step 3:</b> Use GPT-5.3 ? Generate documentation</li>
-</ol>
+<div class="timeline">
+
+<div class="time-block master-tx">
+Step 1: Deep Code Review  
+<small>Use Claude</small>
+</div>
+
+<div class="time-block slave-rx">
+Step 2: Flash Optimization  
+<small>Use GPT-5.2 Codex</small>
+</div>
+
+<div class="time-block slave-tx">
+Step 3: Documentation  
+<small>Use GPT-5.3</small>
+</div>
 
 </div>
 
-<div class="section">
-<h2>?? Additional Tools & Options</h2>
+</section>
+
+<section>
+<h2>?? Additional Tools</h2>
 
 <table>
 <tr>
@@ -163,47 +146,43 @@
 
 <tr>
 <td>Cursor IDE</td>
-<td>AI-powered code editing + refactoring</td>
+<td>AI code editing + refactoring</td>
 </tr>
 
 <tr>
 <td>SonarQube</td>
-<td>Static code analysis (bugs, smells)</td>
+<td>Static code analysis</td>
 </tr>
 
 <tr>
 <td>Cppcheck</td>
-<td>Embedded C static analysis</td>
+<td>Embedded C analysis</td>
 </tr>
 
 <tr>
 <td>STM32CubeIDE Analyzer</td>
-<td>Memory and performance analysis</td>
+<td>Memory + performance tracking</td>
 </tr>
 
 </table>
 
-</div>
+</section>
 
-<div class="section">
-<h2>?? Key Recommendations</h2>
-<ul>
-<li>Use Codex for firmware-level changes</li>
-<li>Use Claude for identifying hidden issues</li>
-<li>Use GPT-5.3 for final documentation</li>
-<li>Avoid using a single model for all tasks</li>
-</ul>
-</div>
-
-<div class="section">
+<section>
 <h2>?? Final Insight</h2>
+
 <p>
-Best results come from combining models:
-<br><br>
-<b>Claude ? Think</b><br>
-<b>Codex ? Build</b><br>
-<b>GPT-5.3 ? Explain</b>
+<span class="highlight">Claude</span> ? Think & Analyze<br>
+<span class="highlight">Codex</span> ? Build & Optimize<br>
+<span class="highlight">GPT-5.3</span> ? Document & Present
 </p>
+
+</section>
+
+<footer>
+Built for Firmware Optimization Workflow ?
+</footer>
+
 </div>
 
 </body>
