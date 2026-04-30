@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>STM32H563 External 5V Supply Analysis</title>
+
+  <!-- Link your existing CSS -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<div class="wrap">
+
+  <h1>STM32H563 External 5V Supply - Snapshot Insight</h1>
+
+  <p>
+    Analysis of external powering issues observed while using
+    <span class="highlight">VIN 5V / E5V</span> on the
+    STM32H563 Nucleo board without ST-LINK USB connection.
+  </p>
+
+  <nav>
+    <div class="chip">VIN vs E5V</div>
+    <div class="chip">Boot Failure</div>
+    <div class="chip">Clock Stability</div>
+    <div class="chip">ST-LINK Dependency</div>
+    <div class="chip">Power Sequencing</div>
+  </nav>
+
+  <!-- ===================================================== -->
+  <section>
+    <h2>Observed Behaviour</h2>
+
+    <table>
+      <tr>
+        <th>Condition</th>
+        <th>Result</th>
+      </tr>
+
+      <tr>
+        <td>Powered using ST-LINK USB</td>
+        <td>Board boots correctly, UART banner visible</td>
+      </tr>
+
+      <tr>
+        <td>External 5V + ST-LINK connected</td>
+        <td>Board works correctly</td>
+      </tr>
+
+      <tr>
+        <td>Remove ST-LINK after boot</td>
+        <td>Board continues running</td>
+      </tr>
+
+      <tr>
+        <td>Cold power-up using only VIN/E5V</td>
+        <td>No UART output, board does not boot correctly</td>
+      </tr>
+
+      <tr>
+        <td>LD5 ON</td>
+        <td>Board receives power</td>
+      </tr>
+
+      <tr>
+        <td>LD4 / LD6 OFF</td>
+        <td>Application or debug startup not completing</td>
+      </tr>
+    </table>
+  </section>
+
+  <!-- ===================================================== -->
+  <section>
+    <h2>Current Power Configuration</h2>
+
+    <div class="block-flow">
+
+      <div class="block">
+        External 5V Supply
+        <small>Bench Supply / Adapter</small>
+      </div>
+
+      <div class="arrow right"></div>
+
+      <div class="block">
+        VIN 5V / E5V
+        <small>Nucleo Input</small>
+      </div>
+
+      <div class="arrow right"></div>
+
+      <div class="block">
+        Onboard Regulators
+        <small>3.3V Generation</small>
+      </div>
+
+      <div class="arrow right"></div>
+
+      <div class="block">
+        STM32H563
+        <small>MCU Boot</small>
+      </div>
+
+    </div>
+
+    <p class="note">
+      IMPORTANT: VIN/E5V powering path behaves differently from ST-LINK USB power path.
+    </p>
+  </section>
+
+  <!-- ===================================================== -->
+  <section>
+    <h2>Most Probable Root Causes</h2>
+
+    <div class="timeline">
+
+      <div class="time-block">
+        1. Clock Startup Instability
+        <small>
+          PLL/Clock configuration may become unstable during cold boot when external power ramps differently.
+          ST-LINK USB often provides cleaner startup timing.
+        </small>
+      </div>
+
+      <div class="time-block">
+        2. Power Ramp Timing Issue
+        <small>
+          External supply rise time may be slower/faster causing improper PLL lock or peripheral initialization failure.
+        </small>
+      </div>
+
+      <div class="time-block">
+        3. HSE Oscillator Startup Failure
+        <small>
+          Ethernet RMII depends heavily on clock stability.
+          HSE startup timing may fail only during external-only power boot.
+        </small>
+      </div>
+
+      <div class="time-block">
+        4. Voltage Drop During Boot
+        <small>
+          External supply may dip briefly during initialization causing brownout-like behaviour.
+        </small>
+      </div>
+
+      <div class="time-block">
+        5. ST-LINK Side Effects
+        <small>
+          ST-LINK connection may unintentionally stabilize NRST, SWD, ground reference,
+          or startup sequencing.
+        </small>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <section>
+    <h2>Why Ethernet Can Be Affected</h2>
+
+    <div class="side-by-side">
+
+      <div class="side-text">
+        <ul>
+          <li>Ethernet RMII requires precise clock timing.</li>
+          <li>PLL instability can prevent ETH MAC startup.</li>
+          <li>NetX waits for Ethernet driver readiness.</li>
+          <li>Cold boot instability may block IP initialization.</li>
+          <li>PHY reset timing may fail during external-only boot.</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <section>
+    <h2>Recommended Investigation Order</h2>
+
+    <div class="register-map">
+
+      <div class="reg">
+        <span>STEP 1</span>
+        <small>Reduce system clock frequency temporarily</small>
+      </div>
+
+      <div class="reg">
+        <span>STEP 2</span>
+        <small>Disable PLL2 / PLL3 temporarily</small>
+      </div>
+
+      <div class="reg">
+        <span>STEP 3</span>
+        <small>Test using HSI instead of HSE</small>
+      </div>
+
+      <div class="reg">
+        <span>STEP 4</span>
+        <small>Disable Ethernet temporarily</small>
+      </div>
+
+      <div class="reg">
+        <span>STEP 5</span>
+        <small>Add startup delay before Ethernet init</small>
+      </div>
+
+      <div class="reg">
+        <span>STEP 6</span>
+        <small>Verify NRST behaviour during cold boot</small>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <section>
+    <h2>Recommended Immediate Tests</h2>
+
+<pre>
+// TEMP TEST 1
+// Use HSI clock only
+
+// TEMP TEST 2
+// Disable Ethernet initialization
+
+// TEMP TEST 3
+tx_thread_sleep(100);
+
+// before ethernet_Init()
+
+// TEMP TEST 4
+// Reduce SYSCLK temporarily
+
+// TEMP TEST 5
+// Check if appMain_entry() is reached
+</pre>
+
+  </section>
+
+  <!-- ===================================================== -->
+  <section>
+    <h2>Key Technical Insight</h2>
+
+    <p>
+      Since the board:
+    </p>
+
+    <ul>
+      <li>Works after ST-LINK-assisted startup</li>
+      <li>Continues running after cable removal</li>
+      <li>Fails only during cold external boot</li>
+    </ul>
+
+    <p>
+      the issue is likely NOT firmware logic failure,
+      but rather:
+    </p>
+
+    <div class="card">
+      <span class="highlight">
+        Power sequencing, clock startup, or reset timing instability during cold boot.
+      </span>
+    </div>
+
+  </section>
+
+  <!-- ===================================================== -->
+  <footer>
+    STM32H563 External Power Boot Investigation Snapshot
+  </footer>
+
+</div>
+</body>
+</html>
