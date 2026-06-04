@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub Copilot AIC Technical Deep Dive</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+<h1>GitHub Copilot AI Credits (AIC) – Technical Deep Dive</h1>
+<p>Comprehensive guide covering the June 2026 Copilot billing changes, AI Credits, token accounting, model selection, agent usage, caching, memory.md workflows, and optimization strategies.</p>
+
+<nav>
+<a class="chip" href="#changes">What Changed</a>
+<a class="chip" href="#tokens">Tokens</a>
+<a class="chip" href="#pricing">Model Pricing</a>
+<a class="chip" href="#agent">Agent Mode</a>
+<a class="chip" href="#execution">Command Execution</a>
+<a class="chip" href="#memory">memory.md</a>
+<a class="chip" href="#optimization">Optimization</a>
+<a class="chip" href="#realworld">Real Example</a>
+</nav>
+
+<section id="changes">
+<h2>1. What Changed?</h2>
+<table>
+<tr><th>Before</th><th>After (June 2026)</th></tr>
+<tr><td>Premium Request Units (PRUs)</td><td>AI Credits (AICs)</td></tr>
+<tr><td>Flat allowance model</td><td>Usage based on model and token consumption</td></tr>
+<tr><td>Minimal model cost differences</td><td>Model selection significantly impacts cost</td></tr>
+</table>
+<p>1 AI Credit (AIC) = $0.01 USD.</p>
+</section>
+
+<section id="tokens">
+<h2>2. Understanding Tokens</h2>
+<p>Models are billed per million tokens. A token is approximately a word fragment, code fragment, or symbol.</p>
+<table>
+<tr><th>Type</th><th>Description</th></tr>
+<tr><td>Input</td><td>New prompt content sent to the model</td></tr>
+<tr><td>Cached Input</td><td>Previously processed content reused at lower cost</td></tr>
+<tr><td>Cache Write</td><td>Creating cache entries for future reuse</td></tr>
+<tr><td>Output</td><td>Model generated response</td></tr>
+</table>
+<pre>
+Prompt 1:
+20,000 tokens -> Full Input Rate
+
+Prompt 2:
+20,000 cached tokens -> Cached Rate
+10,000 new tokens -> Full Input Rate
+</pre>
+
+<p>
+  <a class="chip" href="token details.html">
+    📘 Read More: Token Deep Dive
+  </a>
+</p>
+</section>
+
+<section id="pricing">
+<h2>3. Model Pricing Summary</h2>
+<table>
+<tr><th>Model</th><th>Category</th><th>Input AIC/1M</th><th>Cached</th><th>Output</th></tr>
+<tr><td>GPT-5 Mini</td><td>Lightweight</td><td>25</td><td>2.5</td><td>200</td></tr>
+<tr><td>GPT-5.4 Nano</td><td>Lightweight</td><td>20</td><td>2</td><td>125</td></tr>
+<tr><td>GPT-5.4 Mini</td><td>Lightweight</td><td>75</td><td>7.5</td><td>450</td></tr>
+<tr><td>GPT-4.1</td><td>Versatile</td><td>200</td><td>50</td><td>800</td></tr>
+<tr><td>GPT-5.2</td><td>Versatile</td><td>175</td><td>17.5</td><td>1400</td></tr>
+<tr><td>GPT-5.4</td><td>Versatile</td><td>250</td><td>25</td><td>1500</td></tr>
+<tr><td>GPT-5.2 Codex</td><td>Powerful</td><td>175</td><td>17.5</td><td>1400</td></tr>
+<tr><td>GPT-5.3 Codex</td><td>Powerful</td><td>175</td><td>17.5</td><td>1400</td></tr>
+</table>
+</section>
+
+<section id="copilot-modes">
+<h2>4. Copilot Interaction Modes</h2>
+
+<p>
+Different Copilot modes perform different levels of analysis and may consume
+different amounts of AI Credits depending on the files, tools and context involved.
+</p>
+<div class="card">
+<h3>Mode Comparison</h3>
+
+<table>
+<tr>
+<th>Mode</th>
+<th>Project Scope</th>
+<th>Typical Cost</th>
+</tr>
+
+<tr>
+<td>Ask</td>
+<td>Single Question</td>
+<td>🟢 Lowest</td>
+</tr>
+
+<tr>
+<td>Edit ❌</td>
+<td>Current File</td>
+<td>🟢 Low</td>
+</tr>
+
+<tr>
+<td>Plan</td>
+<td>Feature / Module</td>
+<td>🟡 Medium</td>
+</tr>
+
+<tr>
+<td>Agent</td>
+<td>Multiple Files</td>
+<td>🟠 High</td>
+</tr>
+
+<tr>
+<td>Agent + Tools</td>
+<td>Project Wide</td>
+<td>🔴 Highest</td>
+</tr>
+
+</table>
+</div>
+<p>
+  <a class="chip" href="interaction modes.html">
+    📘 Read More: Copilot Interaction Modes
+  </a>
+</p>
+</section>
+
+<section id="execution">
+<h2>5. Command & Tool Execution</h2>
+<table>
+<tr><th>Action</th><th>Recommendation</th></tr>
+<tr><td>Run Python Script</td><td>Allow when validation is needed</td></tr>
+<tr><td>Terminal Commands</td><td>Review before approval</td></tr>
+<tr><td>File Modifications</td><td>Inspect scope first</td></tr>
+<tr><td>Repeated Debug Loops</td><td>Stop when sufficient evidence is gathered</td></tr>
+</table>
+</section>
+
+<section id="memory">
+<h2>6. memory.md Workflow</h2>
+<pre>
+Task Start
+  ↓
+New Chat
+  ↓
+Analysis
+  ↓
+Update memory.md
+  ↓
+Close Chat
+  ↓
+New Chat
+  ↓
+Read memory.md
+</pre>
+
+<pre>
+# memory.md
+
+Project: Modbus Testing Tool
+
+Key Files:
+- modbus_cli.py
+- transport.py
+
+Known Issues:
+- ASCII framing fixed
+- RTU fallback enabled
+
+Current Focus:
+- Timeout handling
+</pre>
+</section>
+
+<section id="realworld">
+<h2>7. Real-World Example</h2>
+<table>
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Project</td><td>Modbus Testing Tool</td></tr>
+<tr><td>Prompts</td><td>37</td></tr>
+<tr><td>Model</td><td>GPT-5 Mini (High Reasoning)</td></tr>
+<tr><td>Consumption</td><td>568 AIC</td></tr>
+<tr><td>Approx Cost</td><td>$5.68</td></tr>
+</table>
+<p>Agent activity, file analysis, script execution, and debugging loops likely contributed significantly beyond the visible prompt count.</p>
+</section>
+
+<section id="optimization">
+<h2>8. Optimization Guide</h2>
+<table>
+<tr><th>Do ✅</th><th>Don't ❌</th></tr>
+<tr><td>Use GPT-5 Mini for routine work</td><td>Use frontier models for simple questions</td></tr>
+<tr><td>Keep prompts focused</td><td>Upload entire repositories unnecessarily</td></tr>
+<tr><td>Maintain memory.md</td><td>Re-explain projects repeatedly</td></tr>
+<tr><td>Review commands before approval</td><td>Approve all agent actions blindly</td></tr>
+<tr><td>Start new chat per task</td><td>Keep one chat for unrelated work</td></tr>
+</table>
+
+<h3>Recommended Settings</h3>
+<table>
+<tr><th>Setting</th><th>Recommended Value</th></tr>
+<tr><td>Default Model</td><td>GPT-5 Mini</td></tr>
+<tr><td>Reasoning</td><td>Medium</td></tr>
+<tr><td>Agent Mode</td><td>Off by default</td></tr>
+<tr><td>Max Requests</td><td>25-50</td></tr>
+<tr><td>Context Scope</td><td>Current File</td></tr>
+</table>
+</section>
+
+<section>
+<h2>9. Future Deep-Dive Pages</h2>
+<p>Use these buttons to split content into separate Snapshot Insight pages later:</p>
+<nav>
+<a class="chip" href="billing-models.html">Billing Models</a>
+<a class="chip" href="token-calculations.html">Token Calculations</a>
+<a class="chip" href="caching-explained.html">Caching Explained</a>
+<a class="chip" href="agent-mode-analysis.html">Agent Mode Analysis</a>
+<a class="chip" href="memory-md-workflow.html">memory.md Workflow</a>
+<a class="chip" href="cost-optimization.html">Cost Optimization</a>
+</nav>
+</section>
+
+<footer>
+GitHub Copilot AIC Technical Deep Dive – Snapshot Insight Style
+</footer>
+</div>
+</body>
+</html>

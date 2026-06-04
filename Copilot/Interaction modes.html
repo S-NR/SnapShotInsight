@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub Copilot - Token Deep Dive</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+<h2>Copilot Interaction Modes</h2>
+
+<p>
+Different Copilot modes perform different levels of analysis and may consume
+different amounts of AI Credits depending on the files, tools and context involved.
+</p>
+
+<section>
+<h3>Ask Mode</h3>
+
+<div class="block-flow">
+    <div class="block">Question</div>
+    <div class="arrow right"></div>
+    <div class="block">Analyze Prompt</div>
+    <div class="arrow right"></div>
+    <div class="block">Generate Answer</div>
+</div>
+
+<pre>
+Typical Usage:
+- Explain code
+- Answer questions
+- Generate small snippets
+- Quick reviews
+
+Lowest Credit Consumption
+</pre>
+</section>
+
+<section>
+
+<h3>Edit Mode ❌</h3>
+
+<div class="block-flow">
+    <div class="block">Prompt</div>
+    <div class="arrow right"></div>
+    <div class="block">Read File</div>
+    <div class="arrow right"></div>
+    <div class="block">Modify Code</div>
+    <div class="arrow right"></div>
+    <div class="block">Apply Changes</div>
+</div>
+
+<pre>
+Typical Usage:
+- Refactor functions
+- Fix warnings
+- Generate code blocks
+- Update documentation
+
+Low to Medium Credit Consumption
+</pre>
+</section>
+
+<section>
+<h3>Plan Mode</h3>
+
+<div class="block-flow">
+    <div class="block">Requirement</div>
+    <div class="arrow right"></div>
+    <div class="block">Analyze Project</div>
+    <div class="arrow right"></div>
+    <div class="block">Build Plan</div>
+    <div class="arrow right"></div>
+    <div class="block">Recommend Steps</div>
+</div>
+
+<pre>
+Typical Usage:
+- Architecture design
+- Feature planning
+- Migration strategy
+- Large enhancements
+
+Medium Credit Consumption
+</pre>
+</section>
+
+<section>
+<h3>Agent Mode</h3>
+
+<div class="block-flow">
+    <div class="block">Prompt</div>
+    <div class="arrow right"></div>
+    <div class="block">Read Files</div>
+    <div class="arrow right"></div>
+    <div class="block">Analyze</div>
+    <div class="arrow right"></div>
+    <div class="block">Generate Fix</div>
+    <div class="arrow right"></div>
+    <div class="block">Validate</div>
+</div>
+
+<pre>
+Typical Usage:
+- Multi-file debugging
+- Project-wide refactoring
+- Dependency analysis
+- Automated fixes
+
+Highest Credit Consumption
+
+Max Requests = 50
+Agent may ask permission to continue after reaching the limit.
+</pre>
+</section>
+
+<section>
+<h3>Agent with Tools</h3>
+
+<div class="block-flow">
+    <div class="block">Prompt</div>
+    <div class="arrow right"></div>
+    <div class="block">Read Files</div>
+    <div class="arrow right"></div>
+    <div class="block">Execute Tools</div>
+    <div class="arrow right"></div>
+    <div class="block">Validate Results</div>
+    <div class="arrow right"></div>
+    <div class="block">Generate Fix</div>
+</div>
+
+<pre>
+Examples:
+- Run Python scripts
+- Execute tests
+- Run build commands
+- Analyze logs
+- Generate reports
+
+Potentially Highest AIC Consumption
+Always review requested actions before approval.
+</pre>
+</section>
+
+</div>
+</body>
+</html>
