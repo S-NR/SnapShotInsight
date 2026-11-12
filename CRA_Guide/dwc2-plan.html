@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · DWC2 action plan</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+<style>
+  .bar{height:10px; border-radius:6px; background:var(--accent); opacity:.85}
+  .bar.range{background:linear-gradient(90deg,var(--accent) 60%,var(--accent-soft))}
+  td.barcell{min-width:180px}
+  .checklist label{display:block; padding:4px 0; cursor:pointer}
+</style>
+</head>
+<body>
+<main>
+  <h1>DWC2: action plan &amp; estimates</h1>
+  <p class="lead">The client's CRA requirements turned into actions with hour estimates: basic risk assessment + SBOM (Phase A), Nitrokey secure-boot feasibility, UI user levels, interface measures, STRIDE (Phase B), and the first review in February 2027.</p>
+  <p>Source: <a class="filelink" data-root="cra" data-path="05_DWC2_CRA_Action_Plan.md"></a> · Contact while the client is absent: <b>Mr. Moser</b> (DWC product manager)</p>
+  <div class="callout warn"><b>All hours are planning estimates (±25 %)</b>They assume one engineer familiar with the codebase and timely answers to the open questions, and exclude client review time.</div>
+
+  <h2 id="ground-rules">Agreed ground rules</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Rule</th><th>Consequence</th></tr></thead>
+    <tbody>
+      <tr><td>Current state / future only, no history reconstruction</td><td>Assess the current release branch only; no SBOMs for old IR releases</td></tr>
+      <tr><td>Start with basic risk assessment + SBOM</td><td>Phase A delivers both (SBOM is required by Annex I Part II.1 anyway)</td></tr>
+      <tr><td>Basic TARA, step by step</td><td>Phase A → treat first issues → Phase B (STRIDE)</td></tr>
+      <tr><td>Missing information is collected, not guessed</td><td>Assumptions marked "to confirm" → <a href="#questions">question list</a></td></tr>
+      <tr><td>Secure bootloader postponed to 2027</td><td>2026: feasibility check + low-cost interim measures only</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="actions">Action overview</h2>
+  <div class="grid c4">
+    <div class="stat"><div class="v">≈ 38 h</div><div class="l">Phase A incl. first risk matrix (32–44 h)</div></div>
+    <div class="stat"><div class="v">12–16 h</div><div class="l">S1 Nitrokey feasibility + PoC</div></div>
+    <div class="stat"><div class="v">94–122 h</div><div class="l">S2 UI user levels (full)</div></div>
+    <div class="stat"><div class="v">126–184 h</div><div class="l">S3 interface measures (all)</div></div>
+  </div>
+  <div class="tablewrap"><table id="actTable">
+    <thead><tr><th>ID</th><th>Action</th><th>Output</th><th>Hours</th><th class="barcell">Effort</th><th>Target</th></tr></thead>
+    <tbody>
+      <tr data-min="6" data-max="6"><td><b>A1</b></td><td>System context &amp; data-flow diagram, trust boundaries</td><td><a href="dwc2-overview.html#context">Context diagram</a></td><td>6</td><td class="barcell"></td><td>Phase A</td></tr>
+      <tr data-min="4" data-max="4"><td><b>A2</b></td><td>Asset identification &amp; classification</td><td><a href="dwc2-risk.html#assets">Asset register</a></td><td>4</td><td class="barcell"></td><td>Phase A</td></tr>
+      <tr data-min="8" data-max="8"><td><b>A3</b></td><td>Attack-surface verification (UART, SPI, I2C, JTAG/ICSP, USB, SD, buses, UI) incl. PCB check</td><td><a href="dwc2-risk.html#interfaces">Interface register</a></td><td>8</td><td class="barcell"></td><td>Phase A</td></tr>
+      <tr data-min="8" data-max="8"><td><b>A4</b></td><td>SBOM for current release (CycloneDX + table) incl. bootloader, converter, toolchain, licences</td><td><a href="dwc2-overview.html#sbom">DWC2_SBOM.cdx.json</a></td><td>8</td><td class="barcell"></td><td>Phase A</td></tr>
+      <tr data-min="8" data-max="8"><td><b>A5</b></td><td>Risk method + first risk matrix + team review</td><td><a href="dwc2-risk.html#matrix">Risk matrix</a></td><td>8</td><td class="barcell"></td><td>Phase A</td></tr>
+      <tr data-min="4" data-max="4"><td><b>A6</b></td><td>Collect missing info, align with Mr. Moser, Phase A report</td><td>Phase A report v1.0</td><td>4</td><td class="barcell"></td><td>Phase A</td></tr>
+      <tr data-min="12" data-max="16"><td><b>S1</b></td><td>Secure-boot feasibility: Nitrokey signing + PIC32 verification, alternatives</td><td><a href="#s1">Feasibility note + PoC</a></td><td>12–16</td><td class="barcell"></td><td>Dec 2026 / Jan 2027</td></tr>
+      <tr data-min="12" data-max="12"><td><b>S2</b></td><td>UI user levels / access control proposal</td><td><a href="#s2">Concept + estimate</a></td><td>12</td><td class="barcell"></td><td>With Phase A</td></tr>
+      <tr data-min="8" data-max="8"><td><b>S3</b></td><td>Communication interface security proposal</td><td><a href="#s3">Measure catalogue</a></td><td>8</td><td class="barcell"></td><td>With Phase A</td></tr>
+      <tr data-min="16" data-max="24"><td><b>Q1</b></td><td>Quick wins (after decision)</td><td><a href="#q1">Code changes</a></td><td>16–24</td><td class="barcell"></td><td>After decision</td></tr>
+      <tr data-min="24" data-max="40"><td><b>B1</b></td><td>Phase B: STRIDE threat modelling</td><td><a href="#stride">Threat catalogue</a></td><td>24–40</td><td class="barcell"></td><td>Jan 2027</td></tr>
+      <tr data-min="8" data-max="8"><td><b>R1</b></td><td>Review package for February</td><td>CRA assessment v1</td><td>8</td><td class="barcell"></td><td>Before Feb review</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout ok"><b>Answer to the estimate request: Phase A including the first risk matrix ≈ 38 hours</b>Draft content for A2, A3 and A5 is already pre-filled from the code review. The remaining effort is verification (hardware, build variants), the formal SBOM and alignment with Mr. Moser.</div>
+
+  <h2 id="s1">S1: Secure bootloader with Nitrokey (feasibility)</h2>
+  <p><b>Result: feasible, with the right split of roles.</b> The PIC32MX575 has no hardware secure boot and no crypto engine, so secure boot means:</p>
+  <div class="steps">
+    <div class="step"><h3>Immutable bootloader</h3><p>Bootloader region write-protected (<code>PWP</code>/<code>BWP</code>) and <code>CP = ON</code>.</p></div>
+    <div class="step"><h3>Public key in the bootloader</h3><p>Integrity-critical, not secret.</p></div>
+    <div class="step"><h3>Verify before programming</h3><p>ECDSA P-256 signature verified in software (micro-ecc, BSD; or wolfCrypt) before erase/program.</p></div>
+    <div class="step"><h3>Anti-rollback</h3><p>Version counter in protected storage.</p></div>
+  </div>
+  <h3>Signing flow on the release PC</h3>
+  <div class="flow">
+    <div class="node"><b>MPLAB X build</b>"Execute this line after build"</div><div class="arrow">→</div>
+    <div class="node"><b>hex → bin</b>Fixed image layout</div><div class="arrow">→</div>
+    <div class="node"><b>SHA-256</b>Hash on the host</div><div class="arrow">→</div>
+    <div class="node"><b>Nitrokey HSM 2</b>Sign hash with <code>CKM_ECDSA</code> via PKCS#11/OpenSC</div><div class="arrow">→</div>
+    <div class="node"><b>Update file</b>Header + image + signature</div>
+  </div>
+  <div class="callout warn"><b>Nitrokey detail</b>Hash on the host and sign with <code>CKM_ECDSA</code>. Using <code>CKM_ECDSA_SHA256</code> on the whole image fails above about 1 KB of input (OpenSC issue #2469, Nitrokey forum).</div>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Option</th><th>Pros</th><th>Cons</th></tr></thead>
+    <tbody>
+      <tr><td><b>Nitrokey HSM 2</b> (recommended)</td><td>Mature PKCS#11, on-device P-256 key generation, DKEK n-of-m backup</td><td>Signing-size limit (hash on host)</td></tr>
+      <tr><td>Nitrokey 3 (PIV/PKCS#11)</td><td>Works per user reports</td><td>Check PIV maturity in stable firmware</td></tr>
+      <tr><td>YubiHSM 2 / other PKCS#11 HSM</td><td>Same workflow, mature</td><td>Cost, vendor change</td></tr>
+      <tr><td>Cloud KMS (AWS / Azure, ECDSA P-256)</td><td>Audit log, access control</td><td>Cloud account + internet at release</td></tr>
+      <tr><td>Offline PC, encrypted key file</td><td>Cheapest</td><td>Weakest; temporary only</td></tr>
+      <tr><td>ATECC608 secure element (next PCB)</td><td>Hardware-protected keys, device identity</td><td>PCB change; doesn't make bootloader immutable alone</td></tr>
+      <tr><td>Next-gen MCU with HW secure boot (PIC32MZ/CZ, SAM)</td><td>Proper root of trust</td><td>Port effort; roadmap decision</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>PoC must confirm:</b> verify time and code size on PIC32MX at 72 MHz (must fit 52 KB); one-time field update from BL 0.0.4; key ceremony and backup; OpenSC on the build PC.</p>
+  <p><b>Full implementation (2027): ≈ 120–200 h</b> covering bootloader rework, update format, anti-rollback, production config bits, key ceremony, migration of installed BL 0.0.4 units, and tests incl. power-fail during update. Depends on bootloader source (Q-01).</p>
+  <h3 id="interim">Interim measures until secure boot (≈ 16–24 h, part of Q1)</h3>
+  <ul>
+    <li>Production config bits: <code>CP = ON</code>, <code>PWP</code> on bootloader pages, <code>BWP = ON</code>, JTAG disabled at startup.</li>
+    <li>Update only after a service-level confirmation in the UI (needs bootloader source).</li>
+    <li>Image integrity check (SHA-256/CRC32): catches corruption, <b>not</b> tampering. Document as such.</li>
+    <li>Update procedure and residual risk in user/service information.</li>
+  </ul>
+
+  <h2 id="s2">S2: UI user levels / access control</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Level</th><th>Who</th><th>Access</th><th>Authentication</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge low">L0 Viewer</span></td><td>Anyone at the device</td><td>Measurement screens, diagnostics (read-only), language</td><td>None</td></tr>
+      <tr><td><span class="badge med">L1 Operator</span></td><td>Customer's trained staff</td><td>Commissioning: pipe, fluid, transducers, outputs, logger, interfaces, units, damping</td><td><b>Customer PIN</b> set at commissioning</td></tr>
+      <tr><td><span class="badge high">L2 Expert / Systec service</span></td><td>Systec and partners</td><td>Calibration, zero setup, optimisation, calibration import, factory reset, update trigger, security-log export</td><td><b>Device-unique challenge-response</b> (serial + Systec key). <b>Replaces master PIN 5555</b></td></tr>
+    </tbody>
+  </table></div>
+  <p><b>Mechanisms:</b> salted SHA-256 in MRAM, no copy on SD (<code>protect.dwc</code> migrated once) · 5 failures → 5-minute lockout, doubling · auto-logout after 10 min and on power cycle · recovery via L2 · security log entries · menu-to-level mapping for <code>SYSCTRL_WIN_02 … WIN_26</code> confirmed by Mr. Moser.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Work package</th><th>Hours</th></tr></thead>
+    <tbody>
+      <tr><td>Concept, menu-to-role mapping, alignment</td><td>12</td></tr>
+      <tr><td>Role check, PIN hashing, lockout, auto-logout, migration</td><td>24–32</td></tr>
+      <tr><td>Challenge-response (device) + Systec PC generator tool</td><td>16–24</td></tr>
+      <tr><td>GUI screens + texts for all language builds, 1CH + 2CH</td><td>12–16</td></tr>
+      <tr><td>Tests: 1CH/2CH × variants, menu regression</td><td>24–32</td></tr>
+      <tr><td>Documentation (Annex II)</td><td>6</td></tr>
+      <tr><th>Total</th><th>≈ 94–122 h</th></tr>
+    </tbody>
+  </table></div>
+  <p><small>Watch: flash is tight. SHA-256 + challenge-response need about 4–8 KB (to confirm).</small></p>
+
+  <h2 id="s3">S3: Communication interface measures</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Interface</th><th>Measure</th><th>Reduces</th><th>Hours</th></tr></thead>
+    <tbody>
+      <tr><td>JTAG / trace / ICSP</td><td>Disable JTAG at startup; CP/PWP/BWP; PCB access check</td><td><a href="dwc2-risk.html#r02">R02</a>, <a href="dwc2-risk.html#r03">R03</a></td><td>6–10</td></tr>
+      <tr><td>USB (MSD)</td><td>Default <b>read-only MSD</b>; write only after L1/L2 login with timeout</td><td>R01, R05, R06</td><td>16–24</td></tr>
+      <tr><td>SD card</td><td>Bounded parsers, size limits, calibration import at L2, fuzz harness</td><td>R06, R07</td><td>28–40</td></tr>
+      <tr><td>MRAM (SPI2)</td><td>CRC per parameter block, boot check, corruption reporting, migration</td><td>R07</td><td>24–32</td></tr>
+      <tr><td>Modbus RTU</td><td>Keep writes off (build-time check); frame robustness test</td><td>R10, R11</td><td>8–12</td></tr>
+      <tr><td>Modbus TCP converter</td><td>Identify, vendor info, change defaults, segmentation guidance</td><td>R08</td><td>6–8 (+ vendor)</td></tr>
+      <tr><td>M-Bus</td><td>Writable-value check (TODO); lock address changes</td><td>R09</td><td>8–12</td></tr>
+      <tr><td>UART service/debug</td><td><code>#error</code> if <code>CMD_ENABLE</code>/debug flags in release</td><td>R13</td><td>2–4</td></tr>
+      <tr><td>SPI1 / I2C sensors</td><td>Plausibility/range checks on ADC and temperature</td><td>R07 (partly)</td><td>4–6</td></tr>
+      <tr><td>All</td><td>Watchdog after blocking-path review; security event log</td><td>R10, repudiation</td><td>24–36</td></tr>
+      <tr><th colspan="3">Total</th><th>≈ 126–184 h</th></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="q1">Quick wins for an early decision (Q1, ≈ 16–24 h)</h2>
+  <div class="grid c2">
+    <div class="card"><div class="kicker">R06</div><h3>Fix <code>read_line()</code> bounds</h3><p><a href="dwc2-findings.html#f5">F5</a></p></div>
+    <div class="card"><div class="kicker">R02 / R03</div><h3>Disable JTAG in release builds</h3><p><a href="dwc2-findings.html#f2">F2</a></p></div>
+    <div class="card"><div class="kicker">R02 / R03</div><h3>Production config bits CP / PWP / BWP</h3><p>Needs agreement on service read-back (Q-06)</p></div>
+    <div class="card"><div class="kicker">R13</div><h3><code>#error</code> guard for <code>CMD_ENABLE</code></h3><p><a href="dwc2-findings.html#f11">F11</a></p></div>
+  </div>
+
+  <h2 id="stride">Phase B: STRIDE preparation</h2>
+  <p>The client's generic examples mapped to DWC2's real architecture (B1, 24–40 h, after first issues are treated):</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>STRIDE</th><th>Client example</th><th>DWC2 equivalent to analyse</th></tr></thead>
+    <tbody>
+      <tr><td><b>Spoofing</b></td><td>Fake update server</td><td>No update server: the threat is a <b>fake update file</b> on SD/USB. Also spoofed Modbus/M-Bus masters and converter config frames</td></tr>
+      <tr><td><b>Tampering</b></td><td>Modified image in external SPI flash</td><td>Firmware is in <b>internal flash</b> (via SD bootloader or JTAG/ICSP). The external SPI device is the <b>MRAM</b> with calibration</td></tr>
+      <tr><td><b>Repudiation</b></td><td>—</td><td>No security log: changes cannot be attributed</td></tr>
+      <tr><td><b>Information disclosure</b></td><td>Reading flash via JTAG</td><td><b>Applies</b>: JTAG not disabled, CP off. Also PIN from <code>protect.dwc</code></td></tr>
+      <tr><td><b>Denial of service</b></td><td>Malformed network packets</td><td>Network only via converter. Also malformed frames and <b>malformed SD files (confirmed overflow)</b></td></tr>
+      <tr><td><b>Elevation of privilege</b></td><td>—</td><td>Master PIN, optional PIN, no role model (S2)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="questions">Open questions for Mr. Moser and the client</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>ID</th><th>Question</th><th>For</th><th>Needed by</th></tr></thead>
+    <tbody>
+      <tr><td>Q-01</td><td>Where is the <b>bootloader BL 0.0.4 source</b>? Field-updatable?</td><td>Client / Moser</td><td>S1</td></tr>
+      <tr><td>Q-02</td><td>Which variants/configs are sold now and after Dec 2027?</td><td>Moser</td><td>A1, A4</td></tr>
+      <tr><td>Q-03</td><td>Is heat measurement used for <b>billing</b> (MID MI-004)?</td><td>Moser</td><td>A2</td></tr>
+      <tr><td>Q-04</td><td>Which <b>TCP↔RTU converter</b> (vendor, firmware, web UI, credentials)?</td><td>Moser</td><td>A3, R08</td></tr>
+      <tr><td>Q-05</td><td>Are JTAG/ICSP pads reachable? Housing sealed?</td><td>Moser / HW</td><td>A3</td></tr>
+      <tr><td>Q-06</td><td>Is code protection off on purpose (service read-back)?</td><td>Client</td><td>Q1</td></tr>
+      <tr><td>Q-07</td><td>Who uses the USB drive function and for what?</td><td>Moser</td><td>S3</td></tr>
+      <tr><td>Q-08</td><td>Do SD logs or PAR files contain personal data?</td><td>Moser</td><td>A2, R15</td></tr>
+      <tr><td>Q-09</td><td>How is master PIN 5555 used today?</td><td>Moser</td><td>S2</td></tr>
+      <tr><td>Q-10</td><td>Which menu functions must customers use without service?</td><td>Moser</td><td>S2</td></tr>
+      <tr><td>Q-11</td><td>Which toolchain builds the released hex (C32 2.02 vs XC32 5.00)?</td><td>Client</td><td>A4</td></tr>
+      <tr><td>Q-12</td><td>Are SystecParamSoftware / flowcom software used with DWC2?</td><td>Moser</td><td>A1, A4</td></tr>
+      <tr><td>Q-13</td><td>Preferred risk method (this L×I matrix or a corporate one)?</td><td>Client</td><td>A5</td></tr>
+      <tr><td>Q-14</td><td>Nitrokey HSM 2 or Nitrokey 3 in the other project? Same key process?</td><td>Client</td><td>S1</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="timeline">Timeline</h2>
+  <div class="timeline">
+    <div class="tl-item past"><div class="d">Wk 46 (now)</div><div class="t">Plan + estimates delivered; questions sent to Mr. Moser</div></div>
+    <div class="tl-item"><div class="d">Wk 47–49</div><div class="t">Phase A A1–A6; SBOM v1; risk matrix verified; S2/S3 proposals final</div></div>
+    <div class="tl-item"><div class="d">Wk 50–51</div><div class="t">Phase A report v1.0; Q1 decision; S1 PoC starts</div></div>
+    <div class="tl-item"><div class="d">Jan 2027</div><div class="t">Q1 implementation; S1 result; Phase B STRIDE</div></div>
+    <div class="tl-item"><div class="d">Feb 2027</div><div class="t"><b>First CRA assessment review</b></div></div>
+  </div>
+
+  <h2 id="checklist">Deliverables checklist for the February review</h2>
+  <p><small>Ticks are saved in this browser only.</small></p>
+  <div class="card checklist" id="reviewChecklist">
+    <label><input type="checkbox"> System context &amp; data-flow diagram (A1)</label>
+    <label><input type="checkbox"> Asset register (A2)</label>
+    <label><input type="checkbox"> Interface / attack-surface register (A3)</label>
+    <label><input type="checkbox"> SBOM v1, CycloneDX + table (A4)</label>
+    <label><input type="checkbox"> Risk method + register + matrix (A5)</label>
+    <label><input type="checkbox"> STRIDE threat catalogue (B1)</label>
+    <label><input type="checkbox"> Measures plan with estimates: S1, S2, S3, Q1</label>
+    <label><input type="checkbox"> Open-points list with Mr. Moser's answers</label>
+  </div>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var rows = document.querySelectorAll("#actTable tbody tr"), max = 40;
+  rows.forEach(function (r) {
+    var a = +r.dataset.min, b = +r.dataset.max, cell = r.querySelector(".barcell");
+    cell.innerHTML = '<div class="bar' + (b > a ? " range" : "") + '" style="width:' + (b / max * 100) + '%" title="' + a + (b > a ? "–" + b : "") + ' h"></div>';
+  });
+  var boxes = document.querySelectorAll("#reviewChecklist input"), key = "cra-dwc2-checklist", saved = [];
+  try { saved = JSON.parse(localStorage.getItem(key) || "[]"); } catch (e) {}
+  boxes.forEach(function (b, i) {
+    b.checked = !!saved[i];
+    b.addEventListener("change", function () {
+      try { localStorage.setItem(key, JSON.stringify([].map.call(boxes, function (x) { return x.checked; }))); } catch (e) {}
+    });
+  });
+});
+</script>
+</body>
+</html>

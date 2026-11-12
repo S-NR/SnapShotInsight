@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · Home</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <div class="kicker" style="color:var(--accent-2);font-weight:700;font-size:12px;letter-spacing:.08em;text-transform:uppercase">EU Regulation 2024/2847 · Training & reference</div>
+  <h1>Cyber Resilience Act: guideline &amp; worked example</h1>
+  <p class="lead">This guide explains what the EU Cyber Resilience Act (CRA) requires from products with firmware and interfaces. It then applies every rule to a real product, the <b>systec DWC2</b> controller (PIC32MX575), so you can see what the guideline means in code, hours and documents.</p>
+
+  <div class="grid c4" style="margin:22px 0">
+    <div class="stat"><div class="v">11 Sep 2026</div><div class="l">Vulnerability reporting (Art. 14) <b>already applies</b></div></div>
+    <div class="stat"><div class="v">11 Dec 2027</div><div class="l">Full application: every unit placed on the EU market must comply</div></div>
+    <div class="stat"><div class="v">24 h</div><div class="l">Early warning for an actively exploited vulnerability</div></div>
+    <div class="stat"><div class="v">€15 M / 2.5 %</div><div class="l">Maximum fine for breaching essential requirements</div></div>
+  </div>
+
+  <h2 id="how-to-use">How to use this guide</h2>
+  <div class="flow">
+    <div class="node"><b>1. Learn the rule</b>Read the CRA guideline pages 1–8.</div>
+    <div class="arrow">→</div>
+    <div class="node"><b>2. See it applied</b>Every rule links to the DWC2 example (S1–S6).</div>
+    <div class="arrow">→</div>
+    <div class="node"><b>3. Open the evidence</b>Findings link straight to the source file and line in the DWC2 tree.</div>
+    <div class="arrow">→</div>
+    <div class="node"><b>4. Reuse the method</b>Copy the DWC2 structure (assets → interfaces → risks → measures) for your own product.</div>
+  </div>
+
+  <h2 id="cra-guidelines">Part 1: CRA guidelines</h2>
+  <div class="grid c3">
+    <a class="card" href="cra-basics.html"><div class="kicker">1</div><h3>What the CRA is</h3><p>A CE-marking product law for cybersecurity. Who is the manufacturer, which documents are free and which standards cost money.</p></a>
+    <a class="card" href="scope.html"><div class="kicker">2</div><h3>Scope &amp; exclusions</h3><p>Is my product in scope? Includes an interactive checker and the sector exclusions (medical, vehicles, aviation…).</p></a>
+    <a class="card" href="classes.html"><div class="kicker">3</div><h3>Product classes &amp; routes</h3><p>Default, Important I/II, Critical. Which conformity module applies and when a notified body is needed.</p></a>
+    <a class="card" href="requirements.html"><div class="kicker">4</div><h3>Essential requirements</h3><p>Annex I Part I (product security, 2a–2m) and Part II (vulnerability handling), read for embedded firmware.</p></a>
+    <a class="card" href="obligations.html"><div class="kicker">5</div><h3>Obligations &amp; reporting</h3><p>Support period, 24 h / 72 h / 14 d reporting, technical file, user information, penalties.</p></a>
+    <a class="card" href="timeline.html"><div class="kicker">6</div><h3>Key dates</h3><p>From entry into force (2024) to full application (2027), and what "legacy product" means.</p></a>
+    <a class="card" href="landscape.html"><div class="kicker">7</div><h3>Related laws &amp; standards</h3><p>RED, NIS2, Machinery, AI Act, PLD, MDR. Which law applies to which kind of system.</p></a>
+    <a class="card" href="how-to.html"><div class="kicker">8</div><h3>How to comply (brownfield)</h3><p>Step-by-step workflow for an existing product, and where AI tooling helps.</p></a>
+  </div>
+
+  <h2 id="systec-baseline">Part 2: Baseline example, systec DWC2</h2>
+  <div class="grid c3">
+    <a class="card" href="systec.html"><div class="kicker">S1</div><h3>Systec products &amp; CRA</h3><p>Every Systec product family mapped to the CRA, with the typical legacy risk points.</p></a>
+    <a class="card" href="dwc2-overview.html"><div class="kicker">S2</div><h3>DWC2 system &amp; attack surface</h3><p>System context, nine interfaces, trust boundaries, and the recovered SBOM.</p></a>
+    <a class="card" href="dwc2-findings.html"><div class="kicker">S3</div><h3>DWC2 findings F1–F12</h3><p>Code-level findings with file and line links: unsigned update, CP off, PIN 5555, stack overflow…</p></a>
+    <a class="card" href="dwc2-risk.html"><div class="kicker">S4</div><h3>Assets &amp; risk matrix</h3><p>Ten assets, eleven interfaces, fifteen risks on an interactive likelihood × impact matrix.</p></a>
+    <a class="card" href="dwc2-plan.html"><div class="kicker">S5</div><h3>Action plan &amp; estimates</h3><p>Phase A ≈ 38 h, Nitrokey secure boot, UI user levels, interface measures, STRIDE, Feb 2027 review.</p></a>
+    <a class="card" href="traceability.html"><div class="kicker">S6</div><h3>Requirement → DWC2 trace</h3><p>Each Annex I requirement traced to DWC2 status, finding, risk and planned action.</p></a>
+  </div>
+
+  <h2 id="five-things">Five things to remember</h2>
+  <div class="steps">
+    <div class="step"><h3>It is a product law</h3><p>Anything with firmware and a data connection sold in the EU is in scope, wherever it was engineered.</p></div>
+    <div class="step"><h3>Most of our products are "default" class</h3><p>Self-assessment (Module A) is available. Network/security devices are "important", and smart meter gateways are "critical".</p></div>
+    <div class="step"><h3>Reporting already applies</h3><p>Since 11 Sep 2026: actively exploited vulnerabilities must be reported within 24 h / 72 h / 14 days, for products already in the field too.</p></div>
+    <div class="step"><h3>Full compliance from 11 Dec 2027</h3><p>Secure/signed updates, no default passwords, access control on configuration, SBOM, CVD policy, support period of at least 5 years.</p></div>
+    <div class="step"><h3>Medical devices and type-approved vehicles are excluded</h3><p>Their own sector laws (MDR/IVDR, UNECE R155/R156) apply instead.</p></div>
+  </div>
+
+  <h2 id="dwc2-at-a-glance">DWC2 at a glance</h2>
+  <div class="grid c4">
+    <div class="stat"><div class="v">Default</div><div class="l">CRA class → Module A self-assessment</div></div>
+    <div class="stat"><div class="v" style="color:var(--crit)">Low</div><div class="l">Current CRA readiness</div></div>
+    <div class="stat"><div class="v">12</div><div class="l">Code findings (4 high, 4 medium, 4 low)</div></div>
+    <div class="stat"><div class="v">≈ 38 h</div><div class="l">Phase A estimate incl. first risk matrix</div></div>
+  </div>
+  <div class="callout crit"><b>Top risk R01 (critical, score 12)</b>A modified <code>SYSCTRL.hex</code> on the SD card, or written over USB, is programmed by bootloader BL 0.0.4 with no authenticity check. <a href="dwc2-findings.html#f1">See finding F1 →</a></div>
+</main>
+</body>
+</html>

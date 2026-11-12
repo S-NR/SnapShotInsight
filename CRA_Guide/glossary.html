@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · Glossary &amp; sources</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>Glossary &amp; sources</h1>
+  <p class="lead">Terms used across the guide, with a link to where each one matters most.</p>
+  <input type="search" id="gq" placeholder="Filter terms…" style="padding:8px 10px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;width:min(360px,100%)">
+
+  <h2 id="glossary">Glossary</h2>
+  <div class="tablewrap"><table id="gl">
+    <thead><tr><th>Term</th><th>Meaning</th><th>See</th></tr></thead>
+    <tbody>
+      <tr><td><b>Annex I</b></td><td>CRA essential cybersecurity requirements: Part I product properties, Part II vulnerability handling</td><td><a href="requirements.html">Requirements</a></td></tr>
+      <tr><td><b>Annex II</b></td><td>Information and instructions the user must receive</td><td><a href="obligations.html#annex-ii">Obligations</a></td></tr>
+      <tr><td><b>Annex III / IV</b></td><td>Lists of important (Class I/II) and critical products</td><td><a href="classes.html">Classes</a></td></tr>
+      <tr><td><b>Annex VII</b></td><td>Content of the technical documentation</td><td><a href="obligations.html#annex-vii">Obligations</a></td></tr>
+      <tr><td><b>Anti-rollback</b></td><td>Preventing installation of an older, vulnerable firmware version</td><td><a href="dwc2-plan.html#s1">S1</a></td></tr>
+      <tr><td><b>CE marking</b></td><td>Manufacturer's mark that the product meets all applicable EU product laws, now including the CRA</td><td><a href="cra-basics.html">Basics</a></td></tr>
+      <tr><td><b>CP / BWP / PWP</b></td><td>PIC32 configuration bits: code protection, boot-flash write protection, program-flash write protection</td><td><a href="dwc2-findings.html#f2">F2</a></td></tr>
+      <tr><td><b>CSIRT</b></td><td>Computer Security Incident Response Team; the coordinator CSIRT receives Art. 14 reports</td><td><a href="obligations.html#reporting">Reporting</a></td></tr>
+      <tr><td><b>CVD</b></td><td>Coordinated vulnerability disclosure: a published policy for receiving and handling vulnerability reports</td><td><a href="requirements.html#part-ii">Part II</a></td></tr>
+      <tr><td><b>CVE</b></td><td>Common Vulnerabilities and Exposures: public IDs for known vulnerabilities</td><td><a href="dwc2-overview.html#sbom">SBOM</a></td></tr>
+      <tr><td><b>CycloneDX / SPDX</b></td><td>Machine-readable SBOM formats</td><td><a href="dwc2-plan.html#actions">A4</a></td></tr>
+      <tr><td><b>DoC</b></td><td>EU declaration of conformity (Annex V/VI)</td><td><a href="obligations.html">Obligations</a></td></tr>
+      <tr><td><b>ECDSA P-256</b></td><td>Elliptic-curve digital signature algorithm on the NIST P-256 curve; used to sign firmware images</td><td><a href="dwc2-plan.html#s1">S1</a></td></tr>
+      <tr><td><b>ENISA</b></td><td>EU Agency for Cybersecurity; runs the single reporting platform</td><td><a href="obligations.html#reporting">Reporting</a></td></tr>
+      <tr><td><b>EUR-Lex</b></td><td>Official, free portal for EU law; the binding CRA text is there</td><td><a href="cra-basics.html#free-vs-paid">Free vs paid</a></td></tr>
+      <tr><td><b>Harmonised standard</b></td><td>European standard cited in the Official Journal; applying it gives presumption of conformity</td><td><a href="landscape.html#standards">Standards</a></td></tr>
+      <tr><td><b>HSM</b></td><td>Hardware security module, e.g. Nitrokey HSM 2, holding private keys that never leave the device</td><td><a href="dwc2-plan.html#s1">S1</a></td></tr>
+      <tr><td><b>ICSP / JTAG</b></td><td>In-circuit serial programming and debug interfaces on the PCB</td><td><a href="dwc2-risk.html#interfaces">Interfaces</a></td></tr>
+      <tr><td><b>Manufacturer</b></td><td>Whoever places the product on the market under its own name or trademark</td><td><a href="cra-basics.html#roles">Roles</a></td></tr>
+      <tr><td><b>Module A / B+C / H</b></td><td>Conformity assessment procedures: self-assessment / type examination / full quality assurance</td><td><a href="classes.html#routes">Routes</a></td></tr>
+      <tr><td><b>MRAM</b></td><td>Magnetoresistive RAM; DWC2 stores parameters and calibration in external MRAM on SPI2</td><td><a href="dwc2-findings.html#f6">F6</a></td></tr>
+      <tr><td><b>MSD</b></td><td>USB Mass Storage Device class; DWC2 exposes its SD card to a PC this way</td><td><a href="dwc2-overview.html#attack-surface">Attack surface</a></td></tr>
+      <tr><td><b>Notified body</b></td><td>Independent body designated to perform third-party conformity assessment</td><td><a href="classes.html">Classes</a></td></tr>
+      <tr><td><b>PKCS#11</b></td><td>Standard API to use keys in tokens and HSMs (via OpenSC for Nitrokey)</td><td><a href="dwc2-plan.html#s1">S1</a></td></tr>
+      <tr><td><b>Placing on the market</b></td><td>First making a product available in the EU; assessed per unit</td><td><a href="timeline.html#legacy">Legacy</a></td></tr>
+      <tr><td><b>SBOM</b></td><td>Software bill of materials: list of components and versions in the product</td><td><a href="dwc2-overview.html#sbom">SBOM</a></td></tr>
+      <tr><td><b>Secure boot</b></td><td>Boot chain that only runs firmware with a valid signature</td><td><a href="dwc2-plan.html#s1">S1</a></td></tr>
+      <tr><td><b>STRIDE</b></td><td>Threat categories: Spoofing, Tampering, Repudiation, Information disclosure, Denial of service, Elevation of privilege</td><td><a href="how-to.html#stride">How-to</a></td></tr>
+      <tr><td><b>Substantial modification</b></td><td>Change that affects compliance with Annex I or the intended purpose; brings legacy units into scope</td><td><a href="timeline.html#legacy">Legacy</a></td></tr>
+      <tr><td><b>Support period</b></td><td>Time the manufacturer handles vulnerabilities; ≥ 5 years, reflecting expected use</td><td><a href="obligations.html">Obligations</a></td></tr>
+      <tr><td><b>TARA</b></td><td>Threat analysis and risk assessment</td><td><a href="how-to.html">How-to</a></td></tr>
+      <tr><td><b>Trust boundary</b></td><td>Line where data or control passes between parts with different trust levels</td><td><a href="dwc2-overview.html#context">Context</a></td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="sources">Sources</h2>
+  <ul>
+    <li>Binding text: <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2847" target="_blank" rel="noopener">Regulation (EU) 2024/2847 on EUR-Lex</a></li>
+    <li>Regulation text and commentary (unofficial, used for this guide): <a href="https://www.cyberresilienceact.eu/regulation.html" target="_blank" rel="noopener">cyberresilienceact.eu/regulation</a>, <a href="https://www.cyberresilienceact.eu/annexes.html" target="_blank" rel="noopener">annexes</a></li>
+    <li>Annex III/IV background: <a href="https://cvdportal.com/glossary/annex-iii-classification" target="_blank" rel="noopener">cvdportal.com</a>, <a href="https://insidecra.com/annex/iii" target="_blank" rel="noopener">insidecra.com</a>, <a href="https://digitalcompliance.snellman.com/technical-descriptions-for-important-and-critical-products-are-published/" target="_blank" rel="noopener">Snellman: technical descriptions</a></li>
+    <li>Systec: <a href="https://www.systec-controls.de/english/home.html" target="_blank" rel="noopener">systec-controls.de</a> · Tismo: <a href="https://www.tismotech.com/" target="_blank" rel="noopener">tismotech.com</a></li>
+    <li>Nitrokey / PKCS#11: <a href="https://support.nitrokey.com/t/nitrokey-hsm-2-code-signing/3389" target="_blank" rel="noopener">HSM 2 code signing</a>, <a href="https://github.com/OpenSC/OpenSC/issues/2469" target="_blank" rel="noopener">OpenSC #2469</a>, <a href="https://python-pkcs11.readthedocs.io/en/latest/opensc.html" target="_blank" rel="noopener">python-pkcs11 with OpenSC</a></li>
+    <li>DWC2 code evidence: <a href="files.html#dwc2-source">File navigator</a></li>
+  </ul>
+  <div class="callout warn"><b>Disclaimer</b>Engineering summary, not legal advice. Items marked † on the landscape page come from general knowledge. Cross-check against EUR-Lex before the February 2027 review.</div>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var q = document.getElementById("gq"), rows = document.querySelectorAll("#gl tbody tr");
+  q.addEventListener("input", function () {
+    var s = q.value.trim().toLowerCase();
+    rows.forEach(function (r) { r.hidden = s && r.textContent.toLowerCase().indexOf(s) < 0; });
+  });
+});
+</script>
+</body>
+</html>

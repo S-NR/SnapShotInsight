@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · File navigator</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>File navigator</h1>
+  <p class="lead">Every document and source file this guide is built on. Links open the local file; <b>copy</b> puts the Windows path on the clipboard so you can paste it into VS Code (<kbd>Ctrl+P</kbd>) or Explorer.</p>
+  <div class="callout"><b>Browser note</b>Links to <code>file:///</code> paths work when this guide is opened from disk. Some browsers show <code>.c</code>/<code>.h</code>/<code>.md</code> files as plain text and download <code>.docx</code>/<code>.pptx</code>. If a link does nothing, use <b>copy</b> and open the path in VS Code.</div>
+
+  <h2 id="cra-docs">CRA analysis documents (Markdown)</h2>
+  <p>Original folder: <a class="filelink" data-root="cra" data-path="">Cyber Resilience Act\</a>. A copy is bundled with this guide in <a href="source-docs/">source-docs/</a>.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>File</th><th>Contents</th><th>Bundled copy</th><th>Guide pages</th></tr></thead>
+    <tbody>
+      <tr><td><a class="filelink" data-root="cra" data-path="README.md"></a></td><td>Index + five key points</td><td><a href="source-docs/README.md">open</a></td><td><a href="index.html">Home</a></td></tr>
+      <tr><td><a class="filelink" data-root="cra" data-path="01_CRA_Overview.md"></a></td><td>Scope, classes, Annex I, obligations, penalties, landscape</td><td><a href="source-docs/01_CRA_Overview.md">open</a></td><td><a href="cra-basics.html">1</a>–<a href="landscape.html">7</a></td></tr>
+      <tr><td><a class="filelink" data-root="cra" data-path="02_CRA_for_Tismo_Projects.md"></a></td><td>Tismo's role, applicability per business line, actions</td><td><a href="source-docs/02_CRA_for_Tismo_Projects.md">open</a></td><td><a href="cra-basics.html#roles">Roles</a>, <a href="how-to.html">How-to</a></td></tr>
+      <tr><td><a class="filelink" data-root="cra" data-path="03_CRA_for_Systec_Projects.md"></a></td><td>Systec products mapped to the CRA, risk points, roadmap</td><td><a href="source-docs/03_CRA_for_Systec_Projects.md">open</a></td><td><a href="systec.html">S1</a></td></tr>
+      <tr><td><a class="filelink" data-root="cra" data-path="04_CRA_DWC2_Codebase_Analysis.md"></a></td><td>DWC2 attack surface, SBOM, findings F1–F12</td><td><a href="source-docs/04_CRA_DWC2_Codebase_Analysis.md">open</a></td><td><a href="dwc2-overview.html">S2</a>, <a href="dwc2-findings.html">S3</a></td></tr>
+      <tr><td><a class="filelink" data-root="cra" data-path="05_DWC2_CRA_Action_Plan.md"></a></td><td>Phase A/B plan, estimates, risk matrix, S1–S3, questions</td><td><a href="source-docs/05_DWC2_CRA_Action_Plan.md">open</a></td><td><a href="dwc2-risk.html">S4</a>, <a href="dwc2-plan.html">S5</a></td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="presentation">Presentation</h2>
+  <div class="tablewrap"><table>
+    <tbody>
+      <tr><td><a class="filelink" data-root="inv" data-path="AI-Native_SDLC_Brownfield_Firmware.pptx"></a></td><td>26 slides with speaker notes: AI-native SDLC for brownfield firmware, including the CRA section (slides 18–23)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="dwc2-source">DWC2 source: evidence files</h2>
+  <p>Root: <a class="filelink" data-root="dwc2" data-path="">DWC2\</a> (IR 44 maintenance tree, read-only review)</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>File</th><th>Why it matters</th><th>Findings</th></tr></thead>
+    <tbody>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="HAL/SYSCTRL_INIT.c"></a></td><td>Configuration bits: <code>CP = OFF</code>, <code>BWP = OFF</code> (38–39), <code>FWDTEN = OFF</code> (51)</td><td><a href="dwc2-findings.html#f2">F2</a>, <a href="dwc2-findings.html#f10">F10</a></td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="SYSCTRL.h"></a></td><td><code>MODBUSTCP_ENABLE</code> (77), converter defaults (2958–2993), <code>DEFAULT_PASSWORD 5555</code> (3020), watchdog flag (826)</td><td><a href="dwc2-findings.html#f3">F3</a>, <a href="dwc2-findings.html#f8">F8</a></td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="SYSCTRL_PASSWORD.c"></a></td><td>Reversible <code>password_encode()</code> (20–60), fallback to master PIN (134, 144)</td><td><a href="dwc2-findings.html#f3">F3</a>, <a href="dwc2-findings.html#f4">F4</a></td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="1CH_2CH_GUI_SCREEN/SYSCTRL_WIN_26_IMPORT_EXPORT.c"></a></td><td>Unbounded <code>read_line()</code> (364–410), <code>importLAR_File()</code> (~2079), MRAM writes (1863–2017)</td><td><a href="dwc2-findings.html#f5">F5</a>, <a href="dwc2-findings.html#f6">F6</a></td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="1CH_2CH_GUI_SCREEN/SYSCTRL_WIN_23_PASSWORD.c"></a></td><td>Master PIN accepted (419), weak RNG seed (464)</td><td><a href="dwc2-findings.html#f3">F3</a>, <a href="dwc2-findings.html#f12">F12</a></td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="1CH_2CH_GUI_SCREEN/SYSCTRL_WIN_0.c"></a></td><td>Password gates (481–511)</td><td><a href="dwc2-findings.html#f4">F4</a></td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="SYSCTRL_MBUS.c"></a></td><td>M-Bus address persistence + TODO (136–154)</td><td><a href="dwc2-findings.html#f7">F7</a></td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="SYSCTRL_MODBUS.c"></a></td><td>Input-register bounds check (552–553)</td><td>positive</td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="Modbus/mbconfig.h"></a></td><td>Modbus write functions disabled (90–102)</td><td>positive</td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="SYSCTRL_SDUSB.c"></a></td><td>USB mass-storage exposure of SD (311, 619)</td><td>IF4</td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="SYSCTRL.c"></a></td><td>USB/SD handling in main loop (3267, 3640)</td><td>IF4</td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="HAL/SYSCTRL_CMDS.c"></a></td><td>Dormant RS232 service commands, raw MRAM write (769–787)</td><td><a href="dwc2-findings.html#f11">F11</a></td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="SYS_BOOTFILE.ld"></a></td><td>Linker script: app reset vector 0x9D00D000</td><td><a href="dwc2-findings.html#f1">F1</a></td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="out/SYS_Bootloader_V004.hex"></a></td><td>Shipped bootloader: update strings, DEVCFG0 = 0x7FFFFFFF</td><td><a href="dwc2-findings.html#f1">F1</a>, <a href="dwc2-findings.html#f2">F2</a></td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="21BD_MODBUS_TCP_Details.docx"></a></td><td>Modbus TCP converter design (fixed config codes)</td><td><a href="dwc2-findings.html#f8">F8</a></td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="SYSCTRL.mcp"></a></td><td>MPLAB 8 project, C32 v2.02</td><td>SBOM</td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="sonar-project.properties"></a></td><td>SonarQube configuration</td><td>positive</td></tr>
+      <tr><td><a class="filelink" data-root="dwc2" data-path="MANAGER_SUMMARY_Flash_Optimization.md"></a></td><td>Flash budget context (tight program memory)</td><td>S2/S3 sizing</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="third-party">Third-party component folders (SBOM)</h2>
+  <div class="pill-row">
+    <a class="filelink" data-root="dwc2" data-path="Modbus/">Modbus/ (FreeModbus)</a>
+    <a class="filelink" data-root="dwc2" data-path="MbusSlave/">MbusSlave/ (solvimus)</a>
+    <a class="filelink" data-root="dwc2" data-path="SDCARD/">SDCARD/ (MDD FS)</a>
+    <a class="filelink" data-root="dwc2" data-path="USB/">USB/ (MLA USB)</a>
+    <a class="filelink" data-root="dwc2" data-path="GUI/">GUI/ (easyGUI)</a>
+  </div>
+
+  <h2 id="this-guide">This guide's own files</h2>
+  <pre>CRA_Guide/
+├── index.html              Home
+├── cra-basics.html … how-to.html     CRA guideline pages 1–8
+├── systec.html, dwc2-*.html, traceability.html   Systec baseline S1–S6
+├── files.html, glossary.html         Resources
+├── assets/style.css, assets/nav.js   Shared look + navigation (edit NAV / ROOTS in nav.js)
+└── source-docs/*.md                  Copies of the CRA analysis documents</pre>
+  <p><small>If the DWC2 tree or the investigations folder moves, update <code>ROOTS</code> at the top of <code>assets/nav.js</code>; every file link follows automatically.</small></p>
+</main>
+</body>
+</html>

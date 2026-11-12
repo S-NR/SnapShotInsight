@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · DWC2 findings</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>DWC2: findings F1–F12</h1>
+  <p class="lead">Static review of source, build configuration, linker script and the shipped bootloader hex, against CRA Annex I Part I. Nothing was run on hardware and no source files were modified. Severity is engineering judgement with the physical/OT context considered.</p>
+  <div class="pill-row">
+    <button class="iconbtn" type="button" data-f="all">All (12)</button>
+    <button class="iconbtn" type="button" data-f="H">High (4)</button>
+    <button class="iconbtn" type="button" data-f="M">Medium (4)</button>
+    <button class="iconbtn" type="button" data-f="L">Low (4)</button>
+    <button class="iconbtn" type="button" id="expandAll">Expand all</button>
+  </div>
+
+  <h2 id="top5">Top 5 actions</h2>
+  <div class="steps">
+    <div class="step"><h3>Signed firmware + anti-rollback</h3><p>Bootloader verifies the image signature before erase/program. <a href="#f1">F1</a></p></div>
+    <div class="step"><h3>Flash code protection &amp; write protection</h3><p><code>CP</code>, <code>PWP</code>, <code>BWP</code> on in production. <a href="#f2">F2</a></p></div>
+    <div class="step"><h3>Remove master PIN 5555</h3><p>Replace reversible PIN encoding with a salted hash. <a href="#f3">F3</a>, <a href="#f4">F4</a></p></div>
+    <div class="step"><h3>Fix unbounded <code>read_line()</code></h3><p>Stack overflow in parameter-file import. <a href="#f5">F5</a></p></div>
+    <div class="step"><h3>SBOM, CVE monitoring, vulnerability process</h3><p>Art. 14 reporting already applies. <a href="dwc2-overview.html#sbom">SBOM</a></p></div>
+  </div>
+
+  <h2 id="findings">Findings</h2>
+  <div id="flist">
+
+  <details class="finding" id="f1" data-sev="H"><summary><span class="fid">F1</span><span class="ft">Firmware update is not authenticated</span><span class="badge high">High</span><span class="badge info">I.2(c), (f)</span></summary><div class="body"><dl>
+    <dt>Evidence</dt><dd>The bootloader reads <code>SYSCTRL.hex</code> from the SD card at reset and programs flash. Its only checks are the HEX record checksum and the address range (strings in <a class="filelink" data-root="dwc2" data-path="out/SYS_Bootloader_V004.hex"></a>). App reset vector 0x9D00D000 in <a class="filelink" data-root="dwc2" data-path="SYS_BOOTFILE.ld"></a>. USB MSD lets a PC write that file.</dd>
+    <dt>Risk</dt><dd>Arbitrary or modified firmware: falsified measurement and totalizer values, a permanently compromised device, or a bricked unit. → <a href="dwc2-risk.html#r01">R01</a></dd>
+    <dt>Fix</dt><dd>Sign release images (ECDSA P-256 or Ed25519); verify in the bootloader before erase/program; version counter for anti-rollback; never erase the running app before the new image is verified. Software verification (micro-ecc, Monocypher) fits in the 52 KB bootloader. → <a href="dwc2-plan.html#s1">S1 Nitrokey secure boot</a></dd>
+    <dt>Dependency</dt><dd><b>Bootloader source is not in this repo</b> (question Q-01).</dd></dl></div></details>
+
+  <details class="finding" id="f2" data-sev="H"><summary><span class="fid">F2</span><span class="ft">Flash code protection and write protection disabled</span><span class="badge high">High</span><span class="badge info">I.2(j), (k), (f)</span></summary><div class="body"><dl>
+    <dt>Evidence</dt><dd><a class="filelink" data-root="dwc2" data-path="HAL/SYSCTRL_INIT.c" data-line="38-39"></a> sets <code>#pragma config CP = OFF</code>, <code>BWP = OFF</code>. Bootloader hex DEVCFG0 = <code>0x7FFFFFFF</code> → CP, BWP, PWP all off. Background debugger off (DEBUG = 11), but ICSP read-out is possible. JTAG pins RA0/1/4/5 and trace RA6/7 are never disabled (JTAGEN defaults on).</dd>
+    <dt>Risk</dt><dd>Firmware, algorithms and embedded secrets can be extracted with a standard programmer; boot flash can be overwritten. → <a href="dwc2-risk.html#r02">R02</a>, <a href="dwc2-risk.html#r03">R03</a></dd>
+    <dt>Fix</dt><dd>Production config: <code>CP = ON</code>, <code>PWP</code> covering the bootloader, <code>BWP = ON</code>, JTAG disabled at startup. Separate debug and production configurations; verify in the production programming procedure. → <a href="dwc2-plan.html#q1">Quick win Q1</a></dd></dl></div></details>
+
+  <details class="finding" id="f3" data-sev="H"><summary><span class="fid">F3</span><span class="ft">Hard-coded master password 5555</span><span class="badge high">High</span><span class="badge info">I.2(b), (d)</span></summary><div class="body"><dl>
+    <dt>Evidence</dt><dd><a class="filelink" data-root="dwc2" data-path="SYSCTRL.h" data-line="3020"></a> <code>#define DEFAULT_PASSWORD 5555</code>. Accepted to deactivate any user password in <a class="filelink" data-root="dwc2" data-path="1CH_2CH_GUI_SCREEN/SYSCTRL_WIN_23_PASSWORD.c" data-line="419"></a>. <a class="filelink" data-root="dwc2" data-path="SYSCTRL_PASSWORD.c" data-line="134, 144"></a> falls back to it when <code>protect.dwc</code> is unreadable.</dd>
+    <dt>Risk</dt><dd>Same unlock code on every device → full configuration access, calibration, factory reset. Exactly what "secure by default" targets. → <a href="dwc2-risk.html#r04">R04</a></dd>
+    <dt>Fix</dt><dd>Device-unique recovery: challenge-response derived from the serial number with a Systec-held key. → <a href="dwc2-plan.html#s2">S2 user levels</a></dd></dl></div></details>
+
+  <details class="finding" id="f4" data-sev="M"><summary><span class="fid">F4</span><span class="ft">Weak PIN scheme, reversible storage on removable media</span><span class="badge med">Medium/High</span><span class="badge info">I.2(d), (e)</span></summary><div class="body"><dl>
+    <dt>Evidence</dt><dd>4-digit numeric PIN. <code>password_encode()</code> in <a class="filelink" data-root="dwc2" data-path="SYSCTRL_PASSWORD.c" data-line="20-60"></a> computes <code>key = SUBn − digit × LETTERn</code>, trivially reversible, stored in <code>protect.dwc</code> on SD. No attempt counter or lockout. PIN is optional: <code>password == 0</code> disables all gates in <a class="filelink" data-root="dwc2" data-path="1CH_2CH_GUI_SCREEN/SYSCTRL_WIN_0.c" data-line="481-511"></a>.</dd>
+    <dt>Risk</dt><dd>PIN readable from SD or over USB. → <a href="dwc2-risk.html#r05">R05</a></dd>
+    <dt>Fix</dt><dd>Salted SHA-256 in MRAM, no copy on SD; attempt limiting with back-off; consider PIN required at commissioning or document the default in Annex II.</dd></dl></div></details>
+
+  <details class="finding" id="f5" data-sev="H"><summary><span class="fid">F5</span><span class="ft">Stack buffer overflow in parameter-file import</span><span class="badge high">High</span><span class="badge info">I.2(a), (k)</span></summary><div class="body"><dl>
+    <dt>Evidence</dt><dd><code>read_line()</code> in <a class="filelink" data-root="dwc2" data-path="1CH_2CH_GUI_SCREEN/SYSCTRL_WIN_26_IMPORT_EXPORT.c" data-line="364-410"></a> copies bytes until <code>\n</code> with <b>no length limit</b>. <code>importLAR_File()</code> (around line 2079) passes <code>char str[500]</code> on the stack.</dd>
+    <dt>Risk</dt><dd>Any line &gt; 499 characters in a parameter file on the SD card (writable over USB) overwrites the stack: crash or code execution. A "known exploitable vulnerability" at release. → <a href="dwc2-risk.html#r06">R06</a></dd>
+    <dt>Fix</dt><dd>Pass the buffer size, stop at <code>size − 1</code>, discard the rest of an over-long line. Fuzz the import parser on a host build (AFL++/libFuzzer). Review other <code>FSfread</code>/<code>strcpy</code> sites.</dd>
+<dt>Sketch</dt><dd><pre>static int read_line(FSFILE *f, char *buf, size_t size)
+{
+    size_t n = 0; char c;
+    while (FSfread(&amp;c, 1, 1, f) == 1) {
+        if (c == '\n') break;
+        if (n + 1 &lt; size) buf[n++] = c;   /* drop excess bytes */
+    }
+    buf[n] = '\0';
+    return (int)n;
+}</pre></dd></dl></div></details>
+
+  <details class="finding" id="f6" data-sev="M"><summary><span class="fid">F6</span><span class="ft">Parameter/calibration integrity not protected</span><span class="badge med">Medium</span><span class="badge info">I.2(f)</span></summary><div class="body"><dl>
+    <dt>Evidence</dt><dd>Calibration, MUS parameters, flow-error tables and com settings written to MRAM via <code>mram_wr_byte()</code> (e.g. <a class="filelink" data-root="dwc2" data-path="1CH_2CH_GUI_SCREEN/SYSCTRL_WIN_26_IMPORT_EXPORT.c" data-line="1863-2017"></a>). No CRC/MAC over stored blocks. SD import writes calibration values after range checks only.</dd>
+    <dt>Risk</dt><dd>Undetected corruption or manipulation of calibration. → <a href="dwc2-risk.html#r07">R07</a></dd>
+    <dt>Fix</dt><dd>CRC (minimum) or MAC per parameter block, verified at boot, corruption reported. Calibration import only at service level; log it.</dd></dl></div></details>
+
+  <details class="finding" id="f7" data-sev="L"><summary><span class="fid">F7</span><span class="ft">Unauthenticated persistent changes via M-Bus</span><span class="badge low">Low/Medium</span><span class="badge info">I.2(d), (j)</span></summary><div class="body"><dl>
+    <dt>Evidence</dt><dd><a class="filelink" data-root="dwc2" data-path="SYSCTRL_MBUS.c" data-line="136-154"></a> persists primary/secondary address changes. Open TODO: "check values with struct tValue::iWritable set".</dd>
+    <dt>Context</dt><dd>M-Bus has no authentication by design (EN 13757); address changes are a normal feature. → <a href="dwc2-risk.html#r09">R09</a></dd>
+    <dt>Fix</dt><dd>Resolve the TODO; document the OT trust assumption; optional lock for address changes.</dd></dl></div></details>
+
+  <details class="finding" id="f8" data-sev="M"><summary><span class="fid">F8</span><span class="ft">Modbus TCP converter (to verify)</span><span class="badge med">Medium</span><span class="badge info">I.2(d), (h), (j)</span></summary><div class="body"><dl>
+    <dt>Evidence</dt><dd><code>MODBUSTCP_ENABLE</code> active (<a class="filelink" data-root="dwc2" data-path="SYSCTRL.h" data-line="77"></a>). Default IP 192.168.100.10/24, port 502 (<code>SYSCTRL.h:2960–2972</code>). Converter configured over UART1 with frames delimited by fixed constants <code>0x12345678</code>/<code>0x87654321</code> (<a class="filelink" data-root="dwc2" data-path="21BD_MODBUS_TCP_Details.docx"></a>).</dd>
+    <dt>Open questions</dt><dd>Network-side config (web UI, default credentials)? Own firmware updates? TCP flood robustness? (Q-04)</dd>
+    <dt>Positive</dt><dd>DWC2 Modbus map is read-only, so network exposure is limited to reading and DoS. → <a href="dwc2-risk.html#r08">R08</a></dd>
+    <dt>Fix</dt><dd>Include the converter in risk assessment and SBOM; vendor security info; segmentation guidance in Annex II.</dd></dl></div></details>
+
+  <details class="finding" id="f9" data-sev="M"><summary><span class="fid">F9</span><span class="ft">No security event log</span><span class="badge med">Medium</span><span class="badge info">I.2(l)</span></summary><div class="body"><dl>
+    <dt>Evidence</dt><dd>No logging of PIN changes, failed PIN entries, config/calibration import, factory reset or firmware update. SD logger records measurement data only.</dd>
+    <dt>Fix</dt><dd>Small ring-buffer security log in MRAM (event, RTC timestamp, source interface), exportable via SD and the diagnostics screen.</dd></dl></div></details>
+
+  <details class="finding" id="f10" data-sev="L"><summary><span class="fid">F10</span><span class="ft">Watchdog disabled</span><span class="badge low">Low/Medium</span><span class="badge info">I.2(h)</span></summary><div class="body"><dl>
+    <dt>Evidence</dt><dd><code>#pragma config FWDTEN = OFF</code> (<a class="filelink" data-root="dwc2" data-path="HAL/SYSCTRL_INIT.c" data-line="51"></a>); <code>ENABLE_WATCHDOG</code> commented out (<code>SYSCTRL.h:826</code>).</dd>
+    <dt>Fix</dt><dd>Enable after a timing review of long blocking paths (SD access, <code>modbusTCPInit()</code>/<code>modbusTCPRead()</code> UART loops, USB MSD transfers). → <a href="dwc2-risk.html#r10">R10</a></dd></dl></div></details>
+
+  <details class="finding" id="f11" data-sev="L"><summary><span class="fid">F11</span><span class="ft">Dormant service backdoor code (compiled out)</span><span class="badge low">Low</span><span class="badge info">I.2(j)</span></summary><div class="body"><dl>
+    <dt>Evidence</dt><dd><a class="filelink" data-root="dwc2" data-path="HAL/SYSCTRL_CMDS.c"></a>: unauthenticated RS232 commands for SD delete/copy/mkdir and <b>arbitrary MRAM write</b> (<code>%MW</code>, <code>cmd_mram()</code> :769–787); unbounded <code>strcpy</code> (:437, :745). Guarded by <code>CMD_ENABLE</code>, not defined in the current <code>SYSCTRL.h</code>.</dd>
+    <dt>Fix</dt><dd>Build-time <code>#error</code> if <code>CMD_ENABLE</code> is set in a release configuration, or remove the code. → <a href="dwc2-risk.html#r13">R13</a></dd></dl></div></details>
+
+  <details class="finding" id="f12" data-sev="L"><summary><span class="fid">F12</span><span class="ft">Weak randomness for activation key</span><span class="badge low">Low</span><span class="badge info">I.2(d)</span></summary><div class="body"><dl>
+    <dt>Evidence</dt><dd><code>Generate_Random_Password()</code> seeds <code>srand(rtc.seconds * rtc.minutes)</code> (<a class="filelink" data-root="dwc2" data-path="1CH_2CH_GUI_SCREEN/SYSCTRL_WIN_23_PASSWORD.c" data-line="464"></a>): at most 3,600 seeds, many 0. Key stored on SD in the F4 format.</dd>
+    <dt>Fix</dt><dd>Device-unique, server-side-generated activation code. Business rather than safety risk. → <a href="dwc2-risk.html#r14">R14</a></dd></dl></div></details>
+  </div>
+
+  <h2 id="positives">Positive findings (keep as evidence)</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Area</th><th>Evidence</th><th>CRA value</th></tr></thead>
+    <tbody>
+      <tr><td>Modbus write functions disabled</td><td><a class="filelink" data-root="dwc2" data-path="Modbus/mbconfig.h" data-line="90-102"></a></td><td>Strong attack-surface reduction (I.2j)</td></tr>
+      <tr><td>Input-register bounds check</td><td><a class="filelink" data-root="dwc2" data-path="SYSCTRL_MODBUS.c" data-line="552-553"></a></td><td>Robust request handling</td></tr>
+      <tr><td>Service command interface compiled out</td><td><code>CMD_ENABLE</code> undefined</td><td>Attack-surface reduction</td></tr>
+      <tr><td>Debug serial output behind compile flags</td><td><code>SYSCTRL.h:420–456</code></td><td>No debug leakage in release builds</td></tr>
+      <tr><td>IP address parser validates octets</td><td><code>SYSCTRL_WIN_26_IMPORT_EXPORT.c:777–795</code></td><td>Input validation</td></tr>
+      <tr><td>Static analysis in use</td><td><a class="filelink" data-root="dwc2" data-path="sonar-project.properties"></a></td><td>Supports Part II.3 security testing</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="limits">Limits of this analysis</h2>
+  <ul>
+    <li>Static review only: no hardware tests, no fuzzing, no binary diff of shipped images.</li>
+    <li>Bootloader behaviour inferred from strings and config words in the hex, not from source.</li>
+    <li>Third-party versions not yet checked against CVE databases (first P0 item).</li>
+    <li>Variant <code>#ifdef</code> combinations (1CH/2CH, languages, VIEGA) checked only for the flags named above.</li>
+    <li>MRAM handling and USB MSD SCSI handling not reviewed in depth.</li>
+  </ul>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var items = document.querySelectorAll("#flist .finding");
+  document.querySelectorAll("[data-f]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var f = b.getAttribute("data-f");
+      items.forEach(function (d) { d.hidden = !(f === "all" || d.getAttribute("data-sev") === f); });
+    });
+  });
+  var open = false;
+  document.getElementById("expandAll").addEventListener("click", function () {
+    open = !open; items.forEach(function (d) { d.open = open; });
+    this.textContent = open ? "Collapse all" : "Expand all";
+  });
+});
+</script>
+</body>
+</html>

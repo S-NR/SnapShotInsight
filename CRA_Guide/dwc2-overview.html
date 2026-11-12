@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · DWC2 system &amp; attack surface</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+<style>
+  .diagram{overflow-x:auto; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px}
+  .diagram svg{display:block; min-width:760px; width:100%; height:auto}
+  .diagram text{font:13px "Segoe UI",system-ui,sans-serif; fill:var(--text)}
+  .diagram .sm{font-size:11.5px; fill:var(--muted)}
+  .diagram .box{fill:var(--surface-2); stroke:var(--border); stroke-width:1.2}
+  .diagram .mcu{fill:var(--accent-soft); stroke:var(--accent); stroke-width:1.4}
+  .diagram .ext{fill:var(--surface); stroke:var(--muted); stroke-width:1.2}
+  .diagram .bad{fill:var(--crit-soft); stroke:var(--crit); stroke-width:1.4}
+  .diagram .tb{fill:none; stroke:var(--warn); stroke-width:1.6; stroke-dasharray:7 5}
+  .diagram .ln{stroke:var(--muted); stroke-width:1.4; fill:none}
+  .diagram .lnbad{stroke:var(--crit); stroke-width:1.6; fill:none}
+  .diagram .tbl{fill:var(--warn); font-size:11.5px; font-weight:600}
+</style>
+</head>
+<body>
+<main>
+  <h1>DWC2: system &amp; attack surface</h1>
+  <p class="lead">DWC2 is the controller firmware (<code>SYSCTRL</code>) for systec ultrasonic flow and heat measurement (deltawave family), in 1- and 2-channel variants and several language builds. This page shows what it is made of and where an attacker could get in.</p>
+  <p>Full analysis: <a class="filelink" data-root="cra" data-path="04_CRA_DWC2_Codebase_Analysis.md"></a> · Source tree: <a class="filelink" data-root="dwc2" data-path="">DWC2 folder</a></p>
+
+  <h2 id="summary">Summary</h2>
+  <div class="tablewrap"><table>
+    <tbody>
+      <tr><th>MCU</th><td>Microchip <b>PIC32MX575F512L</b>: 512 KB flash, 64 KB RAM, <b>no crypto accelerator</b>; external MRAM for parameters</td></tr>
+      <tr><th>Toolchains</th><td>MPLAB 8 (<a class="filelink" data-root="dwc2" data-path="SYSCTRL.mcp"></a>, C32 v2.02) and MPLAB X (<code>SYSCTRL.X</code>, XC32 v5.00)</td></tr>
+      <tr><th>Bootloader</th><td>BL 0.0.4 at 0x9D000000–0x9D00CFFF; app reset vector 0x9D00D000 (<a class="filelink" data-root="dwc2" data-path="SYS_BOOTFILE.ld"></a>, <a class="filelink" data-root="dwc2" data-path="out/SYS_Bootloader_V004.hex"></a>). <b>Source not in repo</b></td></tr>
+      <tr><th>CRA scope / class</th><td><span class="badge crit">In scope</span> <span class="badge low">Default → Module A</span></td></tr>
+      <tr><th>Other regimes</th><td>EMC/LVD; MID MI-004 if heat is billed; ATEX for Ex variants; RED only with integrated radio</td></tr>
+      <tr><th>Readiness</th><td><span class="badge crit">Low</span> Unsigned SD update, code protection off, master PIN, stack overflow in import</td></tr>
+      <tr><th>Positives</th><td>Modbus writes compiled out; RS232 service commands compiled out; SonarQube in place</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="context">System context &amp; trust boundaries</h2>
+  <div class="diagram" role="img" aria-label="DWC2 system context diagram">
+  <svg viewBox="0 0 920 470" xmlns="http://www.w3.org/2000/svg">
+    <!-- device boundary -->
+    <rect class="tb" x="250" y="22" width="410" height="430" rx="14"/>
+    <text class="tbl" x="262" y="40">TB1 · device housing / PCB</text>
+    <!-- MCU -->
+    <rect class="mcu" x="280" y="52" width="350" height="150" rx="10"/>
+    <text x="296" y="76" style="font-weight:700">PIC32MX575F512L</text>
+    <rect class="box" x="296" y="88" width="318" height="28" rx="6"/><text x="306" y="107">Bootloader BL 0.0.4 (52 KB) · reads SYSCTRL.hex</text>
+    <rect class="box" x="296" y="122" width="318" height="28" rx="6"/><text x="306" y="141">Application SYSCTRL</text>
+    <text class="sm" x="296" y="170">FreeModbus 1.27 · solvimus M-Bus 1.11 · MDD FAT FS</text>
+    <text class="sm" x="296" y="188">USB MSD stack · easyGUI 6.0.8 · plib</text>
+    <!-- peripherals -->
+    <rect class="box" x="280" y="218" width="168" height="48" rx="8"/><text x="292" y="238">Keypad + display</text><text class="sm" x="292" y="256">PIN optional, master 5555</text>
+    <rect class="box" x="462" y="218" width="168" height="48" rx="8"/><text x="474" y="238">MRAM (SPI2)</text><text class="sm" x="474" y="256">calibration, params, no CRC</text>
+    <rect class="box" x="280" y="278" width="168" height="44" rx="8"/><text x="292" y="297">LTC2402 ADC</text><text class="sm" x="292" y="313">SPI1</text>
+    <rect class="box" x="462" y="278" width="168" height="44" rx="8"/><text x="474" y="297">MCP9801 temp</text><text class="sm" x="474" y="313">I2C1/I2C2</text>
+    <rect class="box" x="280" y="334" width="350" height="40" rx="8"/><text x="292" y="359">SD card slot (SPI) · USB device port · RS485 UART1 · M-Bus</text>
+    <rect class="bad" x="280" y="388" width="350" height="44" rx="8"/><text x="292" y="407" style="font-weight:600">JTAG/trace RA0–RA7 + ICSP</text><text class="sm" x="292" y="424">JTAG not disabled · CP = OFF · BWP = OFF</text>
+
+    <!-- left actors -->
+    <rect class="tb" x="14" y="52" width="200" height="140" rx="12"/><text class="tbl" x="24" y="70">TB2 · removable media &amp; USB</text>
+    <rect class="ext" x="28" y="80" width="172" height="44" rx="8"/><text x="40" y="100">SD card</text><text class="sm" x="40" y="116">logs, PAR/LAR, protect.dwc, SYSCTRL.hex</text>
+    <rect class="ext" x="28" y="136" width="172" height="44" rx="8"/><text x="40" y="156">PC over USB (MSD)</text><text class="sm" x="40" y="172">full read/write of SD files</text>
+    <rect class="ext" x="28" y="222" width="172" height="44" rx="8"/><text x="40" y="242">Operator / service</text><text class="sm" x="40" y="258">local UI</text>
+    <rect class="ext" x="28" y="388" width="172" height="44" rx="8"/><text x="40" y="408">Programmer / probe</text><text class="sm" x="40" y="424">physical access</text>
+    <path class="lnbad" d="M200 102 H280"/><path class="lnbad" d="M200 158 H240 V350 H280"/>
+    <path class="ln" d="M200 244 H280"/>
+    <path class="lnbad" d="M200 410 H280"/>
+
+    <!-- right actors -->
+    <rect class="tb" x="700" y="52" width="206" height="236" rx="12"/><text class="tbl" x="710" y="70">TB3 · field buses / TB4 · Ethernet</text>
+    <rect class="ext" x="714" y="80" width="178" height="44" rx="8"/><text x="726" y="100">SCADA / DCS</text><text class="sm" x="726" y="116">Modbus RTU RS485, read-only</text>
+    <rect class="ext" x="714" y="136" width="178" height="58" rx="8"/><text x="726" y="156">TCP↔RTU converter</text><text class="sm" x="726" y="172">Modbus TCP, port 502</text><text class="sm" x="726" y="187">192.168.100.10, fixed code</text>
+    <rect class="ext" x="714" y="222" width="178" height="44" rx="8"/><text x="726" y="242">M-Bus master</text><text class="sm" x="726" y="258">address changes persisted</text>
+    <path class="ln" d="M714 102 H676 V350 H630"/><path class="ln" d="M714 165 H690 V350"/><path class="ln" d="M714 244 H690"/>
+  </svg>
+  </div>
+  <p><small>Red lines = paths that currently lead to code execution or full configuration access without authentication. TB = trust boundary.</small></p>
+
+  <h2 id="attack-surface">Attack surface (from code)</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>#</th><th>Interface</th><th>Purpose</th><th>Authentication</th><th>Evidence</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><b>SD card</b></td><td>Logging; PAR/LAR import/export; <code>protect.dwc</code>; activation key; <b>firmware update</b> via bootloader</td><td><span class="badge crit">None</span></td><td><a class="filelink" data-root="dwc2" data-path="SYSCTRL_PASSWORD.c"></a> <a class="filelink" data-root="dwc2" data-path="1CH_2CH_GUI_SCREEN/SYSCTRL_WIN_26_IMPORT_EXPORT.c"></a></td></tr>
+      <tr><td>2</td><td><b>USB device (MSD)</b></td><td>Exposes SD card to a PC, which can write every file incl. <code>SYSCTRL.hex</code></td><td><span class="badge crit">None</span></td><td><a class="filelink" data-root="dwc2" data-path="SYSCTRL_SDUSB.c" data-line="311, 619"></a> <a class="filelink" data-root="dwc2" data-path="SYSCTRL.c" data-line="3267, 3640"></a></td></tr>
+      <tr><td>3</td><td>Modbus RTU (RS485, UART1)</td><td>Measurement data to SCADA; write functions disabled at compile time</td><td><span class="badge med">None (protocol)</span></td><td><a class="filelink" data-root="dwc2" data-path="Modbus/mbconfig.h" data-line="90–102"></a></td></tr>
+      <tr><td>4</td><td>Modbus TCP via converter</td><td>Ethernet access to the same RTU slave; converter configured with fixed code <code>0x12345678 / 0x87654321</code></td><td><span class="badge high">Fixed constant</span></td><td><a class="filelink" data-root="dwc2" data-path="SYSCTRL.h" data-line="77, 2958–2993"></a> <a class="filelink" data-root="dwc2" data-path="21BD_MODBUS_TCP_Details.docx"></a></td></tr>
+      <tr><td>5</td><td>M-Bus slave</td><td>Meter readout; address changes persisted to MRAM</td><td><span class="badge med">None (protocol)</span></td><td><a class="filelink" data-root="dwc2" data-path="SYSCTRL_MBUS.c" data-line="136–154"></a></td></tr>
+      <tr><td>6</td><td>Keypad + display</td><td>Full config, calibration, factory reset, import/export</td><td><span class="badge high">Optional 4-digit PIN</span></td><td><a class="filelink" data-root="dwc2" data-path="1CH_2CH_GUI_SCREEN/SYSCTRL_WIN_0.c" data-line="481–511"></a></td></tr>
+      <tr><td>7</td><td>RS232 service commands</td><td>SD file commands, raw MRAM read/write, RTC</td><td><span class="badge low">Compiled out</span></td><td><a class="filelink" data-root="dwc2" data-path="HAL/SYSCTRL_CMDS.c"></a></td></tr>
+      <tr><td>8</td><td><b>ICSP / JTAG</b></td><td>Programming / debugging; flash read-out possible</td><td><span class="badge crit">CP off</span></td><td><a class="filelink" data-root="dwc2" data-path="HAL/SYSCTRL_INIT.c" data-line="38–39"></a></td></tr>
+      <tr><td>9</td><td><b>Bootloader BL 0.0.4</b></td><td>On reset, programs <code>SYSCTRL.hex</code> from SD</td><td><span class="badge crit">Checksum only</span></td><td><a class="filelink" data-root="dwc2" data-path="out/SYS_Bootloader_V004.hex"></a></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3 id="attack-chain">Key attack chain</h3>
+  <div class="flow">
+    <div class="node"><b>1. Access</b>Physical access to the SD card, or a PC connected over USB</div><div class="arrow">→</div>
+    <div class="node"><b>2. Plant</b>Modified <code>SYSCTRL.hex</code> copied to the card</div><div class="arrow">→</div>
+    <div class="node"><b>3. Reset</b>Bootloader checks only HEX checksums and address range, then programs flash</div><div class="arrow">→</div>
+    <div class="node" style="border-color:var(--crit)"><b>4. Impact</b>Arbitrary firmware: falsified flow/heat/totalizer values to SCADA or billing</div>
+  </div>
+  <p>This is risk <a href="dwc2-risk.html#r01">R01 (critical)</a> and finding <a href="dwc2-findings.html#f1">F1</a>.</p>
+
+  <h2 id="sbom">Draft SBOM (recovered from source)</h2>
+  <p>Required by Annex I Part II.1. Recommended format: CycloneDX JSON per release (action <a href="dwc2-plan.html#actions">A4</a>).</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Component</th><th>Supplier</th><th>Version found</th><th>Location</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Application <code>SYSCTRL</code></td><td>Systec / IBMT / Tismo</td><td>IR 44 maintenance branch</td><td>root, <code>HAL/</code>, <code>1CH_2CH_GUI_SCREEN/</code></td><td>Add product version string</td></tr>
+      <tr><td>Bootloader BL 0.0.4</td><td>Systec</td><td>0.0.4</td><td><code>out/</code></td><td><b>Source not in repo</b>; needed for secure boot</td></tr>
+      <tr><td>FreeModbus (RTU/ASCII)</td><td>Christian Walter (BSD)</td><td>mb.c v1.27 (2007), mbrtu.c v1.18</td><td><a class="filelink" data-root="dwc2" data-path="Modbus/">Modbus/</a></td><td>Old but small; check issues</td></tr>
+      <tr><td>M-Bus slave stack</td><td>solvimus GmbH (commercial)</td><td>1.11 (2008)</td><td><a class="filelink" data-root="dwc2" data-path="MbusSlave/">MbusSlave/</a></td><td>Ask vendor about security support</td></tr>
+      <tr><td>MDD FAT file system</td><td>Microchip (IBMT-modified)</td><td>v1.2.x era</td><td><a class="filelink" data-root="dwc2" data-path="SDCARD/">SDCARD/</a></td><td>Parses untrusted media</td></tr>
+      <tr><td>USB device stack + MSD</td><td>Microchip MLA (IBMT-modified)</td><td>rev 2.7a / 2.8</td><td><a class="filelink" data-root="dwc2" data-path="USB/">USB/</a></td><td>Parses host input</td></tr>
+      <tr><td>PIC32 peripheral library</td><td>Microchip</td><td>legacy</td><td><code>plib.h</code></td><td>Deprecated by Microchip</td></tr>
+      <tr><td>easyGUI generated GUI</td><td>IBIS Solutions</td><td>6.0.8.008</td><td><a class="filelink" data-root="dwc2" data-path="GUI/">GUI/</a></td><td>Generated code + fonts</td></tr>
+      <tr><td>Toolchain / C runtime</td><td>Microchip</td><td>C32 v2.02, XC32 v5.00</td><td><code>SYSCTRL.mcp</code>, <code>SYSCTRL.X</code></td><td>Confirm which builds the release (Q-11); archive it</td></tr>
+      <tr><td>Modbus TCP converter</td><td>Third party (to confirm)</td><td>unknown</td><td>external</td><td>Own firmware and credentials; include if sold with DWC2</td></tr>
+    </tbody>
+  </table></div>
+</main>
+</body>
+</html>

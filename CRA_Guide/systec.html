@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · Systec products &amp; CRA</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>Systec products &amp; the CRA</h1>
+  <p class="lead">systec Controls (Germany) manufactures and sells measurement instruments under its own name in the EU, so <b>Systec is the CRA manufacturer</b>. Tismo, as firmware engineering partner, delivers much of the evidence. Its customers (water, power, district heating, gas, chemicals, pharma) are often NIS2 entities and will ask for cybersecurity evidence anyway.</p>
+  <p>Source: <a href="https://www.systec-controls.de/english/home.html" target="_blank" rel="noopener">systec-controls.de</a> product pages · full document <a class="filelink" data-root="cra" data-path="03_CRA_for_Systec_Projects.md"></a></p>
+
+  <h2 id="product-mapping">Product-by-product applicability</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Product family</th><th>Examples</th><th>Known interfaces</th><th>CRA?</th><th>Class</th></tr></thead>
+    <tbody>
+      <tr><td><b>Ultrasonic flow</b></td><td>deltawave, deltawaveVER2LEAN (<a href="dwc2-overview.html">DWC2 controller</a>)</td><td>RS485, Modbus, M-Bus, USB, SD card (logging, setup, updates), GSM option</td><td><span class="badge crit">Yes</span></td><td>Default → A</td></tr>
+      <tr><td>Ultrasonic clamp-on</td><td>deltawaveC-fix, portable, gas</td><td>To verify</td><td><span class="badge crit">Yes</span></td><td>Default</td></tr>
+      <tr><td>Ultrasonic gas meter</td><td>deltawave SUF</td><td>To verify</td><td><span class="badge crit">Yes</span></td><td>Default; check MID</td></tr>
+      <tr><td>Differential-pressure flow</td><td>deltaflow, deltaflowC, ring flow, pitot</td><td>4–20 mA, possibly HART/Modbus</td><td><span class="badge crit">Yes</span> if firmware + interface</td><td>Default</td></tr>
+      <tr><td>Multivariable transmitter</td><td>SYS-MMF</td><td>To verify</td><td><span class="badge crit">Yes</span></td><td>Default</td></tr>
+      <tr><td><b>Flow computer</b></td><td>flowcom</td><td>Modbus, USB, logging, Windows software</td><td><span class="badge crit">Yes</span></td><td>Default</td></tr>
+      <tr><td>Coriolis</td><td>Coriolis flow meter</td><td>To verify</td><td><span class="badge crit">Yes</span> if firmware + interface</td><td>Default</td></tr>
+      <tr><td>Accessories</td><td>deltafit, air-flushing, wall-thickness gauge</td><td>To verify</td><td>Only with firmware + data link</td><td>Default</td></tr>
+      <tr><td><b>PC software</b></td><td>SystecParamSoftware, flowcom software, deltacalc</td><td>Windows; USB to device</td><td><span class="badge crit">Yes</span> (software product)</td><td>Default</td></tr>
+      <tr><td>systec Automotive</td><td>Pitot probes, exhaust-gas flow meters, OEM sensors</td><td>To verify</td><td><span class="badge crit">Yes</span> for test benches</td><td>Default; vehicle-part exclusion only if type-approved</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>Other CE regimes stay:</b> EMC, LVD, ATEX (Ex variants), PED, MID (custody transfer), RED (integrated radio). <a href="landscape.html">Related laws →</a></p>
+
+  <h2 id="risk-points">Typical legacy risk points</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Area</th><th>Typical state</th><th>CRA ref.</th><th>What to do</th><th>DWC2 evidence</th></tr></thead>
+    <tbody>
+      <tr><td>Modbus RTU / M-Bus</td><td>No authentication by protocol design</td><td>I.2d, 2f, 2j</td><td>Read-only measurement registers; protected config writes; document the OT-zone assumption</td><td>Modbus writes off ✔; <a href="dwc2-findings.html#f7">F7</a></td></tr>
+      <tr><td><b>SD-card updates</b></td><td>Card loads config and firmware</td><td>I.2c, 2f</td><td><b>Sign firmware images, verify in the bootloader</b>, anti-rollback. The single most important retrofit</td><td><a href="dwc2-findings.html#f1">F1</a></td></tr>
+      <tr><td>USB parameterisation</td><td>Local PC tool without authentication</td><td>I.2d, 2b</td><td>Device-side service password; log config changes</td><td><a href="dwc2-overview.html#attack-surface">USB MSD</a></td></tr>
+      <tr><td>GSM remote transmission</td><td>Possibly unencrypted</td><td>I.2e, 2h</td><td>Encrypted transport (VPN/TLS modem); customer duties in Annex II</td><td>Not in DWC2 tree</td></tr>
+      <tr><td>Calibration data</td><td>Flash/EEPROM without check</td><td>I.2f</td><td>CRC/MAC on calibration tables; report corruption</td><td><a href="dwc2-findings.html#f6">F6</a></td></tr>
+      <tr><td>Debug ports</td><td>JTAG/SWD accessible</td><td>I.2j, 2k</td><td>Read-out protection, debug lock in production</td><td><a href="dwc2-findings.html#f2">F2</a></td></tr>
+      <tr><td>Long field life</td><td>10–20 years, informal support</td><td>Art. 13(8)</td><td>Publish support end date; archive toolchains</td><td>C32 2.02 / XC32 5.00</td></tr>
+      <tr><td>Third-party code</td><td>Undocumented versions</td><td>Part II.1</td><td>Recover SBOM, monitor CVEs</td><td><a href="dwc2-overview.html#sbom">SBOM</a></td></tr>
+      <tr><td>Vulnerability reporting</td><td>No formal process</td><td>Art. 14</td><td>Security contact, CVD policy, 24 h runbook</td><td><a href="dwc2-risk.html#r12">R12</a></td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="roadmap">Recommended Systec roadmap</h2>
+  <div class="steps">
+    <div class="step"><h3>Product inventory &amp; classification (now)</h3><p>Every product and software tool: interfaces, firmware version, MCU, components, EU sales after Dec 2027.</p></div>
+    <div class="step"><h3>Vulnerability-handling process (now, legally required)</h3><p>Security contact, CVD policy, Art. 14 runbook, ENISA platform account, internal owner.</p></div>
+    <div class="step"><h3>SBOM recovery &amp; CVE baseline</h3><p>For each firmware and PC tool. DWC2 is the pilot.</p></div>
+    <div class="step"><h3>Per-product risk assessment</h3><p>Annex I.1, with IEC 62443-4-2 as checklist. DWC2 Phase A/B is the template.</p></div>
+    <div class="step"><h3>Security retrofit</h3><p>Signed updates → config write protection → debug lock → data integrity → security log → secure reset.</p></div>
+    <div class="step"><h3>Technical file, DoC, Annex II</h3><p>Per product, including support end date and secure installation guidance.</p></div>
+    <div class="step"><h3>Support period &amp; end-of-sale decisions</h3><p>Decide which older models get retrofitted and which stop selling before Dec 2027.</p></div>
+  </div>
+
+  <h2 id="why-dwc2">Why DWC2 is the baseline</h2>
+  <div class="callout ok"><b>A representative legacy instrument</b>DWC2 combines every typical Systec risk point: field buses, USB, SD-card updates, local UI, calibration data and a long field life, on a resource-tight MCU without crypto hardware. The method used for it carries over to deltawave variants and flowcom. <a href="dwc2-overview.html">Start the DWC2 walkthrough →</a></div>
+</main>
+</body>
+</html>

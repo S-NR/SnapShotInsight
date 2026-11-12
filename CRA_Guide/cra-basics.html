@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · What the CRA is</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>What the CRA is</h1>
+  <p class="lead">Regulation (EU) 2024/2847, the <b>Cyber Resilience Act</b>, sets horizontal cybersecurity requirements for <b>products with digital elements</b>. It works like the CE regimes we already know (LVD, EMC, RED), but for cybersecurity.</p>
+
+  <h2 id="in-one-paragraph">The CRA in one paragraph</h2>
+  <p>The CRA is a <b>product law</b>, not an operator law. To place a product with digital elements on the EU market, the manufacturer has to:</p>
+  <div class="grid c2">
+    <div class="card"><div class="kicker">Design</div><h3>Meet the essential requirements</h3><p>Design to Annex I Part I (secure by default, secure updates, access control, integrity…). <a href="requirements.html">Requirements →</a></p></div>
+    <div class="card"><div class="kicker">Maintain</div><h3>Handle vulnerabilities</h3><p>Run a vulnerability-handling process for the whole support period (Annex I Part II): SBOM, CVD policy, free security updates.</p></div>
+    <div class="card"><div class="kicker">Report</div><h3>Report exploited vulnerabilities</h3><p>Report actively exploited vulnerabilities and severe incidents to ENISA/CSIRT within 24 h (Art. 14). <a href="obligations.html#reporting">Reporting →</a></p></div>
+    <div class="card"><div class="kicker">Declare</div><h3>Document, declare, mark</h3><p>Keep technical documentation (Annex VII), sign the EU declaration of conformity and affix the CE mark.</p></div>
+  </div>
+  <p>The rules apply no matter where the manufacturer is based (EU, India, USA). What triggers them is <b>making the product available on the EU market</b>.</p>
+
+  <h2 id="roles">Who carries which obligation</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Role</th><th>Definition (simplified)</th><th>Main duties</th><th>In our context</th></tr></thead>
+    <tbody>
+      <tr><td><b>Manufacturer</b></td><td>Develops or has a product developed and markets it <b>under its own name or trademark</b> (Art. 3(13))</td><td>Everything: Annex I, risk assessment, support period, reporting, technical file, DoC, CE (Art. 13–14)</td><td><b>Systec</b> for DWC2 / deltawave / flowcom</td></tr>
+      <tr><td><b>Importer</b></td><td>EU-based, places a non-EU manufacturer's product on the EU market</td><td>Check the manufacturer did its job; keep DoC available (Art. 19)</td><td>—</td></tr>
+      <tr><td><b>Distributor</b></td><td>Makes the product available, not manufacturer/importer</td><td>Check CE mark and documentation (Art. 20)</td><td>Systec resellers</td></tr>
+      <tr><td><b>Becomes manufacturer</b></td><td>Rebrands, or makes a <b>substantial modification</b></td><td>Full manufacturer duties (Art. 21–22)</td><td>A partner relabelling DWC2</td></tr>
+      <tr><td><b>Open-source steward</b></td><td>Organisation that sustainably supports FOSS meant for commercial use</td><td>Light regime: security policy, cooperation (Art. 24)</td><td>—</td></tr>
+      <tr><td><b>Engineering partner</b></td><td>Not a CRA role</td><td>No direct legal duty, but delivers the evidence the manufacturer needs</td><td><b>Tismo</b>: risk assessment, SBOM, code fixes, test evidence</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><b>Tismo's position</b>For design-services projects Tismo is usually <b>not</b> the manufacturer. The client's legal obligations become Tismo's engineering deliverables. Tismo would be the manufacturer only for products, SDKs or apps it sells under the Tismo name.</div>
+
+  <h2 id="free-vs-paid">Is the CRA a paid or restricted document?</h2>
+  <p><b>No.</b> The regulation itself is public EU law and free to read. What costs money are the <b>technical standards</b> used to show compliance.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Document</th><th>Access</th><th>What it is</th></tr></thead>
+    <tbody>
+      <tr><td><b>Cyber Resilience Act</b>, Reg. (EU) 2024/2847, Articles + Annexes I–VIII</td><td><span class="badge low">Free</span> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2847" target="_blank" rel="noopener">EUR-Lex</a></td><td>The law: scope, requirements, obligations, deadlines, fines</td></tr>
+      <tr><td>Commission implementing / delegated acts (e.g. technical descriptions of product categories, Reg. (EU) 2025/2392)</td><td><span class="badge low">Free</span> EUR-Lex</td><td>Details that complete the law</td></tr>
+      <tr><td>Commission guidance, FAQs, ENISA material</td><td><span class="badge low">Free</span></td><td>Interpretation help</td></tr>
+      <tr><td>CRA harmonised standards (in drafting at CEN/CENELEC/ETSI)</td><td><span class="badge med">Mostly paid</span> (ETSI usually free)</td><td>Technical "how to". Applying them gives a <i>presumption of conformity</i></td></tr>
+      <tr><td>IEC 62443-4-1 / 4-2</td><td><span class="badge high">Paid</span> IEC / VDE</td><td>Secure development lifecycle; component security requirements. De-facto industrial reference</td></tr>
+      <tr><td>ISO/IEC 27005, EN 18031-x</td><td><span class="badge high">Paid</span></td><td>Risk-management method; RED radio cybersecurity</td></tr>
+      <tr><td>ETSI EN 303 645</td><td><span class="badge low">Free</span> ETSI</td><td>Consumer IoT baseline</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout warn"><b>Source note for this guide</b>The CRA text used here was read from <a href="https://www.cyberresilienceact.eu/regulation.html" target="_blank" rel="noopener">cyberresilienceact.eu</a>, an unofficial reproduction with commentary. Before the February 2027 review, cross-check dates, fines and Annex I wording against EUR-Lex (CELEX 32024R2847) and cite EUR-Lex in the technical file.</div>
+
+  <h2 id="structure">How the regulation is built</h2>
+  <p>You rarely need to read all 71 articles. These are the ones engineers keep coming back to:</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Article / Annex</th><th>Topic</th><th>Where in this guide</th></tr></thead>
+    <tbody>
+      <tr><td>Art. 2–3</td><td>Scope, exclusions, definitions</td><td><a href="scope.html">Scope</a></td></tr>
+      <tr><td>Art. 7–8, Annex III–IV</td><td>Important and critical products</td><td><a href="classes.html">Classes</a></td></tr>
+      <tr><td>Art. 13</td><td>Manufacturer obligations, support period</td><td><a href="obligations.html">Obligations</a></td></tr>
+      <tr><td>Art. 14</td><td>Reporting of exploited vulnerabilities and incidents</td><td><a href="obligations.html#reporting">Reporting</a></td></tr>
+      <tr><td>Art. 19–22</td><td>Importers, distributors, when others become manufacturer</td><td><a href="#roles">Roles</a></td></tr>
+      <tr><td>Art. 28, 30, 32</td><td>Declaration of conformity, CE marking, conformity procedures</td><td><a href="classes.html#routes">Routes</a></td></tr>
+      <tr><td>Art. 64</td><td>Penalties</td><td><a href="obligations.html#penalties">Penalties</a></td></tr>
+      <tr><td>Art. 69, 71</td><td>Transitional provisions, dates</td><td><a href="timeline.html">Key dates</a></td></tr>
+      <tr><td><b>Annex I</b></td><td>Essential cybersecurity requirements (Part I product, Part II vulnerability handling)</td><td><a href="requirements.html">Requirements</a></td></tr>
+      <tr><td>Annex II</td><td>Information and instructions to the user</td><td><a href="obligations.html#annex-ii">User info</a></td></tr>
+      <tr><td>Annex V–VI</td><td>EU declaration of conformity (full / simplified)</td><td>—</td></tr>
+      <tr><td><b>Annex VII</b></td><td>Technical documentation content</td><td><a href="obligations.html#annex-vii">Technical file</a></td></tr>
+      <tr><td>Annex VIII</td><td>Conformity assessment modules (A, B+C, H)</td><td><a href="classes.html#routes">Routes</a></td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="systec-example">Applied to Systec</h2>
+  <div class="callout ok"><b>DWC2 baseline</b>Systec manufactures DWC2 under its own name and sells it in the EU, so <b>Systec is the manufacturer</b> with all Art. 13/14 duties. Tismo, as the firmware partner, produces the risk assessment, SBOM and code fixes. <a href="systec.html">Systec products &amp; CRA →</a></div>
+</main>
+</body>
+</html>
