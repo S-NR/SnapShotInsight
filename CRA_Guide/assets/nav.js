@@ -46,13 +46,8 @@
   if (!here || here.indexOf(".html") < 0) here = "index.html";
   var idx = flat.findIndex(function (i) { return i.href === here; });
 
-  // ---- Theme ------------------------------------------------------------------------------
-  function getTheme() { try { return localStorage.getItem("cra-theme"); } catch (e) { return null; } }
-  function setTheme(t) {
-    if (t) document.documentElement.setAttribute("data-theme", t); else document.documentElement.removeAttribute("data-theme");
-    try { if (t) localStorage.setItem("cra-theme", t); else localStorage.removeItem("cra-theme"); } catch (e) {}
-  }
-  setTheme(getTheme());
+  // Dark theme only (matches the other user guides)
+  try { localStorage.removeItem("cra-theme"); } catch (e) {}
 
   // ---- Helpers ------------------------------------------------------------------------------
   function el(tag, attrs, html) {
@@ -68,94 +63,61 @@
     var main = document.querySelector("main");
     if (!main) return;
 
-    // Header
-    var header = el("header", { class: "topbar" });
-    header.innerHTML =
-      '<button class="iconbtn" id="menuBtn" aria-label="Open menu">☰</button>' +
-      '<a class="brand" href="index.html"><span class="logo">CRA</span><span>Cyber Resilience Act Guide <small>· with a worked example</small></span></a>' +
-      '<span class="spacer"></span>' +
-      '<input type="search" id="navSearch" placeholder="Filter pages… ( / )" aria-label="Filter pages">' +
-      '<button class="iconbtn" id="themeBtn" title="Toggle light/dark">◐</button>';
+    // Page frame: header, quick navigation, page body as cards (same layout as the other user guides)
+    var wrap = el("div", { class: "wrap" });
+    var head = el("header", { class: "site-head" },
+      '<span class="logo">CRA</span><div><p class="t"><a href="index.html">Cyber Resilience Act Guide</a></p>' +
+      '<div class="s">A step-by-step guide to the EU Cyber Resilience Act, with a worked example (EX-100).</div></div>');
 
-    // Sidebar
-    var side = el("aside", { class: "sidebar", id: "sidebar" });
+    var nav = el("nav", { class: "card quicknav", "aria-label": "Guide pages" });
+    nav.appendChild(el("h2", null, "Quick navigation"));
     NAV.forEach(function (g) {
-      var box = el("div", { class: "group" });
-      box.appendChild(el("h4", null, g.group));
+      var grp = el("div", { class: "grp" });
+      grp.appendChild(el("span", null, g.group));
       g.items.forEach(function (i) {
-        var a = el("a", { href: i.href, "data-kw": (i.title + " " + (i.kw || "")).toLowerCase() },
-          (i.n ? '<span class="num">' + i.n + "</span>" : '<span class="num">⌂</span>') + "<span>" + i.title + "</span>");
-        if (i.href === here) a.className = "active";
-        box.appendChild(a);
-        if (i.href === here) {
-          var toc = el("div", { class: "toc" });
-          main.querySelectorAll("h2").forEach(function (h) {
-            if (!h.id) h.id = slug(h.textContent);
-            toc.appendChild(el("a", { href: "#" + h.id }, h.textContent));
-          });
-          if (toc.children.length) box.appendChild(toc);
-        }
+        grp.appendChild(el("a", { href: i.href, class: "btn" + (i.href === here ? " on" : "") },
+          (i.n ? "<small>" + i.n + "</small>" : "") + i.title));
       });
-      side.appendChild(box);
+      nav.appendChild(grp);
     });
 
-    var layout = el("div", { class: "layout" });
-    document.body.insertBefore(header, document.body.firstChild);
-    main.parentNode.insertBefore(layout, main);
-    layout.appendChild(side);
-    layout.appendChild(main);
-
-    // Breadcrumb
-    if (idx >= 0 && here !== "index.html") {
-      var c = el("div", { class: "crumbs" }, '<a href="index.html">Home</a> › ' + flat[idx].group + " › " + flat[idx].title);
-      main.insertBefore(c, main.firstChild);
+    // Group the page into cards: everything from one <h2> to the next becomes a section card
+    var intro = [], sections = [], cur = null;
+    Array.prototype.slice.call(main.childNodes).forEach(function (n) {
+      if (n.nodeType === 1 && n.tagName === "H2") {
+        if (!n.id) n.id = slug(n.textContent);
+        cur = el("section", { class: "card" });
+        sections.push(cur);
+      }
+      if (cur) cur.appendChild(n); else intro.push(n);
+    });
+    while (main.firstChild) main.removeChild(main.firstChild);
+    if (idx >= 0 && here !== "index.html") main.appendChild(el("div", { class: "crumbs" }, '<a href="index.html">Home</a> › ' + flat[idx].group + " › " + flat[idx].title));
+    intro.forEach(function (n) { main.appendChild(n); });
+    if (sections.length > 1) {
+      var jump = el("div", { class: "note jump" }, "Jump to: ");
+      sections.forEach(function (s) { var h = s.querySelector("h2"); jump.appendChild(el("a", { class: "btn", href: "#" + h.id }, h.textContent)); });
+      main.appendChild(jump);
     }
+    sections.forEach(function (s) { main.appendChild(s); });
+
+    main.parentNode.insertBefore(wrap, main);
+    wrap.appendChild(head);
+    wrap.appendChild(nav);
+    wrap.appendChild(main);
 
     // Pager + footer
     if (idx >= 0) {
       var pager = el("nav", { class: "pager" });
       if (idx > 0) pager.appendChild(el("a", { href: flat[idx - 1].href, class: "prev" }, "<small>← Previous</small>" + flat[idx - 1].title));
       if (idx < flat.length - 1) pager.appendChild(el("a", { href: flat[idx + 1].href, class: "next" }, "<small>Next →</small>" + flat[idx + 1].title));
-      main.appendChild(pager);
+      wrap.appendChild(pager);
     }
-    main.appendChild(el("div", { class: "foot" },
+    wrap.appendChild(el("footer", { class: "foot" },
       "Engineering summary, not legal advice. CRA text taken from " +
       '<a href="https://www.cyberresilienceact.eu/regulation.html" target="_blank" rel="noopener">cyberresilienceact.eu</a> (unofficial reproduction). ' +
       'The binding text is <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2847" target="_blank" rel="noopener">Regulation (EU) 2024/2847 on EUR-Lex</a>. ' +
       "EX-100 is a fictional, anonymised legacy industrial instrument used to illustrate the method; it does not describe any specific product."));
-
-    // Theme toggle
-    document.getElementById("themeBtn").addEventListener("click", function () {
-      var cur = document.documentElement.getAttribute("data-theme");
-      var sysDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
-      var isDark = cur ? cur === "dark" : sysDark;
-      setTheme(isDark ? "light" : "dark");
-    });
-
-    // Mobile menu
-    document.getElementById("menuBtn").addEventListener("click", function () { document.body.classList.toggle("nav-open"); });
-    side.addEventListener("click", function (e) { if (e.target.closest("a")) document.body.classList.remove("nav-open"); });
-
-    // Nav filter
-    var s = document.getElementById("navSearch");
-    s.addEventListener("input", function () {
-      var q = s.value.trim().toLowerCase();
-      side.querySelectorAll(".group").forEach(function (g) {
-        var any = false;
-        g.querySelectorAll(":scope > a").forEach(function (a) {
-          var ok = !q || a.getAttribute("data-kw").indexOf(q) >= 0;
-          a.classList.toggle("hidden", !ok); if (ok) any = true;
-        });
-        var toc = g.querySelector(".toc"); if (toc) toc.classList.toggle("hidden", !!q);
-        g.classList.toggle("hidden", !any);
-      });
-    });
-    s.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") { var first = side.querySelector(".group:not(.hidden) > a:not(.hidden)"); if (first) location.href = first.getAttribute("href"); }
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "/" && document.activeElement !== s && !/input|textarea/i.test(document.activeElement.tagName)) { e.preventDefault(); s.focus(); }
-    });
 
     // File links: <code>init.c</code>
     main.querySelectorAll("a.filelink").forEach(function (a) {
