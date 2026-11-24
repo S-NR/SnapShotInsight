@@ -119,7 +119,7 @@
       main.appendChild(pager);
     }
     main.appendChild(el("div", { class: "foot" },
-      "Engineering summary prepared by the Tismo Brownfield team, not legal advice. CRA text taken from " +
+      "Engineering summary, not legal advice. CRA text taken from " +
       '<a href="https://www.cyberresilienceact.eu/regulation.html" target="_blank" rel="noopener">cyberresilienceact.eu</a> (unofficial reproduction). ' +
       'The binding text is <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2847" target="_blank" rel="noopener">Regulation (EU) 2024/2847 on EUR-Lex</a>. ' +
       "EX-100 is a fictional, anonymised legacy industrial instrument used to illustrate the method; it does not describe any specific product."));

@@ -9,7 +9,7 @@ Primary source read: <https://www.cyberresilienceact.eu/regulation.html> and <ht
 
 ## 1. What the CRA is, in one paragraph
 
-The CRA is a **product law**, not an operator law. It works like the CE-marking regimes we already know (LVD, EMC, RED), but for **cybersecurity**. To place a product with digital elements on the EU market, the manufacturer has to:
+The CRA is a **product law**, not an operator law. It works like the familiar CE-marking regimes (LVD, EMC, RED), but for **cybersecurity**. To place a product with digital elements on the EU market, the manufacturer has to:
 
 - design it to a set of essential cybersecurity requirements;
 - run a vulnerability-handling process for the whole support period;

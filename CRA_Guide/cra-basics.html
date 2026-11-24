@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CRA Guide · What the CRA is</title>
-<link rel="stylesheet" href="assets/style.css">
-<script src="assets/nav.js"></script>
+<link rel="stylesheet" href="assets/style.css?v=3">
+<script src="assets/nav.js?v=3"></script>
 </head>
 <body>
 <main>
   <h1>What the CRA is</h1>
-  <p class="lead">Regulation (EU) 2024/2847, the <b>Cyber Resilience Act</b>, sets horizontal cybersecurity requirements for <b>products with digital elements</b>. It works like the CE regimes we already know (LVD, EMC, RED), but for cybersecurity.</p>
+  <p class="lead">Regulation (EU) 2024/2847, the <b>Cyber Resilience Act</b>, sets horizontal cybersecurity requirements for <b>products with digital elements</b>. It works like the familiar CE regimes (LVD, EMC, RED), but for cybersecurity.</p>
 
   <h2 id="in-one-paragraph">The CRA in one paragraph</h2>
   <p>The CRA is a <b>product law</b>, not an operator law. To place a product with digital elements on the EU market, the manufacturer has to:</p>
@@ -24,17 +24,17 @@
 
   <h2 id="roles">Who carries which obligation</h2>
   <div class="tablewrap"><table>
-    <thead><tr><th>Role</th><th>Definition (simplified)</th><th>Main duties</th><th>In our context</th></tr></thead>
+    <thead><tr><th>Role</th><th>Definition (simplified)</th><th>Main duties</th><th>In the worked example</th></tr></thead>
     <tbody>
       <tr><td><b>Manufacturer</b></td><td>Develops or has a product developed and markets it <b>under its own name or trademark</b> (Art. 3(13))</td><td>Everything: Annex I, risk assessment, support period, reporting, technical file, DoC, CE (Art. 13–14)</td><td><b>The instrument maker</b> for EX-100 and its other instruments</td></tr>
       <tr><td><b>Importer</b></td><td>EU-based, places a non-EU manufacturer's product on the EU market</td><td>Check the manufacturer did its job; keep DoC available (Art. 19)</td><td>—</td></tr>
       <tr><td><b>Distributor</b></td><td>Makes the product available, not manufacturer/importer</td><td>Check CE mark and documentation (Art. 20)</td><td>Resellers of the instruments</td></tr>
       <tr><td><b>Becomes manufacturer</b></td><td>Rebrands, or makes a <b>substantial modification</b></td><td>Full manufacturer duties (Art. 21–22)</td><td>A partner relabelling EX-100</td></tr>
       <tr><td><b>Open-source steward</b></td><td>Organisation that sustainably supports FOSS meant for commercial use</td><td>Light regime: security policy, cooperation (Art. 24)</td><td>—</td></tr>
-      <tr><td><b>Engineering partner</b></td><td>Not a CRA role</td><td>No direct legal duty, but delivers the evidence the manufacturer needs</td><td><b>Tismo</b>: risk assessment, SBOM, code fixes, test evidence</td></tr>
+      <tr><td><b>Engineering partner</b></td><td>Not a CRA role</td><td>No direct legal duty, but delivers the evidence the manufacturer needs</td><td>Design-services company: risk assessment, SBOM, code fixes, test evidence</td></tr>
     </tbody>
   </table></div>
-  <div class="callout"><b>Tismo's position</b>For design-services projects Tismo is usually <b>not</b> the manufacturer. The client's legal obligations become Tismo's engineering deliverables. Tismo would be the manufacturer only for products, SDKs or apps it sells under the Tismo name.</div>
+  <div class="callout"><b>Engineering partner's position</b>A design-services company that develops a product for a client is usually <b>not</b> the manufacturer. The client's legal obligations become the partner's engineering deliverables. The partner becomes the manufacturer only for products, SDKs or apps it sells under its own name.</div>
 
   <h2 id="free-vs-paid">Is the CRA a paid or restricted document?</h2>
   <p><b>No.</b> The regulation itself is public EU law and free to read. What costs money are the <b>technical standards</b> used to show compliance.</p>
@@ -74,7 +74,7 @@
   </table></div>
 
   <h2 id="example">Applied to the worked example</h2>
-  <div class="callout ok"><b>EX-100 baseline</b>The instrument maker sells EX-100 under its own name in the EU, so <b>it is the CRA manufacturer</b> with all Art. 13/14 duties. Tismo, as the firmware partner, produces the risk assessment, SBOM and code fixes. <a href="portfolio.html">Typical instrument portfolio →</a></div>
+  <div class="callout ok"><b>EX-100 baseline</b>The instrument maker sells EX-100 under its own name in the EU, so <b>it is the CRA manufacturer</b> with all Art. 13/14 duties. The firmware engineering partner produces the risk assessment, SBOM and code fixes. <a href="portfolio.html">Typical instrument portfolio →</a></div>
 </main>
 </body>
 </html>

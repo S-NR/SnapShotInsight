@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>CRA Guide · EX-100 system &amp; attack surface</title>
-<link rel="stylesheet" href="assets/style.css">
-<script src="assets/nav.js"></script>
+<link rel="stylesheet" href="assets/style.css?v=3">
+<script src="assets/nav.js?v=3"></script>
 <style>
   .diagram{overflow-x:auto; background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:10px}
   .diagram svg{display:block; min-width:760px; width:100%; height:auto}
@@ -110,7 +110,7 @@
   <div class="tablewrap"><table>
     <thead><tr><th>Component</th><th>Supplier</th><th>Version found</th><th>Location</th><th>Notes</th></tr></thead>
     <tbody>
-      <tr><td>Application <code>app</code></td><td>Manufacturer / original developer / Tismo</td><td>the current maintenance branch</td><td>root, <code>HAL/</code>, <code>1CH_2CH_GUI_SCREEN/</code></td><td>Add product version string</td></tr>
+      <tr><td>Application <code>app</code></td><td>Manufacturer / original developer / engineering partner</td><td>the current maintenance branch</td><td>root, <code>HAL/</code>, <code>1CH_2CH_GUI_SCREEN/</code></td><td>Add product version string</td></tr>
       <tr><td>Legacy bootloader</td><td>Manufacturer</td><td>legacy</td><td><code>out/</code></td><td><b>Source not in repo</b>; needed for secure boot</td></tr>
       <tr><td>FreeModbus (RTU/ASCII)</td><td>Christian Walter (BSD)</td><td>mb.c v1.27 (2007), mbrtu.c v1.18</td><td><code>Modbus stack</code></td><td>Old but small; check issues</td></tr>
       <tr><td>M-Bus slave stack</td><td>commercial vendor (commercial)</td><td>1.11 (2008)</td><td><code>M-Bus stack</code></td><td>Ask vendor about security support</td></tr>
