@@ -23,15 +23,17 @@
       { href: "obligations.html", n: "5", title: "Obligations & reporting", kw: "art 13 14 support period 5 years reporting 24h 72h enisa penalties fines annex ii annex vii technical documentation doc ce" },
       { href: "timeline.html", n: "6", title: "Key dates", kw: "timeline 2024 2026 2027 2028 deadlines today legacy substantial modification" },
       { href: "landscape.html", n: "7", title: "Related laws & standards", kw: "red nis2 machinery ai act pld data act gpsr iec 62443 en 18031 etsi 303 645 mdr" },
-      { href: "how-to.html", n: "8", title: "How to comply (brownfield)", kw: "workflow steps process tara stride risk assessment ai help brownfield retrofit" }
+      { href: "how-to.html", n: "8", title: "How to comply (brownfield)", kw: "workflow steps process tara stride risk assessment ai help brownfield retrofit" },
+      { href: "ra-method.html", n: "9", title: "Risk-assessment method & templates", kw: "iso 31000 guideline templates t1 t15 v1.2 5x5 criteria review definition of done annex ii part ii" }
     ]},
     { group: "Baseline example: Systec", items: [
       { href: "systec.html", n: "S1", title: "Systec products & CRA", kw: "systec deltawave flowcom products classification risk points roadmap" },
       { href: "dwc2-overview.html", n: "S2", title: "DWC2: system & attack surface", kw: "dwc2 pic32mx575 context interfaces sbom bootloader usb sd modbus mbus jtag" },
       { href: "dwc2-findings.html", n: "S3", title: "DWC2: findings F1–F12", kw: "findings code review master password 5555 read_line overflow code protection unsigned update watchdog" },
-      { href: "dwc2-risk.html", n: "S4", title: "DWC2: assets & risk matrix", kw: "assets risk register matrix likelihood impact r01 phase a tara" },
+      { href: "dwc2-risk.html", n: "S4", title: "DWC2: risk assessment v0.2", kw: "assets risk register matrix likelihood impact 5x5 r01 r19 residual roadmap phase a tara v0.2" },
       { href: "dwc2-plan.html", n: "S5", title: "DWC2: action plan & estimates", kw: "action plan hours estimate phase a phase b stride nitrokey secure boot user levels interface measures questions moser february review" },
-      { href: "traceability.html", n: "S6", title: "Requirement → DWC2 trace", kw: "traceability annex i mapping requirement finding risk action evidence" }
+      { href: "dwc2-wp1.html", n: "S6", title: "DWC2: WP1 quick wins", kw: "wp1 quick wins import read_line jtag code protection cp bwp pwp release build guard effort 42 h test cases" },
+      { href: "traceability.html", n: "S7", title: "Requirement → DWC2 trace", kw: "traceability annex i mapping requirement finding risk action evidence" }
     ]},
     { group: "Resources", items: [
       { href: "files.html", n: "R1", title: "File navigator", kw: "files documents source code markdown pptx paths open" },
@@ -121,7 +123,7 @@
       "Engineering summary prepared by the Tismo Brownfield team, not legal advice. CRA text taken from " +
       '<a href="https://www.cyberresilienceact.eu/regulation.html" target="_blank" rel="noopener">cyberresilienceact.eu</a> (unofficial reproduction). ' +
       'The binding text is <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2847" target="_blank" rel="noopener">Regulation (EU) 2024/2847 on EUR-Lex</a>. ' +
-      "DWC2 findings reflect the IR 44 maintenance tree as reviewed on 12 Nov 2026."));
+      "DWC2 findings reflect the IR 44 maintenance tree as reviewed on 12 Nov 2026 (F5 updated 23 Nov); DWC2 risk assessment draft 0.2 of 24 Nov 2026."));
 
     // Theme toggle
     document.getElementById("themeBtn").addEventListener("click", function () {

@@ -51,7 +51,7 @@
       <tr data-min="12" data-max="16"><td><b>S1</b></td><td>Secure-boot feasibility: Nitrokey signing + PIC32 verification, alternatives</td><td><a href="#s1">Feasibility note + PoC</a></td><td>12–16</td><td class="barcell"></td><td>Dec 2026 / Jan 2027</td></tr>
       <tr data-min="12" data-max="12"><td><b>S2</b></td><td>UI user levels / access control proposal</td><td><a href="#s2">Concept + estimate</a></td><td>12</td><td class="barcell"></td><td>With Phase A</td></tr>
       <tr data-min="8" data-max="8"><td><b>S3</b></td><td>Communication interface security proposal</td><td><a href="#s3">Measure catalogue</a></td><td>8</td><td class="barcell"></td><td>With Phase A</td></tr>
-      <tr data-min="16" data-max="24"><td><b>Q1</b></td><td>Quick wins (after decision)</td><td><a href="#q1">Code changes</a></td><td>16–24</td><td class="barcell"></td><td>After decision</td></tr>
+      <tr data-min="32" data-max="52"><td><b>Q1</b></td><td>Quick wins = <a href="dwc2-wp1.html">WP1</a> (after decision)</td><td><a href="dwc2-wp1.html">Code changes + tests</a></td><td>16–24 code only; ≈ 42 incl. tests (32–52)</td><td class="barcell"></td><td>After decision (Jan 2027)</td></tr>
       <tr data-min="24" data-max="40"><td><b>B1</b></td><td>Phase B: STRIDE threat modelling</td><td><a href="#stride">Threat catalogue</a></td><td>24–40</td><td class="barcell"></td><td>Jan 2027</td></tr>
       <tr data-min="8" data-max="8"><td><b>R1</b></td><td>Review package for February</td><td>CRA assessment v1</td><td>8</td><td class="barcell"></td><td>Before Feb review</td></tr>
     </tbody>
@@ -139,7 +139,8 @@
     </tbody>
   </table></div>
 
-  <h2 id="q1">Quick wins for an early decision (Q1, ≈ 16–24 h)</h2>
+  <h2 id="q1">Quick wins for an early decision (Q1)</h2>
+  <div class="callout"><b>Detailed as work package 1 (23 Nov 2026)</b>Design, code changes C1–C4, 22 new test cases and an effort of ≈ 42 h including tests (16–24 h for the code alone). <a href="dwc2-wp1.html">Open WP1 →</a></div>
   <div class="grid c2">
     <div class="card"><div class="kicker">R06</div><h3>Fix <code>read_line()</code> bounds</h3><p><a href="dwc2-findings.html#f5">F5</a></p></div>
     <div class="card"><div class="kicker">R02 / R03</div><h3>Disable JTAG in release builds</h3><p><a href="dwc2-findings.html#f2">F2</a></p></div>
@@ -177,15 +178,16 @@
       <tr><td>Q-10</td><td>Which menu functions must customers use without service?</td><td>Moser</td><td>S2</td></tr>
       <tr><td>Q-11</td><td>Which toolchain builds the released hex (C32 2.02 vs XC32 5.00)?</td><td>Client</td><td>A4</td></tr>
       <tr><td>Q-12</td><td>Are SystecParamSoftware / flowcom software used with DWC2?</td><td>Moser</td><td>A1, A4</td></tr>
-      <tr><td>Q-13</td><td>Preferred risk method (this L×I matrix or a corporate one)?</td><td>Client</td><td>A5</td></tr>
+      <tr><td>Q-13</td><td>Preferred risk method? <b>Proposal:</b> adopt the 5×5 criteria of templates v1.2 (T4); R-01–R-19 already re-rated in <a href="dwc2-risk.html">draft 0.2</a></td><td>Client</td><td>A5</td></tr>
       <tr><td>Q-14</td><td>Nitrokey HSM 2 or Nitrokey 3 in the other project? Same key process?</td><td>Client</td><td>S1</td></tr>
     </tbody>
   </table></div>
 
   <h2 id="timeline">Timeline</h2>
   <div class="timeline">
-    <div class="tl-item past"><div class="d">Wk 46 (now)</div><div class="t">Plan + estimates delivered; questions sent to Mr. Moser</div></div>
-    <div class="tl-item"><div class="d">Wk 47–49</div><div class="t">Phase A A1–A6; SBOM v1; risk matrix verified; S2/S3 proposals final</div></div>
+    <div class="tl-item past"><div class="d">Wk 46</div><div class="t">Plan + estimates delivered; questions sent to Mr. Moser</div></div>
+    <div class="tl-item past"><div class="d">Wk 48 (now)</div><div class="t">WP1 designed (≈ 42 h); templates v1.2; DWC2 risk assessment draft 0.2 (19 risks, 5×5)</div></div>
+    <div class="tl-item"><div class="d">Wk 48–49</div><div class="t">Phase A A1–A6; SBOM v1; verify draft 0.2 with Mr. Moser; S2/S3 proposals final</div></div>
     <div class="tl-item"><div class="d">Wk 50–51</div><div class="t">Phase A report v1.0; Q1 decision; S1 PoC starts</div></div>
     <div class="tl-item"><div class="d">Jan 2027</div><div class="t">Q1 implementation; S1 result; Phase B STRIDE</div></div>
     <div class="tl-item"><div class="d">Feb 2027</div><div class="t"><b>First CRA assessment review</b></div></div>
@@ -206,7 +208,7 @@
 </main>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  var rows = document.querySelectorAll("#actTable tbody tr"), max = 40;
+  var rows = document.querySelectorAll("#actTable tbody tr"), max = 52;
   rows.forEach(function (r) {
     var a = +r.dataset.min, b = +r.dataset.max, cell = r.querySelector(".barcell");
     cell.innerHTML = '<div class="bar' + (b > a ? " range" : "") + '" style="width:' + (b / max * 100) + '%" title="' + a + (b > a ? "–" + b : "") + ' h"></div>';

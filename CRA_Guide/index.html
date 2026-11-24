@@ -24,7 +24,7 @@
   <div class="flow">
     <div class="node"><b>1. Learn the rule</b>Read the CRA guideline pages 1–8.</div>
     <div class="arrow">→</div>
-    <div class="node"><b>2. See it applied</b>Every rule links to the DWC2 example (S1–S6).</div>
+    <div class="node"><b>2. See it applied</b>Every rule links to the DWC2 example (S1–S7).</div>
     <div class="arrow">→</div>
     <div class="node"><b>3. Open the evidence</b>Findings link straight to the source file and line in the DWC2 tree.</div>
     <div class="arrow">→</div>
@@ -48,10 +48,24 @@
     <a class="card" href="systec.html"><div class="kicker">S1</div><h3>Systec products &amp; CRA</h3><p>Every Systec product family mapped to the CRA, with the typical legacy risk points.</p></a>
     <a class="card" href="dwc2-overview.html"><div class="kicker">S2</div><h3>DWC2 system &amp; attack surface</h3><p>System context, nine interfaces, trust boundaries, and the recovered SBOM.</p></a>
     <a class="card" href="dwc2-findings.html"><div class="kicker">S3</div><h3>DWC2 findings F1–F12</h3><p>Code-level findings with file and line links: unsigned update, CP off, PIN 5555, stack overflow…</p></a>
-    <a class="card" href="dwc2-risk.html"><div class="kicker">S4</div><h3>Assets &amp; risk matrix</h3><p>Ten assets, eleven interfaces, fifteen risks on an interactive likelihood × impact matrix.</p></a>
+    <a class="card" href="dwc2-risk.html"><div class="kicker">S4 · updated</div><h3>Risk assessment v0.2</h3><p>Eleven assets, eleven interfaces, nineteen risks on an interactive 5 × 5 matrix, with roadmap and residual risks.</p></a>
     <a class="card" href="dwc2-plan.html"><div class="kicker">S5</div><h3>Action plan &amp; estimates</h3><p>Phase A ≈ 38 h, Nitrokey secure boot, UI user levels, interface measures, STRIDE, Feb 2027 review.</p></a>
-    <a class="card" href="traceability.html"><div class="kicker">S6</div><h3>Requirement → DWC2 trace</h3><p>Each Annex I requirement traced to DWC2 status, finding, risk and planned action.</p></a>
+    <a class="card" href="dwc2-wp1.html"><div class="kicker">S6 · new</div><h3>WP1 quick wins</h3><p>Bounded SD import, JTAG off, code protection, release guard: design, effort ≈ 42 h, 22 new tests.</p></a>
+    <a class="card" href="traceability.html"><div class="kicker">S7</div><h3>Requirement → DWC2 trace</h3><p>Each Annex I requirement traced to DWC2 status, finding, risk and planned action.</p></a>
+    <a class="card" href="ra-method.html"><div class="kicker">9 · new</div><h3>Risk-assessment method</h3><p>ISO 31000 guideline, templates T1–T15 v1.2 and the review that produced them.</p></a>
   </div>
+
+  <h2 id="whats-new">What's new (24 Nov 2026)</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Date</th><th>Update</th><th>Where</th></tr></thead>
+    <tbody>
+      <tr><td>24 Nov 2026</td><td>DWC2 risk assessment draft 0.2: 19 risks re-rated on the 5 × 5 scale (3 High, no Critical), R-16–R-19 added, roadmap and residual risks; verified, 5 open points</td><td><a href="dwc2-risk.html">S4</a></td></tr>
+      <tr><td>23 Nov 2026</td><td>Risk-assessment templates updated to v1.2 (Annex I Part II, Art. 14, Annex II, operator role, gate checklist)</td><td><a href="ra-method.html">9</a></td></tr>
+      <tr><td>23 Nov 2026</td><td>Work package 1 (quick wins) designed: changes C1–C4, ≈ 42 h incl. tests</td><td><a href="dwc2-wp1.html">S6</a></td></tr>
+      <tr><td>23 Nov 2026</td><td>Finding F5 extended: <code>sprintf</code> / <code>strcpy</code> overflows in the import path</td><td><a href="dwc2-findings.html#f5">S3</a></td></tr>
+      <tr><td>23 Nov 2026</td><td>Systec roadmap progress and decisions needed from systec</td><td><a href="systec.html#progress">S1</a></td></tr>
+    </tbody>
+  </table></div>
 
   <h2 id="five-things">Five things to remember</h2>
   <div class="steps">
@@ -67,9 +81,9 @@
     <div class="stat"><div class="v">Default</div><div class="l">CRA class → Module A self-assessment</div></div>
     <div class="stat"><div class="v" style="color:var(--crit)">Low</div><div class="l">Current CRA readiness</div></div>
     <div class="stat"><div class="v">12</div><div class="l">Code findings (4 high, 4 medium, 4 low)</div></div>
-    <div class="stat"><div class="v">≈ 38 h</div><div class="l">Phase A estimate incl. first risk matrix</div></div>
+    <div class="stat"><div class="v">19 risks</div><div class="l">Draft 0.2: 3 High, 13 Medium, 3 Low (5 × 5)</div></div>
   </div>
-  <div class="callout crit"><b>Top risk R01 (critical, score 12)</b>A modified <code>SYSCTRL.hex</code> on the SD card, or written over USB, is programmed by bootloader BL 0.0.4 with no authenticity check. <a href="dwc2-findings.html#f1">See finding F1 →</a></div>
+  <div class="callout crit"><b>Top risks: R-01, R-04, R-12 (High, score 12)</b>R-01: a modified <code>SYSCTRL.hex</code> on the SD card, or written over USB, is programmed by bootloader BL 0.0.4 with no authenticity check (<a href="dwc2-findings.html#f1">F1</a>). R-04: PIN off by default and master PIN 5555. R-12: no process yet for Art. 14 reporting, which already applies. <a href="dwc2-risk.html">Open the risk register →</a></div>
 </main>
 </body>
 </html>

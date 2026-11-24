@@ -36,7 +36,7 @@
 | **S1** | Secure-boot feasibility: Nitrokey signing + PIC32 verification, alternatives | Feasibility note + PoC on dev board | 12–16 | Tismo | Dec 2026 / Jan 2027 | Pre-check in §5 |
 | **S2** | UI user levels / access control: proposal | Concept + menu-to-role mapping + estimate | 12 (proposal) | Tismo + Moser | With Phase A | Proposal in §6 |
 | **S3** | Security measures for communication interfaces: proposal | Measure catalogue + estimate | 8 (proposal) | Tismo | With Phase A | Proposal in §7 |
-| **Q1** | Quick wins (decision needed, see §7.2) | Code changes in maintenance branch | 16–24 | Tismo | After decision | Open |
+| **Q1** | Quick wins (decision needed, see §7.2) | Code changes in maintenance branch | 16–24 (code only); **≈ 42 incl. tests**, see [06](06_DWC2_CRA_WP1_Quick_Wins.md) | Tismo | After decision | Detailed in 06 (23 Nov 2026) |
 | **B1** | Phase B: STRIDE threat modelling | Threat catalogue + updated risk register | 24–40 | Tismo | Jan 2027 | After first issues treated |
 | **R1** | Review package for February | CRA assessment v1 (Phase A + B, SBOM, measures plan) | 8 | Tismo | Before Feb review | — |
 
@@ -251,6 +251,8 @@ These are low effort, high value, and do not need the 2027 bootloader work:
 3. Production config bits `CP`/`PWP`/`BWP` (R02/R03). This needs agreement on service/read-back procedures.
 4. `#error` guard for `CMD_ENABLE`/debug flags (R13).
 
+Design, code changes, effort and test cases for these four items: [06_DWC2_CRA_WP1_Quick_Wins.md](06_DWC2_CRA_WP1_Quick_Wins.md).
+
 ---
 
 ## 8. Open questions (collected for Mr. Moser and the client)
@@ -269,7 +271,7 @@ These are low effort, high value, and do not need the 2027 bootloader work:
 | Q-10 | Which menu functions must customers be able to use **without** Systec service? | Moser | S2 |
 | Q-11 | Which **toolchain** builds the released hex (C32 v2.02 vs. XC32 v5.00)? | Client | A4 |
 | Q-12 | Are PC tools (SystecParamSoftware, flowcom software) used with DWC2? They are in CRA scope as software too | Moser | A1, A4 |
-| Q-13 | Preferred **risk method** (this L×I matrix, or a Systec corporate method)? | Client | A5 |
+| Q-13 | Preferred **risk method** (this L×I matrix, or a Systec corporate method)? Proposal: adopt the 5 × 5 criteria of template T4 v1.2 and re-rate R01–R15 (see [07](07_CRA_Risk_Assessment_Templates_Review.md) §5) | Client | A5 |
 | Q-14 | Is Nitrokey **HSM 2** or **Nitrokey 3** used in the other project? Same key-management process wanted? | Client | S1 |
 
 ---

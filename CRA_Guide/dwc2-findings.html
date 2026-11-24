@@ -55,6 +55,7 @@
   <details class="finding" id="f5" data-sev="H"><summary><span class="fid">F5</span><span class="ft">Stack buffer overflow in parameter-file import</span><span class="badge high">High</span><span class="badge info">I.2(a), (k)</span></summary><div class="body"><dl>
     <dt>Evidence</dt><dd><code>read_line()</code> in <a class="filelink" data-root="dwc2" data-path="1CH_2CH_GUI_SCREEN/SYSCTRL_WIN_26_IMPORT_EXPORT.c" data-line="364-410"></a> copies bytes until <code>\n</code> with <b>no length limit</b>. <code>importLAR_File()</code> (around line 2079) passes <code>char str[500]</code> on the stack.</dd>
     <dt>Risk</dt><dd>Any line &gt; 499 characters in a parameter file on the SD card (writable over USB) overwrites the stack: crash or code execution. A "known exploitable vulnerability" at release. → <a href="dwc2-risk.html#r06">R06</a></dd>
+    <dt>Update 23 Nov 2026</dt><dd>Two more overflows on the same path: <code>systemInfoDetails()</code> (line ~1090) does <code>sprintf(str1, "%s", token)</code> into <code>str1[50]</code>, and <code>strcpy</code> into <code>name[8]</code> at lines 538, 542 and 610 overwrites adjacent static data. All are fixed together in <a href="dwc2-wp1.html#c1">WP1 change C1</a>.</dd>
     <dt>Fix</dt><dd>Pass the buffer size, stop at <code>size − 1</code>, discard the rest of an over-long line. Fuzz the import parser on a host build (AFL++/libFuzzer). Review other <code>FSfread</code>/<code>strcpy</code> sites.</dd>
 <dt>Sketch</dt><dd><pre>static int read_line(FSFILE *f, char *buf, size_t size)
 {

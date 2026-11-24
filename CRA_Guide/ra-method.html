@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · Risk-assessment method &amp; templates</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>Risk-assessment method &amp; templates</h1>
+  <p class="lead">Annex I Part I point 1 asks for security "appropriate to the risks", based on a documented cybersecurity risk assessment that becomes part of the technical file (Annex VII). The team method has two parts: a <b>guideline</b> (how to run the assessment) and a <b>template set T1–T15</b> (what to record). DWC2 is the first product assessed with it.</p>
+  <p>Sources: <a class="filelink" data-root="cra" data-path="CRA_Risk_Assessment_Guideline.pptx"></a> · <a class="filelink" data-root="cra" data-path="CRA_Risk_Assessment_Templates.pptx"></a> (v1.2) · <a class="filelink" data-root="cra" data-path="07_CRA_Risk_Assessment_Templates_Review.md"></a> (<a href="source-docs/07_CRA_Risk_Assessment_Templates_Review.md">bundled copy</a>)</p>
+
+  <h2 id="process">The process: ISO 31000 in 8 steps, with STRIDE</h2>
+  <div class="steps">
+    <div class="step"><h3>1 · Scope &amp; deployment</h3><p>Product, essential functions, environment, users, personal data, support period (T1).</p></div>
+    <div class="step"><h3>2 · Classify</h3><p>CRA scope, operator role, product class and route; component security levels (T2, T3).</p></div>
+    <div class="step"><h3>3 · Risk criteria</h3><p>Likelihood and impact scales, bands, who approves what; frozen before rating (T4).</p></div>
+    <div class="step"><h3>4 · Identify</h3><p>Assets, interfaces, data flows and trust boundaries, STRIDE threats, supplier components (T5–T9).</p></div>
+    <div class="step"><h3>5–6 · Analyse &amp; evaluate</h3><p>Existing controls, L × I, band, assumptions and confidence, decision (T10).</p></div>
+    <div class="step"><h3>7 · Treat</h3><p>Controls with requirement IDs and Annex I references; Part I/II coverage; traceability to tests; residual-risk sign-off and gate checklist (T11–T14).</p></div>
+    <div class="step"><h3>8 · Record &amp; review</h3><p>Every trigger (design change, new vulnerability, incident) reopens the record; Art. 14 reportability checked (T15).</p></div>
+  </div>
+  <p><small>The guideline's worked example is a connected thermostat. ID scheme: <code>A-</code> assets · <code>IF-</code> interfaces · <code>DF-</code>/<code>TB-</code> flows and boundaries · <code>C-</code> components · <code>TH-</code> threats · <code>R-</code> risks · <code>REQ-SEC-</code> requirements · <code>TC-</code> tests.</small></p>
+
+  <h2 id="criteria">Default risk criteria (T4 example, 5 × 5)</h2>
+  <div class="grid c3">
+    <div class="card"><h3>Likelihood</h3><p>1 rare (lab equipment, expert) · 2 unlikely (physical access + specialist) · 3 possible (radio/network range, public tools) · 4 likely (remote, known technique) · 5 almost certain (remote, automated, exploit published)</p></div>
+    <div class="card"><h3>Impact</h3><p>1 negligible · 2 minor (one device, self-recovers) · 3 moderate (one user's data or function lost) · 4 major (safety-relevant or many users) · 5 severe (fleet-wide, physical harm, attacks other systems)</p></div>
+    <div class="card"><h3>Bands</h3><p><span class="badge crit">16–25 Critical</span> release blocked · <span class="badge high">10–15 High</span> treat before release · <span class="badge med">5–9 Medium</span> treat or retain with signature · <span class="badge low">1–4 Low</span> accept and record</p></div>
+  </div>
+  <p><small>Adapt the wording per product line and get it approved before rating. DWC2 uses an industrial adaptation (<a href="dwc2-risk.html#method">see S4</a>), pending approval (Q-13).</small></p>
+
+  <h2 id="templates">Template set v1.2 at a glance</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>ID</th><th>Template</th><th>Key fields (v1.2 additions in bold)</th></tr></thead>
+    <tbody>
+      <tr><td>—</td><td>Document control + <b>Assessment team</b></td><td>Version, status, approvals, <b>hardware revision, support-period end, related records</b>; <b>roles, names, workshops</b></td></tr>
+      <tr><td>T1</td><td>Scope &amp; deployment</td><td>Core function, <b>essential functions</b>, environment, misuse, <b>personal data</b>, support period</td></tr>
+      <tr><td>T2</td><td>Product classification</td><td>In scope, <b>economic-operator role</b>, <b>placed on market / substantial modification</b>, Annex III/IV, route, <b>other EU legislation</b></td></tr>
+      <tr><td>T3</td><td>Component security classification</td><td>Shipped, security function, robustness claim → level N/A / Low / Medium / High (<b>legend</b>)</td></tr>
+      <tr><td>T4</td><td>Risk criteria</td><td><b>Example 5 × 5 scales and bands</b>, actions, approval authority, freeze line</td></tr>
+      <tr><td>T5</td><td>Asset register</td><td>C, I, A, Au mapped to I.2(e), (f), (h), (d) (<b>legend</b>)</td></tr>
+      <tr><td>T6</td><td>Interfaces &amp; attack surface</td><td>Exposure, authentication, enabled in production, <b>default state</b></td></tr>
+      <tr><td>T7</td><td>Data flows &amp; trust boundaries</td><td>Diagram, flows, boundary, protection, <b>STRIDE reviewed</b></td></tr>
+      <tr><td>T8</td><td>Threat register</td><td><b>TH-IDs</b>, STRIDE, flow/interface, asset, <b>component</b></td></tr>
+      <tr><td>T9</td><td>Third-party components</td><td>Version, licence, support end, advisories, known CVEs, <b>last checked</b></td></tr>
+      <tr><td>T10</td><td>Risk analysis &amp; evaluation</td><td>Existing controls, L, I, score, band, assumptions / confidence, decision</td></tr>
+      <tr><td>T11</td><td>Risk treatment plan</td><td>Option, control, REQ-SEC ID, Annex I ref, due, status, <b>new risks introduced</b></td></tr>
+      <tr><td>T12</td><td>Annex I applicability</td><td><b>I.1</b> + I.2(a)–(m); <b>new Part II slide (II.1–II.8)</b></td></tr>
+      <tr><td>T13</td><td>Traceability</td><td>Risk → requirement → design element → test → result → evidence</td></tr>
+      <tr><td>T14</td><td>Residual risk + <b>definition of done</b></td><td>Residual L × I, rationale, <b>user information (Annex II)</b>, sign-off incl. <b>manufacturer representative</b>; <b>10-item gate checklist</b></td></tr>
+      <tr><td>T15</td><td>Review &amp; trigger log</td><td>Trigger, affected items, action, <b>Art. 14 reportable?</b>, new version</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="review">Review verdict (23 Nov 2026)</h2>
+  <div class="callout"><b>Not perfect, but a solid base</b>The templates follow the guideline's process one-to-one with a clean ID scheme. The gaps were CRA obligations that sit outside a pure ISO 31000 process: Annex I Part II, Art. 14 reporting, Annex II user information and the economic-operator role. 20 of 25 findings were fixed in v1.2 (26 → 29 slides).</div>
+  <div class="grid c2">
+    <div class="card"><h3>Still open (need a decision)</h3><ul>
+      <li>Remove the marketing closing slide from an evidence document (#21)</li>
+      <li>Excel workbook for large registers; keep the deck for summary and sign-off (#22)</li>
+      <li>Before / after 5 × 5 heat maps (#23)</li>
+      <li>CVSS or vendor severity in T9 / T15 (#24)</li>
+      <li>Separate requirements list for larger products (#25)</li></ul></div>
+    <div class="card"><h3>Guideline deck: align next revision</h3><ul>
+      <li>Threat IDs T1–T5 → TH-1…TH-5</li>
+      <li>Definition of done: add Annex I Part II, Art. 14 and Annex II</li>
+      <li>References: add IEC 62443-4-1 / 4-2 and the EN 40000 series</li>
+      <li>Optional industrial worked example (flow meter on Modbus / M-Bus)</li>
+      <li>Slide size differs from the templates (cosmetic)</li></ul></div>
+  </div>
+
+  <h2 id="dwc2">Applied: DWC2 risk assessment</h2>
+  <div class="grid c3">
+    <a class="card" href="dwc2-risk.html"><div class="kicker">Draft 0.2 · 24 Nov 2026</div><h3>DWC2 risk register</h3><p>19 risks on the 5 × 5 scale: 3 High (R-01, R-04, R-12), 13 Medium, 3 Low; roadmap and residual risks.</p></a>
+    <a class="card" href="dwc2-wp1.html"><div class="kicker">WP1</div><h3>First treatment package</h3><p>Four quick wins closing R-02, R-03, R-06 and R-13 (≈ 42 h incl. tests).</p></a>
+    <div class="card"><div class="kicker">Files</div><h3>Decks</h3><p><a class="filelink" data-root="cra" data-path="DWC2_CRA_Risk_Assessment_v0.2.pptx"></a><br><a class="filelink" data-root="cra" data-path="DWC2_CRA_Risk_Assessment.pptx"></a> (v0.1)</p></div>
+  </div>
+</main>
+</body>
+</html>
