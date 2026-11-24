@@ -10,7 +10,7 @@
 <body>
 <main>
   <h1>How to comply: a brownfield workflow</h1>
-  <p class="lead">For an existing product with years of firmware history, use a step-by-step basic TARA (threat analysis and risk assessment). Each step links to the DWC2 output that shows what "done" looks like.</p>
+  <p class="lead">For an existing product with years of firmware history, use a step-by-step basic TARA (threat analysis and risk assessment). Each step links to the EX-100 output that shows what "done" looks like.</p>
 
   <h2 id="ground-rules">Ground rules</h2>
   <div class="grid c2">
@@ -23,14 +23,14 @@
   <h2 id="workflow">The workflow</h2>
   <div class="steps">
     <div class="step"><h3>Scope &amp; classify</h3><p>In scope? Which class? Who is the manufacturer? Which other CE regimes? → <a href="scope.html#checker">scope checker</a>, <a href="classes.html">classes</a></p></div>
-    <div class="step"><h3>System context &amp; trust boundaries (Phase A · A1)</h3><p>Draw the device, its users, buses, removable media and network links. Mark trust boundaries. → <a href="dwc2-overview.html#context">DWC2 context</a></p></div>
-    <div class="step"><h3>Assets (A2)</h3><p>What must be protected: firmware/IP, bootloader, calibration, measurement results, credentials, keys, configuration, logs. Rate C/I/A. → <a href="dwc2-risk.html#assets">DWC2 assets</a></p></div>
-    <div class="step"><h3>Attack surface (A3)</h3><p>Every interface, including UART, SPI, I2C, JTAG/SWD/ICSP, USB, SD, field buses and UI. Verify on hardware. → <a href="dwc2-risk.html#interfaces">DWC2 interfaces</a></p></div>
-    <div class="step"><h3>SBOM (A4)</h3><p>Recover components and versions from source headers; output CycloneDX JSON; start CVE monitoring. → <a href="dwc2-overview.html#sbom">DWC2 SBOM</a></p></div>
-    <div class="step"><h3>First risk matrix (A5)</h3><p>Likelihood × impact for each threat-to-asset pair; agree the method with the client. → <a href="dwc2-risk.html#matrix">DWC2 matrix</a></p></div>
-    <div class="step"><h3>Code review against Annex I</h3><p>Look for unsigned updates, debug ports, default passwords, unbounded parsers, missing integrity checks. → <a href="dwc2-findings.html">DWC2 findings</a></p></div>
-    <div class="step"><h3>Treat first issues</h3><p>Quick wins first (low effort, high value), then planned measures with estimates. → <a href="dwc2-plan.html#q1">quick wins</a></p></div>
-    <div class="step"><h3>Phase B: STRIDE threat modelling (B1)</h3><p>Spoofing, Tampering, Repudiation, Information disclosure, DoS, Elevation of privilege, per interface. → <a href="dwc2-plan.html#stride">DWC2 STRIDE prep</a></p></div>
+    <div class="step"><h3>System context &amp; trust boundaries (Phase A · A1)</h3><p>Draw the device, its users, buses, removable media and network links. Mark trust boundaries. → <a href="example-overview.html#context">EX-100 context</a></p></div>
+    <div class="step"><h3>Assets (A2)</h3><p>What must be protected: firmware/IP, bootloader, calibration, measurement results, credentials, keys, configuration, logs. Rate C/I/A. → <a href="example-risk.html#assets">EX-100 assets</a></p></div>
+    <div class="step"><h3>Attack surface (A3)</h3><p>Every interface, including UART, SPI, I2C, JTAG/SWD/ICSP, USB, SD, field buses and UI. Verify on hardware. → <a href="example-risk.html#interfaces">EX-100 interfaces</a></p></div>
+    <div class="step"><h3>SBOM (A4)</h3><p>Recover components and versions from source headers; output CycloneDX JSON; start CVE monitoring. → <a href="example-overview.html#sbom">EX-100 SBOM</a></p></div>
+    <div class="step"><h3>First risk matrix (A5)</h3><p>Likelihood × impact for each threat-to-asset pair; agree the method with the client. → <a href="example-risk.html#matrix">EX-100 matrix</a></p></div>
+    <div class="step"><h3>Code review against Annex I</h3><p>Look for unsigned updates, debug ports, default passwords, unbounded parsers, missing integrity checks. → <a href="example-findings.html">EX-100 findings</a></p></div>
+    <div class="step"><h3>Treat first issues</h3><p>Quick wins first (low effort, high value), then planned measures with estimates. → <a href="example-plan.html#q1">quick wins</a></p></div>
+    <div class="step"><h3>Phase B: STRIDE threat modelling (B1)</h3><p>Spoofing, Tampering, Repudiation, Information disclosure, DoS, Elevation of privilege, per interface. → <a href="example-plan.html#stride">EX-100 STRIDE prep</a></p></div>
     <div class="step"><h3>Process &amp; documentation</h3><p>CVD policy, reporting runbook, support period, Annex II user info, Annex VII technical file, DoC. → <a href="obligations.html">obligations</a></p></div>
   </div>
 
@@ -50,7 +50,7 @@
   <h2 id="ai-help">Where AI tooling helps</h2>
   <p>AI assistants (Claude, ChatGPT, Copilot) do not replace the engineer's judgement, but they speed up the evidence-heavy steps:</p>
   <div class="grid c3">
-    <div class="card"><div class="kicker">Understand</div><h3>Attack-surface mapping</h3><p>Read a large legacy tree, list every interface, parser and config bit with file/line evidence. DWC2's 9 interfaces were mapped this way.</p></div>
+    <div class="card"><div class="kicker">Understand</div><h3>Attack-surface mapping</h3><p>Read a large legacy tree, list every interface, parser and config bit with file/line evidence. EX-100's 9 interfaces were mapped this way.</p></div>
     <div class="card"><div class="kicker">Inventory</div><h3>SBOM recovery</h3><p>Find third-party components and versions from headers and project files, then draft CycloneDX.</p></div>
     <div class="card"><div class="kicker">Review</div><h3>Security code review</h3><p>Flag unbounded copies, hard-coded secrets, weak RNG, disabled protections. Every hit is verified by a person.</p></div>
     <div class="card"><div class="kicker">Impact</div><h3>Change impact analysis</h3><p>Before a fix: what else reads this buffer, register map or MRAM layout? Protects brownfield behaviour.</p></div>

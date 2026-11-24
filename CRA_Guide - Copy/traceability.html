@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · Requirement → DWC2 trace</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>Requirement → DWC2 traceability</h1>
+  <p class="lead">One row per CRA requirement: where DWC2 stands, which finding and risk prove it, and which planned action closes the gap. Use this as the skeleton of the technical-file argument for Module A.</p>
+  <div class="pill-row">
+    <button class="iconbtn" type="button" data-s="all">All</button>
+    <button class="iconbtn" type="button" data-s="gap">Gaps only</button>
+    <button class="iconbtn" type="button" data-s="ok">Met / partly</button>
+    <button class="iconbtn" type="button" data-s="proc">Process</button>
+  </div>
+
+  <h2 id="trace">Trace matrix</h2>
+  <div class="tablewrap"><table id="traceTable">
+    <thead><tr><th>CRA ref.</th><th>Requirement</th><th>DWC2 status</th><th>Finding</th><th>Risk</th><th>Action</th><th>Evidence for technical file</th></tr></thead>
+    <tbody>
+      <tr data-s="gap"><td>I.1</td><td>Risk-based security</td><td><span class="badge high">Gap</span></td><td>—</td><td>all</td><td>A1–A6, B1</td><td>Phase A report, STRIDE catalogue</td></tr>
+      <tr data-s="gap"><td>I.2(a)</td><td>No known exploitable vulnerabilities</td><td><span class="badge high">Gap</span></td><td><a href="dwc2-findings.html#f5">F5</a></td><td><a href="dwc2-risk.html#r06">R06</a>, <a href="dwc2-risk.html#r11">R11</a></td><td>Q1, A4</td><td>CVE scan report, fuzz results</td></tr>
+      <tr data-s="gap"><td>I.2(b)</td><td>Secure by default</td><td><span class="badge high">Gap</span></td><td><a href="dwc2-findings.html#f3">F3</a>, <a href="dwc2-findings.html#f4">F4</a></td><td><a href="dwc2-risk.html#r04">R04</a></td><td>S2</td><td>Role model spec, test report</td></tr>
+      <tr data-s="gap"><td>I.2(c)</td><td>Security updates</td><td><span class="badge high">Gap</span></td><td><a href="dwc2-findings.html#f1">F1</a></td><td><a href="dwc2-risk.html#r01">R01</a></td><td>S1 (2027), interim Q1</td><td>Update procedure, signed-image tests</td></tr>
+      <tr data-s="gap"><td>I.2(d)</td><td>Protection from unauthorised access</td><td><span class="badge high">Gap</span></td><td><a href="dwc2-findings.html#f3">F3</a>, <a href="dwc2-findings.html#f4">F4</a>, <a href="dwc2-findings.html#f7">F7</a>, <a href="dwc2-findings.html#f12">F12</a></td><td><a href="dwc2-risk.html#r04">R04</a>, <a href="dwc2-risk.html#r05">R05</a>, <a href="dwc2-risk.html#r09">R09</a></td><td>S2, S3</td><td>Lockout tests, MSD read-only test</td></tr>
+      <tr data-s="gap"><td>I.2(e)</td><td>Confidentiality</td><td><span class="badge med">Gap</span></td><td><a href="dwc2-findings.html#f4">F4</a></td><td><a href="dwc2-risk.html#r05">R05</a></td><td>S2</td><td>PIN storage design</td></tr>
+      <tr data-s="gap"><td>I.2(f)</td><td>Integrity of programs, data, config</td><td><span class="badge high">Gap</span></td><td><a href="dwc2-findings.html#f1">F1</a>, <a href="dwc2-findings.html#f2">F2</a>, <a href="dwc2-findings.html#f6">F6</a></td><td><a href="dwc2-risk.html#r01">R01</a>, <a href="dwc2-risk.html#r03">R03</a>, <a href="dwc2-risk.html#r07">R07</a></td><td>S1, Q1, S3</td><td>Config-bit verification, CRC tests</td></tr>
+      <tr data-s="ok"><td>I.2(g)</td><td>Data minimisation</td><td><span class="badge low">Likely met</span></td><td>—</td><td><a href="dwc2-risk.html#r15">R15</a></td><td>Q-08</td><td>Data inventory statement</td></tr>
+      <tr data-s="gap"><td>I.2(h)</td><td>Availability / DoS resilience</td><td><span class="badge med">Gap</span></td><td><a href="dwc2-findings.html#f10">F10</a>, <a href="dwc2-findings.html#f8">F8</a></td><td><a href="dwc2-risk.html#r08">R08</a>, <a href="dwc2-risk.html#r10">R10</a></td><td>S3</td><td>Watchdog timing review, flood test</td></tr>
+      <tr data-s="ok"><td>I.2(i)</td><td>No harm to other devices/networks</td><td><span class="badge low">Likely met</span></td><td>slave-only buses</td><td><a href="dwc2-risk.html#r19">R-19</a></td><td>S3 (bus fail-silent)</td><td>Design statement, bus fault test</td></tr>
+      <tr data-s="ok"><td>I.2(j)</td><td>Limit attack surface</td><td><span class="badge med">Partly</span></td><td><a href="dwc2-findings.html#f2">F2</a>, <a href="dwc2-findings.html#f11">F11</a>; Modbus writes off ✔</td><td><a href="dwc2-risk.html#r02">R02</a>, <a href="dwc2-risk.html#r13">R13</a></td><td>Q1, S3</td><td><code>mbconfig.h</code>, build-guard evidence</td></tr>
+      <tr data-s="gap"><td>I.2(k)</td><td>Exploit mitigation</td><td><span class="badge med">Gap</span></td><td><a href="dwc2-findings.html#f5">F5</a></td><td><a href="dwc2-risk.html#r06">R06</a></td><td>Q1, S3</td><td>Parser review, fuzz harness</td></tr>
+      <tr data-s="gap"><td>I.2(l)</td><td>Security logging</td><td><span class="badge med">Gap</span></td><td><a href="dwc2-findings.html#f9">F9</a></td><td><a href="dwc2-risk.html#r16">R-16</a></td><td>S3</td><td>Log spec + export test</td></tr>
+      <tr data-s="gap"><td>I.2(m)</td><td>Secure deletion</td><td><span class="badge med">Gap</span></td><td>—</td><td><a href="dwc2-risk.html#r17">R-17</a></td><td>S3 (secure erase)</td><td>Decommissioning procedure</td></tr>
+      <tr data-s="gap"><td>II.1</td><td>SBOM</td><td><span class="badge high">Gap</span></td><td><a href="dwc2-overview.html#sbom">draft</a></td><td><a href="dwc2-risk.html#r11">R11</a></td><td>A4</td><td><code>DWC2_SBOM.cdx.json</code></td></tr>
+      <tr data-s="gap"><td>II.2</td><td>Fix without delay, separate security updates</td><td><span class="badge med">Gap</span></td><td>—</td><td>—</td><td>Release process</td><td>Branching / release policy</td></tr>
+      <tr data-s="ok"><td>II.3</td><td>Security testing</td><td><span class="badge med">Partly</span></td><td>SonarQube ✔ (not a gate)</td><td><a href="dwc2-risk.html#r18">R-18</a></td><td>WP1 tests, S3 fuzzing, SAST gate</td><td>SonarQube + fuzz reports</td></tr>
+      <tr data-s="proc"><td>II.4–6</td><td>Disclosure, CVD policy, contact</td><td><span class="badge info">Process</span></td><td>—</td><td><a href="dwc2-risk.html#r12">R12</a></td><td>Systec</td><td>Published CVD policy</td></tr>
+      <tr data-s="gap"><td>II.7–8</td><td>Secure, free update distribution</td><td><span class="badge high">Gap</span></td><td><a href="dwc2-findings.html#f1">F1</a></td><td><a href="dwc2-risk.html#r01">R01</a></td><td>S1</td><td>Update procedure, advisories</td></tr>
+      <tr data-s="proc"><td>Art. 13(8)</td><td>Support period ≥ 5 years</td><td><span class="badge info">Process</span></td><td>—</td><td>—</td><td>Systec decision</td><td>Support-period rationale</td></tr>
+      <tr data-s="proc"><td>Art. 14</td><td>24 h / 72 h / 14 d reporting</td><td><span class="badge info">Process</span></td><td>—</td><td><a href="dwc2-risk.html#r12">R12</a></td><td>Runbook</td><td>Runbook, ENISA account</td></tr>
+      <tr data-s="proc"><td>Annex II</td><td>User information</td><td><span class="badge info">Process</span></td><td>—</td><td>—</td><td>Docs update</td><td>Manual / service info</td></tr>
+    </tbody>
+  </table></div>
+  <p>Requirement wording: <a href="requirements.html">Essential requirements</a> · Obligations: <a href="obligations.html">Obligations &amp; reporting</a></p>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var rows = document.querySelectorAll("#traceTable tbody tr");
+  document.querySelectorAll("[data-s]").forEach(function (b) {
+    if (b.tagName !== "BUTTON") return;
+    b.addEventListener("click", function () {
+      var s = b.getAttribute("data-s");
+      rows.forEach(function (r) { r.hidden = !(s === "all" || r.getAttribute("data-s") === s); });
+    });
+  });
+});
+</script>
+</body>
+</html>

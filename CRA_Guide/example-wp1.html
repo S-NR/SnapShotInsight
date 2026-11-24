@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · EX-100 WP1 quick wins</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>EX-100: work package 1, quick wins</h1>
+  <p class="lead">The first set of CRA code changes for EX-100: four low-risk fixes that remove the only confirmed memory-safety defect reachable from SD/USB and close the debug and read-out paths. Design, changes, effort and tests in one place. <b>Status: proposal for the manufacturer's decision; no source file has been changed.</b></p>
+
+  <div class="grid c4" style="margin:18px 0">
+    <div class="stat"><div class="v">4</div><div class="l">Changes C1–C4</div></div>
+    <div class="stat"><div class="v">≈ 42 h</div><div class="l">Effort incl. tests (range 32–52 h)</div></div>
+    <div class="stat"><div class="v">22</div><div class="l">New test cases + the last release regression</div></div>
+    <div class="stat"><div class="v">R-02, 03, 06, 13</div><div class="l">Risks closed or reduced</div></div>
+  </div>
+
+  <h2 id="scope">CRA tasks and what WP1 covers</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>ID</th><th>CRA task</th><th>Annex I</th><th>Risk</th><th>In WP1?</th></tr></thead>
+    <tbody>
+      <tr><td>T1</td><td>Bounded parsing of SD parameter files (parameter import)</td><td>I.2(a), (k)</td><td><a href="example-risk.html#r06">R-06</a></td><td><span class="badge low">Yes</span></td></tr>
+      <tr><td>T2</td><td>Disable JTAG in release builds</td><td>I.2(j), (k)</td><td><a href="example-risk.html#r02">R-02</a>, <a href="example-risk.html#r03">R-03</a></td><td><span class="badge low">Yes</span></td></tr>
+      <tr><td>T3</td><td>Production config bits: <code>CP</code>, <code>BWP</code>, <code>PWP</code></td><td>I.2(f), (j), (k)</td><td>R-02, R-03</td><td><span class="badge low">Yes</span> firmware + procedure</td></tr>
+      <tr><td>T4</td><td>Build guard: no service interface / debug output in release builds</td><td>I.2(j)</td><td><a href="example-risk.html#r13">R-13</a></td><td><span class="badge low">Yes</span></td></tr>
+      <tr><td>—</td><td>Signed update + anti-rollback (secure bootloader)</td><td>I.2(c), (f)</td><td>R-01</td><td>No: <a href="example-plan.html#s1">S1</a>, 2027</td></tr>
+      <tr><td>—</td><td>Remove master PIN, hashed PIN, user levels</td><td>I.2(b), (d)</td><td>R-04, R-05</td><td>No: <a href="example-plan.html#s2">S2</a></td></tr>
+      <tr><td>—</td><td>Parameter CRC, security log, watchdog, M-Bus check, converter</td><td>I.2(f), (h), (l)</td><td>R-07–R-10</td><td>No: <a href="example-plan.html#s3">S3</a></td></tr>
+      <tr><td>—</td><td>SBOM, CVE monitoring, vulnerability handling</td><td>Part II, Art. 14</td><td>R-11, R-12</td><td>No: Phase A / process</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><b>Why this selection</b>No bootloader source, no MRAM layout change, no change to file formats, register maps or menus. These are the lowest-risk CRA changes for a brownfield release.</div>
+
+  <h2 id="existing">Existing design and code</h2>
+  <h3>T1 · SD parameter-file import</h3>
+  <p><code>import_export.c</code> · flow: <code>importLAR_File()</code> → <code>read_line()</code> → <code>systemInfoDetails()</code> → <code>parse_token()</code> → row handlers → MRAM.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>#</th><th>Location</th><th>Existing code</th><th>Defect</th></tr></thead>
+    <tbody>
+      <tr><td>1a</td><td><code>read_line()</code> :364–410</td><td>Copies byte by byte until <code>\n</code> / EOF</td><td><span class="badge crit">No length limit</span> buffer size not passed in</td></tr>
+      <tr><td>1b</td><td><code>importLAR_File()</code> :2079–2092</td><td><code>char str[500]</code> on the stack</td><td>Line ≥ 500 bytes overwrites the stack</td></tr>
+      <tr><td>1c</td><td><code>systemInfoDetails()</code> :1076–1103</td><td><code>sprintf(str1, "%s", token)</code> into <code>str1[50]</code></td><td>Field ≥ 50 bytes overwrites the stack</td></tr>
+      <tr><td>1d</td><td>:538, :542, :610</td><td><code>strcpy</code> into <code>name[8]</code></td><td>Name ≥ 8 bytes overwrites adjacent static data</td></tr>
+    </tbody>
+  </table></div>
+  <p><small>The device's own export writes rows of at most 493 bytes (typically ~130), so a 500-byte limit accepts every file the device can produce. The uncommitted customer-specific change (<code>adc_offset</code> in rows 8/9) must be merged first.</small></p>
+  <div class="grid c3">
+    <div class="card"><h3>T2 · JTAG</h3><p><code>main.c</code>: <code>DDPCON = 0x0008</code> turns trace off but <b>leaves JTAG on</b> (bit 3 = JTAGEN). Port A only uses RA9/RA10, so turning JTAG off has no GPIO side effect.</p></div>
+    <div class="card"><h3>T3 · Config bits</h3><p><code>init.c</code>: <code>CP = OFF</code>, <code>BWP = OFF</code>, <code>PWP</code> default off. Only one MPLAB X configuration ("default") exists.</p></div>
+    <div class="card"><h3>T4 · Service interface</h3><p><code>CMD_ENABLE</code> (raw MRAM write <code>%MW</code>) is undefined only for Modbus/M-Bus builds; nothing at build time stops it or debug output in other variants.</p></div>
+  </div>
+
+  <h2 id="changes">Changes</h2>
+  <div class="grid c2">
+    <div class="card" id="c1"><div class="kicker">C1 · T1</div><h3>Bounded import parsing</h3><p><code>IMPORT_LINE_MAX 500</code>; <code>read_line(fin, buf, size)</code> stores at most size − 1 bytes, returns code 2 for over-long lines; the row is <b>skipped</b> (never truncated) and the existing import-error message is shown. <code>snprintf</code> in <code>systemInfoDetails()</code>; bounded name copies. Review other <code>FSfread</code> sites.</p></div>
+    <div class="card" id="c2"><div class="kicker">C2 · T2</div><h3>JTAG off in release</h3><p><code>#ifdef RELEASE_BUILD</code> → <code>DDPCON = 0x0000</code>, else keep <code>0x0008</code> for development. Correct the misleading comment.</p></div>
+    <div class="card" id="c3"><div class="kicker">C3 · T3</div><h3>Production config bits</h3><p><code>CP = ON</code>, <code>BWP = ON</code>, <code>PWP</code> over the bootloader pages in release builds, set also in the production programming image and verified with MPLAB IPE. Depends on Q-01 and Q-06.</p></div>
+    <div class="card" id="c4"><div class="kicker">C4 · T4</div><h3>Release build guard</h3><p>New MPLAB X configuration <code>production</code> with <code>-DRELEASE_BUILD</code>; <code>#error</code> if <code>CMD_ENABLE</code> or debug flags are set. Released hex files are built only from <code>production</code>.</p></div>
+  </div>
+  <p><small>Expected flash impact: about 100–300 bytes; confirmed by the MEM_OPT_*_1 gate (&lt; 98 % of <code>0x73000</code>) for every language build.</small></p>
+
+  <h2 id="effort">Effort estimation</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Task</th><th>Design</th><th>Code</th><th>New tests</th><th>Regression</th><th>Docs, review</th><th>Total (h)</th></tr></thead>
+    <tbody>
+      <tr><td>C1 bounded import parsing</td><td>2</td><td>4</td><td>6 host + 4 target</td><td>6</td><td>2</td><td><b>24</b></td></tr>
+      <tr><td>C2 JTAG off</td><td>0.5</td><td>0.5</td><td>1</td><td>—</td><td>0.5</td><td><b>2.5</b></td></tr>
+      <tr><td>C3 config bits + programming procedure</td><td>1</td><td>1</td><td>2</td><td>1</td><td>2</td><td><b>7</b></td></tr>
+      <tr><td>C4 release guard + <code>production</code> configuration</td><td>0.5</td><td>1.5</td><td>1</td><td>—</td><td>0.5</td><td><b>3.5</b></td></tr>
+      <tr><td>Release build of all variants, MEM_OPT gate, test report, release note</td><td>—</td><td>—</td><td>—</td><td>3</td><td>2</td><td><b>5</b></td></tr>
+      <tr><td colspan="6"><b>WP1 total</b> (±25 %, one engineer familiar with the code)</td><td><b>≈ 42</b></td></tr>
+    </tbody>
+  </table></div>
+  <p><small>The action plan's Q1 figure (16–24 h) covered code only; WP1 adds the host test harness, negative tests and full regression needed as CRA evidence (Annex I Part II.3).</small></p>
+
+  <h2 id="tests">Test cases</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Group</th><th>IDs</th><th>What they prove</th></tr></thead>
+    <tbody>
+      <tr><td>Import robustness (C1)</td><td>CRA_IMP_TC_01–11</td><td>Line at limit imports; over-long line / field / name, no-newline 64 KB file and binary garbage cause no crash and no out-of-range setting; CRLF/LF and last-line behaviour kept; export → import round trip byte-identical; host unit tests and ≥ 1 h fuzzing with AddressSanitizer</td></tr>
+      <tr><td>Debug lock &amp; protection (C2/C3)</td><td>CRA_HW_TC_01–07</td><td>No JTAG in production, JTAG works in development; flash read-back blocked; bootloader write-protected; SD update still works with protection kept; ICSP full erase works; port A outputs unchanged</td></tr>
+      <tr><td>Build guard (C4)</td><td>CRA_BLD_TC_01–04</td><td><code>production</code> fails with <code>CMD_ENABLE</code> or debug output; all variants build clean with no <code>service_cmds</code> symbols; development unaffected</td></tr>
+      <tr><td>Regression (existing)</td><td>IMPORT_TC_01–20, EXPORT_TC_01–28, REFACTOR_06/17, MEM_OPT_*, ADC_TC_01–04, IMP_TOT_BF_01/02</td><td>Same results as the last release report; flash &lt; 98 %; SD bootloader load; measurement unchanged; no new SonarQube issues</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout ok"><b>Exit criteria</b>All new tests pass with no regression; R-06 and R-13 closed; R-02/R-03 move to Low once production programming applies C3. Test sheet "CRA WP1 Testing" is added to the IR test report; the release note states the residual risk (R-01 remains until the 2027 secure bootloader).</div>
+
+  <h2 id="open">Open points before implementation</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>ID</th><th>Question</th><th>Blocks</th></tr></thead>
+    <tbody>
+      <tr><td>Q-01</td><td>Does the legacy bootloader program config words from <code>app.hex</code>? Is its source available?</td><td>C3</td></tr>
+      <tr><td>Q-06</td><td>Is flash read-back needed in service or production (reason for <code>CP = OFF</code>)?</td><td>C3</td></tr>
+      <tr><td>Q-11</td><td>Is C32 v2.02 the release toolchain? Can the AUTOBUILDER select an MPLAB X configuration?</td><td>C4</td></tr>
+      <tr><td>New</td><td>Which existing GUI message signals "import row skipped" (avoids new language strings)?</td><td>C1</td></tr>
+    </tbody>
+  </table></div>
+</main>
+</body>
+</html>

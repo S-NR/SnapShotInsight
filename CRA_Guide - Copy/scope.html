@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · Scope &amp; exclusions</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>Scope &amp; exclusions</h1>
+  <p class="lead">The CRA covers any <b>product with digital elements</b>: hardware or software, including its remote data processing and separately sold components, whose intended or reasonably foreseeable use involves a <b>direct or indirect, logical or physical data connection</b> to a device or network (Art. 2–3).</p>
+
+  <h2 id="in-practice">What that means in practice</h2>
+  <p>Almost any product with firmware and an interface is in scope.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Typical product</th><th>In scope?</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Industrial sensor/transmitter with Modbus RS485, USB, Ethernet</td><td><span class="badge crit">Yes</span></td><td>Physical/logical data connection</td></tr>
+      <tr><td>Device whose only "interface" is an SD card or a service port</td><td><span class="badge crit">Yes, very likely</span></td><td>An indirect/physical data connection still counts</td></tr>
+      <tr><td>IoT device + cloud backend + mobile app</td><td><span class="badge crit">Yes, all three</span></td><td>The cloud counts as <i>remote data processing</i> when the device needs it to perform a function</td></tr>
+      <tr><td>PC configuration tool sold with/for a product</td><td><span class="badge crit">Yes</span></td><td>Software product with digital elements, also when free with the device</td></tr>
+      <tr><td>Pure SaaS with no product attached</td><td><span class="badge low">No</span> (generally)</td><td>Not a product. NIS2 or other law may apply</td></tr>
+      <tr><td>Free/open-source software developed non-commercially</td><td><span class="badge low">No</span></td><td>Monetised or commercially supported FOSS is in scope; open-source stewards have a light regime</td></tr>
+      <tr><td>Identical spare parts</td><td><span class="badge low">No</span></td><td>Art. 2(6)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="exclusions">Sector exclusions (Art. 2(2)–(7))</h2>
+  <p>These sectors already regulate cybersecurity in their own law, so the CRA does not apply.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Sector</th><th>Governing law instead</th></tr></thead>
+    <tbody>
+      <tr><td>Medical devices / in-vitro diagnostics</td><td>Reg. (EU) 2017/745 (MDR), 2017/746 (IVDR)</td></tr>
+      <tr><td>Type-approved motor vehicles &amp; trailers</td><td>Reg. (EU) 2019/2144 (in practice UNECE R155/R156)</td></tr>
+      <tr><td>Certified civil aviation equipment</td><td>Reg. (EU) 2018/1139</td></tr>
+      <tr><td>Marine equipment</td><td>Directive 2014/90/EU</td></tr>
+      <tr><td>National security / defence / classified data</td><td>Excluded outright</td></tr>
+      <tr><td>Other sectors with equal or higher protection</td><td>Only via a Commission delegated act (Art. 2(5))</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout warn"><b>Watch the edges</b>A lab instrument that is <i>not</i> a medical device is in scope. Test-bench equipment for automotive labs is in scope; only components of a <i>type-approved vehicle</i> are excluded.</div>
+
+  <h2 id="checker">Quick scope checker</h2>
+  <div class="card checker" id="scopeChecker">
+    <div class="q"><p>1. Does the product contain firmware or software?</p>
+      <label><input type="radio" name="q1" value="y"> Yes</label><label><input type="radio" name="q1" value="n"> No</label></div>
+    <div class="q"><p>2. Does it have any data connection (bus, USB, SD card, radio, Ethernet, service/debug port used in the field)?</p>
+      <label><input type="radio" name="q2" value="y"> Yes</label><label><input type="radio" name="q2" value="n"> No</label></div>
+    <div class="q"><p>3. Is it made available on the EU market in a commercial context (sold, or supplied free with a paid product)?</p>
+      <label><input type="radio" name="q3" value="y"> Yes</label><label><input type="radio" name="q3" value="n"> No</label></div>
+    <div class="q"><p>4. Is it a medical/IVD device, part of a type-approved vehicle, certified aviation, marine equipment, or defence-only?</p>
+      <label><input type="radio" name="q4" value="y"> Yes</label><label><input type="radio" name="q4" value="n"> No</label></div>
+    <div class="q"><p>5. Is its <i>core function</i> one of: router/modem/switch, network interface, OS, boot manager, VPN, firewall/IDS, smart-home security, smart meter gateway, secure element/HSM, security-function MCU?</p>
+      <label><input type="radio" name="q5" value="y"> Yes</label><label><input type="radio" name="q5" value="n"> No</label></div>
+    <button class="iconbtn" type="button" id="fillDwc2">Fill in DWC2 answers</button>
+    <button class="iconbtn" type="button" id="resetChk">Reset</button>
+    <div class="result" id="chkResult">Answer the questions to see the result.</div>
+  </div>
+
+  <h2 id="systec-example">Applied to DWC2</h2>
+  <div class="callout ok"><b>DWC2 is in scope</b>Firmware product with several physical and logical data connections: RS485/Modbus RTU, M-Bus, USB (mass storage), SD card, and optional Modbus TCP through a converter. Not excluded: it is not a medical device or vehicle part. Core function is flow/heat measurement, so it is <b>default class</b>. <a href="dwc2-overview.html#attack-surface">See the DWC2 interfaces →</a></div>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var form = document.getElementById("scopeChecker"), out = document.getElementById("chkResult");
+  function v(n){ var r = form.querySelector('input[name="'+n+'"]:checked'); return r ? r.value : null; }
+  function evaluate(){
+    var a=[v("q1"),v("q2"),v("q3"),v("q4"),v("q5")];
+    if (a[0]==="n"||a[1]==="n") { out.innerHTML = "<b>Probably not in scope.</b> No digital element or no data connection. Re-check if a service port or removable media is used in the field."; return; }
+    if (a[2]==="n") { out.innerHTML = "<b>Not in scope</b> unless it is later made available on the EU market commercially."; return; }
+    if (a[3]==="y") { out.innerHTML = "<b>Excluded from the CRA.</b> The sector law (MDR/IVDR, UNECE R155/R156, aviation, marine) covers cybersecurity instead. <a href='landscape.html'>Related laws →</a>"; return; }
+    if (a.some(function(x){return x===null;})) { out.textContent = "Answer all questions to see the result."; return; }
+    if (a[4]==="y") { out.innerHTML = "<b>In scope, Important or Critical class.</b> Check Annex III/IV. Module A is only possible for Class I with harmonised standards applied in full; otherwise a notified body is needed. <a href='classes.html'>Classes →</a>"; return; }
+    out.innerHTML = "<b>In scope, default class → Module A self-assessment.</b> Meet Annex I, keep a technical file, sign the DoC, affix CE. Reporting duties apply now. <a href='requirements.html'>Requirements →</a>";
+  }
+  form.addEventListener("change", evaluate);
+  document.getElementById("fillDwc2").addEventListener("click", function(){
+    ["q1:y","q2:y","q3:y","q4:n","q5:n"].forEach(function(p){ var s=p.split(":"); form.querySelector('input[name="'+s[0]+'"][value="'+s[1]+'"]').checked=true; });
+    evaluate();
+  });
+  document.getElementById("resetChk").addEventListener("click", function(){ form.querySelectorAll("input").forEach(function(i){i.checked=false;}); out.textContent="Answer the questions to see the result."; });
+});
+</script>
+</body>
+</html>

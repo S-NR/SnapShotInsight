@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · Product classes &amp; routes</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>Product classes &amp; conformity routes</h1>
+  <p class="lead">Products are classified by their <b>core functionality</b> (Art. 7, 8; Annex III, IV). A product that merely <i>contains</i> an OS or a microcontroller is not automatically "important". The class decides whether self-assessment is allowed.</p>
+
+  <h2 id="decision">Classification decision</h2>
+  <div class="flow">
+    <div class="node"><b>Annex IV?</b>Critical → European certificate where required</div><div class="arrow">→ no →</div>
+    <div class="node"><b>Annex III Class II?</b>Important II → notified body mandatory</div><div class="arrow">→ no →</div>
+    <div class="node"><b>Annex III Class I?</b>Important I → standards in full, or notified body</div><div class="arrow">→ no →</div>
+    <div class="node" style="border-color:var(--low)"><b>Default (~90 %)</b>Module A self-assessment</div>
+  </div>
+
+  <h2 id="classes">The four classes</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Class</th><th>Categories (abridged)</th><th>Conformity assessment (Art. 32)</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge low">Default</span></td><td>Everything not listed below, including most industrial sensors, instruments, controllers and consumer IoT</td><td><b>Module A</b>: internal control (self-assessment)</td></tr>
+      <tr><td><span class="badge med">Important, Class I</span><br><small>Annex III, 19 categories</small></td><td>
+        <ul style="margin:0;padding-left:18px">
+          <li>Identity/access-management systems and access-control readers</li><li>Browsers; password managers; anti-malware; VPN products</li>
+          <li>Network management systems; SIEM</li><li><b>Boot managers</b>; PKI and digital-certificate software</li>
+          <li><b>Physical and virtual network interfaces</b></li><li><b>Operating systems</b></li><li><b>Routers, modems, switches</b></li>
+          <li><b>Microprocessors / microcontrollers / ASICs / FPGAs with security-related functionality</b></li>
+          <li>Smart-home general-purpose virtual assistants; smart-home security products (locks, cameras, alarms)</li>
+          <li>Connected toys with social interaction or location tracking</li><li>Personal wearables for health monitoring or for children</li>
+        </ul></td><td>Module A <b>only if</b> harmonised standards or an EU certification scheme are applied in full. Otherwise <b>B+C</b> or <b>H</b> (notified body)</td></tr>
+      <tr><td><span class="badge high">Important, Class II</span><br><small>4 categories</small></td><td>Hypervisors and container runtimes; firewalls and intrusion detection/prevention; tamper-resistant microprocessors; tamper-resistant microcontrollers</td><td><b>B+C</b>, <b>H</b>, or EU certification scheme ≥ "substantial". Notified body mandatory</td></tr>
+      <tr><td><span class="badge crit">Critical</span><br><small>Annex IV, 3 categories</small></td><td>Hardware devices with security boxes; <b>smart meter gateways</b> and other devices for advanced security incl. secure cryptoprocessing; smartcards / secure elements</td><td>European cybersecurity certificate (EUCC) where a delegated act requires it; otherwise the Class II routes</td></tr>
+    </tbody>
+  </table></div>
+  <p><small>The Commission published technical descriptions of these categories in Implementing Regulation (EU) 2025/2392. Some websites still show the 2022 <i>proposal's</i> lists (where operating systems were Class II). Use the final 2024 text only.</small></p>
+
+  <h2 id="routes">Conformity modules (Annex VIII)</h2>
+  <div class="grid c3">
+    <div class="card"><div class="kicker">Module A</div><h3>Internal control</h3><p>The manufacturer assesses conformity itself, writes the technical file and signs the DoC. Still a legal declaration that market surveillance can audit.</p></div>
+    <div class="card"><div class="kicker">Module B + C</div><h3>EU-type examination + conformity to type</h3><p>A notified body examines the design (B); the manufacturer ensures production matches the examined type (C).</p></div>
+    <div class="card"><div class="kicker">Module H</div><h3>Full quality assurance</h3><p>A notified body approves and monitors the manufacturer's whole quality system for design, production and vulnerability handling.</p></div>
+  </div>
+
+  <h2 id="tismo-rule">Rule of thumb for engineers</h2>
+  <div class="callout">If the product has firmware and any interface (bus, USB, radio, Ethernet, SD card, debug port used in the field), assume <b>CRA applies, default class, Module A</b>. Then check whether the <b>core function</b> puts it in Annex III/IV. Gateways and network interface modules are the usual surprise: they can be <b>Important Class I</b>.</div>
+
+  <h2 id="systec-example">Applied to Systec / DWC2</h2>
+  <div class="callout ok"><b>Default class → Module A</b>None of the Systec products has a core function listed in Annex III or IV: they measure flow, heat and pressure. DWC2 uses a PIC32MX microcontroller, but the product's core function is not "microcontroller with security functions". No notified body is needed. <a href="systec.html#product-mapping">Systec product mapping →</a></div>
+  <div class="callout warn"><b>Check the Modbus TCP converter</b>The TCP↔RTU converter used with DWC2 is a separate product. If Systec sells it as a stand-alone network interface under its own name, look at whether it falls under "network interfaces" (Class I). <a href="dwc2-findings.html#f8">Finding F8 →</a></div>
+</main>
+</body>
+</html>

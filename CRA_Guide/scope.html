@@ -54,13 +54,13 @@
       <label><input type="radio" name="q4" value="y"> Yes</label><label><input type="radio" name="q4" value="n"> No</label></div>
     <div class="q"><p>5. Is its <i>core function</i> one of: router/modem/switch, network interface, OS, boot manager, VPN, firewall/IDS, smart-home security, smart meter gateway, secure element/HSM, security-function MCU?</p>
       <label><input type="radio" name="q5" value="y"> Yes</label><label><input type="radio" name="q5" value="n"> No</label></div>
-    <button class="iconbtn" type="button" id="fillDwc2">Fill in DWC2 answers</button>
+    <button class="iconbtn" type="button" id="fillEX-100">Fill in EX-100 answers</button>
     <button class="iconbtn" type="button" id="resetChk">Reset</button>
     <div class="result" id="chkResult">Answer the questions to see the result.</div>
   </div>
 
-  <h2 id="systec-example">Applied to DWC2</h2>
-  <div class="callout ok"><b>DWC2 is in scope</b>Firmware product with several physical and logical data connections: RS485/Modbus RTU, M-Bus, USB (mass storage), SD card, and optional Modbus TCP through a converter. Not excluded: it is not a medical device or vehicle part. Core function is flow/heat measurement, so it is <b>default class</b>. <a href="dwc2-overview.html#attack-surface">See the DWC2 interfaces →</a></div>
+  <h2 id="example">Applied to EX-100</h2>
+  <div class="callout ok"><b>EX-100 is in scope</b>Firmware product with several physical and logical data connections: RS485/Modbus RTU, M-Bus, USB (mass storage), SD card, and optional Modbus TCP through a converter. Not excluded: it is not a medical device or vehicle part. Core function is flow/heat measurement, so it is <b>default class</b>. <a href="example-overview.html#attack-surface">See the EX-100 interfaces →</a></div>
 </main>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
     out.innerHTML = "<b>In scope, default class → Module A self-assessment.</b> Meet Annex I, keep a technical file, sign the DoC, affix CE. Reporting duties apply now. <a href='requirements.html'>Requirements →</a>";
   }
   form.addEventListener("change", evaluate);
-  document.getElementById("fillDwc2").addEventListener("click", function(){
+  document.getElementById("fillEX-100").addEventListener("click", function(){
     ["q1:y","q2:y","q3:y","q4:n","q5:n"].forEach(function(p){ var s=p.split(":"); form.querySelector('input[name="'+s[0]+'"][value="'+s[1]+'"]').checked=true; });
     evaluate();
   });

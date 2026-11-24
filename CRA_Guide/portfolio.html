@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · the manufacturer products &amp; CRA</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>Typical instrument portfolio &amp; the CRA</h1>
+  <p class="lead">A typical instrument maker manufactures and sells measurement instruments under its own name in the EU, so <b>it is the CRA manufacturer</b>. Tismo, as firmware engineering partner, delivers much of the evidence. Its customers (water, power, district heating, gas, chemicals, pharma) are often NIS2 entities and will ask for cybersecurity evidence anyway.</p>
+  <p>Generic portfolio of an industrial instrument maker. Interfaces depend on the specific product; "to verify" marks what each product team must confirm.</p>
+
+  <h2 id="product-mapping">Product-by-product applicability</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Product family</th><th>Examples</th><th>Known interfaces</th><th>CRA?</th><th>Class</th></tr></thead>
+    <tbody>
+      <tr><td><b>Flow / heat meters with field bus</b></td><td>Ultrasonic, electromagnetic or DP meters with a controller (<a href="example-overview.html">EX-100</a>)</td><td>RS485, Modbus, M-Bus, USB, SD card (logging, setup, updates), optional cellular modem</td><td><span class="badge crit">Yes</span></td><td>Default → A</td></tr>
+      <tr><td>Transmitters</td><td>Pressure, temperature, multivariable</td><td>4–20 mA, HART, Modbus</td><td><span class="badge crit">Yes</span> if firmware + data interface</td><td>Default</td></tr>
+      <tr><td><b>Flow computers / controllers</b></td><td>Totalising and data-logging units</td><td>Modbus, USB, Ethernet, logging, PC software</td><td><span class="badge crit">Yes</span></td><td>Default</td></tr>
+      <tr><td>Portable instruments</td><td>Clamp-on or handheld meters</td><td>USB, Bluetooth (check RED)</td><td><span class="badge crit">Yes</span></td><td>Default</td></tr>
+      <tr><td><b>PC software</b></td><td>Parameterisation, data read-out and calculation tools</td><td>Windows; USB / serial to the device</td><td><span class="badge crit">Yes</span> (software product)</td><td>Default</td></tr>
+      <tr><td>Mechanical parts and accessories</td><td>Primary elements, fittings, mounting kits</td><td>None</td><td><span class="badge low">No</span> without firmware + data link</td><td>—</td></tr>
+      <tr><td>Test-bench sensors</td><td>Sensors for vehicle or engine test benches</td><td>To verify</td><td><span class="badge crit">Yes</span> for test benches</td><td>Default; vehicle-part exclusion only if type-approved</td></tr>
+    </tbody>
+  </table></div>
+  <p><b>Other CE regimes stay:</b> EMC, LVD, ATEX (Ex variants), PED, MID (custody transfer), RED (integrated radio). <a href="landscape.html">Related laws →</a></p>
+
+  <h2 id="risk-points">Typical legacy risk points</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Area</th><th>Typical state</th><th>CRA ref.</th><th>What to do</th><th>EX-100 evidence</th></tr></thead>
+    <tbody>
+      <tr><td>Modbus RTU / M-Bus</td><td>No authentication by protocol design</td><td>I.2d, 2f, 2j</td><td>Read-only measurement registers; protected config writes; document the OT-zone assumption</td><td>Modbus writes off ✔; <a href="example-findings.html#f7">F7</a></td></tr>
+      <tr><td><b>SD-card updates</b></td><td>Card loads config and firmware</td><td>I.2c, 2f</td><td><b>Sign firmware images, verify in the bootloader</b>, anti-rollback. The single most important retrofit</td><td><a href="example-findings.html#f1">F1</a></td></tr>
+      <tr><td>USB parameterisation</td><td>Local PC tool without authentication</td><td>I.2d, 2b</td><td>Device-side service password; log config changes</td><td><a href="example-overview.html#attack-surface">USB MSD</a></td></tr>
+      <tr><td>GSM remote transmission</td><td>Possibly unencrypted</td><td>I.2e, 2h</td><td>Encrypted transport (VPN/TLS modem); customer duties in Annex II</td><td>Not in EX-100 tree</td></tr>
+      <tr><td>Calibration data</td><td>Flash/EEPROM without check</td><td>I.2f</td><td>CRC/MAC on calibration tables; report corruption</td><td><a href="example-findings.html#f6">F6</a></td></tr>
+      <tr><td>Debug ports</td><td>JTAG/SWD accessible</td><td>I.2j, 2k</td><td>Read-out protection, debug lock in production</td><td><a href="example-findings.html#f2">F2</a></td></tr>
+      <tr><td>Long field life</td><td>10–20 years, informal support</td><td>Art. 13(8)</td><td>Publish support end date; archive toolchains</td><td>C32 2.02 / XC32 5.00</td></tr>
+      <tr><td>Third-party code</td><td>Undocumented versions</td><td>Part II.1</td><td>Recover SBOM, monitor CVEs</td><td><a href="example-overview.html#sbom">SBOM</a></td></tr>
+      <tr><td>Vulnerability reporting</td><td>No formal process</td><td>Art. 14</td><td>Security contact, CVD policy, 24 h runbook</td><td><a href="example-risk.html#r12">R-12</a> (High)</td></tr>
+      <tr><td>Device password</td><td>Optional PIN, master / service codes</td><td>I.2b, 2d</td><td>User-set or unique credentials, no master code, attempt limiting</td><td><a href="example-findings.html#f3">F3</a>, <a href="example-findings.html#f4">F4</a>; <a href="example-risk.html#r04">R-04</a> (High)</td></tr>
+      <tr><td>Security logging</td><td>None</td><td>I.2l</td><td>Log config, PIN, import, reset and update events</td><td><a href="example-findings.html#f9">F9</a>; <a href="example-risk.html#r16">R-16</a></td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="roadmap">Recommended the manufacturer roadmap</h2>
+  <div class="steps">
+    <div class="step"><h3>Product inventory &amp; classification (now)</h3><p>Every product and software tool: interfaces, firmware version, MCU, components, EU sales after Dec 2027.</p></div>
+    <div class="step"><h3>Vulnerability-handling process (now, legally required)</h3><p>Security contact, CVD policy, Art. 14 runbook, ENISA platform account, internal owner.</p></div>
+    <div class="step"><h3>SBOM recovery &amp; CVE baseline</h3><p>For each firmware and PC tool. EX-100 is the pilot.</p></div>
+    <div class="step"><h3>Per-product risk assessment</h3><p>Annex I.1, with IEC 62443-4-2 as checklist. EX-100 Phase A/B is the template.</p></div>
+    <div class="step"><h3>Security retrofit</h3><p>Signed updates → config write protection → debug lock → data integrity → security log → secure reset.</p></div>
+    <div class="step"><h3>Technical file, DoC, Annex II</h3><p>Per product, including support end date and secure installation guidance.</p></div>
+    <div class="step"><h3>Support period &amp; end-of-sale decisions</h3><p>Decide which older models get retrofitted and which stop selling before Dec 2027.</p></div>
+  </div>
+
+  <h2 id="progress">Roadmap progress (24 Nov 2026)</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Step</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>1 · Inventory &amp; classification</td><td><span class="badge low">EX-100 done</span> default class; other products not started</td></tr>
+      <tr><td>2 · Vulnerability-handling process</td><td><span class="badge crit">Not started</span> needs a manufacturer owner (<a href="example-risk.html#r12">R-12</a>)</td></tr>
+      <tr><td>3 · SBOM &amp; CVE baseline</td><td><span class="badge med">EX-100 draft</span> formal CycloneDX SBOM in Phase A</td></tr>
+      <tr><td>4 · Per-product risk assessment</td><td><span class="badge med">EX-100 draft 0.2</span> 19 risks; <a href="ra-method.html">method and templates v1.2</a> ready for reuse</td></tr>
+      <tr><td>5 · Security retrofit</td><td><span class="badge med">EX-100 WP1 designed</span> awaiting decision; secure boot 2027</td></tr>
+      <tr><td>6 · Technical file + DoC</td><td><span class="badge crit">Not started</span></td></tr>
+      <tr><td>7 · Support periods</td><td><span class="badge high">Open question</span> to the manufacturer</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="decisions">Decisions needed from the manufacturer</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>ID</th><th>Needed</th><th>Blocks</th></tr></thead>
+    <tbody>
+      <tr><td>Q1</td><td>Go / no-go for <a href="example-wp1.html">WP1 quick wins</a> (≈ 42 h)</td><td>Implementation Jan 2027</td></tr>
+      <tr><td>Q-01</td><td>Does the legacy bootloader program config words? Is its source available?</td><td>WP1 C3, SBOM, S1</td></tr>
+      <tr><td>Q-06</td><td>Is flash read-back needed in service / production (reason for <code>CP = OFF</code>)?</td><td>WP1 C3</td></tr>
+      <tr><td>Q-11</td><td>Release toolchain (C32 v2.02 or XC32)? Can the AUTOBUILDER select a configuration?</td><td>WP1 C4, SBOM</td></tr>
+      <tr><td>Q-13</td><td>Approve the 5×5 risk criteria used in draft 0.2</td><td>Risk register</td></tr>
+      <tr><td>—</td><td>Owner for residual-risk acceptance and the Art. 14 reporting contact</td><td>Sign-off, reporting</td></tr>
+      <tr><td>—</td><td>Support period; models still sold after 11 Dec 2027</td><td>Annex II, scope</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="why-example">Why EX-100 is the baseline</h2>
+  <div class="callout ok"><b>A representative legacy instrument</b>EX-100 combines every typical legacy-instrument risk point: field buses, USB, SD-card updates, local UI, calibration data and a long field life, on a resource-tight MCU without crypto hardware. The method used for it carries over to ultrasonic meter variants and flow computer. <a href="example-overview.html">Start the EX-100 walkthrough →</a></div>
+</main>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · Obligations &amp; reporting</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>Manufacturer obligations &amp; reporting</h1>
+  <p class="lead">Designing a secure product is only half of the CRA. The manufacturer must also support it, report incidents, document it and inform users (Art. 13–14, 28–31).</p>
+
+  <h2 id="obligations">Obligations at a glance</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Obligation</th><th>Detail</th><th>Article</th></tr></thead>
+    <tbody>
+      <tr><td>Risk assessment</td><td>Documented, kept up to date during the support period, part of the technical file</td><td>13(2)–(4)</td></tr>
+      <tr><td>Component due diligence</td><td>Including open-source and third-party libraries. Report component vulnerabilities upstream</td><td>13(5)–(6)</td></tr>
+      <tr><td><b>Support period</b></td><td><b>At least 5 years</b>, reflecting the expected use time. End date (month/year) shown at purchase</td><td>13(8), (19)</td></tr>
+      <tr><td>Update availability</td><td>Each security update stays available for <b>10 years</b> or the rest of the support period if longer</td><td>13(9)</td></tr>
+      <tr><td>Record retention</td><td>Technical documentation and DoC kept 10 years or the support period, whichever is longer</td><td>13(13)</td></tr>
+      <tr><td>User information</td><td>Annex II content (see below)</td><td>13(18)</td></tr>
+      <tr><td>Single point of contact</td><td>For vulnerability reports; not only an automated tool</td><td>13(17)</td></tr>
+      <tr><td>Corrective action</td><td>Fix, withdraw or recall non-conforming products</td><td>13(21)</td></tr>
+      <tr><td><b>Reporting</b></td><td>Exploited vulnerabilities and severe incidents via ENISA single reporting platform</td><td>14</td></tr>
+      <tr><td>DoC + CE marking</td><td>EU declaration of conformity; CE mark (for software, may sit on DoC or website)</td><td>28, 30</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="reporting">Reporting (Art. 14): applies since 11 Sep 2026</h2>
+  <p>Reports go through the <b>ENISA single reporting platform</b> to the coordinator CSIRT. This applies to <b>all products on the EU market</b>, including units sold before 2027.</p>
+  <div class="grid c2">
+    <div class="card">
+      <div class="kicker">Actively exploited vulnerability</div>
+      <div class="timeline">
+        <div class="tl-item"><div class="d">≤ 24 h</div><div class="t">Early warning (Member States where the product is available)</div></div>
+        <div class="tl-item"><div class="d">≤ 72 h</div><div class="t">Vulnerability notification: product, nature of exploit, corrective measures taken</div></div>
+        <div class="tl-item"><div class="d">≤ 14 days after a fix is available</div><div class="t">Final report: description, severity, impact, malicious actor (if known), security update details</div></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="kicker">Severe incident affecting product security</div>
+      <div class="timeline">
+        <div class="tl-item"><div class="d">≤ 24 h</div><div class="t">Early warning, incl. whether suspected malicious</div></div>
+        <div class="tl-item"><div class="d">≤ 72 h</div><div class="t">Incident notification with initial assessment</div></div>
+        <div class="tl-item"><div class="d">≤ 1 month</div><div class="t">Final report: severity, root cause, mitigation</div></div>
+      </div>
+    </div>
+  </div>
+  <p>The manufacturer must also inform affected users and, where needed, tell them about mitigation (Art. 14(8)).</p>
+  <div class="callout crit"><b>Systec gap R12 (high)</b>No vulnerability-handling runbook exists yet, so Systec could not triage and report within 24 h today. A practical first step: map installed DWC2 versions (IR 25 … IR 45) to SBOMs so a CVE can be triaged fast. <a href="dwc2-risk.html#r12">Risk R12 →</a></div>
+
+  <h3 id="runbook">Minimal reporting runbook</h3>
+  <div class="steps">
+    <div class="step"><h3>Intake</h3><p>Published security contact (e.g. security@…) and CVD policy. Every report gets an owner and a timestamp.</p></div>
+    <div class="step"><h3>Triage (hours)</h3><p>Which products and versions are affected? Use the SBOM per release. Is it actively exploited?</p></div>
+    <div class="step"><h3>Notify (≤ 24 h / 72 h)</h3><p>Pre-registered ENISA platform account, prepared templates, named backup person.</p></div>
+    <div class="step"><h3>Fix &amp; inform</h3><p>Security-only release, free of charge, advisory to customers, final report within 14 days of the fix.</p></div>
+  </div>
+
+  <h2 id="annex-ii">User information (Annex II)</h2>
+  <div class="grid c2">
+    <ul class="card" style="margin:0;padding-left:34px">
+      <li>Manufacturer name, address, contact</li>
+      <li>Single point of contact for vulnerabilities and the CVD policy location</li>
+      <li>Product name, type and identification</li>
+      <li>Intended purpose and security environment</li>
+      <li>Known circumstances that may lead to significant risk</li>
+      <li>Where to find the EU declaration of conformity</li>
+    </ul>
+    <ul class="card" style="margin:0;padding-left:34px">
+      <li>Type of support and <b>end date of the support period</b></li>
+      <li>Secure commissioning / installation instructions</li>
+      <li>How security updates are installed (and how to postpone or turn off automatic updates)</li>
+      <li>Secure decommissioning and data removal</li>
+      <li>Where the SBOM can be accessed, if it is made available</li>
+    </ul>
+  </div>
+  <p><b>For DWC2:</b> add support end date, network segmentation guidance for Modbus TCP and M-Bus, how to verify firmware authenticity, how to set the PIN, and how to erase MRAM/SD at decommissioning.</p>
+
+  <h2 id="annex-vii">Technical documentation (Annex VII)</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Content</th><th>DWC2 source of evidence</th></tr></thead>
+    <tbody>
+      <tr><td>General description, intended purpose, software versions, user information</td><td>Existing release documents per IR (<code>documentation/Release documents/</code>)</td></tr>
+      <tr><td>Design, development and production, incl. system architecture</td><td><a href="dwc2-overview.html#context">System context</a>, <a href="dwc2-overview.html#attack-surface">attack surface</a></td></tr>
+      <tr><td>Vulnerability-handling process: SBOM, CVD policy, contact, update distribution</td><td><a href="dwc2-overview.html#sbom">Draft SBOM</a> + Systec process (to create)</td></tr>
+      <tr><td>Cybersecurity risk assessment</td><td><a href="dwc2-risk.html">Risk register &amp; matrix</a>, Phase B STRIDE</td></tr>
+      <tr><td>Support-period rationale</td><td>To define (field use often 10–20 years)</td></tr>
+      <tr><td>Harmonised standards / specifications applied</td><td>None cited yet; IEC 62443-4-2 as reference checklist</td></tr>
+      <tr><td>Test reports</td><td>SonarQube reports, fuzzing and update negative tests (planned)</td></tr>
+      <tr><td>Copy of the EU DoC</td><td>Systec</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="penalties">Penalties (Art. 64)</h2>
+  <div class="grid c3">
+    <div class="stat"><div class="v" style="color:var(--crit)">€15 M / 2.5 %</div><div class="l">Annex I essential requirements, Art. 13 or Art. 14</div></div>
+    <div class="stat"><div class="v" style="color:var(--high)">€10 M / 2 %</div><div class="l">Other obligations: DoC, CE, technical file, importers, distributors, conformity assessment</div></div>
+    <div class="stat"><div class="v" style="color:var(--med)">€5 M / 1 %</div><div class="l">Incorrect, incomplete or misleading information to authorities</div></div>
+  </div>
+  <p>Whichever is higher of the fixed amount and the percentage of worldwide annual turnover. Micro and small enterprises are not fined for missing the 24-hour early warning. On top of fines, the <b>Product Liability Directive</b> (EU) 2024/2853 can make a product "defective" when security updates are missing. <a href="landscape.html">Related laws →</a></p>
+</main>
+</body>
+</html>

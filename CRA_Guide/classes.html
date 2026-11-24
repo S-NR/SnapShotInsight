@@ -50,9 +50,9 @@
   <h2 id="tismo-rule">Rule of thumb for engineers</h2>
   <div class="callout">If the product has firmware and any interface (bus, USB, radio, Ethernet, SD card, debug port used in the field), assume <b>CRA applies, default class, Module A</b>. Then check whether the <b>core function</b> puts it in Annex III/IV. Gateways and network interface modules are the usual surprise: they can be <b>Important Class I</b>.</div>
 
-  <h2 id="systec-example">Applied to Systec / DWC2</h2>
-  <div class="callout ok"><b>Default class → Module A</b>None of the Systec products has a core function listed in Annex III or IV: they measure flow, heat and pressure. DWC2 uses a PIC32MX microcontroller, but the product's core function is not "microcontroller with security functions". No notified body is needed. <a href="systec.html#product-mapping">Systec product mapping →</a></div>
-  <div class="callout warn"><b>Check the Modbus TCP converter</b>The TCP↔RTU converter used with DWC2 is a separate product. If Systec sells it as a stand-alone network interface under its own name, look at whether it falls under "network interfaces" (Class I). <a href="dwc2-findings.html#f8">Finding F8 →</a></div>
+  <h2 id="example">Applied to the worked example (EX-100)</h2>
+  <div class="callout ok"><b>Default class → Module A</b>None of the typical instrument products has a core function listed in Annex III or IV: they measure flow, heat and pressure. EX-100 uses a PIC32MX microcontroller, but the product's core function is not "microcontroller with security functions". No notified body is needed. <a href="portfolio.html#product-mapping">Portfolio mapping →</a></div>
+  <div class="callout warn"><b>Check the Modbus TCP converter</b>The TCP↔RTU converter used with EX-100 is a separate product. If the manufacturer sells it as a stand-alone network interface under its own name, look at whether it falls under "network interfaces" (Class I). <a href="example-findings.html#f8">Finding F8 →</a></div>
 </main>
 </body>
 </html>

@@ -50,7 +50,7 @@
     </div>
   </div>
   <p>The manufacturer must also inform affected users and, where needed, tell them about mitigation (Art. 14(8)).</p>
-  <div class="callout crit"><b>Systec gap R12 (high)</b>No vulnerability-handling runbook exists yet, so Systec could not triage and report within 24 h today. A practical first step: map installed DWC2 versions (IR 25 … IR 45) to SBOMs so a CVE can be triaged fast. <a href="dwc2-risk.html#r12">Risk R12 →</a></div>
+  <div class="callout crit"><b>the manufacturer gap R12 (high)</b>No vulnerability-handling runbook exists yet, so the manufacturer could not triage and report within 24 h today. A practical first step: map installed EX-100 versions (IR 25 … the last release) to SBOMs so a CVE can be triaged fast. <a href="example-risk.html#r12">Risk R12 →</a></div>
 
   <h3 id="runbook">Minimal reporting runbook</h3>
   <div class="steps">
@@ -78,20 +78,20 @@
       <li>Where the SBOM can be accessed, if it is made available</li>
     </ul>
   </div>
-  <p><b>For DWC2:</b> add support end date, network segmentation guidance for Modbus TCP and M-Bus, how to verify firmware authenticity, how to set the PIN, and how to erase MRAM/SD at decommissioning.</p>
+  <p><b>For EX-100:</b> add support end date, network segmentation guidance for Modbus TCP and M-Bus, how to verify firmware authenticity, how to set the PIN, and how to erase MRAM/SD at decommissioning.</p>
 
   <h2 id="annex-vii">Technical documentation (Annex VII)</h2>
   <div class="tablewrap"><table>
-    <thead><tr><th>Content</th><th>DWC2 source of evidence</th></tr></thead>
+    <thead><tr><th>Content</th><th>EX-100 source of evidence</th></tr></thead>
     <tbody>
       <tr><td>General description, intended purpose, software versions, user information</td><td>Existing release documents per IR (<code>documentation/Release documents/</code>)</td></tr>
-      <tr><td>Design, development and production, incl. system architecture</td><td><a href="dwc2-overview.html#context">System context</a>, <a href="dwc2-overview.html#attack-surface">attack surface</a></td></tr>
-      <tr><td>Vulnerability-handling process: SBOM, CVD policy, contact, update distribution</td><td><a href="dwc2-overview.html#sbom">Draft SBOM</a> + Systec process (to create)</td></tr>
-      <tr><td>Cybersecurity risk assessment</td><td><a href="dwc2-risk.html">Risk register &amp; matrix</a>, Phase B STRIDE</td></tr>
+      <tr><td>Design, development and production, incl. system architecture</td><td><a href="example-overview.html#context">System context</a>, <a href="example-overview.html#attack-surface">attack surface</a></td></tr>
+      <tr><td>Vulnerability-handling process: SBOM, CVD policy, contact, update distribution</td><td><a href="example-overview.html#sbom">Draft SBOM</a> + the manufacturer process (to create)</td></tr>
+      <tr><td>Cybersecurity risk assessment</td><td><a href="example-risk.html">Risk register &amp; matrix</a>, Phase B STRIDE</td></tr>
       <tr><td>Support-period rationale</td><td>To define (field use often 10–20 years)</td></tr>
       <tr><td>Harmonised standards / specifications applied</td><td>None cited yet; IEC 62443-4-2 as reference checklist</td></tr>
       <tr><td>Test reports</td><td>SonarQube reports, fuzzing and update negative tests (planned)</td></tr>
-      <tr><td>Copy of the EU DoC</td><td>Systec</td></tr>
+      <tr><td>Copy of the EU DoC</td><td>the manufacturer</td></tr>
     </tbody>
   </table></div>
 

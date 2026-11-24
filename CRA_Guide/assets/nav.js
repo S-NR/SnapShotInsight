@@ -2,9 +2,8 @@
 (function () {
   "use strict";
 
-  // ---- Local roots used for "open file" links -------------------------------------------
+  // ---- Local roots used for "open file" links (only resolve on the author's PC) -------------
   var ROOTS = {
-    dwc2: "D:/Projects/GIT/Systec - DWx/GIT/DWx/IR_44/DWx_Software_Maintenance/Technical/Sources/Software/DWC2/",
     inv:  "D:/Projects/GIT/Investigations/Autromation to SDLC documents/",
     cra:  "D:/Projects/GIT/Investigations/Autromation to SDLC documents/Cyber Resilience Act/"
   };
@@ -26,14 +25,14 @@
       { href: "how-to.html", n: "8", title: "How to comply (brownfield)", kw: "workflow steps process tara stride risk assessment ai help brownfield retrofit" },
       { href: "ra-method.html", n: "9", title: "Risk-assessment method & templates", kw: "iso 31000 guideline templates t1 t15 v1.2 5x5 criteria review definition of done annex ii part ii" }
     ]},
-    { group: "Baseline example: Systec", items: [
-      { href: "systec.html", n: "S1", title: "Systec products & CRA", kw: "systec deltawave flowcom products classification risk points roadmap" },
-      { href: "dwc2-overview.html", n: "S2", title: "DWC2: system & attack surface", kw: "dwc2 pic32mx575 context interfaces sbom bootloader usb sd modbus mbus jtag" },
-      { href: "dwc2-findings.html", n: "S3", title: "DWC2: findings F1–F12", kw: "findings code review master password 5555 read_line overflow code protection unsigned update watchdog" },
-      { href: "dwc2-risk.html", n: "S4", title: "DWC2: risk assessment v0.2", kw: "assets risk register matrix likelihood impact 5x5 r01 r19 residual roadmap phase a tara v0.2" },
-      { href: "dwc2-plan.html", n: "S5", title: "DWC2: action plan & estimates", kw: "action plan hours estimate phase a phase b stride nitrokey secure boot user levels interface measures questions moser february review" },
-      { href: "dwc2-wp1.html", n: "S6", title: "DWC2: WP1 quick wins", kw: "wp1 quick wins import read_line jtag code protection cp bwp pwp release build guard effort 42 h test cases" },
-      { href: "traceability.html", n: "S7", title: "Requirement → DWC2 trace", kw: "traceability annex i mapping requirement finding risk action evidence" }
+    { group: "Worked example: EX-100", items: [
+      { href: "portfolio.html", n: "S1", title: "Typical instrument portfolio", kw: "industrial instruments portfolio flow meter flow computer products classification risk points roadmap" },
+      { href: "example-overview.html", n: "S2", title: "EX-100: system & attack surface", kw: "example pic32mx context interfaces sbom bootloader usb sd modbus mbus jtag" },
+      { href: "example-findings.html", n: "S3", title: "EX-100: findings F1–F12", kw: "findings code review master password fixed master PIN read_line overflow code protection unsigned update watchdog" },
+      { href: "example-risk.html", n: "S4", title: "EX-100: risk assessment v0.2", kw: "assets risk register matrix likelihood impact 5x5 r01 r19 residual roadmap phase a tara v0.2" },
+      { href: "example-plan.html", n: "S5", title: "EX-100: action plan & estimates", kw: "action plan hours estimate phase a phase b stride nitrokey secure boot user levels interface measures questions product manager review" },
+      { href: "example-wp1.html", n: "S6", title: "EX-100: WP1 quick wins", kw: "wp1 quick wins import read_line jtag code protection cp bwp pwp release build guard effort 42 h test cases" },
+      { href: "traceability.html", n: "S7", title: "Requirement → EX-100 trace", kw: "traceability annex i mapping requirement finding risk action evidence" }
     ]},
     { group: "Resources", items: [
       { href: "files.html", n: "R1", title: "File navigator", kw: "files documents source code markdown pptx paths open" },
@@ -73,7 +72,7 @@
     var header = el("header", { class: "topbar" });
     header.innerHTML =
       '<button class="iconbtn" id="menuBtn" aria-label="Open menu">☰</button>' +
-      '<a class="brand" href="index.html"><span class="logo">CRA</span><span>Cyber Resilience Act Guide <small>· Systec DWC2 baseline</small></span></a>' +
+      '<a class="brand" href="index.html"><span class="logo">CRA</span><span>Cyber Resilience Act Guide <small>· with a worked example</small></span></a>' +
       '<span class="spacer"></span>' +
       '<input type="search" id="navSearch" placeholder="Filter pages… ( / )" aria-label="Filter pages">' +
       '<button class="iconbtn" id="themeBtn" title="Toggle light/dark">◐</button>';
@@ -123,7 +122,7 @@
       "Engineering summary prepared by the Tismo Brownfield team, not legal advice. CRA text taken from " +
       '<a href="https://www.cyberresilienceact.eu/regulation.html" target="_blank" rel="noopener">cyberresilienceact.eu</a> (unofficial reproduction). ' +
       'The binding text is <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2847" target="_blank" rel="noopener">Regulation (EU) 2024/2847 on EUR-Lex</a>. ' +
-      "DWC2 findings reflect the IR 44 maintenance tree as reviewed on 12 Nov 2026 (F5 updated 23 Nov); DWC2 risk assessment draft 0.2 of 24 Nov 2026."));
+      "EX-100 is a fictional, anonymised legacy industrial instrument used to illustrate the method; it does not describe any specific product."));
 
     // Theme toggle
     document.getElementById("themeBtn").addEventListener("click", function () {
@@ -158,7 +157,7 @@
       if (e.key === "/" && document.activeElement !== s && !/input|textarea/i.test(document.activeElement.tagName)) { e.preventDefault(); s.focus(); }
     });
 
-    // File links: <a class="filelink" data-root="dwc2" data-path="HAL/SYSCTRL_INIT.c" data-line="38-39"></a>
+    // File links: <code>init.c</code>
     main.querySelectorAll("a.filelink").forEach(function (a) {
       var root = ROOTS[a.getAttribute("data-root")] || "";
       var p = a.getAttribute("data-path") || "";

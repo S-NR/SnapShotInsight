@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · Key dates</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>Key dates</h1>
+  <p class="lead">The CRA phases in over three years. Reporting already applies; full design requirements apply to units placed on the market from 11 December 2027. The red marker shows today.</p>
+
+  <h2 id="timeline">CRA timeline</h2>
+  <div class="timeline" id="craTimeline">
+    <div class="tl-item" data-date="2024-12-10"><div class="d">10 Dec 2024</div><div class="t">Entry into force (Art. 71)</div></div>
+    <div class="tl-item" data-date="2025-12-11"><div class="d">11 Dec 2025</div><div class="t">Commission implementing acts due: technical descriptions of Annex III/IV categories, reporting details (Art. 7(4), 14(9))</div></div>
+    <div class="tl-item" data-date="2026-06-11"><div class="d">11 Jun 2026</div><div class="t">Chapter IV applies: notification of conformity assessment bodies</div></div>
+    <div class="tl-item" data-date="2026-09-11"><div class="d">11 Sep 2026</div><div class="t"><b>Reporting obligations (Art. 14) apply</b>, including for products placed on the market before 2027</div></div>
+    <div class="tl-item" data-date="2026-12-11"><div class="d">11 Dec 2026</div><div class="t">Member States should have enough notified bodies (Art. 35)</div></div>
+    <div class="tl-item" data-date="2027-12-11"><div class="d">11 Dec 2027</div><div class="t"><b>Full application</b>: essential requirements, conformity assessment, CE marking</div></div>
+    <div class="tl-item" data-date="2028-06-11"><div class="d">11 Jun 2028</div><div class="t">Older EU type-examination certificates stop being valid (Art. 69)</div></div>
+  </div>
+
+  <h2 id="legacy">Legacy products (Art. 69)</h2>
+  <div class="grid c3">
+    <div class="card"><div class="kicker">Before 11 Dec 2027</div><h3>Units already sold</h3><p>Not subject to the design requirements unless they later undergo a <b>substantial modification</b>.</p></div>
+    <div class="card"><div class="kicker">Always</div><h3>Reporting still applies</h3><p>Art. 14 reporting covers every product on the EU market, old units included.</p></div>
+    <div class="card"><div class="kicker">From 11 Dec 2027</div><h3>Each new unit</h3><p>"Placing on the market" applies <b>per unit</b>. A model launched in 2015 but still sold in 2028 must comply for every unit sold after the date.</p></div>
+  </div>
+  <div class="callout warn"><b>Substantial modification</b>A firmware release that changes security-relevant behaviour, or adds functions beyond the original risk assessment, can count as substantial. Security fixes alone normally do not. Plan each DWC2 release with this in mind.</div>
+
+  <h2 id="dwc2-timeline">DWC2 project timeline (planned)</h2>
+  <div class="timeline">
+    <div class="tl-item" data-date="2026-11-12"><div class="d">Wk 46 · 12 Nov 2026</div><div class="t">Action plan + estimates delivered; questions sent to Mr. Moser</div></div>
+    <div class="tl-item" data-date="2026-11-16"><div class="d">Wk 47–49</div><div class="t">Phase A: A1–A6, SBOM v1, risk matrix verified, S2/S3 proposals finalised</div></div>
+    <div class="tl-item" data-date="2026-12-07"><div class="d">Wk 50–51</div><div class="t">Phase A report v1.0; decision on quick wins Q1; Nitrokey PoC (S1) starts</div></div>
+    <div class="tl-item" data-date="2027-01-04"><div class="d">Jan 2027</div><div class="t">Q1 implementation (if approved); S1 PoC result; Phase B STRIDE</div></div>
+    <div class="tl-item" data-date="2027-02-01"><div class="d">Feb 2027</div><div class="t"><b>First CRA assessment review</b>: Phase A + B, SBOM, risk register, measures plan</div></div>
+    <div class="tl-item" data-date="2027-06-01"><div class="d">2027</div><div class="t">Secure bootloader implementation (postponed to 2027, ≈ 120–200 h)</div></div>
+    <div class="tl-item" data-date="2027-12-11"><div class="d">11 Dec 2027</div><div class="t">DWC2 units placed on the market must fully comply</div></div>
+  </div>
+  <p><a href="dwc2-plan.html#timeline">Full action plan →</a></p>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  var today = new Date(2026, 10, 12); // 12 Nov 2026 (document date)
+  var real = new Date(); if (real > today) today = real;
+  document.querySelectorAll(".timeline").forEach(function (tl) {
+    var items = [].slice.call(tl.querySelectorAll(".tl-item[data-date]"));
+    var nowPlaced = false;
+    items.forEach(function (it) {
+      var d = new Date(it.getAttribute("data-date") + "T00:00:00");
+      if (d <= today) it.classList.add("past");
+      else if (!nowPlaced) {
+        var m = document.createElement("div"); m.className = "tl-item now";
+        m.innerHTML = '<div class="d" style="color:var(--crit)">Today · ' + today.toLocaleDateString("en-GB", {day:"numeric", month:"short", year:"numeric"}) + "</div>";
+        tl.insertBefore(m, it); nowPlaced = true;
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>

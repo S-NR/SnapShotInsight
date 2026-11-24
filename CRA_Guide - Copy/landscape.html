@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · Related laws &amp; standards</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+</head>
+<body>
+<main>
+  <h1>Related laws &amp; standards</h1>
+  <p class="lead">The CRA is one piece of the EU digital rulebook. The table shows which law applies to which kind of system and how it relates to the CRA. Rows marked † come from general knowledge of EU law; verify the dates before relying on them.</p>
+
+  <h2 id="which-law">Which law applies to which system</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Law</th><th>Applies to</th><th>Relationship to CRA</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td><b>CRA</b> (EU) 2024/2847</td><td>Products with digital elements</td><td>Horizontal baseline for product cybersecurity</td><td>Reporting since 11 Sep 2026; full 11 Dec 2027</td></tr>
+      <tr><td><b>RED</b> 2014/53/EU + Del. Reg. (EU) 2022/30 †</td><td>Radio equipment (Wi-Fi, BLE, cellular, LoRa…) that connects to the internet, processes personal data or handles money</td><td>Overlapping cybersecurity requirements (EN 18031-1/-2/-3). Expected to be superseded by the CRA for cybersecurity</td><td>Applies since 1 Aug 2025 †</td></tr>
+      <tr><td><b>NIS2</b> (EU) 2022/2555</td><td><b>Operators</b> (energy, water, manufacturing, health…), not products</td><td>Operators push CRA-type requirements onto suppliers through supply-chain security</td><td>In force; national transposition</td></tr>
+      <tr><td><b>Machinery Regulation</b> (EU) 2023/1230 †</td><td>Machinery, safety components, control systems</td><td>Protection against corruption where it affects safety; CRA conformity supports this</td><td>From 20 Jan 2027 †</td></tr>
+      <tr><td><b>AI Act</b> (EU) 2024/1689</td><td>AI systems, especially high-risk</td><td>CRA Annex I compliance can count for AI Act Art. 15 cybersecurity (CRA Art. 12)</td><td>Phased 2025–2027</td></tr>
+      <tr><td><b>Product Liability Directive</b> (EU) 2024/2853 †</td><td>All products, explicitly including software</td><td>Missing security updates can make a product "defective" → civil liability</td><td>Transposition by 9 Dec 2026 †</td></tr>
+      <tr><td><b>Data Act</b> (EU) 2023/2854 †</td><td>Connected products and related services</td><td>Data access by design; complementary</td><td>Applies from 12 Sep 2025 †</td></tr>
+      <tr><td><b>GPSR</b> (EU) 2023/988</td><td>Consumer products</td><td>Covers safety risks the CRA does not</td><td>Applies</td></tr>
+      <tr><td><b>Cybersecurity Act</b> (EU) 2019/881</td><td>Voluntary EU certification schemes (e.g. EUCC)</td><td>Certification route for critical / Class II products</td><td>Applies</td></tr>
+      <tr><td><b>MDR / IVDR</b></td><td>Medical and in-vitro diagnostic devices</td><td><b>Excludes</b> the CRA; cybersecurity inside MDR (MDCG 2019-16 †)</td><td>Applies</td></tr>
+      <tr><td><b>Vehicle type approval</b> 2019/2144 (UNECE R155/R156)</td><td>Type-approved vehicles</td><td><b>Excludes</b> the CRA</td><td>Applies</td></tr>
+      <tr><td>ATEX, MID, EMC, LVD, PED</td><td>Ex protection, legal metrology, EMC, electrical and pressure safety</td><td><b>Not replaced</b>; cybersecurity is added on top</td><td>Applies</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="by-system">Quick lookup by system type</h2>
+  <div class="grid c3">
+    <div class="card"><div class="kicker">Industrial instrument (Modbus, USB, SD)</div><h3>CRA default + EMC/LVD</h3><p>Plus ATEX for Ex variants, MID if used for billing, Machinery Regulation if part of a machine. Customers under NIS2 ask for IEC 62443.</p></div>
+    <div class="card"><div class="kicker">Device with radio</div><h3>CRA + RED DA</h3><p>RED Delegated Act (EN 18031) applies already; CRA takes over cybersecurity later.</p></div>
+    <div class="card"><div class="kicker">Gateway / network module</div><h3>CRA Important Class I</h3><p>Routers, modems and network interfaces as core function need standards in full or a notified body.</p></div>
+    <div class="card"><div class="kicker">Smart meter gateway</div><h3>CRA Critical</h3><p>Plus MID and national metering security rules.</p></div>
+    <div class="card"><div class="kicker">Medical device</div><h3>MDR / IVDR only</h3><p>CRA excluded. A non-medical lab instrument is still in CRA scope.</p></div>
+    <div class="card"><div class="kicker">AI feature in a machine</div><h3>CRA + AI Act</h3><p>If high-risk AI: CRA Annex I compliance helps meet AI Act cybersecurity.</p></div>
+  </div>
+
+  <h2 id="standards">Standards worth knowing</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Standard</th><th>Use</th><th>Access</th></tr></thead>
+    <tbody>
+      <tr><td>IEC 62443-4-1</td><td>Secure product development lifecycle</td><td><span class="badge high">Paid</span></td></tr>
+      <tr><td>IEC 62443-4-2</td><td>Technical security requirements for IACS components; the checklist NIS2 customers expect</td><td><span class="badge high">Paid</span></td></tr>
+      <tr><td>IEC 62443-3-2</td><td>Risk assessment, zones and conduits</td><td><span class="badge high">Paid</span></td></tr>
+      <tr><td>ISO/IEC 27005</td><td>Information security risk management</td><td><span class="badge high">Paid</span></td></tr>
+      <tr><td>EN 18031-1/-2/-3</td><td>RED radio cybersecurity</td><td><span class="badge high">Paid</span></td></tr>
+      <tr><td>ETSI EN 303 645</td><td>Consumer IoT baseline</td><td><span class="badge low">Free</span></td></tr>
+      <tr><td>CRA harmonised standards</td><td>Presumption of conformity once cited in the OJ (in drafting)</td><td><span class="badge med">Mostly paid</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout">Until CRA harmonised standards are cited in the Official Journal, Module A relies on demonstrating Annex I directly. That is the approach taken for DWC2.</div>
+
+  <h2 id="systec-example">Applied to DWC2</h2>
+  <div class="callout ok"><b>DWC2 regimes</b>CRA (default) + existing EMC/LVD. <b>MID MI-004</b> if the heat function (VIEGA variant) is used for billing: MID-certified software has its own update constraints (question Q-03). <b>RED</b> only if a radio module is integrated. ATEX if Ex variants exist.</div>
+</main>
+</body>
+</html>

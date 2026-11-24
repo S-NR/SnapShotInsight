@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CRA Guide · EX-100 assets &amp; risk matrix</title>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/nav.js"></script>
+<style>
+tr.flash td{animation:fl 1.6s ease}@keyframes fl{0%{background:var(--warn-soft)}100%{background:transparent}}
+.matrix.m5{grid-template-columns:120px repeat(5,minmax(80px,1fr))}
+</style>
+</head>
+<body>
+<main>
+  <h1>EX-100: assets, interfaces &amp; risk matrix</h1>
+  <p class="lead">Phase A of the basic TARA: what must be protected, where it can be attacked, and the likelihood × impact rating of every risk. This page shows the <b>EX-100 risk assessment draft 0.2</b> (24 Nov 2026), built on the risk-assessment templates v1.2. Everything is a <b>draft</b> until verified on hardware and with the product manager.</p>
+  <p>Method: <a href="ra-method.html">Risk-assessment method &amp; templates</a></p>
+
+  <div class="grid c4" style="margin:18px 0">
+    <div class="stat"><div class="v">19</div><div class="l">Risks rated (R-01–R-19)</div></div>
+    <div class="stat"><div class="v" style="color:var(--high)">3 High</div><div class="l">R-01, R-04, R-12 · no Critical</div></div>
+    <div class="stat"><div class="v">13 / 3</div><div class="l">Medium / Low before treatment</div></div>
+    <div class="stat"><div class="v">0 High</div><div class="l">Target after planned treatment (4 Medium, 15 Low)</div></div>
+  </div>
+
+  <div class="callout warn"><b>What changed from the first matrix (12 Nov 2026)</b>
+    <p>The first matrix used a 4×4 scale (R01 Critical, seven High). Draft 0.2 uses the 5×5 criteria of the templates (pending approval, Q-13) and IEC 31010 rating rules. Changes: R-02 6→8 (IP loss is Major), R-06 8→9 (crash path needs no skill), and four new risks R-16–R-19 for security logging, secure erase, the missing SAST gate and bus behaviour. The 4×4 values remain in the internal action plan.</p></div>
+
+  <h2 id="assets">Assets (T5)</h2>
+  <p>C = confidentiality I.2(e) · I = integrity I.2(f) · A = availability I.2(h) · Au = authenticity I.2(d). Essential function: correct measurement and readout (A-04).</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>ID</th><th>Asset</th><th>Where</th><th>C</th><th>I</th><th>A</th><th>Au</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>A-01</td><td><b>Application firmware</b> (incl. measurement IP)</td><td>Internal flash</td><td><b>H</b></td><td><b>H</b></td><td>H</td><td>H</td><td>Readable via JTAG/ICSP (CP off)</td></tr>
+      <tr><td>A-02</td><td><b>Bootloader</b></td><td>0x9D000000–0x9D00CFFF</td><td>M</td><td><b>H</b></td><td>H</td><td>H</td><td>Update root of trust; source not in repo</td></tr>
+      <tr><td>A-03</td><td><b>Calibration &amp; parameters</b></td><td>External MRAM (SPI2)</td><td>M</td><td><b>H</b></td><td>H</td><td>H</td><td>No integrity check</td></tr>
+      <tr><td>A-04</td><td><b>Measurement results &amp; totalizers</b></td><td>RAM, MRAM, SD, buses</td><td>L</td><td><b>H</b></td><td><b>H</b></td><td>H</td><td>Billing use to confirm</td></tr>
+      <tr><td>A-05</td><td><b>User PIN / access codes</b></td><td>MRAM + <code>PIN file</code></td><td><b>H</b></td><td>H</td><td>M</td><td>M</td><td>Reversible encoding; master PIN</td></tr>
+      <tr><td>A-06</td><td>Logger activation key</td><td>MRAM + SD</td><td>M</td><td>M</td><td>L</td><td>M</td><td>Feature licence</td></tr>
+      <tr><td>A-07</td><td>Communication configuration</td><td>MRAM, converter</td><td>L</td><td>M</td><td><b>H</b></td><td>M</td><td>Breaks SCADA readout</td></tr>
+      <tr><td>A-08</td><td>Cryptographic keys</td><td>None today</td><td>—</td><td>—</td><td>—</td><td>—</td><td>Future signing key (Nitrokey)</td></tr>
+      <tr><td>A-09</td><td>Log data on SD</td><td>SD card</td><td>L/M</td><td>M</td><td>M</td><td>L</td><td>Personal data to confirm</td></tr>
+      <tr><td>A-10</td><td>Device identity (serial, M-Bus address)</td><td>MRAM</td><td>L</td><td>M</td><td>M</td><td>M</td><td>For unique codes later</td></tr>
+      <tr><td>A-11</td><td>Security event log <span class="badge info">new</span></td><td>MRAM (planned, S3)</td><td>L</td><td>H</td><td>M</td><td>L</td><td>Does not exist yet (R-16)</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2 id="interfaces">Interfaces / attack surface (T6)</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>ID</th><th>Interface</th><th>Exposure</th><th>Current protection</th><th>Default state</th><th>Assets</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>IF-01</td><td><b>JTAG + trace</b> (RA0–RA7)</td><td>Physical</td><td><span class="badge crit">None</span></td><td>On after reset</td><td>A-01, A-02</td><td>Pads populated? (Q-05)</td></tr>
+      <tr><td>IF-02</td><td><b>ICSP</b> (PGEC/PGED)</td><td>Physical</td><td><span class="badge crit">None</span> CP off</td><td>On</td><td>A-01, A-02</td><td>Production procedure</td></tr>
+      <tr><td>IF-03</td><td><b>SD card</b></td><td>Physical, removable</td><td><span class="badge crit">None</span></td><td>On</td><td>A-01, A-03, A-05</td><td>Firmware update, import</td></tr>
+      <tr><td>IF-04</td><td><b>USB device (MSD)</b></td><td>Physical</td><td><span class="badge crit">None</span></td><td>On when plugged</td><td>A-01, A-03, A-05, A-09</td><td>Full SD read/write by any PC</td></tr>
+      <tr><td>IF-05</td><td>Modbus RTU / RS485</td><td>Adjacent (field bus)</td><td><span class="badge low">Read-only</span></td><td>On</td><td>A-04</td><td>Writes compiled out</td></tr>
+      <tr><td>IF-06</td><td>Modbus TCP via converter</td><td><b>Remote (plant network)</b></td><td><span class="badge med">Fixed config code</span></td><td>Option</td><td>A-04, A-07</td><td>Converter type to confirm (Q-04)</td></tr>
+      <tr><td>IF-07</td><td>M-Bus slave</td><td>Adjacent (field bus)</td><td><span class="badge med">None</span></td><td>On if fitted</td><td>A-07</td><td>Address writable</td></tr>
+      <tr><td>IF-08</td><td>RS232 service / debug</td><td>Physical</td><td><span class="badge low">Compiled out</span></td><td>Off</td><td>A-03, A-05</td><td>Build guard in <a href="example-wp1.html#c4">WP1 C4</a></td></tr>
+      <tr><td>IF-09</td><td>SPI1/SPI2 (ADC, MRAM)</td><td>Physical (PCB)</td><td>None</td><td>On</td><td>A-03</td><td>Low priority</td></tr>
+      <tr><td>IF-10</td><td>I2C1/I2C2 (temperature)</td><td>Physical (PCB)</td><td>None</td><td>On</td><td>A-04</td><td>Low priority</td></tr>
+      <tr><td>IF-11</td><td>Keypad / display UI</td><td>Physical</td><td><span class="badge high">Optional PIN</span></td><td>PIN off</td><td>A-03, A-04, A-05</td><td>Master fixed master PIN (<a href="example-plan.html#s2">S2</a>)</td></tr>
+    </tbody>
+  </table></div>
+  <p><small>Trust boundaries: TB-1 housing / PCB · TB-2 removable media &amp; USB · TB-3 field buses · TB-4 Ethernet via converter. Ten data flows (DF-01–DF-10) were desk-reviewed with STRIDE in v0.2; the team workshop is still open.</small></p>
+
+  <h2 id="method">Risk criteria (T4, EX-100 proposal)</h2>
+  <div class="grid c3">
+    <div class="card"><h3>Likelihood 1–5</h3><p>1 lab equipment, opened housing, expert · 2 physical access + specialist skills · 3 field bus / plant network, or physical access with public tools · 4 remote, known technique · 5 remote, automated, exploit published.</p></div>
+    <div class="card"><h3>Impact 1–5</h3><p>1 cosmetic · 2 one device's readout degraded, recovers · 3 one device's measurement or config lost, site visit · 4 falsified measurement or billing, plant affected, IP lost · 5 many sites, safety-relevant, attacks other systems.</p></div>
+    <div class="card"><h3>Risk = L × I</h3><p><span class="badge low">1–4 Low</span> <span class="badge med">5–9 Medium</span> <span class="badge high">10–15 High</span> <span class="badge crit">16–25 Critical</span></p></div>
+  </div>
+  <p><small>Critical blocks release · High must be treated before release · Medium treated or retained with a signed decision · Low accepted and recorded. Rules (IEC 31010): one consequence per risk, assumptions and confidence recorded; L × I ranks risks, it does not measure them. Approval pending (Q-13).</small></p>
+
+  <h2 id="matrix">Risk matrix</h2>
+  <p>Click a risk ID to jump to its row.</p>
+  <div class="tablewrap" style="padding:10px"><div class="matrix m5" id="riskMatrix"></div></div>
+
+  <h2 id="register">Risk register (T8 + T10 + T11)</h2>
+  <div class="tablewrap"><table id="riskTable">
+    <thead><tr><th>ID</th><th>Threat → asset</th><th>Interface</th><th>L</th><th>I</th><th>Score</th><th>Planned treatment</th></tr></thead>
+    <tbody>
+      <tr id="r01" data-l="3" data-i="4"><td><b>R-01</b></td><td>Modified or older <code>app.hex</code> placed on SD (or by PC malware via USB MSD); bootloader programs it → A-01, A-04 · <a href="example-findings.html#f1">F1</a></td><td>IF-03, IF-04</td><td>3</td><td>4</td><td></td><td>Interim measures; signed update with anti-rollback (<a href="example-plan.html#s1">S1</a>, ≤ 11 Dec 2027)</td></tr>
+      <tr id="r02" data-l="2" data-i="4"><td><b>R-02</b></td><td>Firmware IP and PIN logic read out via JTAG/ICSP → A-01, A-05 · <a href="example-findings.html#f2">F2</a></td><td>IF-01, IF-02</td><td>2</td><td>4</td><td></td><td>JTAG off, CP on (<a href="example-wp1.html">WP1</a> C2/C3)</td></tr>
+      <tr id="r03" data-l="2" data-i="4"><td><b>R-03</b></td><td>Bootloader or firmware overwritten via JTAG/ICSP → A-01, A-02 · <a href="example-findings.html#f2">F2</a></td><td>IF-01, IF-02</td><td>2</td><td>4</td><td></td><td>JTAG off; CP, BWP, PWP (<a href="example-wp1.html">WP1</a> C2/C3)</td></tr>
+      <tr id="r04" data-l="3" data-i="4"><td><b>R-04</b></td><td>Config or calibration changed on site: PIN off by default, or fixed master PIN → A-03, A-04 · <a href="example-findings.html#f3">F3</a></td><td>IF-11</td><td>3</td><td>4</td><td></td><td>Remove master PIN; PIN on by default; user levels; lockout (<a href="example-plan.html#s2">S2</a>)</td></tr>
+      <tr id="r05" data-l="3" data-i="3"><td><b>R-05</b></td><td>PIN decoded from <code>PIN file</code> (reversible encoding) → A-05 · <a href="example-findings.html#f4">F4</a></td><td>IF-03, IF-04</td><td>3</td><td>3</td><td></td><td>Salted hash in MRAM, no SD copy (<a href="example-plan.html#s2">S2</a>)</td></tr>
+      <tr id="r06" data-l="3" data-i="3"><td><b>R-06</b></td><td>Crafted parameter file overflows the stack in import (<code>read_line</code>, <code>sprintf</code>, <code>strcpy</code>) → A-01, A-03, A-04 · <a href="example-findings.html#f5">F5</a></td><td>IF-03, IF-04</td><td>3</td><td>3</td><td></td><td>Bounded parsing + negative/fuzz tests (<a href="example-wp1.html#c1">WP1 C1</a>). Known defect: blocks release under I.2(a)</td></tr>
+      <tr id="r07" data-l="2" data-i="4"><td><b>R-07</b></td><td>Calibration in MRAM corrupted or changed, not detected → A-03 · <a href="example-findings.html#f6">F6</a></td><td>DF-10</td><td>2</td><td>4</td><td></td><td>Parameter CRC, corruption report, last-good fallback (<a href="example-plan.html#s3">S3</a>)</td></tr>
+      <tr id="r08" data-l="3" data-i="3"><td><b>R-08</b></td><td>Network attacker floods or reconfigures the Modbus TCP converter → A-04, A-07 · <a href="example-findings.html#f8">F8</a></td><td>IF-06</td><td>3</td><td>3</td><td></td><td>Identify and assess converter; segmentation guidance in user information</td></tr>
+      <tr id="r09" data-l="3" data-i="2"><td><b>R-09</b></td><td>M-Bus master changes the bus address without authentication → A-07, A-10 · <a href="example-findings.html#f7">F7</a></td><td>IF-07</td><td>3</td><td>2</td><td></td><td>Writable-value check; address-lock option (<a href="example-plan.html#s3">S3</a>)</td></tr>
+      <tr id="r10" data-l="2" data-i="3"><td><b>R-10</b></td><td>Malformed input or load hangs the device; no watchdog recovery → A-04 · <a href="example-findings.html#f10">F10</a></td><td>IF-03…07</td><td>2</td><td>3</td><td></td><td>Watchdog after timing review; defined output state (<a href="example-plan.html#s3">S3</a>)</td></tr>
+      <tr id="r11" data-l="3" data-i="3"><td><b>R-11</b></td><td>Known vulnerability in old third-party code exploited (FreeModbus 2007, M-Bus 2008, modified MLA FAT/USB)</td><td>IF-03…07</td><td>3</td><td>3</td><td></td><td>CycloneDX SBOM + CVE monitoring; vendor queries (A4)</td></tr>
+      <tr id="r12" data-l="3" data-i="4"><td><b>R-12</b></td><td>Actively exploited vulnerability not triaged and reported within 24 h (Art. 14, applies now)</td><td>process</td><td>3</td><td>4</td><td></td><td>Vulnerability handling, CVD policy, contact, Art. 14 runbook (the manufacturer)</td></tr>
+      <tr id="r13" data-l="1" data-i="4"><td><b>R-13</b></td><td>Release built with <code>CMD_ENABLE</code> or debug output: raw MRAM access over RS232 · <a href="example-findings.html#f11">F11</a></td><td>IF-08</td><td>1</td><td>4</td><td></td><td><code>RELEASE_BUILD</code> <code>#error</code> guard (<a href="example-wp1.html#c4">WP1 C4</a>)</td></tr>
+      <tr id="r14" data-l="3" data-i="1"><td><b>R-14</b></td><td>Logger activation key bypassed (weak RNG, reversible) → A-06 · <a href="example-findings.html#f12">F12</a></td><td>IF-03, IF-11</td><td>3</td><td>1</td><td></td><td>Retained; device-unique code later</td></tr>
+      <tr id="r15" data-l="1" data-i="2"><td><b>R-15</b></td><td>Personal or site data in SD logs, PAR or export files read by others → A-09</td><td>IF-03, IF-04</td><td>1</td><td>2</td><td></td><td>Confirm no personal data (Q-08); else minimise</td></tr>
+      <tr id="r16" data-l="3" data-i="2"><td><b>R-16</b> <span class="badge info">new</span></td><td>Config, calibration or firmware changed with no security event recorded: change cannot be traced → A-03, A-11 · <a href="example-findings.html#f9">F9</a></td><td>DF-01…03</td><td>3</td><td>2</td><td></td><td>Security event log in MRAM (<a href="example-plan.html#s3">S3</a>), I.2(l)</td></tr>
+      <tr id="r17" data-l="3" data-i="2"><td><b>R-17</b> <span class="badge info">new</span></td><td>Device decommissioned or resold with PIN, site and log data; no secure erase → A-03, A-05, A-09</td><td>IF-11, IF-03</td><td>3</td><td>2</td><td></td><td>Secure erase / factory reset; decommissioning in user information, I.2(b), (m)</td></tr>
+      <tr id="r18" data-l="3" data-i="3"><td><b>R-18</b> <span class="badge info">new</span></td><td>New memory-safety defect ships: SAST is not a release gate, toolchain is old (C32 2.02) → A-01</td><td>build</td><td>3</td><td>3</td><td></td><td>SonarQube quality gate as release criterion; archive or migrate toolchain</td></tr>
+      <tr id="r19" data-l="2" data-i="3"><td><b>R-19</b> <span class="badge info">new</span></td><td>Faulty or compromised device disturbs the RS485 / M-Bus segment and affects other devices → A-07</td><td>IF-05, IF-07</td><td>2</td><td>3</td><td></td><td>Bus fail-silent on fault; address-clash detection (<a href="example-plan.html#s3">S3</a>), I.2(i)</td></tr>
+    </tbody>
+  </table></div>
+  <p><small>Likelihood assumes field devices are accessible to customer staff and service partners, and that the Modbus TCP option is installed in plant networks. Requirement IDs REQ-SEC-01–16 for each treatment are in the deck (T11–T13).</small></p>
+
+  <h2 id="roadmap">Mitigation roadmap</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Package</th><th>Scope</th><th>Closes</th><th>Target</th></tr></thead>
+    <tbody>
+      <tr><td><a href="example-wp1.html"><b>WP1 quick wins</b></a></td><td>Bounded import, JTAG off, code protection, release guard</td><td>R-02, R-03, R-06, R-13</td><td>Jan 2027 (if approved)</td></tr>
+      <tr><td><b>Phase A · process</b></td><td>SBOM + CVE check, PSIRT + Art. 14, SAST gate, converter and personal-data checks</td><td>R-08, R-11, R-12, R-15, R-18</td><td>Now</td></tr>
+      <tr><td><a href="example-plan.html#s2"><b>S2 · access control</b></a></td><td>Remove master PIN, PIN on by default, hashed PIN, lockout</td><td>R-04, R-05</td><td>2027</td></tr>
+      <tr><td><a href="example-plan.html#s3"><b>S3 · integrity &amp; availability</b></a></td><td>CRC, watchdog, M-Bus check, security log, secure erase, bus fail-silent</td><td>R-07, R-09, R-10, R-16, R-17, R-19</td><td>2027</td></tr>
+      <tr><td><a href="example-plan.html#s1"><b>S1 · secure bootloader</b></a></td><td>Signed update with anti-rollback</td><td>R-01</td><td>≤ 11 Dec 2027</td></tr>
+      <tr><td><b>CRA conformity</b></td><td>Technical file, EU DoC, CE marking (Module A)</td><td>All</td><td>≤ 11 Dec 2027</td></tr>
+    </tbody>
+  </table></div>
+  <p><small>R-14 is retained (feature licence only).</small></p>
+
+  <h2 id="residual">Residual risks (T14, proposed)</h2>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Risk</th><th>Residual L × I</th><th>Band</th><th>Rationale</th><th>User information (Annex II)</th></tr></thead>
+    <tbody>
+      <tr><td>R-01 (interim)</td><td>3 × 4 = 12</td><td><span class="badge high">High</span></td><td>Time-limited until S1; not acceptable for units placed on the market after 11 Dec 2027. After S1: 1 × 4 = 4 Low</td><td>Control physical SD/USB access; use only the manufacturer images</td></tr>
+      <tr><td>R-04 (after S2)</td><td>2 × 4 = 8</td><td><span class="badge med">Medium</span></td><td>Per-device PIN, on by default, lockout; residual = shared or observed PIN</td><td>Set PIN at commissioning; do not share</td></tr>
+      <tr><td>R-08 (provisional)</td><td>2 × 3 = 6</td><td><span class="badge med">Medium</span></td><td>After converter assessment; depends on operator segmentation</td><td>Install converter in a segmented OT network</td></tr>
+      <tr><td>R-11 (after A4)</td><td>2 × 3 = 6</td><td><span class="badge med">Medium</span></td><td>SBOM + monitoring; residual = unpublished flaw in legacy stacks</td><td>—</td></tr>
+      <tr><td>R-14</td><td>3 × 1 = 3</td><td><span class="badge low">Low</span></td><td>Feature licence only; no safety or measurement impact</td><td>—</td></tr>
+      <tr><td>R-18 (after gate)</td><td>2 × 3 = 6</td><td><span class="badge med">Medium</span></td><td>Gate catches common defects; residual = logic errors</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <p><small>Nothing is accepted yet; all sign-offs (manufacturer product owner, Tismo security lead, manufacturer compliance, manufacturer representative) are pending.</small></p>
+
+  <h2 id="review">Review status of draft 0.2</h2>
+  <div class="callout"><b>Verified on 24 Nov 2026</b>
+    <p>All L × I scores and bands, the before-treatment counts, the roadmap coverage (all 19 risks) and the REQ-SEC-01–16 references are consistent across the deck.</p></div>
+  <div class="callout warn"><b>Open points before sending to the product manager</b>
+    <p>1. The cover notes reference <code>EX-100_Review_v0.1_vs_Project_Context.md</code> and a "case study v0.1", which are not in the CRA folder.</p>
+    <p>2. "After treatment: 4 Medium / 15 Low" has residual ratings for only 6 risks; rate the rest or label the column as a target.</p>
+    <p>3. R-06 combines two consequences (crash 3×3, code execution 2×4), against the "one consequence per risk" rule.</p>
+    <p>4. The T4 rule "likelihood per device over the support period" does not match the access-based likelihood scale.</p>
+    <p>5. T4 should state that a known exploitable vulnerability blocks release regardless of band (R-06).</p></div>
+</main>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  function level(s){ return s>=16?"crit":s>=10?"high":s>=5?"med":"low"; }
+  var names={crit:"Critical",high:"High",med:"Medium",low:"Low"};
+  var rows=[].slice.call(document.querySelectorAll("#riskTable tbody tr"));
+  rows.forEach(function(r){
+    var s=(+r.dataset.l)*(+r.dataset.i), lv=level(s);
+    r.children[5].innerHTML='<span class="badge '+lv+'">'+s+' '+names[lv]+'</span>';
+  });
+  var m=document.getElementById("riskMatrix"),
+      I=["1 negligible","2 minor","3 moderate","4 major","5 severe"],
+      L=["5 almost certain","4 likely","3 possible","2 unlikely","1 rare"];
+  function div(cls,txt){ var d=document.createElement("div"); d.className=cls; if(txt) d.textContent=txt; return d; }
+  m.appendChild(div("h","Likelihood ↓ / Impact →"));
+  I.forEach(function(t){ m.appendChild(div("h",t)); });
+  L.forEach(function(lt,li){
+    var l=5-li;
+    m.appendChild(div("h",lt));
+    for(var i=1;i<=5;i++){
+      var c=div("cell "+level(l*i));
+      rows.filter(function(r){return +r.dataset.l===l && +r.dataset.i===i;}).forEach(function(r){
+        var a=document.createElement("a"); a.className="chip"; a.href="#"+r.id; a.textContent=r.children[0].querySelector("b").textContent;
+        a.title=r.children[1].textContent.trim();
+        a.addEventListener("click",function(){ r.classList.remove("flash"); void r.offsetWidth; r.classList.add("flash"); });
+        c.appendChild(a);
+      });
+      m.appendChild(c);
+    }
+  });
+  if (location.hash && /^#r\d+/.test(location.hash)) { var t=document.querySelector(location.hash); if(t) t.classList.add("flash"); }
+});
+</script>
+</body>
+</html>
